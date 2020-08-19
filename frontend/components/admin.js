@@ -8,12 +8,12 @@ const Admin = ({ children }) => {
   useEffect(() => {
     if (!isAuth()) {
       Router.push("/authSignin");
+    } else if (isAuth().role === 1) {
+      Router.push("/authSignup");
     } else if (isAuth().role !== 0) {
-      Router.push("/");
+      Router.push("/admin");
     }
   }, []);
-
-  // if (isAuth.role !== 1)
 
   return <React.Fragment>{children}</React.Fragment>;
 };

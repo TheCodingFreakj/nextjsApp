@@ -2,19 +2,23 @@ import React from "react";
 // import Link from "next/link";
 import Layout from "../../components/Layout";
 import SignupComp from "../../components/SignupComponent";
-//import Admin from "../../components/admin";
+import Admin from "../../components/admin";
 
 //bring components
 
 const Signup = () => {
   return (
     <Layout>
-      <h1 className="text-center pt-4 pb-4">Please Sign Up Before login in</h1>
-      <div className="row">
-        <div className="col-md-6 offset-md-2">
-          <SignupComp />
+      <Admin>
+        <h1 className="text-center pt-4 pb-4">
+          Please Sign Up Before login in
+        </h1>
+        <div className="row">
+          <div className="col-md-6 offset-md-2">
+            <SignupComp />
+          </div>
         </div>
-      </div>
+      </Admin>
     </Layout>
   );
 };

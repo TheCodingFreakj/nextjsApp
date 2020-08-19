@@ -8,7 +8,7 @@ const Private = ({ children }) => {
   useEffect(() => {
     if (!isAuth()) {
       Router.push("/authSignin");
-    } else if (isAuth().role !== 1) {
+    } else if (isAuth().role === 0) {
       Router.push("/user");
     }
   }, []);
