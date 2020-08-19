@@ -44,18 +44,18 @@ const Header = () => {
               <>
                 <NavItem className="ml-5 text-danger font-weight-bold  h5">
                   <Link href="/authSignup">
-                    <a className="text-danger font-weight-bold  h5">signup</a>
+                    <a className="text-danger font-weight-bold  h5">Register</a>
                   </Link>
                 </NavItem>
                 <NavItem className="ml-5 text-danger font-weight-bold  h5">
                   <Link href="/authSignin">
-                    <a className="text-danger font-weight-bold  h5">signin</a>
+                    <a className="text-danger font-weight-bold  h5">Login</a>
                   </Link>
                 </NavItem>
               </>
             )}
-
-            {isAuth() && isAuth().role === 0 && (
+            {/* {console.log(isAuth())} */}
+            {isAuth() && isAuth().role !== 1 && (
               <NavItem className="ml-5 text-danger font-weight-bold  h5">
                 <Link href="/user">
                   <a className="text-danger font-weight-bold  h5">{`${
@@ -66,13 +66,15 @@ const Header = () => {
             )}
 
             {isAuth() && isAuth().role === 1 && (
-              <NavItem className="ml-5 text-danger font-weight-bold  h5">
-                <Link href="/admin">
-                  <a className="text-danger font-weight-bold  h5">
-                    {`${isAuth().name}'s Dashboard`}
-                  </a>
-                </Link>
-              </NavItem>
+              <>
+                <NavItem className="ml-5 text-danger font-weight-bold  h5">
+                  <Link href="/admin">
+                    <a className="text-danger font-weight-bold  h5">
+                      {`${isAuth().name}'s Dashboard`}
+                    </a>
+                  </Link>
+                </NavItem>
+              </>
             )}
 
             {isAuth() && (

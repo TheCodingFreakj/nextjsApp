@@ -8,8 +8,10 @@ const Private = ({ children }) => {
   useEffect(() => {
     if (!isAuth()) {
       Router.push("/authSignin");
+    } else if (isAuth().role !== 1) {
+      Router.push("/user");
     }
-  });
+  }, []);
 
   return <React.Fragment>{children}</React.Fragment>;
 };

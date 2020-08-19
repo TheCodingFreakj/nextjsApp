@@ -9,7 +9,7 @@ const UserIndex = () => {
   return (
     <Layout>
       <Private>
-        <h2>User DashBorad</h2>
+        <h2>User DashBoard</h2>
         {/* <Link href="/authSignup">
         <a>signup</a>
       </Link>

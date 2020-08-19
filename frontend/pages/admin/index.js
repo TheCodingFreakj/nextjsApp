@@ -9,7 +9,7 @@ const AdminIndex = () => {
   return (
     <Layout>
       <Admin>
-        <h2>Admin DashBorad</h2>
+        <h2>Admin DashBoard</h2>
         {/* <Link href="/authSignup">
         <a>signup</a>
       </Link>

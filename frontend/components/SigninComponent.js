@@ -49,9 +49,10 @@ const SigninComp = () => {
         //authenticate the user
 
         authenticate(data, () => {
-          if (isAuth() && isAuth().role == 1) {
+          console.log(data);
+          if (isAuth() && data.user.role === 1) {
             Router.push(`/admin`);
-          } else {
+          } else if (isAuth() && data.user.role === 0) {
             Router.push(`/user`);
           }
         });
