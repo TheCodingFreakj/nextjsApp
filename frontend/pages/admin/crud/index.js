@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Layout from "../../../components/Layout";
+import Category from "../../../components/crud/category";
 import Admin from "../../../components/admin";
 
 //bring components
@@ -15,11 +16,11 @@ const CategoryTag = () => {
               <h2>Manage Categories And Tags </h2>
             </div>
 
-            <div className="col-md-4">
-              <p>Categories</p>
+            <div className="col-md-6">
+              <Category />
             </div>
 
-            <div className="col-md-8">
+            <div className="col-md-6">
               <p>Tags</p>
             </div>
           </div>
