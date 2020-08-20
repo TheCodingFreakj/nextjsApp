@@ -8,10 +8,8 @@ const Admin = ({ children }) => {
   useEffect(() => {
     if (!isAuth()) {
       Router.push("/authSignin");
-    } else if (isAuth().role === 1) {
-      Router.push("/authSignup");
-    } else if (isAuth().role !== 0) {
-      Router.push("/admin");
+    } else if (isAuth().role === 0) {
+      Router.push("/");
     }
   }, []);
 

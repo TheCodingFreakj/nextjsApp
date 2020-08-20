@@ -97,3 +97,7 @@ export const signout = async (next) => {
     console.log("Error", error.message);
   }
 };
+
+// export const register = async ()=>{
+
+// }

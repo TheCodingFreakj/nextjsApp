@@ -11,6 +11,8 @@ require("dotenv").config();
 const blogRoute = require("./routes/blogRoute");
 const authRoute = require("./routes/authRoute");
 const userProfileRoute = require("./routes/userProfileRoute");
+const categoryRoute = require("./routes/categoryRoute");
+const tagsRoute = require("./routes/tagsRoute");
 
 //app
 const app = express();
@@ -48,6 +50,8 @@ mongoose
 app.use("/api", blogRoute);
 app.use("/api", authRoute);
 app.use("/api", userProfileRoute);
+app.use("/api", categoryRoute);
+app.use("/api", tagsRoute);
 
 //Ports
 

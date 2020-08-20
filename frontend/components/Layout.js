@@ -18,7 +18,14 @@ const Layout = ({ children }) => {
           href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css"
           rel="stylesheet"
         />
-        <title>ReactReserve</title>
+
+        {/* <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css"
+          rel="stylesheet"
+        /> */}
+
+        <link href="/static/styles.css" rel="stylesheet" />
+        <title>My Next Website App </title>
       </Head>
       <Header />
       {children}

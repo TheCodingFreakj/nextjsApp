@@ -2,14 +2,14 @@ import React from "react";
 // import Link from "next/link";
 import Layout from "../../components/Layout";
 import SignupComp from "../../components/SignupComponent";
-import Admin from "../../components/admin";
+import SignupPrivate from "../../components/signupPrivateComp";
 
 //bring components
 
 const Signup = () => {
   return (
     <Layout>
-      <Admin>
+      <SignupPrivate>
         <h1 className="text-center pt-4 pb-4">
           Please Sign Up Before login in
         </h1>
@@ -18,7 +18,7 @@ const Signup = () => {
             <SignupComp />
           </div>
         </div>
-      </Admin>
+      </SignupPrivate>
     </Layout>
   );
 };

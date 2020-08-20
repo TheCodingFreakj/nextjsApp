@@ -1,7 +1,7 @@
 import React from "react";
-//import Link from "next/link";
+import Link from "next/link";
 import Layout from "../../components/Layout";
-import Admin from "../../components/private";
+import Admin from "../../components/admin";
 
 //bring components
 
@@ -9,14 +9,25 @@ const AdminIndex = () => {
   return (
     <Layout>
       <Admin>
-        <h2>Admin DashBoard</h2>
-        {/* <Link href="/authSignup">
-        <a>signup</a>
-      </Link>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-12 pt-5 pb-5">
+              <h2>Admin DashBoard</h2>
+            </div>
 
-      <Link href="/authSignin">
-        <a>signin</a>
-      </Link> */}
+            <div className="col-md-4">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/crud">
+                    <a>Create Category</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-8">Tags</div>
+          </div>
+        </div>
       </Admin>
     </Layout>
   );

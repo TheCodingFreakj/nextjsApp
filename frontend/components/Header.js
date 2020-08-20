@@ -16,10 +16,18 @@ import {
 import Link from "next/link";
 import Router from "next/router";
 
+import NProgress from "nprogress";
+
 import { APP_NAME } from "../config";
 import { signout } from "../actions/auth";
 
 import { isAuth } from "../actions/setAuthToken";
+
+import "../node_modules/nprogress/nprogress.css";
+
+Router.onRouteChangeStart = (url) => NProgress.start();
+Router.onRouteChangeComplete = (url) => NProgress.done();
+Router.onRouteChangeError = (url) => NProgress.done();
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,6 +60,7 @@ const Header = () => {
             {/* {console.log(isAuth())} */}
 
             {isAuth() && isAuth().role !== 1 && (
+              //User
               <NavItem className="ml-5 text-danger font-weight-bold  h5">
                 <Link href="/user">
                   <a className="text-danger font-weight-bold  h5">{`${
@@ -62,10 +71,11 @@ const Header = () => {
             )}
 
             {isAuth() && isAuth().role !== 0 && (
+              //Admin
               <>
                 <NavItem className="ml-5 text-danger font-weight-bold  h5">
                   <Link href="/authSignup">
-                    <a className="text-danger font-weight-bold  h5">Register</a>
+                    <a className="text-danger font-weight-bold  h5">Signup</a>
                   </Link>
                 </NavItem>
                 <NavItem className="ml-5 text-danger font-weight-bold  h5">
@@ -79,6 +89,7 @@ const Header = () => {
             )}
 
             {isAuth() && (
+              //Both
               <NavItem className="ml-5 text-danger font-weight-bold  h5">
                 <a
                   className="text-danger font-weight-bold  h5"

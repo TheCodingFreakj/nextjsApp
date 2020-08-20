@@ -10,13 +10,6 @@ const UserIndex = () => {
     <Layout>
       <Private>
         <h2>User DashBoard</h2>
-        {/* <Link href="/authSignup">
-        <a>signup</a>
-      </Link>
-
-      <Link href="/authSignin">
-        <a>signin</a>
-      </Link> */}
       </Private>
     </Layout>
   );
