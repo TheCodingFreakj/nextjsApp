@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Layout from "../../../components/Layout";
 import Category from "../../../components/crud/category";
+import Tags from "../../../components/crud/tags";
 import Admin from "../../../components/admin";
 
 //bring components
@@ -21,7 +22,7 @@ const CategoryTag = () => {
             </div>
 
             <div className="col-md-6">
-              <p>Tags</p>
+              <Tags />
             </div>
           </div>
         </div>

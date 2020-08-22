@@ -5,38 +5,34 @@ import Router from "next/router";
 //get the token , get xookie from local storage and send that when create the cat
 import { isAuth, getCookie } from "../../actions/setAuthToken";
 
-import {
-  create,
-  getCategories,
-  removeSingleCategory,
-} from "../../actions/category";
+import { create, getTags, removeSingleTag } from "../../actions/tags";
 
-const Category = () => {
+const Tags = () => {
   const [values, setValues] = useState({
     name: "",
     error: false,
     success: false,
-    categories: [],
+    tags: [],
     removed: false,
     reload: false,
   });
 
-  const { name, error, success, categories, removed, reload } = values;
+  const { name, error, success, tags, removed, reload } = values;
   const token = getCookie("token"); // pass the name of cookie you want to get
 
   //get all the things you want to show in the state using useeffect and loop throught to show
   //you can use useEffect when you want to show something on UI and it runs everytime the component mounts
   useEffect(() => {
-    loadCategories();
+    loadTags();
   }, [reload]);
 
   //putting all the created categories in categories and displaying it through categories[]
-  const loadCategories = () => {
-    getCategories().then((data) => {
+  const loadTags = () => {
+    getTags().then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
-        setValues({ ...values, categories: data });
+        setValues({ ...values, tags: data });
       }
     });
   };
@@ -46,12 +42,12 @@ const Category = () => {
     // const categories = categories.filter(cat => cat.id !== itemId);
     if (answer) {
       //console.log(slug);
-      deleteCategory(slug);
+      deleteTag(slug);
     }
   };
 
-  const deleteCategory = (slug) => {
-    removeSingleCategory(slug, token).then((data) => {
+  const deleteTag = (slug) => {
+    removeSingleTag(slug, token).then((data) => {
       console.log(data);
       if (data.error) {
         console.log(data.error);
@@ -70,16 +66,16 @@ const Category = () => {
 
   //loop through the category array and map to display all using jsx
   //use this function to show it while returning
-  const showCategories = () => {
-    return categories.map((category, i) => (
+  const showTags = () => {
+    return tags.map((tag, i) => (
       <button
-        onDoubleClick={() => deleteConfirm(category.slug)} //passing the slug we want to delete
-        value={category.slug}
+        onDoubleClick={() => deleteConfirm(tag.slug)} //passing the slug we want to delete
+        value={tag.slug}
         title="Double Click To Delete"
         key={i}
         className="btn btn-outline-primary mr-1 ml-1 mt-3"
       >
-        {category.name}
+        {tag.name}
       </button>
     ));
   };
@@ -118,23 +114,23 @@ const Category = () => {
 
   const showSuccess = () => {
     if (success) {
-      return <p className="text-success">Category is Created</p>;
+      return <p className="text-success">Tag is Created</p>;
     }
   };
 
   const showError = () => {
     if (error) {
-      return <p className="text-danger">Category is there already</p>;
+      return <p className="text-danger">Tag is there already</p>;
     }
   };
 
   const showRemoved = () => {
     if (removed) {
-      return <p className="text-danger">Category is Removed</p>;
+      return <p className="text-danger">Tag is Removed</p>;
     }
   };
 
-  const newCategoryForm = () => {
+  const newTagForm = () => {
     return (
       <form onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
@@ -142,7 +138,7 @@ const Category = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="Your Category"
+            placeholder="Your Tags"
             onChange={onChange("name")}
             value={name}
             required
@@ -167,11 +163,11 @@ const Category = () => {
 
       <div onMouseMove={mouseMoveHandler}>
         {showRemoved()}
-        {showCategories()}
+        {showTags()}
       </div>
-      {newCategoryForm()}
+      {newTagForm()}
     </React.Fragment>
   );
 };
 
-export default Category;
+export default Tags;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API } from "../config";
 
-export const create = async (category, token) => {
+export const create = async (tag, token) => {
   try {
     const config = {
       method: "POST",
@@ -14,9 +14,9 @@ export const create = async (category, token) => {
       },
     };
 
-    const body = JSON.stringify(category);
+    const body = JSON.stringify(tag);
 
-    const response = await axios.post(`${API}/api/category`, body, config); //handing the backedn register user
+    const response = await axios.post(`${API}/api/tag`, body, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);
@@ -38,13 +38,13 @@ export const create = async (category, token) => {
   }
 };
 
-export const getCategories = async () => {
+export const getTags = async () => {
   try {
     const config = {
       method: "GET",
     };
 
-    const response = await axios.get(`${API}/api/categories`, config); //handing the backedn register user
+    const response = await axios.get(`${API}/api/tags`, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);
@@ -66,13 +66,13 @@ export const getCategories = async () => {
   }
 };
 
-export const getSingleCategory = async (slug) => {
+export const getSingleTag = async (slug) => {
   try {
     const config = {
       method: "GET",
     };
 
-    const response = await axios.get(`${API}/api/category/${slug}`, config); //handing the backedn register user
+    const response = await axios.get(`${API}/api/tag/${slug}`, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);
@@ -94,7 +94,7 @@ export const getSingleCategory = async (slug) => {
   }
 };
 
-export const removeSingleCategory = async (slug, token) => {
+export const removeSingleTag = async (slug, token) => {
   try {
     const config = {
       method: "DELETE",
@@ -107,7 +107,7 @@ export const removeSingleCategory = async (slug, token) => {
       },
     };
 
-    const response = await axios.delete(`${API}/api/category/${slug}`, config); //handing the backedn register user
+    const response = await axios.delete(`${API}/api/tag/${slug}`, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);
