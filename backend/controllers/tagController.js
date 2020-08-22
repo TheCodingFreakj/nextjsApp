@@ -1,4 +1,4 @@
-const Tags = require("../models/category");
+const Tags = require("../models/tags");
 const slugify = require("slugify");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
@@ -12,7 +12,7 @@ exports.create = async (req, res) => {
 
     let slug = slugify(name).toLowerCase();
 
-    let tag = new Category({ name, slug });
+    let tag = new Tags({ name, slug });
 
     await tag.save((err, data) => {
       if (err)

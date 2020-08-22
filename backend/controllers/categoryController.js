@@ -61,17 +61,17 @@ exports.read = async (req, res) => {
 exports.removeCat = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   try {
-    let category = await Category.findOneAndRemove({ slug }).exec(
-      (err, category) => {
-        if (err) {
-          return res.status(400).json({ errors: errorHandler(err) });
-        }
-
-        res.json({
-          message: "Category Deleted Successfully",
-        });
+    await Category.findOneAndRemove({ slug }).exec((err, category) => {
+      console.log(category);
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
       }
-    );
+
+      return res.json({
+        category,
+        message: "Category Deleted Successfully",
+      });
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
