@@ -8,6 +8,7 @@ const Tags = require("../models/tags");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const fs = require("fs");
 const { smartTrim } = require("../helpers/blog");
+const { parse } = require("path");
 
 //Real Logic of the routes
 
@@ -114,5 +115,105 @@ exports.create = (req, res) => {
   } catch (error) {
     console.error(err.message);
     res.status(500).send("Server Error");
+  }
+};
+
+exports.list = async (req, res) => {
+  try {
+    await Blog.find({})
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name username")
+      .select(
+        "_id title, slug, excerpt categories tags postedBy createAt updatedAt"
+      )
+      .exec((err, blogs) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+
+        res.json(blogs);
+      });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+};
+exports.listAllBlogsByCatAndTags = async (req, res) => {
+  //get the limit of blogs to be shown from the front end
+  //if user clicks load more then additional req will be sent and then the previous blogs are skipped then rest are send
+  let limit = req.body.limit ? parseInt(req.body.limit) : 10; //by default is skip
+  let skip = req.body.skip ? parseInt(req.body.skip) : 0;
+
+  let blogsToBeSent;
+  let categoriesToBeSent;
+  let tagsToBeSent;
+  try {
+    await Blog.find({})
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name username profile")
+      .populate({ createdBy: -1 }) //To confirm that latest blogs are sent
+      .skip(skip)
+      .limit(limit)
+      .select(
+        "_id title, slug, excerpt categories tags postedBy createAt updatedAt"
+      )
+      .exec((err, blogs) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+
+        blogsToBeSent = blogs;
+
+        //get all categories
+        Category.find({}).exec((err, categories) => {
+          if (err) {
+            return res.status(400).json({ errors: errorHandler(err) });
+          }
+          categoriesToBeSent = categories;
+
+          //get all the tags
+
+          Tags.find({}).exec((err, tags) => {
+            if (err) {
+              return res.status(400).json({ errors: errorHandler(err) });
+            }
+            tagsToBeSent = tags;
+            //return all categories, blogs , tags
+
+            res.json({
+              blogsToBeSent,
+              tagsToBeSent,
+              categoriesToBeSent,
+              size: blogsToBeSent.length,
+            });
+          });
+        });
+      });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+};
+exports.read = (req, res) => {
+  try {
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+};
+exports.removeBlog = (req, res) => {
+  try {
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+};
+exports.updateBlog = (req, res) => {
+  try {
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
   }
 };

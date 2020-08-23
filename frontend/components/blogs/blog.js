@@ -12,7 +12,6 @@ import { getTags } from "../../actions/tags";
 import { createBlog } from "../../actions/blog";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "../../node_modules/react-quill/dist/quill.snow.css";
-import { Label } from "reactstrap";
 
 //{JSON.stringify(router)}
 
@@ -122,6 +121,10 @@ const BlogComponent = ({ router }) => {
 
     //Here we are using a browswr api called formData
     formData.set(name, value); //This is the data we will send to bacvkend
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("title", JSON.stringify(value));
+    }
     setValues({ ...values, [name]: value, formData: formData, error: "" });
   };
 
@@ -200,11 +203,29 @@ const BlogComponent = ({ router }) => {
     ));
   };
 
+  const showError = () => (
+    <div
+      className="alert alert-danger"
+      style={{ display: error ? "" : "none" }}
+    >
+      {error}
+    </div>
+  );
+
+  const showSuccess = () => (
+    <div
+      className="alert alert-success"
+      style={{ display: success ? "" : "none" }}
+    >
+      {success}
+    </div>
+  );
+
   const createBlogForm = () => {
     return (
       <form className="text-center" onSubmit={(e) => onSubmit(e)}>
         <label className="text-muted">
-          <p>Title</p>
+          <h3>Title</h3>
         </label>
         <div className="form-group">
           <input
@@ -233,20 +254,26 @@ const BlogComponent = ({ router }) => {
     );
   };
   return (
-    <div className="container-fluid">
+    <div className="container-fluid pb-5 ">
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-10 pb-5">
           {createBlogForm()}
-          <hr></hr>
+
+          <div className="pb-5">
+            {showError()}
+            {showSuccess()}
+          </div>
+
+          {/* <hr></hr>
           {JSON.stringify(title)}
           <hr />
           {JSON.stringify(body)}
           <hr />
           {JSON.stringify(categories)}
           <hr />
-          {JSON.stringify(tags)}
+          {JSON.stringify(tags)} */}
         </div>
-        <div className="col-md-4">
+        <div className="col-md-2">
           <div>
             <div className="form-group pb-2">
               <h5>Featured Image</h5>

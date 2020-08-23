@@ -14,8 +14,20 @@ const tokenAuth = require("../middlewares/tokenAuth");
 
 //bring Controller
 
-const { create } = require("../controllers/blogController");
+const {
+  create,
+  list,
+  listAllBlogsByCatAndTags,
+  read,
+  removeBlog,
+  updateBlog,
+} = require("../controllers/blogController");
 
 router.post("/blog", tokenAuth, adminMiddleware, create);
+router.get("/blogs", list);
+router.post("/blogs-categories-tags", listAllBlogsByCatAndTags);
+router.post("/blog/:slug", read);
+router.delete("/blog/:slug", tokenAuth, adminMiddleware, removeBlog);
+router.put("/blog/:slug", tokenAuth, adminMiddleware, updateBlog);
 
 module.exports = router;
