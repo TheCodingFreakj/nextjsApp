@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
-import dynamic from "next/dynamic";
+import dynamic from "next/dynamic"; //ReactQuill runs only on client side
+//nextjs runs both on client and server side
+//we need to make sure we are not using in server side rendering
 import { withRouter } from "next/router";
 
 //get the token , get xookie from local storage and send that when create the cat
 import { isAuth, getCookie } from "../../actions/setAuthToken";
-
 import { getCategories } from "../../actions/category";
 import { getTags } from "../../actions/tags";
 import { createBlog } from "../../actions/blog";
@@ -16,8 +17,24 @@ import "../../node_modules/react-quill/dist/quill.snow.css";
 //{JSON.stringify(router)}
 
 const BlogComponent = ({ router }) => {
-  //Here we will grab the blogContent from local storage and populating on the state
+  const titletFromLS = () => {
+    //dont have window avaliable
+    if (typeof window === "undefined") {
+      return false;
+    }
 
+    //if we have a item called blog in local storage and then we want that
+    if (localStorage.getItem("title")) {
+      // we are storing the value as json object we need to convert that as js object which is showed ion the editor
+      return JSON.parse(localStorage.getItem("title"));
+    } else {
+      return false;
+    }
+  };
+
+  //Here we will grab the blogContent from local storage and populating on the state
+  //This function return the value of the property if it exists
+  //You need to inc\voke the function in the state
   const blogContentFromLS = () => {
     //dont have window avaliable
     if (typeof window === "undefined") {
@@ -38,15 +55,16 @@ const BlogComponent = ({ router }) => {
   const [checked, setChecked] = useState([]); //categories
   const [checkedTag, setCheckedTag] = useState([]); //Tags
 
+  //state for form values
   //run the function
-  const [body, setBody] = useState(blogContentFromLS());
+  const [body, setBody] = useState(blogContentFromLS()); //after getting the data from
   const [values, setValues] = useState({
     error: "",
     sizeError: "",
     success: "",
     formData: "",
-    title: "",
-    hidePublishButton: "",
+    title: titletFromLS(), //The title by default will have a value by whatever is there in local storate
+    hidePublishButton: false,
   });
 
   const {
@@ -109,22 +127,31 @@ const BlogComponent = ({ router }) => {
     });
   };
 
+  //This is a funxtion returi\ning another function
+
   const onChange = (name) => (e) => {
     //For title and image upload like featured
     //we grab the e.target.value to set the title
-    //For u\images we get e.target.files
+    //For images we get e.target.files
     //figure out what is the name to grab the concerned value to show up
     //console.log(e.target.value);
-
+    //name can be title, photo or anything from forms
     //For images we upload many file but for featuerd image we grab the first image
+
+    //if name is photo? :
     const value = name === "photo" ? e.target.files[0] : e.target.value;
 
+    //Before using this browswr api we need to instanciate it in in useeffcet
     //Here we are using a browswr api called formData
+    //first is the property name then value or e.target....
     formData.set(name, value); //This is the data we will send to bacvkend
 
+    //we have to  take this data from loacl storage and popuate it in the state as default value
     if (typeof window !== "undefined") {
       localStorage.setItem("title", JSON.stringify(value));
     }
+
+    //after populating we have to update the state
     setValues({ ...values, [name]: value, formData: formData, error: "" });
   };
 
@@ -135,6 +162,7 @@ const BlogComponent = ({ router }) => {
 
     //populate this body in local storage so that in refersh its not lost
     if (typeof window !== "undefined") {
+      //if we have a window then store the blog
       localStorage.setItem("blog", JSON.stringify(e));
     }
   };
@@ -232,12 +260,13 @@ const BlogComponent = ({ router }) => {
             type="text"
             className="form-control"
             name="title"
-            value={title} // grab the init value from formData
+            value={title} // This value should be coming from the state
             onChange={onChange("title")} //setFormData
             required
           />
         </div>
 
+        {/* This is the textArea */}
         <div className="form-group">
           <ReactQuill
             value={body}
@@ -264,12 +293,12 @@ const BlogComponent = ({ router }) => {
             {showSuccess()}
           </div>
 
-          {/* <hr></hr>
+          <hr />
           {JSON.stringify(title)}
           <hr />
           {JSON.stringify(body)}
           <hr />
-          {JSON.stringify(categories)}
+          {/* {JSON.stringify(categories)}
           <hr />
           {JSON.stringify(tags)} */}
         </div>

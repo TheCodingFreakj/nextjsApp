@@ -1,6 +1,8 @@
 import axios from "axios";
 import { API } from "../config";
 
+//This is the input I am getting from the createBlogForm() after submit
+//formData, getCookie("token")
 export const createBlog = async (blog, token) => {
   try {
     const config = {
@@ -13,7 +15,7 @@ export const createBlog = async (blog, token) => {
       },
     };
 
-    const body = blog;
+    const body = blog; //we are sending the formData to get posted on the backend
 
     const response = await axios.post(`${API}/api/blog`, body, config); //handing the backedn register user
     return response.data;

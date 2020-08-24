@@ -3,7 +3,6 @@ import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
 import { listBlogsWithCategoriesNTags } from "../../actions/blog";
-//import { GetServerSideProps } from "next";
 import { API } from "../../config";
 
 const Blogs = (pageProps) => {
@@ -77,7 +76,7 @@ export const getServerSideProps = async () => {
 
   const data = await listBlogsWithCategoriesNTags();
 
-  console.log(data); //This is coming fine
+  //console.log(data); //This is coming fine
 
   if (data.error) {
     console.log(data.error);
