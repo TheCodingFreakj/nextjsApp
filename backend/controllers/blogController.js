@@ -5,10 +5,10 @@ const stripHtml = require("string-strip-html");
 const _ = require("lodash");
 const Category = require("../models/category");
 const Tags = require("../models/tags");
+const User = require("../models/user");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const fs = require("fs");
 const { smartTrim } = require("../helpers/blog");
-const { parse } = require("path");
 
 //Real Logic of the routes
 
@@ -125,7 +125,7 @@ exports.list = async (req, res) => {
       .populate("tags", "_id name slug")
       .populate("postedBy", "_id name username")
       .select(
-        "_id title, slug, excerpt categories tags postedBy createAt updatedAt"
+        "_id title slug excerpt categories tags postedBy createAt updatedAt"
       )
       .exec((err, blogs) => {
         if (err) {
@@ -153,13 +153,13 @@ exports.listAllBlogsByCatAndTags = async (req, res) => {
       .populate("categories", "_id name slug")
       .populate("tags", "_id name slug")
       .populate("postedBy", "_id name username profile")
-      .populate({ createdBy: -1 }) //To confirm that latest blogs are sent
+      .sort({ createdBy: -1 }) //To confirm that latest blogs are sent
       .skip(skip)
       .limit(limit)
       .select(
-        "_id title, slug, excerpt categories tags postedBy createAt updatedAt"
+        "_id title slug excerpt categories tags postedBy createAt updatedAt"
       )
-      .exec((err, blogs) => {
+      .exec(async (err, blogs) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
         }
@@ -167,7 +167,7 @@ exports.listAllBlogsByCatAndTags = async (req, res) => {
         blogsToBeSent = blogs;
 
         //get all categories
-        Category.find({}).exec((err, categories) => {
+        await Category.find({}).exec(async (err, categories) => {
           if (err) {
             return res.status(400).json({ errors: errorHandler(err) });
           }
@@ -175,7 +175,7 @@ exports.listAllBlogsByCatAndTags = async (req, res) => {
 
           //get all the tags
 
-          Tags.find({}).exec((err, tags) => {
+          await Tags.find({}).exec((err, tags) => {
             if (err) {
               return res.status(400).json({ errors: errorHandler(err) });
             }
@@ -196,24 +196,134 @@ exports.listAllBlogsByCatAndTags = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-exports.read = (req, res) => {
+exports.read = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
   try {
+    await Blog.findOne({ slug })
+      // .select("-photo")
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name username")
+      .select(
+        "_id title body slug mtitle mdesc categories tags postedBy createAt updatedAt"
+      )
+      .exec((err, blog) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+
+        return res.json(blog);
+      });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
   }
 };
-exports.removeBlog = (req, res) => {
+exports.removeBlog = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
   try {
+    await Blog.findOneAndRemove({ slug }).exec((err, blog) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      return res.json({
+        blog,
+        message: "The Blog is deleted successful",
+      });
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
   }
 };
-exports.updateBlog = (req, res) => {
+exports.updateBlog = async (req, res) => {
+  //get the data from form body
+  const slug = req.params.slug.toLowerCase();
   try {
+    await Blog.findOne({ slug }).exec((err, oldBlog) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      let form = new formidable.IncomingForm();
+      form.keepExtensions = true; //if we have files in formData we want to keep the extensions
+      //convert formData into valid javascript obj
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          return res.status(400).json({
+            error: "Image could not upload",
+          });
+        }
+
+        let slugBeforeMerge = oldBlog.slug; // saving such that slug dont change
+
+        oldBlog = _.merge(oldBlog, fields); //merge new fields
+        oldBlog.slug = slugBeforeMerge;
+
+        //update the body cat tag desc
+
+        const { body, desc, categories, tags } = fields;
+
+        if (body) {
+          oldBlog.excerpt = smartTrim(body, 320, " ", " ....");
+          oldBlog.desc = stripHtml(body.substring(0, 160));
+        }
+
+        if (categories) {
+          oldBlog.categories = categories.split(",");
+        }
+
+        if (tags) {
+          oldBlog.tags = tags.split(",");
+        }
+
+        if (files.photo) {
+          if (files.photo.size > 10000000) {
+            return res.status(400).json({
+              error: "Image should be less then 1mb in size",
+            });
+          }
+
+          oldBlog.photo.data = fs.readFileSync(files.photo.path);
+          oldBlog.photo.contentType = files.photo.type;
+        }
+
+        oldBlog.save((err, result) => {
+          if (err) {
+            return res.status(400).json({
+              error: errorHandler(err),
+            });
+          }
+
+          // result.photo = undefined;
+
+          res.json(result);
+        });
+      });
+    });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server error");
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.photo = async (req, res) => {
+  //get the data from form body
+  const slug = req.params.slug.toLowerCase();
+  try {
+    await Blog.findOne({ slug })
+      .select("photo")
+      .exec((err, blog) => {
+        if (err || !blog) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+
+        res.set("Content-Type", blog.photo.contentType);
+        return res.send(blog.photo.data);
+      });
+  } catch (error) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
   }
 };

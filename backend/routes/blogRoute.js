@@ -21,6 +21,7 @@ const {
   read,
   removeBlog,
   updateBlog,
+  photo,
 } = require("../controllers/blogController");
 
 router.post("/blog", tokenAuth, adminMiddleware, create);
@@ -29,5 +30,6 @@ router.post("/blogs-categories-tags", listAllBlogsByCatAndTags);
 router.post("/blog/:slug", read);
 router.delete("/blog/:slug", tokenAuth, adminMiddleware, removeBlog);
 router.put("/blog/:slug", tokenAuth, adminMiddleware, updateBlog);
+router.get("/blog/photo/:slug", photo);
 
 module.exports = router;
