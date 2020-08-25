@@ -139,7 +139,10 @@ exports.list = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+//We are using this fuction in blog index page
 exports.listAllBlogsByCatAndTags = async (req, res) => {
+  //console.log(req.body.limit);
   //get the limit of blogs to be shown from the front end
   //if user clicks load more then additional req will be sent and then the previous blogs are skipped then rest are send
   let limit = req.body.limit ? parseInt(req.body.limit) : 10; //by default is skip
@@ -187,6 +190,8 @@ exports.listAllBlogsByCatAndTags = async (req, res) => {
               tagsToBeSent,
               categoriesToBeSent,
               size: blogsToBeSent.length,
+              // limit,
+              // skip,
             });
           });
         });
@@ -196,6 +201,8 @@ exports.listAllBlogsByCatAndTags = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+//use this for getting single blog
 exports.read = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   try {
