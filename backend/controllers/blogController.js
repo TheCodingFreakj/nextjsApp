@@ -121,12 +121,12 @@ exports.create = (req, res) => {
 exports.list = async (req, res) => {
   try {
     await Blog.find({})
-      .populate("categories", "_id name slug")
-      .populate("tags", "_id name slug")
-      .populate("postedBy", "_id name username")
+      .populate("categories", "_id name slug") // to populate a field which is also another model you have mention that in the current model with a ref to ObjectId
+      .populate("tags", "_id name slug") // second argument is what fields you want to get from that model to this model
+      .populate("postedBy", "_id name username") //getting the user from user model
       .select(
         "_id title slug excerpt categories tags postedBy createAt updatedAt"
-      )
+      ) //select which stuffs you want to send while getting the blogs
       .exec((err, blogs) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });

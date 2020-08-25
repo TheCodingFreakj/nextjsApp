@@ -17,6 +17,8 @@ import "../../node_modules/react-quill/dist/quill.snow.css";
 //{JSON.stringify(router)}
 
 const BlogComponent = ({ router }) => {
+  //we are storing the value in the local storage
+  //and we want to reset or delete the values from local storage only if i get the success confirmation from backend
   const titletFromLS = () => {
     //dont have window avaliable
     if (typeof window === "undefined") {
@@ -49,6 +51,15 @@ const BlogComponent = ({ router }) => {
       return false;
     }
   };
+
+  //whatever you want to show you have to get the exact data from backedn
+  //or you can create create data which the user will give for instance forms
+  //use functions for that
+
+  //what ever you want ti show on screen you have to create the state
+  //inside the functions you can setState of the data variable
+  //Then you think how you can load the stuffs : useEffects
+  //after loading the data in state you have to write another function to show the data
 
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
@@ -121,6 +132,9 @@ const BlogComponent = ({ router }) => {
         });
 
         setBody("");
+
+        setChecked([]);
+        setCheckedTag([]);
         setCategories([]);
         setTags([]);
       }
@@ -167,22 +181,31 @@ const BlogComponent = ({ router }) => {
     }
   };
 
+  //function to get the ids
+
+  //if id exists in the categories state we have to take that out using the splice method
+  //if not we have to push the id to the state array
   const handleToggle = (cId) => () => {
+    //clear the state incase of any error
     setValues({ ...values, error: "" });
-
     //return the first index or -1
-
-    const clickedCategory = checked.indexOf(cId);
+    //state.indexOf(cid)
+    const clickedCategory = checked.indexOf(cId); //index of is to find out if id is present already
+    //this is the array which stores what all is there in the checked state
     const all = [...checked];
+
+    //-1 means id dont exist
     if (clickedCategory === -1) {
       all.push(cId);
     } else {
       all.splice(clickedCategory, 1);
     }
 
-    console.log(all);
+    //update the state with the array
+    //console.log(all);
     setChecked(all);
 
+    //put the selecetd categories and push them to the categories state and send to backend
     formData.set("categories", all);
   };
 
@@ -369,3 +392,8 @@ BlogComponent.formats = [
 ];
 
 export default withRouter(BlogComponent);
+
+//While submitting somthing to the backend you have to use forms
+//Store the submit type in a variable.
+//Here we are also submitting checked bozes so we have to pick up the ids
+//push the category ids in the state (update the state) then submit

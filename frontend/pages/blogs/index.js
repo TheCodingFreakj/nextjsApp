@@ -3,7 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
 import { listBlogsWithCategoriesNTags } from "../../actions/blog";
-import { API } from "../../config";
+
+import Card from "../../components/blogs/card";
 
 const Blogs = (pageProps) => {
   console.log(pageProps); //nor coming
@@ -11,37 +12,25 @@ const Blogs = (pageProps) => {
   const showAllBlogs = () => {
     return pageProps.blogsToBeSent.map((blog, i) => (
       <article key={i}>
-        <div className="lead pb-4 ">
-          <header>
-            <Link href={`/blogs/${blog.slug}`}>
-              <a>
-                <h2 className=" pt-3 pb-3 font-weight-bold">{blog.title}</h2>
-              </a>
-            </Link>
-          </header>
-
-          <section>
-            <p className="mark ml-1 pt-2 pb-2">
-              Written By {blog.postedBy.name} | Published {blog.updatedAt}
-            </p>
-          </section>
-
-          <section>Blog Categories and Tags</section>
-          <div className="row">
-            <div className="col-md-4">IMage</div>
-            <div className="col-md-8">
-              <section>
-                <div className="pb-3">{blog.excerpt}</div>
-
-                <Link href={`/blogs/${blog.slug}`}>
-                  <a className="btn btn-success mt-2 pt-2">Read More</a>
-                </Link>
-              </section>
-            </div>
-          </div>
-        </div>
+        <Card blog={blog} />
         <hr />
       </article>
+    ));
+  };
+
+  const showAllCategories = () => {
+    return pageProps.categoriesToBeSent.map((cat, i) => (
+      <Link key={i} href={`/categories/${cat.slug}`}>
+        <a className="btn btn-success mr-1 ml-1 mt-3">{cat.name}</a>
+      </Link>
+    ));
+  };
+
+  const showAllTags = () => {
+    return pageProps.tagsToBeSent.map((tag, i) => (
+      <Link key={i} href={`/categories/${tag.slug}`}>
+        <a className="btn btn-success mr-1 ml-1 mt-3">{tag.name}</a>
+      </Link>
     ));
   };
   return (
@@ -56,7 +45,11 @@ const Blogs = (pageProps) => {
             </div>
 
             <section>
-              <p>Show Categories and Tags</p>
+              <div className="pb-5 text-center">
+                {showAllCategories()}
+                <br />
+                {showAllTags()}
+              </div>
             </section>
           </header>
         </div>
