@@ -1,0 +1,88 @@
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import Router from "next/router";
+
+//get the token , get xookie from local storage and send that when create the cat
+import { isAuth, getCookie } from "../../actions/setAuthToken";
+import { getCategories } from "../../actions/category";
+import { getTags } from "../../actions/tags";
+import { listAllBlogs, removeBlog } from "../../actions/blog";
+import moment from "moment";
+
+const ReadBlogs = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [successDeleteMessage, setSuccessDeleteMessage] = useState("");
+  const token = getCookie("token"); // need the token to update and delete the blog
+  //we can use useffect to load all blogs
+  //console.log(blogs);
+
+  useEffect(() => {
+    loadBlogs();
+  }, []);
+
+  const loadBlogs = () => {
+    listAllBlogs().then((data) => {
+      //console.log(data);
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setBlogs(data);
+      }
+    });
+  };
+
+  const deleteBlog = (slug) => {
+    removeBlog(slug, token).then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setSuccessDeleteMessage(data.message);
+        loadBlogs(); //once we delete we need to load blog with page refresh
+      }
+    });
+  };
+
+  const deleteConfirm = (slug) => {
+    let answer = window.confirm("Are you sure to delete the blog? ");
+    if (answer) {
+      deleteBlog(slug);
+    }
+  };
+
+  const showAllBlogs = () => {
+    return blogs.map((blog, i) => {
+      return (
+        <div key={i} className="pb-5">
+          <h3>{blog.title}</h3>
+          <p className="mark">
+            Submitted By {blog.postedBy.name} | Written on
+            {moment(blog.updatedAt).from()}
+            <button
+              className="btn btn-small btn-danger"
+              onClick={() => deleteConfirm(blog.slug)}
+            >
+              Delete
+            </button>
+          </p>
+        </div>
+      );
+    });
+  };
+
+  return (
+    <React.Fragment>
+      <p>Display all blogs created by admin and all user profile</p>
+
+      <div className="row">
+        <div className="col-md-12">
+          {successDeleteMessage && (
+            <div className="alert alert-warning">{successDeleteMessage}</div>
+          )}
+          {showAllBlogs()}
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
+
+export default ReadBlogs;

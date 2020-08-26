@@ -22,6 +22,7 @@ const {
   removeBlog,
   updateBlog,
   photo,
+  listRelated,
 } = require("../controllers/blogController");
 
 router.post("/blog", tokenAuth, adminMiddleware, create);
@@ -31,5 +32,6 @@ router.post("/blog/:slug", read);
 router.delete("/blog/:slug", tokenAuth, adminMiddleware, removeBlog);
 router.put("/blog/:slug", tokenAuth, adminMiddleware, updateBlog);
 router.get("/blog/photo/:slug", photo);
+router.post("/blogs/related", listRelated);
 
 module.exports = router;

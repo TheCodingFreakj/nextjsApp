@@ -1,17 +1,34 @@
 //This page chnahes based on router and slug
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
-import { singleBlog } from "../../actions/blog";
+import { singleBlog, listRelatedBlog } from "../../actions/blog";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { withRouter } from "next/router";
 import renderHTML from "react-render-html";
 import moment from "moment";
+import SmallCard from "../../components/blogs/smallcard";
 
 const SingleBlog = ({ blog, query }) => {
   //   console.log(query);
+
+  const [related, setRelated] = useState([]);
+  const loadRelated = () => {
+    listRelatedBlog({ blog }).then((data) => {
+      //console.log(data);
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setRelated(data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadRelated();
+  }, []);
   const head = () => (
     <Head>
       <title>
@@ -56,6 +73,16 @@ const SingleBlog = ({ blog, query }) => {
     ));
   };
   //   console.log(blog);
+
+  const showRelatedBlogs = () => {
+    return related.map((blog, i) => (
+      <div key={i} className="col-md-4">
+        <article>
+          <SmallCard blog={blog} />
+        </article>
+      </div>
+    ));
+  };
   return (
     <React.Fragment>
       {head()}
@@ -102,7 +129,8 @@ const SingleBlog = ({ blog, query }) => {
             <div className="container pb-5">
               <h4 className="text-center pt-5 pb-5 h2 ">Related Blogs</h4>
               <hr />
-              <p>Show Related Blogs</p>
+              {/* {JSON.stringify(related)} */}
+              <div className="row">{showRelatedBlogs()}</div>
             </div>
 
             <div className="container pb-5">

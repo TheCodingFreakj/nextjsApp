@@ -334,3 +334,28 @@ exports.photo = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+exports.listRelated = async (req, res) => {
+  let limit = req.body.limit ? parseInt(req.body.limit) : 3;
+  const { _id, categories } = req.body.blog; //This req comes from frontend where we send the blog on which we want to include the related
+
+  try {
+    //get the blogs uing id but include only categories and give back other blogs from same category
+    await Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
+      .limit(limit)
+      .populate("postedBy", "_id name profile")
+      .select("title slug excerpt postedBy createdAt updatedAt")
+      .exec((err, blogs) => {
+        if (err) {
+          return res.status(400).json({
+            error: "Image could not upload",
+          });
+        }
+
+        res.json(blogs);
+      });
+  } catch (error) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
