@@ -93,6 +93,7 @@ export const listBlogsWithCategoriesNTags = async (skip, limit) => {
   }
 };
 
+//gives the blog based on slug
 export const singleBlog = async (slug) => {
   try {
     const config = {

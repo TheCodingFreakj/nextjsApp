@@ -98,6 +98,7 @@ const BlogComponent = ({ router }) => {
 
   const initCategories = () => {
     getCategories().then((data) => {
+      //console.log(data);//five categories coming
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -108,6 +109,7 @@ const BlogComponent = ({ router }) => {
 
   const initTags = () => {
     getTags().then((data) => {
+      // console.log(data);//five tags coming
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -121,6 +123,7 @@ const BlogComponent = ({ router }) => {
     //console.log("Ready to Publish a Blog");
 
     createBlog(formData, getCookie("token")).then((data) => {
+      // console.log(data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -202,7 +205,7 @@ const BlogComponent = ({ router }) => {
     }
 
     //update the state with the array
-    //console.log(all);
+    console.log(all);
     setChecked(all);
 
     //put the selecetd categories and push them to the categories state and send to backend
@@ -210,27 +213,29 @@ const BlogComponent = ({ router }) => {
   };
 
   const handleTagsToggle = (tId) => () => {
+    //clear the state incase of any error
     setValues({ ...values, error: "" });
 
     //return the first index or -1
 
-    const clickedTag = checked.indexOf(tId);
-    const all = [...checkedTag];
+    const clickedTag = checkedTag.indexOf(tId);
+    const allTags = [...checkedTag];
     if (clickedTag === -1) {
-      all.push(tId);
+      allTags.push(tId);
     } else {
-      all.splice(clickedTag, 1);
+      allTags.splice(clickedTag, 1);
     }
 
-    console.log(all);
-    setCheckedTag(all);
+    console.log(allTags);
+    setCheckedTag(allTags);
 
-    formData.set("tags", all);
+    formData.set("tags", allTags);
   };
 
   const showCategories = () => {
     return categories.map((cat, i) => (
       <li key={i} className="list-unstyled">
+        {/* {console.log(cat)} */}
         <input
           onChange={handleToggle(cat._id)}
           type="checkbox"
@@ -321,9 +326,9 @@ const BlogComponent = ({ router }) => {
           <hr />
           {JSON.stringify(body)}
           <hr />
-          {/* {JSON.stringify(categories)}
+          {JSON.stringify(categories)}
           <hr />
-          {JSON.stringify(tags)} */}
+          {JSON.stringify(tags)}
         </div>
         <div className="col-md-2">
           <div>

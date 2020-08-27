@@ -16,7 +16,7 @@ const Card = ({ blog }) => {
   };
 
   const showBlogTags = (blog) => {
-    return blog.categories.map((tag, i) => (
+    return blog.tags.map((tag, i) => (
       <Link key={i} href={`/categories/${tag.slug}`}>
         <a className="btn btn-danger mr-1 ml-1 mt-3">{tag.name}</a>
       </Link>
@@ -51,7 +51,7 @@ const Card = ({ blog }) => {
           <section>
             <img
               className="img img-fluid"
-              style={{ maxHeight: "150px", width: "auto" }}
+              style={{ maxHeight: "auto", width: "100%" }}
               src={`${API}/api/blog/photo/${blog.slug}`}
               alt={blog.title}
             />
