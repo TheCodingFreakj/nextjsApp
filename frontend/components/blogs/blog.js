@@ -226,7 +226,7 @@ const BlogComponent = ({ router }) => {
       allTags.splice(clickedTag, 1);
     }
 
-    console.log(allTags);
+    //console.log(allTags);
     setCheckedTag(allTags);
 
     formData.set("tags", allTags);

@@ -359,3 +359,31 @@ exports.listRelated = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+exports.BlogSearchLists = async (req, res) => {
+  const { search } = req.query;
+  try {
+    if (search) {
+      await Blog.find(
+        {
+          $or: [
+            { title: { $regex: search, $options: "i" } },
+            { body: { $regex: search, $options: "i" } },
+          ],
+        },
+        (err, blogs) => {
+          if (err) {
+            return res.status(400).json({
+              error: errorHandler(err),
+            });
+          }
+
+          res.json(blogs);
+        }
+      ).select("-photo -body ");
+    }
+  } catch (error) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};

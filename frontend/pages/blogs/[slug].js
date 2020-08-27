@@ -32,7 +32,7 @@ const SingleBlog = ({ blog, query }) => {
   const head = () => (
     <Head>
       <title>
-        {blog.title} | {APP_NAME}{" "}
+        {blog.title} | {APP_NAME}
       </title>
       <meta name="description" content={blog.mdesc} />
 
@@ -67,7 +67,7 @@ const SingleBlog = ({ blog, query }) => {
 
   const showBlogTags = (blog) => {
     return blog.categories.map((tag, i) => (
-      <Link key={i} href={`/categories/${tag.slug}`}>
+      <Link key={i} href={`/tags/${tag.slug}`}>
         <a className="btn btn-danger mr-1 ml-1 mt-3">{tag.name}</a>
       </Link>
     ));
@@ -149,8 +149,8 @@ export const getServerSideProps = async ({ query }) => {
   const querybuilder = query.slug;
   const data = await singleBlog(query.slug);
 
-  console.log(data);
-  console.log(query.slug);
+  // console.log(data);
+  // console.log(query.slug);
 
   //console.log("getServerProps", data, context.params, context.query);
 

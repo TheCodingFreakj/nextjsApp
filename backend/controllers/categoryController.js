@@ -1,4 +1,5 @@
 const Category = require("../models/category");
+const Blog = require("../models/blog");
 const slugify = require("slugify");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
@@ -45,13 +46,27 @@ exports.list = async (req, res) => {
 exports.read = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   try {
-    await Category.findOne({ slug }).exec((err, category) => {
+    await Category.findOne({ slug }).exec(async (err, category) => {
       if (err) {
         return res
           .status(400)
           .json({ errors: [{ msg: "There is no category of this type" }] });
       }
-      res.json(category); //you can also return the blogs associated with this category
+      //res.json(category); //you can also return the blogs associated with this category
+      await Blog.find({ categories: category })
+        .populate("categories", "_id name slug")
+        .populate("tags", "_id name slug")
+        .populate("postedBy", "_id name")
+        .select(
+          "_id title slug excerpt categories postedBy tags createdBy updateAt"
+        )
+        .exec((err, data) => {
+          if (err) {
+            return res.status(400).json({ errors: errorHandler(err) });
+          }
+
+          res.json({ category: category, blogs: data });
+        });
     });
   } catch (err) {
     console.error(err.message);
@@ -62,7 +77,7 @@ exports.removeCat = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   try {
     await Category.findOneAndRemove({ slug }).exec((err, category) => {
-      console.log(category);
+      // console.log(category);
       if (err) {
         return res.status(400).json({ errors: errorHandler(err) });
       }

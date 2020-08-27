@@ -105,7 +105,7 @@ const Blogs = (pageProps) => {
 
   const showAllTags = () => {
     return pageProps.tagsToBeSent.map((tag, i) => (
-      <Link key={i} href={`/categories/${tag.slug}`}>
+      <Link key={i} href={`/tags/${tag.slug}`}>
         <a className="btn btn-success mr-1 ml-1 mt-3">{tag.name}</a>
       </Link>
     ));

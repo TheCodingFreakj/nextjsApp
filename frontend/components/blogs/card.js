@@ -16,8 +16,9 @@ const Card = ({ blog }) => {
   };
 
   const showBlogTags = (blog) => {
+    //console.log(blog);
     return blog.tags.map((tag, i) => (
-      <Link key={i} href={`/categories/${tag.slug}`}>
+      <Link key={i} href={`/tags/${tag.slug}`}>
         <a className="btn btn-danger mr-1 ml-1 mt-3">{tag.name}</a>
       </Link>
     ));

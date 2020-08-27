@@ -68,6 +68,7 @@ export const getCategories = async () => {
 
 //This is for Category Page
 export const getSingleCategory = async (slug) => {
+  // console.log(slug);
   try {
     const config = {
       method: "GET",

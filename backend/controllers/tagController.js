@@ -1,5 +1,6 @@
 const Tags = require("../models/tags");
 const slugify = require("slugify");
+const Blog = require("../models/blog");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 exports.create = async (req, res) => {
@@ -45,13 +46,29 @@ exports.list = async (req, res) => {
 exports.read = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   try {
-    await Tags.findOne({ slug }).exec((err, tag) => {
+    await Tags.findOne({ slug }).exec(async (err, tag) => {
       if (err) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "There is no category of this type" }] });
+          .json({ errors: [{ msg: "There is no tags of this type" }] });
       }
-      res.json(tag); //you can also return the blogs associated with this category
+      // res.json(tag); //you can also return the blogs associated with this category
+
+      await Blog.find({ tags: tag })
+        .populate("tags", "_id name slug")
+        .populate("categories", "_id name slug")
+        .populate("postedBy", "_id name")
+        .select(
+          "_id title slug excerpt categories postedBy tags createdBy updateAt"
+        )
+        .exec((err, data) => {
+          //console.log(data);
+          if (err) {
+            return res.status(400).json({ errors: errorHandler(err) });
+          }
+
+          res.json({ tag: tag, blogs: data });
+        });
     });
   } catch (err) {
     console.error(err.message);

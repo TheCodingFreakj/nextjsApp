@@ -23,6 +23,7 @@ const {
   updateBlog,
   photo,
   listRelated,
+  BlogSearchLists,
 } = require("../controllers/blogController");
 
 router.post("/blog", tokenAuth, adminMiddleware, create);
@@ -33,5 +34,6 @@ router.delete("/blog/:slug", tokenAuth, adminMiddleware, removeBlog);
 router.put("/blog/:slug", tokenAuth, adminMiddleware, updateBlog);
 router.get("/blog/photo/:slug", photo);
 router.post("/blogs/related", listRelated);
+router.get("/blogs/search", BlogSearchLists);
 
 module.exports = router;
