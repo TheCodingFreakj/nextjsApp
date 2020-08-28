@@ -11,10 +11,13 @@ const {
 
 const tokenAuth = require("../middlewares/tokenAuth");
 
-const { read } = require("../controllers/userProfileController");
+const {
+  read,
+  publicUserProfile,
+} = require("../controllers/userProfileController");
 
 //bring validators
 
 router.get("/profile", tokenAuth, adminMiddleware, read);
-
+router.get("/user/:username", publicUserProfile);
 module.exports = router;

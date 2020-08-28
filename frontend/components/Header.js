@@ -24,6 +24,7 @@ import { signout } from "../actions/auth";
 import { isAuth } from "../actions/setAuthToken";
 
 import "../node_modules/nprogress/nprogress.css";
+import Search from "../components/blogs/search";
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
@@ -35,7 +36,7 @@ const Header = () => {
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <div>
+    <React.Fragment>
       <Navbar
         color="blue"
         light
@@ -122,7 +123,9 @@ const Header = () => {
           </Nav>
         </Collapse>
       </Navbar>
-    </div>
+
+      <Search />
+    </React.Fragment>
   );
 };
 

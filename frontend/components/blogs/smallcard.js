@@ -29,15 +29,14 @@ const SmallCard = ({ blog }) => {
               <h5 className="card-title">{blog.title}</h5>
             </a>
           </Link>
-          <p className="card-text">{renderHTML(blog.excerpt)}</p>
+
+          <div>
+            <p className="card-text">{renderHTML(blog.excerpt)}</p>
+          </div>
         </section>
       </div>
 
       <div className="card-body">
-        {/* <Link href={`/blogs/${blog.slug}`}>
-          <a className=" pt-2">Read More</a>
-        </Link> */}
-
         <div>
           Posted {moment(blog.updatedAt).fromNow()} by{" "}
           <Link href={`/`}>

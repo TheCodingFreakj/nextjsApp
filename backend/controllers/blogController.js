@@ -361,7 +361,9 @@ exports.listRelated = async (req, res) => {
 };
 
 exports.BlogSearchLists = async (req, res) => {
-  const { search } = req.query;
+  console.log(req.query); //this is the string you get from frontend
+  const { search } = req.query; //we send the seatc object from frontend
+
   try {
     if (search) {
       await Blog.find(
