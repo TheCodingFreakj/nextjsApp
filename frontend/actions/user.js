@@ -87,8 +87,8 @@ export const updateProfile = async (token, user) => {
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       },
     };
-
-    const response = await axios.put(`${API}/api/user/update`, config); //handing the backedn register user
+    const body = user;
+    const response = await axios.put(`${API}/api/user/update`, body, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);

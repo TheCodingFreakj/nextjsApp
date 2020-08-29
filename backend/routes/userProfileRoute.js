@@ -20,7 +20,7 @@ const {
 
 //bring validators
 
-router.get("/profile", tokenAuth, authMiddleware, read); // foe private profile to update delete
+router.get("/user/profile", tokenAuth, authMiddleware, read); // for private profile to update delete
 router.get("/user/:username", publicUserProfile);
 router.put("/user/update", tokenAuth, authMiddleware, updateUserProfile);
 router.get("/user/photo/:username", getUserProfilephoto);

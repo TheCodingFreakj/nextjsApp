@@ -64,6 +64,7 @@ exports.publicUserProfile = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
   try {
     let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
     form.parse(req, async (err, fields, files) => {
       if (err) {
         return res.status(400).json({
@@ -83,17 +84,18 @@ exports.updateUserProfile = async (req, res) => {
 
         user.photo.data = fs.readFileSync(files.photo.path);
         user.photo.contentType = files.photo.type;
-        await user.save;
-        if (err) {
-          return res.status(400).json({
-            error: errorHandler(err),
-          });
-        }
-
-        user.hashed_password = undefined;
-
-        res.json(user);
       }
+
+      await user.save;
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err),
+        });
+      }
+
+      user.hashed_password = undefined;
+
+      res.json(user);
     });
   } catch (error) {
     console.error(err.message);
