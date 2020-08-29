@@ -62,6 +62,7 @@ exports.publicUserProfile = async (req, res) => {
 };
 
 exports.updateUserProfile = async (req, res) => {
+  //console.log(req.user);
   try {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
@@ -72,8 +73,17 @@ exports.updateUserProfile = async (req, res) => {
         });
       }
 
-      let user = authUser.profile; //This is coming from authMiddleware
+      let user = req.user; //This is coming from authMiddleware
+      //console.log(user);
       user = _.extend(user, fields); //if fields change then they will be merged
+
+      //checking for password
+
+      if (fields.password && fields.password.length < 6) {
+        return res.status(400).json({
+          error: "Please Make your password 6 characters long",
+        });
+      }
 
       if (files.photo) {
         if (files.photo.size > 10000000) {
@@ -86,16 +96,19 @@ exports.updateUserProfile = async (req, res) => {
         user.photo.contentType = files.photo.type;
       }
 
-      await user.save;
-      if (err) {
-        return res.status(400).json({
-          error: errorHandler(err),
-        });
-      }
+      user.save((err, result) => {
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
 
-      user.hashed_password = undefined;
+        result.hashed_password = undefined;
 
-      res.json(user);
+        res.json(result);
+
+        console.log(result);
+      });
     });
   } catch (error) {
     console.error(err.message);
@@ -104,6 +117,7 @@ exports.updateUserProfile = async (req, res) => {
 };
 exports.getUserProfilephoto = async (req, res) => {
   const username = req.params.username;
+  //console.log(username);
   try {
     await User.findOne({ username }).exec((err, user) => {
       if (err) {
@@ -111,10 +125,8 @@ exports.getUserProfilephoto = async (req, res) => {
           .status(400)
           .json({ error: "This  user does not exist in the database" });
       }
-
       if (user.photo.data) {
         res.set("Content-Type", user.photo.contentType);
-
         return res.send(user.photo.data);
       }
     });

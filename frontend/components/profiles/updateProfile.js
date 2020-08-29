@@ -3,6 +3,7 @@ import Link from "next/link";
 import Router from "next/router";
 import { getCookie, isAuth } from "../../actions/setAuthToken";
 import { getProfile, updateProfile } from "../../actions/user";
+import { API } from "../../config";
 
 const ProfileUpdate = () => {
   //request the backend to get the authenticated logged in user profile
@@ -102,9 +103,38 @@ const ProfileUpdate = () => {
           success: true,
           loading: false,
         });
+
+        //console.log(data);
       }
     });
   };
+
+  const showError = () => {
+    <div
+      className="alert alert-danger"
+      style={{ display: error ? "" : "none" }}
+    >
+      {error}
+    </div>;
+  };
+  const showSuccess = () => (
+    <div
+      className="alert alert-success"
+      style={{ display: success ? "" : "none" }}
+    >
+      Profile Updated
+    </div>
+  );
+
+  const showLoading = () => {
+    <div
+      className="alert alert-info"
+      style={{ display: loading ? "" : "none" }}
+    >
+      Loading...
+    </div>;
+  };
+
   const profileUpdateForm = () => {
     return (
       <form className="text-center" onSubmit={(e) => onSubmit(e)}>
@@ -126,7 +156,7 @@ const ProfileUpdate = () => {
             type="text"
             className="form-control"
             name="username"
-            value={username} // grab the init value from the state
+            value={username || ""} // grab the init value from the state
             onChange={onChange("username")}
             required
           />
@@ -138,7 +168,7 @@ const ProfileUpdate = () => {
             type="text"
             className="form-control"
             name="name"
-            value={name} // grab the init value from the state
+            value={name || ""} // grab the init value from the state
             onChange={onChange("name")}
             required
           />
@@ -150,7 +180,7 @@ const ProfileUpdate = () => {
             type="text"
             className="form-control"
             name="email"
-            value={email} // grab the init value from the state
+            value={email || ""} // grab the init value from the state
             onChange={onChange("email")}
             required
           />
@@ -159,24 +189,22 @@ const ProfileUpdate = () => {
         <div className="form-group">
           <label className="text-muted">Password</label>
           <input
-            type="text"
+            type="password"
             className="form-control"
             name="password"
-            value={password} // grab the init value from the state
+            value={password || ""} // grab the init value from the state
             onChange={onChange("password")}
-            required
           />
         </div>
 
         <div className="form-group">
           <label className="text-muted">About</label>
           <input
-            type="text-area"
+            type="text"
             className="form-control"
             name="about"
-            value={about} // grab the init value from the state
+            value={about || ""}
             onChange={onChange("about")}
-            required
           />
         </div>
 
@@ -191,11 +219,21 @@ const ProfileUpdate = () => {
     <React.Fragment>
       <div className="container">
         <div className="row">
-          <div className="col-md-4">Image</div>
+          <div className="col-md-4">
+            {/* <img
+              src={`${API}/api/user/photo/${username}`}
+              className="img img-fluid img-thumbnail mb-3"
+              style={{ maxHeight: "auto", maxWidth: "100%" }}
+              alt="user profile"
+            /> */}
+          </div>
 
-          <div className="col-md-8">
+          <div className="col-md-8 mb-5">
             {/* {JSON.stringify({ username, email, name })} */}
             {profileUpdateForm()}
+            {showSuccess()}
+            {showError()}
+            {showLoading()}
           </div>
         </div>
       </div>

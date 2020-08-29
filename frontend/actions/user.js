@@ -79,7 +79,7 @@ export const getProfile = async (token) => {
 export const updateProfile = async (token, user) => {
   try {
     const config = {
-      method: "GET",
+      method: "PUT",
       headers: {
         Accept: "application/json",
         Authorization: ` Bearer ${token}`,
