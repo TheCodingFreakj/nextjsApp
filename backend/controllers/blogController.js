@@ -343,7 +343,7 @@ exports.listRelated = async (req, res) => {
     //get the blogs uing id but include only categories and give back other blogs from same category
     await Blog.find({ _id: { $ne: _id }, categories: { $in: categories } })
       .limit(limit)
-      .populate("postedBy", "_id name profile")
+      .populate("postedBy", "_id name username profile")
       .select("title slug excerpt postedBy createdAt updatedAt")
       .exec((err, blogs) => {
         if (err) {

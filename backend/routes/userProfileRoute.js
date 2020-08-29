@@ -14,10 +14,14 @@ const tokenAuth = require("../middlewares/tokenAuth");
 const {
   read,
   publicUserProfile,
+  updateUserProfile,
+  getUserProfilephoto,
 } = require("../controllers/userProfileController");
 
 //bring validators
 
-router.get("/profile", tokenAuth, adminMiddleware, read);
+router.get("/profile", tokenAuth, authMiddleware, read); // foe private profile to update delete
 router.get("/user/:username", publicUserProfile);
+router.put("/user/update", tokenAuth, authMiddleware, updateUserProfile);
+router.get("/user/photo/:username", getUserProfilephoto);
 module.exports = router;
