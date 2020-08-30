@@ -97,7 +97,7 @@ exports.Signin = async (req, res) => {
       return res.status(400).json({ errors: [{ msg: "There is no user" }] });
     }
 
-    console.log(user);
+    //console.log(user);
 
     // const username = user.username;
     //const email = user.email;

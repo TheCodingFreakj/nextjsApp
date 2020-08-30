@@ -22,6 +22,6 @@ const {
 
 router.get("/user/profile", tokenAuth, authMiddleware, read); // for private profile to update delete
 router.get("/user/:username", publicUserProfile);
-router.put("/user/update", tokenAuth, authMiddleware, updateUserProfile);
-router.get("/user/photo/:username", getUserProfilephoto);
+router.put("/user/update", tokenAuth, authMiddleware, updateUserProfile); //if you want to update the profile this applies
+router.get("/user/photo/:username", getUserProfilephoto); //for upload profile image
 module.exports = router;

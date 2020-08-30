@@ -36,4 +36,8 @@ router.get("/blog/photo/:slug", photo);
 router.post("/blogs/related", listRelated);
 router.get("/blogs/search", BlogSearchLists);
 
+//This is the auth user blog crud
+router.post("/user/blog", tokenAuth, authMiddleware, create);
+router.delete("/user/blog/:slug", tokenAuth, authMiddleware, removeBlog);
+router.put("/user/blog/:slug", tokenAuth, authMiddleware, updateBlog);
 module.exports = router;

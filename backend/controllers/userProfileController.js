@@ -4,6 +4,7 @@ const { errorHandler } = require("../helpers/dbErrorHandler");
 const _ = require("lodash");
 const formidable = require("formidable");
 const fs = require("fs");
+const { result } = require("lodash");
 
 exports.read = (req, res) => {
   // console.log(req.user);
@@ -85,6 +86,9 @@ exports.updateUserProfile = async (req, res) => {
         });
       }
 
+      //for photo update
+      //runs when user updates photo
+
       if (files.photo) {
         if (files.photo.size > 10000000) {
           return res.status(400).json({
@@ -103,11 +107,11 @@ exports.updateUserProfile = async (req, res) => {
           });
         }
 
-        result.hashed_password = undefined;
+        user.hashed_password = undefined;
+        user.photo = undefined;
 
-        res.json(result);
-
-        console.log(result);
+        res.json(user);
+        console.log(user);
       });
     });
   } catch (error) {
@@ -116,8 +120,10 @@ exports.updateUserProfile = async (req, res) => {
   }
 };
 exports.getUserProfilephoto = async (req, res) => {
+  // console.log(req.body.username);
+  //const username = req.body._id;
   const username = req.params.username;
-  //console.log(username);
+  // console.log(username);
   try {
     await User.findOne({ username }).exec((err, user) => {
       if (err) {

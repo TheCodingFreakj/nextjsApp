@@ -58,3 +58,13 @@ export const isAuth = () => {
     }
   }
 };
+
+export const updateUserLocalStorage = (user, next) => {
+  if (typeof window !== "undefined") {
+    if (localStorage.getItem("user")) {
+      let auth = JSON.parse(localStorage.getItem("user"));
+      auth = user;
+      localStorage.setItem("user", JSON.stringify(auth));
+    }
+  }
+};

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
-import { getCookie, isAuth } from "../../actions/setAuthToken";
+import {
+  getCookie,
+  isAuth,
+  updateUserLocalStorage,
+} from "../../actions/setAuthToken";
 import { getProfile, updateProfile } from "../../actions/user";
 import { API } from "../../config";
 
@@ -42,7 +46,7 @@ const ProfileUpdate = () => {
 
   const init = () => {
     getProfile(token).then((data) => {
-      //console.log(data); //data coming
+      console.log(data); //data coming
       if (data.err) {
         //push the error in the state
         setValues({ ...values, error: data.error });
@@ -68,6 +72,8 @@ const ProfileUpdate = () => {
     //console.log(e.target.value);
     const value = name === "photo" ? e.target.files[0] : e.target.value;
     let userFormData = new FormData();
+
+    console.log(...userFormData);
     userFormData.set(name, value); //This is the data we will send to bacvkend
     //after populating we have to update the state
     setValues({
@@ -93,7 +99,7 @@ const ProfileUpdate = () => {
           loading: false,
         });
       } else {
-        //either redirect or upa\date the state here
+        // updateUserLocalStorage(data, () => {
         setValues({
           ...values,
           username: data.username,
@@ -104,7 +110,9 @@ const ProfileUpdate = () => {
           loading: false,
         });
 
-        //console.log(data);
+        console.log(data);
+        // });
+        //either redirect or upa\date the state here
       }
     });
   };
@@ -220,12 +228,12 @@ const ProfileUpdate = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-4">
-            {/* <img
+            <img
               src={`${API}/api/user/photo/${username}`}
               className="img img-fluid img-thumbnail mb-3"
               style={{ maxHeight: "auto", maxWidth: "100%" }}
               alt="user profile"
-            /> */}
+            />
           </div>
 
           <div className="col-md-8 mb-5">

@@ -120,6 +120,12 @@ const Header = () => {
                 </a>
               </NavItem>
             )}
+
+            <NavItem className="ml-5 text-light font-weight-bold  h5">
+              <Link href="/user/crud">
+                <a className="text-light font-weight-bold  h5">Write a Blog</a>
+              </Link>
+            </NavItem>
           </Nav>
         </Collapse>
       </Navbar>
