@@ -122,7 +122,7 @@ const Header = () => {
             )}
 
             <NavItem className="ml-5 text-light font-weight-bold  h5">
-              <Link href="/user/crud">
+              <Link href="/user/blogs">
                 <a className="text-light font-weight-bold  h5">Write a Blog</a>
               </Link>
             </NavItem>

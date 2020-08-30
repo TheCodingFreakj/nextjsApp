@@ -1,11 +1,19 @@
 import axios from "axios";
 import { API } from "../config";
 import queryString from "query-string";
+import { isAuth } from "../actions/setAuthToken";
 
 //This is the input I am getting from the createBlogForm() after submit
 //formData, getCookie("token")
 export const createBlog = async (blog, token) => {
+  let createBlogEndPoint;
+
   try {
+    if (isAuth() && isAuth().role === 1) {
+      createBlogEndPoint = `${API}/api/blog`;
+    } else if (isAuth() && isAuth().role === 0) {
+      createBlogEndPoint = `${API}/api/user/blog`;
+    }
     const config = {
       method: "POST",
       headers: {
@@ -18,7 +26,7 @@ export const createBlog = async (blog, token) => {
 
     const body = blog; //we are sending the formData to get posted on the backend
 
-    const response = await axios.post(`${API}/api/blog`, body, config); //handing the backedn register user
+    const response = await axios.post(`${createBlogEndPoint}`, body, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);
