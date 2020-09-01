@@ -7,19 +7,27 @@ const fs = require("fs");
 const { result } = require("lodash");
 
 exports.read = (req, res) => {
-  // console.log(req.user);
+  console.log("The verified user is again passed to read method ", req.user); //Also getting the verified user
 
   const authenticatedUser = req.user;
   authenticatedUser.hashed_password = undefined;
+
+  console.log(
+    "We will return the authenticated user minus password info",
+    authenticatedUser
+  ); //This is without password
 
   return res.json(authenticatedUser);
 };
 
 exports.publicUserProfile = async (req, res) => {
   //we need a username
-
+  console.log(
+    "This is params..This is the query object passed from getServerSideprops",
+    req.params
+  );
   let username = req.params.username;
-  console.log(username);
+  console.log("This is the username as per req params", username);
   let user;
   let blogs;
 
@@ -57,13 +65,16 @@ exports.publicUserProfile = async (req, res) => {
         });
     });
   } catch (error) {
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send("Server Error");
   }
 };
 
 exports.updateUserProfile = async (req, res) => {
-  //console.log(req.user);
+  console.log(
+    "This is the entire updated user info I got after update",
+    req.user
+  );
   try {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
@@ -75,8 +86,12 @@ exports.updateUserProfile = async (req, res) => {
       }
 
       let user = req.user; //This is coming from authMiddleware
-      //console.log(user);
+      console.log("This is the entire user info I got just to  update", user);
       user = _.extend(user, fields); //if fields change then they will be merged
+
+      console.log("This is the merged info", user);
+      console.log("The fields which i currently changed", fields);
+      console.log("These are the user files", files);
 
       //checking for password
 
@@ -107,6 +122,7 @@ exports.updateUserProfile = async (req, res) => {
           });
         }
 
+        console.log(result);
         user.hashed_password = undefined;
         user.photo = undefined;
 
@@ -115,29 +131,33 @@ exports.updateUserProfile = async (req, res) => {
       });
     });
   } catch (error) {
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send("Server Error");
   }
 };
+
 exports.getUserProfilephoto = async (req, res) => {
   // console.log(req.body.username);
   //const username = req.body._id;
-  const username = req.params.username;
-  // console.log(username);
+  const userId = req.params.userId;
+  console.log(userId);
   try {
-    await User.findOne({ username }).exec((err, user) => {
+    await User.findOne({ _id: userId }).exec((err, user) => {
       if (err) {
         return res
           .status(400)
-          .json({ error: "This  user does not exist in the database" });
+          .json({ error: "This user does not exist in the database" });
       }
+
+      console.log("This is the user data that needed to be changed", user);
+
       if (user.photo.data) {
         res.set("Content-Type", user.photo.contentType);
         return res.send(user.photo.data);
       }
     });
   } catch (error) {
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send("Server Error");
   }
 };

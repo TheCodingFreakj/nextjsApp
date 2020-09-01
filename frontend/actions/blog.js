@@ -174,13 +174,19 @@ export const listRelatedBlog = async (blog) => {
   }
 };
 
-export const listAllBlogs = async () => {
+export const listAllBlogs = async (username) => {
+  let listBlogsEndPoint;
   try {
+    if (username) {
+      listBlogsEndPoint = `${API}/api/${username}/blogs`;
+    } else {
+      listBlogsEndPoint = `${API}/api/blogs`;
+    }
     const config = {
       method: "GET",
     };
 
-    const response = await axios.get(`${API}/api/blogs`, config); //handing the backedn register user
+    const response = await axios.get(`${listBlogsEndPoint}`, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);

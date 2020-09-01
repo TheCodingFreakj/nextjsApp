@@ -53,7 +53,10 @@ export const getProfile = async (token) => {
 
     const response = await axios.get(`${API}/api/user/profile`, config); //handing the backedn register user
     return response.data;
-    console.log(response.data); // this is the token from backend
+    console.log(
+      "I am expecing the retirn of the read method from this backend request plus photo",
+      response.data
+    ); // this is the token from backend
     console.log(response.status);
     console.log(response.statusText);
     console.log(response.headers);
@@ -77,6 +80,7 @@ export const getProfile = async (token) => {
 };
 
 export const updateProfile = async (token, user) => {
+  console.log("This is the userData for update", user);
   try {
     const config = {
       method: "PUT",
@@ -90,7 +94,10 @@ export const updateProfile = async (token, user) => {
     const body = user;
     const response = await axios.put(`${API}/api/user/update`, body, config); //handing the backedn register user
     return response.data;
-    console.log(response.data); // this is the token from backend
+    console.log(
+      "This is the data I get when i hit the submit button",
+      response.data
+    ); // this is the token from backend
     console.log(response.status);
     console.log(response.statusText);
     console.log(response.headers);

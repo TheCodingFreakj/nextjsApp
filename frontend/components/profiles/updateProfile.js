@@ -18,6 +18,7 @@ const ProfileUpdate = () => {
 
   const [values, setValues] = useState({
     username: "",
+    userId: "",
     name: "",
     email: "",
     password: "",
@@ -41,12 +42,16 @@ const ProfileUpdate = () => {
     loading,
     photo,
     userData,
+    userId,
   } = values;
   //request the backend to get the authenticated logged in user profile
 
-  const init = () => {
-    getProfile(token).then((data) => {
-      console.log(data); //data coming
+  const init = async () => {
+    await getProfile(token).then((data) => {
+      console.log(
+        "I am expecing the retirn of the read method from this backend request. This is the authenticated user profile data",
+        data
+      ); //data coming
       if (data.err) {
         //push the error in the state
         setValues({ ...values, error: data.error });
@@ -59,11 +64,13 @@ const ProfileUpdate = () => {
           name: data.name,
           email: data.email,
           about: data.about,
+          userId: data._id,
         });
       }
     });
   };
 
+  //getting authenticated logged in user every refresh
   useEffect(() => {
     init();
   }, []);
@@ -73,7 +80,7 @@ const ProfileUpdate = () => {
     const value = name === "photo" ? e.target.files[0] : e.target.value;
     let userFormData = new FormData();
 
-    console.log(...userFormData);
+    console.log("This is the value I am updating now", value);
     userFormData.set(name, value); //This is the data we will send to bacvkend
     //after populating we have to update the state
     setValues({
@@ -85,10 +92,15 @@ const ProfileUpdate = () => {
     });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    updateProfile(token, userData).then((data) => {
+    console.log(
+      "This is the entire userdata I am to send to the backend",
+      userData
+    );
+
+    await updateProfile(token, userData).then((data) => {
       //console.log(data);
       if (data.err) {
         //push the error in the state
@@ -108,9 +120,10 @@ const ProfileUpdate = () => {
           about: data.about,
           success: true,
           loading: false,
+          userId: data._id,
         });
 
-        console.log(data);
+        console.log("This is the updated data at frontend", data);
         // });
         //either redirect or upa\date the state here
       }
@@ -228,8 +241,11 @@ const ProfileUpdate = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-4">
+            {/* Consider putting this in action files */}
+
+            {/* Getting this username from state */}
             <img
-              src={`${API}/api/user/photo/${username}`}
+              src={`${API}/api/user/photo/${userId}`}
               className="img img-fluid img-thumbnail mb-3"
               style={{ maxHeight: "auto", maxWidth: "100%" }}
               alt="user profile"

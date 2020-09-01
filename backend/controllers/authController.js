@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const shortid = require("short-id");
 const bcrypt = require("bcryptjs");
+// const { BlogSearchLists } = require("./blogController");
+const { errorHandler } = require("../helpers/dbErrorHandler");
 
 exports.Signup = async (req, res) => {
   const { username, name, email, password } = req.body;
@@ -173,18 +175,26 @@ exports.requireSignin = expressJwt({
 });
 
 exports.authMiddleware = async (req, res, next) => {
-  // console.log(req.user.id);
+  console.log(
+    "I am getting the id of the verified person that i got from tokenAuth middleware",
+    req.user.id
+  );
   //need the user id
   try {
     const authUserID = req.user.id;
 
     // console.log(authUserID);
     let authUser = await User.findById({ _id: authUserID });
+
+    console.log(
+      "This is the entire user information i pulled using the logged in user",
+      authUser
+    ); //This comes with photo and all stuffs including password
     //no user
     if (!authUser) {
       return res.status(400).json({ errors: [{ msg: "There is no user" }] });
     }
-    // console.log(authUser);
+    // console.log("Using that Id i got I am find the entire user info", authUser);
     // console.log(authUser.profile);
 
     req.user = authUser;
@@ -221,5 +231,44 @@ exports.adminMiddleware = async (req, res, next) => {
   } catch (error) {
     console.error("something wrong with adminMiddleware");
     res.status(500).json({ msg: "Server Error" });
+  }
+};
+
+//This middleware checks if the blog posted by userId matched with the loggedin person
+
+//find the particular blog based on slug
+
+exports.canUpdateAndDeleteBlog = async (req, res, next) => {
+  const slug = req.params.slug.toLowerCase();
+  console.log(
+    "This is the slug I got from params. I will use this to find the blogs",
+    slug
+  );
+  try {
+    Blog.findOne({ slug }).exec((err, data) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err),
+        });
+      }
+
+      console.log("This is blog data", data);
+      //we are checking the blog's user id is equal to the logged in user
+      let authorizedUser =
+        data.postedBy._id.toString() === req.user._id.toString(); //This is avalable using the auth middleware auth
+
+      if (!authorizedUser) {
+        if (err) {
+          return res.status(400).json({
+            error: "You are not authorized",
+          });
+        }
+      }
+
+      next();
+    });
+  } catch (error) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
   }
 };

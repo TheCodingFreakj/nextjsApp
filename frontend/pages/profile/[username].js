@@ -123,10 +123,12 @@ const UserProfile = ({ user, blogs, query }) => {
 
 export const getServerSideProps = async ({ query }) => {
   //now all the returns are avaialble as props
+
+  console.log("This is query object from getServerSideProps", query); //this returns whatever we pass as params in [].js
   const querybuilder = query.username;
   const data = await getUserPublicProfile(query.username);
 
-  //console.log(data);
+  console.log("I am expecting the user and blogs written ", data);
   // console.log(query.slug);
 
   //console.log("getServerProps", data, context.params, context.query);

@@ -2,10 +2,18 @@ import React from "react";
 import Link from "next/link";
 import Layout from "../../../components/Layout";
 import Private from "../../../components/private";
+import ReadBlogs from "../../../components/blogs/readblog";
+import { isAuth } from "../../../actions/setAuthToken";
 
 //bring components
 
 const Blog = () => {
+  //Here is the usermane
+  const username = isAuth() && isAuth().username;
+  console.log("This is the username I got from", username);
+
+  // const userId = isAuth() && isAuth()._id;
+  // console.log("This is the username I got from", userId);
   return (
     <Layout>
       <Private>
@@ -16,7 +24,7 @@ const Blog = () => {
             </div>
 
             <div className="col-md-12">
-              This is for deleting and updating blogs
+              <ReadBlogs username={username} />
             </div>
           </div>
         </div>

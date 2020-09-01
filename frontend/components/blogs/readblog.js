@@ -9,7 +9,7 @@ import { getTags } from "../../actions/tags";
 import { listAllBlogs, removeBlog } from "../../actions/blog";
 import moment from "moment";
 
-const ReadBlogs = () => {
+const ReadBlogs = ({ username }) => {
   const [blogs, setBlogs] = useState([]);
   const [successDeleteMessage, setSuccessDeleteMessage] = useState("");
   const token = getCookie("token"); // need the token to update and delete the blog
@@ -21,7 +21,7 @@ const ReadBlogs = () => {
   }, []);
 
   const loadBlogs = () => {
-    listAllBlogs().then((data) => {
+    listAllBlogs(username).then((data) => {
       //console.log(data);
       if (data.error) {
         console.log(data.error);

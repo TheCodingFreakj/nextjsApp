@@ -389,3 +389,48 @@ exports.BlogSearchLists = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+//logged in userid must match with the person who created the blog then he can delete
+exports.listByUser = async (req, res) => {
+  //console.log("This is netire body", req.params);
+  console.log("I am getting the username from the params", req.params.username);
+  try {
+    User.find({ username: req.params.username }).exec((err, user) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err),
+        });
+      }
+      console.log(
+        "This is the entire user info I found using the username",
+        user
+      );
+      let userId = user._id;
+
+      console.log("This is userId I target", userId);
+
+      //find the blog using userid
+      Blog.find({ postedBy: userId })
+        .populate("categories", "_id name slug")
+        .populate("tags", "_id name slug")
+        .populate("postedBy", "_id name username")
+        .select("_id title slug postedBy createdAt updatedAt")
+        .exec((err, data) => {
+          if (err) {
+            return res.status(400).json({
+              error: errorHandler(err),
+            });
+          }
+
+          console.log(
+            "This is the entire list of blogs I got using the userId i got from user whoes username i got from params",
+            data
+          );
+          res.json(data);
+        });
+    });
+  } catch (error) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};

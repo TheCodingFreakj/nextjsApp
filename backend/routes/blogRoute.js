@@ -8,6 +8,7 @@ const {
   requireSignin,
   adminMiddleware,
   authMiddleware,
+  canUpdateAndDeleteBlog,
 } = require("../controllers/authController");
 
 const tokenAuth = require("../middlewares/tokenAuth");
@@ -24,6 +25,7 @@ const {
   photo,
   listRelated,
   BlogSearchLists,
+  listByUser,
 } = require("../controllers/blogController");
 
 router.post("/blog", tokenAuth, adminMiddleware, create);
@@ -38,6 +40,19 @@ router.get("/blogs/search", BlogSearchLists);
 
 //This is the auth user blog crud
 router.post("/user/blog", tokenAuth, authMiddleware, create);
-router.delete("/blog/:slug", tokenAuth, authMiddleware, removeBlog);
-router.put("/blog/:slug", tokenAuth, authMiddleware, updateBlog);
+router.get("/:username/blogs", listByUser); //This is the username with which we find id to check
+router.delete(
+  "/blog/:slug",
+  tokenAuth,
+  authMiddleware,
+  canUpdateAndDeleteBlog,
+  removeBlog
+);
+router.put(
+  "/blog/:slug",
+  tokenAuth,
+  authMiddleware,
+  canUpdateAndDeleteBlog,
+  updateBlog
+);
 module.exports = router;
