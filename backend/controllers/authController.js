@@ -1,6 +1,7 @@
 //get the model file for hashing methods
 
 const User = require("../models/user");
+const Blog = require("../models/blog");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const shortid = require("short-id");
@@ -252,11 +253,11 @@ exports.canUpdateAndDeleteBlog = async (req, res, next) => {
         });
       }
 
-      console.log("This is blog data", data);
+      console.log("This is blog data that user can update and delete", data);
       //we are checking the blog's user id is equal to the logged in user
       let authorizedUser =
         data.postedBy._id.toString() === req.user._id.toString(); //This is avalable using the auth middleware auth
-
+      console.log("This is the authorised user", authorizedUser);
       if (!authorizedUser) {
         if (err) {
           return res.status(400).json({

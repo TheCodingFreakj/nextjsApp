@@ -86,7 +86,7 @@ exports.updateUserProfile = async (req, res) => {
       }
 
       let user = req.user; //This is coming from authMiddleware
-      console.log("This is the entire user info I got just to  update", user);
+      console.log("This is the entire user info I got just to update", user);
       user = _.extend(user, fields); //if fields change then they will be merged
 
       console.log("This is the merged info", user);

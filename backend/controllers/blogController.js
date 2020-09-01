@@ -393,7 +393,10 @@ exports.BlogSearchLists = async (req, res) => {
 //logged in userid must match with the person who created the blog then he can delete
 exports.listByUser = async (req, res) => {
   //console.log("This is netire body", req.params);
-  console.log("I am getting the username from the params", req.params.username);
+  console.log(
+    "I am getting the username from the params. This is what I send from frontend from local storage which is current logged in user info",
+    req.params.username
+  );
   try {
     User.find({ username: req.params.username }).exec((err, user) => {
       if (err) {
@@ -405,7 +408,7 @@ exports.listByUser = async (req, res) => {
         "This is the entire user info I found using the username",
         user
       );
-      let userId = user._id;
+      let userId = user[0]._id;
 
       console.log("This is userId I target", userId);
 
