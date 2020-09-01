@@ -54,7 +54,7 @@ export const getProfile = async (token) => {
     const response = await axios.get(`${API}/api/user/profile`, config); //handing the backedn register user
     return response.data;
     console.log(
-      "I am expecing the retirn of the read method from this backend request plus photo",
+      "I am expecing the return of the read method from this backend request plus photo",
       response.data
     ); // this is the token from backend
     console.log(response.status);

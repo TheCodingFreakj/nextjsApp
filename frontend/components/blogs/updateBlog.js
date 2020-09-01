@@ -220,7 +220,7 @@ const UpdateBlog = ({ router }) => {
   };
 
   const editBlog = (e) => {
-    console.log("update blog");
+    // console.log("update blog");
     e.preventDefault();
     updateBlog(formData, getCookie("token"), router.query.slug).then((data) => {
       if (data.error) {
