@@ -217,6 +217,8 @@ const UpdateBlog = ({ router }) => {
     //   //if we have a window then store the blog
     //   localStorage.setItem("blog", JSON.stringify(e));
     // }
+
+    console.log("This is the updated formData", formData);
   };
 
   const editBlog = (e) => {

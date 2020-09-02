@@ -217,7 +217,7 @@ export const removeBlog = async (slug, token) => {
     if (isAuth() && isAuth().role === 1) {
       removeBlogsEndPoint = `${API}/api/blog/${slug}`;
     } else if (isAuth() && isAuth().role === 0) {
-      removeBlogsEndPoint = `${API}/user/api/blog/${slug}`;
+      removeBlogsEndPoint = `${API}/api/user/blog/${slug}`;
     }
     const config = {
       method: "DELETE",
@@ -256,6 +256,7 @@ export const removeBlog = async (slug, token) => {
 };
 
 export const updateBlog = async (blog, token, slug) => {
+  // console.log("This is the blog sent for update", blog);
   let updateBlogsEndPoint;
   try {
     if (isAuth() && isAuth().role === 1) {
@@ -263,6 +264,8 @@ export const updateBlog = async (blog, token, slug) => {
     } else if (isAuth() && isAuth().role === 0) {
       updateBlogsEndPoint = `${API}/api/user/blog/${slug}`;
     }
+
+    // console.log(updateBlogsEndPoint);
     const config = {
       method: "PUT",
       headers: {
@@ -277,7 +280,7 @@ export const updateBlog = async (blog, token, slug) => {
     const body = blog; //we are sending the formData to get posted on the backend
     const response = await axios.put(`${updateBlogsEndPoint}`, body, config); //handing the backedn register user
     return response.data;
-    console.log(response.data); // this is the token from backend
+    console.log("This is updated response for blog", response.data); // this is the token from backend
     console.log(response.status);
     console.log(response.statusText);
     console.log(response.headers);

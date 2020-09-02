@@ -42,14 +42,14 @@ router.get("/blogs/search", BlogSearchLists);
 router.post("/user/blog", tokenAuth, authMiddleware, create);
 router.get("/:username/blogs", listByUser); //This is the username with which we find id to check
 router.delete(
-  "/blog/:slug",
+  "/user/blog/:slug",
   tokenAuth,
   authMiddleware,
   canUpdateAndDeleteBlog,
   removeBlog
 );
 router.put(
-  "/blog/:slug",
+  "/user/blog/:slug",
   tokenAuth,
   authMiddleware,
   canUpdateAndDeleteBlog,
