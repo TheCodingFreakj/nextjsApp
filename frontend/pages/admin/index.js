@@ -35,7 +35,7 @@ const AdminIndex = () => {
               </ul>
             </div>
 
-            <div className="col-md-12">
+            <div className="col-md-4">
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/crud/blogs">
@@ -45,17 +45,61 @@ const AdminIndex = () => {
               </ul>
             </div>
 
-            <div className="col-md-12">
+            <div className="col-md-8">
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/crud/blogs/blog">
                     <a>Update/Delete Blogs</a>
                   </Link>
                 </li>
+              </ul>
+            </div>
 
+            <div className="col-md-12">
+              <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/adminUpdate">
                     <a>Update Profile</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-8">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/services">
+                    <a>Create Services</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-4">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/services/crud/service">
+                    <a>Update/Delete Services</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-8">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="">
+                    <a>Create Combo-Packages</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-4">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="">
+                    <a>Update/Delete Combo-Packages</a>
                   </Link>
                 </li>
               </ul>

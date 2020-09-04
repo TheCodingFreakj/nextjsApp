@@ -13,6 +13,7 @@ const authRoute = require("./routes/authRoute");
 const userProfileRoute = require("./routes/userProfileRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const tagsRoute = require("./routes/tagsRoute");
+const servicesRoute = require("./routes/servicesRoute");
 
 //app
 const app = express();
@@ -52,6 +53,7 @@ app.use("/api", authRoute);
 app.use("/api", userProfileRoute);
 app.use("/api", categoryRoute);
 app.use("/api", tagsRoute);
+app.use("/api", servicesRoute);
 
 //Ports
 

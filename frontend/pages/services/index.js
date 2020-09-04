@@ -17,11 +17,27 @@ const ServicesPage = () => {
               </h1>
             </div>
 
+            <section>
+              <div className="pb-5 text-center">
+                {/* {showAllServices()} */}
+                Show all services
+                <br />
+              </div>
+            </section>
+
             <div className="col-md-12 pt-3">
               <h1 className="display-4 font-weight-bold text-center">
                 ComboPackages
               </h1>
             </div>
+
+            <section>
+              <div className="pb-5 text-center">
+                {/* {showAllServices()} */}
+                Show all services
+                <br />
+              </div>
+            </section>
           </header>
         </div>
 
