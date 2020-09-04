@@ -88,6 +88,26 @@ const AdminIndex = () => {
             <div className="col-md-8">
               <ul className="list-group">
                 <li className="list-group-item">
+                  <Link href="/admin/crud/toolsBrands">
+                    <a>Create Marketing Tools Options</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-4">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="">
+                    <a>Create Reviews</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-8">
+              <ul className="list-group">
+                <li className="list-group-item">
                   <Link href="">
                     <a>Create Combo-Packages</a>
                   </Link>

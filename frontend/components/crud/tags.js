@@ -145,7 +145,7 @@ const Tags = () => {
           />
         </div>
 
-        <button type="submit" className="btn btm-primary">
+        <button type="submit" className="btn btn-success">
           Create
         </button>
       </form>
