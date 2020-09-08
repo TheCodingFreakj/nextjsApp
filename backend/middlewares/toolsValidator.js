@@ -9,3 +9,7 @@ exports.toolsCreateValidator = [
 //Adds a validator to check if a value is not empty; that is, a string with a length of 1 or bigger.
 
 //https://express-validator.github.io/docs/validation-chain-api.html
+
+exports.brandsCreateValidator = [
+  check("brandName").not().isEmpty().withMessage(" Name is required"), // incase of rule violation send these messages as error
+];

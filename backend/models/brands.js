@@ -3,7 +3,7 @@ const { ObjectId } = mongoose.Schema;
 
 const brandsSchema = new mongoose.Schema(
   {
-    name: {
+    brandName: {
       type: String,
       trim: true,
       required: true,
@@ -21,20 +21,20 @@ const brandsSchema = new mongoose.Schema(
       default: 4.5,
     },
 
-    location: {
-      type: {
-        type: String, // Don't do `{ location: { type: String } }`
-        enum: ["Point"], // 'location.type' must be 'Point'
-        required: true,
-      },
-      coordinates: {
-        type: [Number],
-        required: true,
-      },
-    },
+    // location: {
+    //   type: {
+    //     type: String, // Don't do `{ location: { type: String } }`
+    //     enum: ["Point"], // 'location.type' must be 'Point'
+    //     required: true,
+    //   },
+    //   coordinates: {
+    //     type: [Number],
+    //     required: true,
+    //   },
+    // },
   },
   { timestamps: true }
 );
 //https://simplicable.com/new/business-data-examples
 //https://simplicable.com/new/customer-data
-module.exports = mongoose.model("Brands", brandsSchema);
+module.exports = mongoose.model("Brand", brandsSchema);

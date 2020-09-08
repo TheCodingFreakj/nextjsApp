@@ -15,12 +15,18 @@ const servicesSchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
+    // indvPrice: {
+    //   [{ type: ObjectId, ref: "Prices", required: true }]
+    // }
     indvPrice: {
       type: Number,
     },
     discountPrice: {
       type: Number,
     },
+    discountedServiceCharges: {
+      type: Number, //service price
+    }, // calculate the service charges
     ratingAverage: {
       type: Number,
       default: 4.5,
@@ -28,7 +34,6 @@ const servicesSchema = new mongoose.Schema(
     ratingQuantity: {
       type: Number,
     },
-
     imageCover: {
       data: Buffer,
       contentType: String,
