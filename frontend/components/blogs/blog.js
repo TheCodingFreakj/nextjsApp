@@ -205,7 +205,7 @@ const BlogComponent = ({ router }) => {
     }
 
     //update the state with the array
-    console.log(all);
+    // console.log(all);
     setChecked(all);
 
     //put the selecetd categories and push them to the categories state and send to backend
@@ -321,14 +321,14 @@ const BlogComponent = ({ router }) => {
             {showSuccess()}
           </div>
 
-          <hr />
+          {/* <hr />
           {JSON.stringify(title)}
           <hr />
           {JSON.stringify(body)}
           <hr />
           {JSON.stringify(categories)}
           <hr />
-          {JSON.stringify(tags)}
+          {JSON.stringify(tags)} */}
         </div>
         <div className="col-md-2">
           <div>

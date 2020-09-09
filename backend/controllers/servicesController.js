@@ -33,3 +33,11 @@ exports.updateServices = async (req, res, next) => {
     res.status(500).send("Server Error");
   }
 };
+
+// Create a meter that calculated price per words and then check out the process (For contentWriting)
+
+// For packages
+// Give them tools to choose and then calculate price
+// This price = Fixed Price (Tool Price + Margin) + (Changeable Price Price) Service Charges - (any seasonal discount)
+
+// Service Price = Labour Cost + Margin

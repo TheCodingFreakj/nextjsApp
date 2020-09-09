@@ -108,7 +108,7 @@ const AdminIndex = () => {
             <div className="col-md-8">
               <ul className="list-group">
                 <li className="list-group-item">
-                  <Link href="">
+                  <Link href="/admin/crud/packages">
                     <a>Create Combo-Packages</a>
                   </Link>
                 </li>

@@ -29,6 +29,21 @@ const ServicesPage = () => {
               <h1 className="display-4 font-weight-bold text-center">
                 ComboPackages
               </h1>
+
+              <div className="pb-5 text-center">
+                <p className="pb-5 text-center">Choose your duration</p>
+                <div className="mr-5 text-center">
+                  <span className="mr-5 pt-5 pb-4 pl-3 pr-3 text-center">
+                    <button className="btn btn-success">Monthly</button>
+                  </span>
+                  <span className="mr-5 text-center">
+                    <button className="btn btn-success">12 Months -18 %</button>
+                  </span>
+                  <span className="mr-5 text-center">
+                    <button className="btn btn-success">24 Months -30 %</button>
+                  </span>
+                </div>
+              </div>
             </div>
 
             <section>

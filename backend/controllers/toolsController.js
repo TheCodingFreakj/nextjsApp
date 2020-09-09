@@ -52,6 +52,7 @@ exports.getAllTools = async (req, res) => {
 //for tool only
 exports.getToolClientPrice = async (req, res) => {
   try {
+    //getting the tool price after discount
     await Tools.aggregate([
       {
         $project: {

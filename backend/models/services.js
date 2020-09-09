@@ -16,7 +16,7 @@ const servicesSchema = new mongoose.Schema(
       index: true,
     },
     // indvPrice: {
-    //   [{ type: ObjectId, ref: "Prices", required: true }]
+    //   [{ type: ObjectId, ref: "Price", required: true }]
     // }
     indvPrice: {
       type: Number,

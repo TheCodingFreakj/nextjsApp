@@ -15,6 +15,7 @@ const categoryRoute = require("./routes/categoryRoute");
 const tagsRoute = require("./routes/tagsRoute");
 const servicesRoute = require("./routes/servicesRoute");
 const toolsRoute = require("./routes/toolsRoute");
+const priceRoute = require("./routes/toolsRoute");
 
 //app
 const app = express();
@@ -56,6 +57,7 @@ app.use("/api", categoryRoute);
 app.use("/api", tagsRoute);
 app.use("/api", servicesRoute);
 app.use("/api", toolsRoute);
+app.use("/api", priceRoute);
 
 //Ports
 
