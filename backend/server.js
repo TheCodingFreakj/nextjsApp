@@ -15,7 +15,7 @@ const categoryRoute = require("./routes/categoryRoute");
 const tagsRoute = require("./routes/tagsRoute");
 const servicesRoute = require("./routes/servicesRoute");
 const toolsRoute = require("./routes/toolsRoute");
-const priceRoute = require("./routes/toolsRoute");
+//const priceRoute = require("./routes/toolsRoute");
 
 //app
 const app = express();
@@ -49,7 +49,6 @@ mongoose
   .then(() => console.log("Database Connected"));
 
 //Routes
-
 app.use("/api", blogRoute);
 app.use("/api", authRoute);
 app.use("/api", userProfileRoute);
@@ -57,10 +56,9 @@ app.use("/api", categoryRoute);
 app.use("/api", tagsRoute);
 app.use("/api", servicesRoute);
 app.use("/api", toolsRoute);
-app.use("/api", priceRoute);
+//app.use("/api", priceRoute);
 
 //Ports
-
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => {

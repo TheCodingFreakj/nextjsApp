@@ -3,7 +3,7 @@ import Link from "next/link";
 import Layout from "../../../../components/Layout";
 import Brands from "../../../../components/serviceCrud/brands";
 import MarketingTools from "../../../../components/serviceCrud/marketingTools";
-import ServicePricesForm from "../../../../components/serviceCrud/price";
+//import ServicePricesForm from "../../../../components/serviceCrud/price";
 import Admin from "../../../../components/admin";
 
 //bring components
@@ -25,10 +25,10 @@ const ServiceComponents = () => {
             <div className="col-md-6">
               <Brands />
               <hr />
-              <div className="col-md-6 pt-9 mt-5">
+              {/* <div className="col-md-6 pt-9 mt-5">
                 <h2>Manage Service And Pricings </h2>
                 <ServicePricesForm />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

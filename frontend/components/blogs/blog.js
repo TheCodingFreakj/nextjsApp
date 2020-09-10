@@ -294,7 +294,6 @@ const BlogComponent = ({ router }) => {
           />
         </div>
 
-        {/* This is the textArea */}
         <div className="form-group">
           <ReactQuill
             value={body}
