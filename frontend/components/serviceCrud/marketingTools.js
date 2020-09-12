@@ -21,6 +21,7 @@ const MarketingTools = () => {
     error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
     success: false, //Shows up as a display message when we submit somthing
     loading: false,
+    removed: false,
     reload: false,
   });
 
@@ -51,14 +52,6 @@ const MarketingTools = () => {
       } else {
         //store what you got in the state
         setValues({ ...values, toolArrayToShow: data });
-        // getToolDetails(token).then((data) => {
-        //   console.log(data);
-        //   if (data.error) {
-        //     console.log(data.error);
-        //   } else {
-        //     setValues({ ...values, priceArrayToshow: data });
-        //   }
-        // });
       }
     });
   };

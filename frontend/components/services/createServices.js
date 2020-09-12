@@ -3,8 +3,11 @@ import Link from "next/link";
 import Router from "next/router";
 import { withRouter } from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
+import { createServices } from "../../actions/services";
+import { getAllTools } from "../../actions/tools";
 
 const CreateServices = ({ router }) => {
+  //getting all values from form inputs
   const [values, setValues] = useState({
     serviceName: "",
     servicePrice: "",
@@ -28,57 +31,138 @@ const CreateServices = ({ router }) => {
     ratingQuantity,
     summary,
     ratings,
-    formData,
     error,
     loading,
     reload,
   } = values;
 
+  //state to get the tools from backend
+  const [tools, setTools] = useState([]);
+
+  //state to get the checkedTool value in the state at the frontend
+  const [checkedTool, setCheckedTool] = useState([]);
+  console.log(checkedTool);
+  const [photoData, setphotoData] = useState({});
+
   useEffect(() => {
-    setValues({ ...values, formData: new FormData() });
+    // const checkedData = new FormData();
+    setValues({ ...values });
+    showToolSideBar();
   }, [router]);
 
   const token = getCookie("token");
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    createServices(formData, token).then((data) => {
+  const showToolSideBar = () => {
+    getAllTools().then((data) => {
       console.log(data);
-      // if (data.error) {
-      //   setValues({ ...values, error: data.error });
-      // } else {
-      //   setValues({
-      //     ...values,
-      //     title: "",
-      //     error: "",
-      //     success: `A new Blog title:"${data.title}" is created `,
-      //   });
-
-      //   setBody("");
-
-      //   setChecked([]);
-      //   setCheckedTag([]);
-      //   setCategories([]);
-      //   setTags([]);
-      // }
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setTools(data);
+      }
     });
   };
 
-  //This is a funxtion returi\ning another function
+  const handleToggle = (tId) => {
+    //clear the state incase of any error
+    setValues({ ...values, error: "" });
+    const clickedTool = checkedTool.indexOf(tId);
+    const allTools = [...checkedTool];
+
+    if (clickedTool === -1) {
+      allTools.push(tId);
+    } else {
+      allTools.splice(clickedTool, 1);
+    }
+    console.log(allTools);
+    setCheckedTool(allTools); // storing all checked value in the state
+  };
+
+  const showTools = () => {
+    return tools.map((tool, i) => (
+      <li key={i} className="list-unstyled">
+        <input
+          onChange={() => handleToggle(tool._id)}
+          type="checkbox"
+          className="mr-2"
+        />
+        <label className="form-check-label">{tool.tool}</label>
+      </li>
+    ));
+  };
+
+  const onPhotoChange = (name) => (e) => {
+    let photoData = new FormData();
+    photoData.append("photo", e.target.files[0]);
+    console.log(photoData.get("photo"));
+
+    setphotoData(photoData);
+
+    // setValues({
+    //   ...values,
+    //   error: false,
+    //   success: false,
+    //   removed: "",
+    // });
+  };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log("The form is submitted");
+
+    // console.log(...checkedData.values());
+
+    const formData = {
+      serviceName,
+      servicePrice,
+      duration,
+      pricePercent,
+      ratingQuantity,
+      summary,
+      ratings,
+      checkedTool,
+      photoData,
+    };
+
+    createServices(formData, token).then((data) => {
+      console.log(data);
+      // console.log(formData.values());
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setValues({
+          ...values,
+          serviceName: "",
+          servicePrice: "",
+          duration: "",
+          pricePercent: "",
+          ratingQuantity: "",
+          summary: "",
+          ratings: "",
+          error: "",
+          success: `A new service :"${data.serviceName}" is created `,
+        });
+      }
+    });
+  };
+
+  //This is a function returning another function
 
   const onChange = (name) => (e) => {
-    console.log("The current input is", e.target.value);
-    console.log([name]);
+    // console.log("The current input is", e.target.value);
+    console.log("The name is ", name);
 
-    const value = name === "photo" ? e.target.files[0] : e.target.value;
-    formData.set(name, value);
+    const value = e.target.value;
 
-    setValues({ ...values, [name]: value, formData: formData, error: "" });
+    setValues({
+      ...values,
+      [name]: value,
+      error: false,
+      success: false,
+      removed: "",
+    });
   };
 
   //Do the brands and display it tom
-  const showMarketingTools = () => {};
 
   const showBrands = () => {};
   const createServiceForm = () => {
@@ -94,7 +178,7 @@ const CreateServices = ({ router }) => {
             className="form-control"
             type="text"
             value={serviceName}
-            onChange={(e) => onChange(e)}
+            onChange={onChange("serviceName")}
           >
             <option value="0">* Select Service Packages</option>
             <option value="contentMarketing">Content Marketing</option>
@@ -149,7 +233,7 @@ const CreateServices = ({ router }) => {
             className="form-control"
             type="text"
             value={pricePercent}
-            onchange="calculateTotal()"
+            onChange={onChange("pricePercent")}
           >
             <option value="0">* Discount Percentage</option>
             <option value="10">10</option>
@@ -185,7 +269,7 @@ const CreateServices = ({ router }) => {
             className="form-control"
             type="text"
             value={ratings}
-            onChange={(e) => onChange(e)}
+            onChange={onChange("ratings")}
           >
             <option value="0">* Ratings for the service package</option>
             <option value="4.0">4.0</option>
@@ -227,7 +311,11 @@ const CreateServices = ({ router }) => {
     <React.Fragment>
       <div className="container-fluid pb-5 ">
         <div className="row">
-          <div className="col-md-8 pb-5">{createServiceForm()}</div>
+          <div className="col-md-8 pb-5">
+            {createServiceForm()}
+            {JSON.stringify(checkedTool)}
+            {JSON.stringify(photoData)}
+          </div>
 
           <div className="col-md-2 pb-5">
             <div>
@@ -237,7 +325,7 @@ const CreateServices = ({ router }) => {
                 <label className="btn btn-outline-success">
                   Upload Featured Image
                   <input
-                    // onChange={onChange("photo")}
+                    onChange={onPhotoChange("photo")}
                     type="file"
                     accept="image/*"
                     hidden
@@ -247,8 +335,8 @@ const CreateServices = ({ router }) => {
             </div>
             <div>
               <h5>Select Marketing Tools</h5>
-              <ul style={{ maxHeight: "100px", overflowY: "scroll" }}>
-                {showMarketingTools()}
+              <ul style={{ maxHeight: "300px", overflowY: "scroll" }}>
+                {showTools()}
               </ul>
 
               <hr />

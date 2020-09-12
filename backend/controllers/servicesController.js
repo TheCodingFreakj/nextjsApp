@@ -1,18 +1,125 @@
 const Service = require("../models/services");
 const User = require("../models/user");
+const formidable = require("formidable");
 const { errorHandler } = require("../helpers/dbErrorHandler");
+const slugify = require("slugify");
 
 //Create a Service
-exports.Services = async (req, res, next) => {
-  const { name } = req.body;
+exports.Services = async (req, res) => {
+  console.log(req.body);
+
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+
   try {
-    //get the admin user
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.status(400).json({
+          error: "There is some issue",
+        });
+      }
+
+      console.log(fields);
+
+      const {
+        serviceName,
+        servicePrice,
+        duration,
+        pricePercent,
+        ratingQuantity,
+        summary,
+        ratings,
+        checkedTool,
+      } = fields;
+
+      if (!checkedTool || !checkedTool.length) {
+        return res.status(400).json({
+          error: "checkedTool is required",
+        });
+      }
+
+      if (!servicePrice || !servicePrice.length) {
+        return res.status(400).json({
+          error: "servicePrice is required",
+        });
+      }
+
+      if (!serviceName || !serviceName.length) {
+        return res.status(400).json({
+          error: "serviceName is required",
+        });
+      }
+
+      if (!pricePercent || !pricePercent.length) {
+        return res.status(400).json({
+          error: "pricePercent is required",
+        });
+      }
+
+      if (!duration || !duration.length) {
+        return res.status(400).json({
+          error: "duration is required",
+        });
+      }
+
+      if (!ratingQuantity || !ratingQuantity.length) {
+        return res.status(400).json({
+          error: "ratingQuantity is required",
+        });
+      }
+
+      if (!ratings || !ratings.length) {
+        return res.status(400).json({
+          error: "ratings is required",
+        });
+      }
+
+      if (!summary || !summary.length) {
+        return res.status(400).json({
+          error: "summary is required",
+        });
+      }
+
+      let service = new Service();
+      service.title = serviceName;
+      service.slug = slugify(serviceName).toLowerCase();
+      service.indvPrice = servicePrice;
+      service.discountPrice = pricePercent;
+      service.summary = summary;
+      service.ratingQuantity = ratingQuantity;
+      service.ratingAverage = ratings;
+
+      let arrayOfTools = checkedData && checkedData.split(",");
+
+      await service.save((err, result) => {
+        console.log(result);
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
+
+        Service.findByIdAndUpdate(
+          result.id,
+          { $push: { tools: arrayOfTools } },
+          { new: true }
+        ).exec((err, result) => {
+          if (err) {
+            return res.status(400).json({
+              error: errorHandler(err),
+            });
+          } else {
+            return res.json(result);
+          }
+        });
+      });
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
   }
 };
-exports.ServicesList = async (req, res, next) => {
+exports.ServicesList = async (req, res) => {
   try {
   } catch (error) {
     console.error(error.message);
@@ -41,3 +148,5 @@ exports.updateServices = async (req, res, next) => {
 // This price = Fixed Price (Tool Price + Margin) + (Changeable Price Price) Service Charges - (any seasonal discount)
 
 // Service Price = Labour Cost + Margin
+
+//https://stackoverflow.com/questions/50137648/using-formdata-to-send-image-to-backend?noredirect=1&lq=1

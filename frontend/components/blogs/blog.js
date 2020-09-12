@@ -319,15 +319,6 @@ const BlogComponent = ({ router }) => {
             {showError()}
             {showSuccess()}
           </div>
-
-          {/* <hr />
-          {JSON.stringify(title)}
-          <hr />
-          {JSON.stringify(body)}
-          <hr />
-          {JSON.stringify(categories)}
-          <hr />
-          {JSON.stringify(tags)} */}
         </div>
         <div className="col-md-2">
           <div>

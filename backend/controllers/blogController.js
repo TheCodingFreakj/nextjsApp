@@ -304,8 +304,6 @@ exports.updateBlog = async (req, res) => {
           }
 
           // result.photo = undefined;
-
-         
         });
       });
     });
