@@ -121,6 +121,7 @@ const BlogComponent = ({ router }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     //console.log("Ready to Publish a Blog");
+    console.log(formData.get("photo"));
 
     createBlog(formData, getCookie("token")).then((data) => {
       // console.log(data);
@@ -155,14 +156,19 @@ const BlogComponent = ({ router }) => {
     //name can be title, photo or anything from forms
     //For images we upload many file but for featuerd image we grab the first image
 
+    console.log(name);
+
     //if name is photo? :
     const value = name === "photo" ? e.target.files[0] : e.target.value;
+
+    console.log(value);
 
     //Before using this browswr api we need to instanciate it in in useeffcet
     //Here we are using a browswr api called formData
     //first is the property name then value or e.target....
     formData.set(name, value); //This is the data we will send to bacvkend
 
+    console.log(formData.values());
     //we have to  take this data from loacl storage and popuate it in the state as default value
     if (typeof window !== "undefined") {
       localStorage.setItem("title", JSON.stringify(value));
@@ -314,7 +320,7 @@ const BlogComponent = ({ router }) => {
       <div className="row">
         <div className="col-md-10 pb-5">
           {createBlogForm()}
-
+          {JSON.stringify(formData)}
           <div className="pb-5">
             {showError()}
             {showSuccess()}

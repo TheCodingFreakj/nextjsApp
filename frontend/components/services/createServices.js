@@ -31,6 +31,7 @@ const CreateServices = ({ router }) => {
     ratingQuantity,
     summary,
     ratings,
+    formData,
     error,
     loading,
     reload,
@@ -42,11 +43,16 @@ const CreateServices = ({ router }) => {
   //state to get the checkedTool value in the state at the frontend
   const [checkedTool, setCheckedTool] = useState([]);
   console.log(checkedTool);
-  const [photoData, setphotoData] = useState({});
+  // const [photoData, setphotoData] = useState({ sendPhotoFile: "" });
+
+  // const { sendPhotoFile } = photoData;
+  // console.log("This is photoData", photoData);
+
+  // const { selectedFile } = photoData;
 
   useEffect(() => {
     // const checkedData = new FormData();
-    setValues({ ...values });
+    setValues({ ...values, formData: new FormData() });
     showToolSideBar();
   }, [router]);
 
@@ -63,66 +69,12 @@ const CreateServices = ({ router }) => {
     });
   };
 
-  const handleToggle = (tId) => {
-    //clear the state incase of any error
-    setValues({ ...values, error: "" });
-    const clickedTool = checkedTool.indexOf(tId);
-    const allTools = [...checkedTool];
-
-    if (clickedTool === -1) {
-      allTools.push(tId);
-    } else {
-      allTools.splice(clickedTool, 1);
-    }
-    console.log(allTools);
-    setCheckedTool(allTools); // storing all checked value in the state
-  };
-
-  const showTools = () => {
-    return tools.map((tool, i) => (
-      <li key={i} className="list-unstyled">
-        <input
-          onChange={() => handleToggle(tool._id)}
-          type="checkbox"
-          className="mr-2"
-        />
-        <label className="form-check-label">{tool.tool}</label>
-      </li>
-    ));
-  };
-
-  const onPhotoChange = (name) => (e) => {
-    let photoData = new FormData();
-    photoData.append("photo", e.target.files[0]);
-    console.log(photoData.get("photo"));
-
-    setphotoData(photoData);
-
-    // setValues({
-    //   ...values,
-    //   error: false,
-    //   success: false,
-    //   removed: "",
-    // });
-  };
   const onSubmit = (e) => {
     e.preventDefault();
     console.log("The form is submitted");
+    console.log(formData.get("photo"));
 
-    // console.log(...checkedData.values());
-
-    const formData = {
-      serviceName,
-      servicePrice,
-      duration,
-      pricePercent,
-      ratingQuantity,
-      summary,
-      ratings,
-      checkedTool,
-      photoData,
-    };
-
+    console.log(formData);
     createServices(formData, token).then((data) => {
       console.log(data);
       // console.log(formData.values());
@@ -151,7 +103,13 @@ const CreateServices = ({ router }) => {
     // console.log("The current input is", e.target.value);
     console.log("The name is ", name);
 
-    const value = e.target.value;
+    // const value = e.target.value;
+
+    const value = name === "photo" ? e.target.files[0] : e.target.value;
+
+    console.log(value);
+
+    formData.set(name, value);
 
     setValues({
       ...values,
@@ -160,6 +118,36 @@ const CreateServices = ({ router }) => {
       success: false,
       removed: "",
     });
+  };
+
+  const handleToggle = (tId) => {
+    //clear the state incase of any error
+    setValues({ ...values, error: "" });
+    const clickedTool = checkedTool.indexOf(tId);
+    const allTools = [...checkedTool];
+
+    if (clickedTool === -1) {
+      allTools.push(tId);
+    } else {
+      allTools.splice(clickedTool, 1);
+    }
+    console.log(allTools);
+    setCheckedTool(allTools); // storing all checked value in the state
+
+    formData.set("tools", allTools);
+  };
+
+  const showTools = () => {
+    return tools.map((tool, i) => (
+      <li key={i} className="list-unstyled">
+        <input
+          onChange={() => handleToggle(tool._id)}
+          type="checkbox"
+          className="mr-2"
+        />
+        <label className="form-check-label">{tool.tool}</label>
+      </li>
+    ));
   };
 
   //Do the brands and display it tom
@@ -314,7 +302,7 @@ const CreateServices = ({ router }) => {
           <div className="col-md-8 pb-5">
             {createServiceForm()}
             {JSON.stringify(checkedTool)}
-            {JSON.stringify(photoData)}
+            {JSON.stringify(formData)}
           </div>
 
           <div className="col-md-2 pb-5">
@@ -325,7 +313,10 @@ const CreateServices = ({ router }) => {
                 <label className="btn btn-outline-success">
                   Upload Featured Image
                   <input
-                    onChange={onPhotoChange("photo")}
+                    // name="sendPhotoFile"
+                    // value={sendPhotoFile || ""}
+                    // onChange={onPhotoChange("sendPhotoFile")}
+                    onChange={onChange("photo")}
                     type="file"
                     accept="image/*"
                     hidden
@@ -354,7 +345,7 @@ const CreateServices = ({ router }) => {
     </React.Fragment>
   );
 };
-// export default withRouter(BlogComponent);
+
 export default withRouter(CreateServices);
 
 //https://draftjs.org/docs/quickstart-api-basics

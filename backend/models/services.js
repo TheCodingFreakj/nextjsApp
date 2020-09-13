@@ -48,9 +48,9 @@ const servicesSchema = new mongoose.Schema(
     duration: {
       type: String,
     },
-    servImages: {
+    photo: {
       data: Buffer,
-      contentType: [String],
+      contentType: String,
     },
     createdAt: {
       type: Date,

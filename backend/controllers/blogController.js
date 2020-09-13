@@ -27,6 +27,9 @@ exports.create = (req, res) => {
       }
 
       const { title, body, categories, tags } = fields; //felds we pass from frontend
+
+      console.log("This is the fields", fields);
+      console.log("This is the files", files);
       if (!title || !title.length) {
         return res.status(400).json({
           error: "Title is required",

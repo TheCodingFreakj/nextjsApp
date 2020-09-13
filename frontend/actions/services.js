@@ -3,6 +3,7 @@ import { API } from "../config";
 
 export const createServices = async (serviceInfo, token) => {
   console.log("This is the data I am sending to server", serviceInfo);
+
   try {
     const config = {
       method: "POST",

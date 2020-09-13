@@ -3,6 +3,7 @@ const User = require("../models/user");
 const formidable = require("formidable");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const slugify = require("slugify");
+const fs = require("fs");
 
 //Create a Service
 exports.Services = async (req, res) => {
@@ -18,8 +19,8 @@ exports.Services = async (req, res) => {
           error: "There is some issue",
         });
       }
-
-      console.log(fields);
+      console.log("This is the fields", fields);
+      console.log("This is the files", files);
 
       const {
         serviceName,
@@ -29,12 +30,12 @@ exports.Services = async (req, res) => {
         ratingQuantity,
         summary,
         ratings,
-        checkedTool,
+        tools,
       } = fields;
 
-      if (!checkedTool || !checkedTool.length) {
+      if (!tools || !tools.length) {
         return res.status(400).json({
-          error: "checkedTool is required",
+          error: "tools is required",
         });
       }
 
@@ -89,10 +90,21 @@ exports.Services = async (req, res) => {
       service.ratingQuantity = ratingQuantity;
       service.ratingAverage = ratings;
 
-      let arrayOfTools = checkedData && checkedData.split(",");
+      let arrayOfTools = tools && tools.split(",");
+
+      if (files.photo) {
+        if (files.photo.size > 10000000) {
+          return res.status(400).json({
+            error: "Image should be less then 1mb in size",
+          });
+        }
+
+        service.photo.data = fs.readFileSync(files.photo.path);
+        service.photo.contentType = files.photo.type;
+      }
 
       await service.save((err, result) => {
-        console.log(result);
+        console.log("This is the result for save", result);
         if (err) {
           return res.status(400).json({
             error: errorHandler(err),
@@ -104,6 +116,7 @@ exports.Services = async (req, res) => {
           { $push: { tools: arrayOfTools } },
           { new: true }
         ).exec((err, result) => {
+          console.log("This is the result with tools update", result);
           if (err) {
             return res.status(400).json({
               error: errorHandler(err),
