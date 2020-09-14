@@ -1,65 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import Head from "next/head";
 import Link from "next/link";
-import Router from "next/router";
-import Card from "../../components/services/ServiceCards/serviceCards";
+import Layout from "../../components/Layout";
+//import { listBlogsWithCategoriesNTags } from "../../actions/blog";
+import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
+import { withRouter } from "next/router";
+
 const ServiceCards = () => {
-  return (
-    <div className="container ml-5 pt-9">
-      <div className="row">
-        <div className="col-md-4 pl-5">
-          <ul className="list-group">
-            <li className="list-group-item">
-              <Link href="">
-                <a>
-                  <button className="btn btn-success">Monthly</button>
-                </a>
-              </Link>
-              <div className="row">
-                <div className="col-md-4 pl-5">
-                  <Card />
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div className="col-md-4">
-          <ul className="list-group">
-            <li className="list-group-item">
-              <Link href="">
-                <a>
-                  <button className="btn btn-success">12 Months -18 %</button>
-                </a>
-              </Link>
-
-              <div className="row">
-                <div className="col-md-4 pl-5">
-                  <Card />
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div className="col-md-4">
-          <ul className="list-group">
-            <li className="list-group-item">
-              <Link href="">
-                <a>
-                  <button className="btn btn-success">24 Months -30 %</button>
-                </a>
-              </Link>
-              <div className="row">
-                <div className="col-md-4 pl-5">
-                  <Card />
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
+  const showAllServicePackages = () => {
+    return (
+      <div>
+        This is the container where i will show service packages called the card
+        componenet
       </div>
-    </div>
+    );
+    //  return pageProps.blogsToBeSent.map((blog, i) => (
+    // <div className="container pt-9 key={i}">
+
+    //   <div className="row">
+    //     <div className="col-md-3 pl-5">
+    //       <ul className="list-group">
+
+    //         <li className="list-group-item">
+    //
+    //           <Card />
+    //         </li>
+    //       </ul>
+    //     </div>
+    //   </div>
+    // </div>;
+    //  )
+  };
+  return (
+    <React.Fragment>
+      <main>
+        <div className="container-fluid">{showAllServicePackages()}</div>
+      </main>
+    </React.Fragment>
   );
 };
 
-export default ServiceCards;
+export const getServerSideProps = async ({ query }) => {
+  //data required here
+};
+
+export default withRouter(ServiceCards);

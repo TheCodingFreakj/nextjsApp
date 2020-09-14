@@ -7,8 +7,8 @@ const ComboPackages = () => {
   const [values, setValues] = useState({
     packageName: "",
     desc: "",
-    listSize: "",
-    comboSize: "",
+    servicesIncluded: "",
+    packagePrice: "",
     servDesc: "",
     error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
     success: false, //Shows up as a display message when we submit somthing
@@ -19,8 +19,8 @@ const ComboPackages = () => {
   const {
     packageName,
     desc,
-    listSize,
-    comboSize,
+    servicesIncluded,
+    packagePrice,
     servDesc,
     error,
     success,
@@ -85,39 +85,67 @@ const ComboPackages = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="Give The Package Name"
+            placeholder="Give The Description"
             onChange={onChange("desc")}
             value={desc}
             required
           />
         </div>
 
+        {/* <div className="form-group">
+          <label className="text-muted">
+            <h3>Rating Average</h3>
+          </label>
+          <select
+            name="status"
+            className="form-control"
+            type="text"
+            value={servicesIncluded}
+            onChange={onChange("servicesIncluded")}
+          >
+            <option value="0">* Ratings for the service package</option>
+            <option value="4.0">4.0</option>
+            <option value="4.1">4.1</option>
+            <option value="4.2">4.2</option>
+            <option value="4.3">4.3</option>
+            <option value="4.4">4.4</option>
+            <option value="4.5">4.5</option>
+            <option value="4.6">4.6</option>
+            <option value="4.7">4.7</option>
+            <option value="4.8">4.8</option>
+            <option value="4.9">4.9</option>
+            <option value="5.0">5.0</option>
+          </select>
+        </div> */}
+
         <div className="form-group">
-          <label className="text-muted">Give the List Size </label>
+          <label className="text-muted">Service Included in the package </label>
           <input
             type="text"
             className="form-control"
-            placeholder="Give The List Size"
-            onChange={onChange("listSize")}
-            value={listSize}
+            placeholder="Choose the services"
+            onChange={onChange("servicesIncluded")}
+            value={servicesIncluded}
             required
           />
         </div>
 
         <div className="form-group">
-          <label className="text-muted">Give the Combo Size </label>
+          <label className="text-muted">Give the Package Price </label>
           <input
             type="text"
             className="form-control"
-            placeholder="Combo Size"
-            onChange={onChange("comboSize")}
-            value={comboSize}
+            placeholder="Include the services"
+            onChange={onChange("packagePrice")}
+            value={packagePrice}
             required
           />
         </div>
 
         <div className="form-group">
-          <label className="text-muted">Give the Service Size </label>
+          <label className="text-muted">
+            What all is included in the service
+          </label>
           <textarea
             type="text"
             className="form-control"

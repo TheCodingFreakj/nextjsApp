@@ -90,6 +90,8 @@ exports.Services = async (req, res) => {
       service.summary = summary;
       service.ratingQuantity = ratingQuantity;
       service.ratingAverage = ratings;
+      // service.packageName = packageName,
+      // service.process=process
 
       let arrayOfTools = tools && tools.split(",");
       // console.log(arrayOfTools);
@@ -154,6 +156,14 @@ exports.updateServices = async (req, res, next) => {
     console.error(error.message);
     res.status(500).send("Server Error");
   }
+};
+
+exports.createComboPackage = async (req, res) => {
+  // packageName
+  // desc: summary
+  // serviceOptions: A dropDown
+  // PackagePrice: Based On the listSize
+  // servicedesc:process
 };
 
 // Create a meter that calculated price per words and then check out the process (For contentWriting)
