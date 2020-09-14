@@ -46,7 +46,7 @@ const MarketingTools = () => {
 
   const loadTools = () => {
     getAllTools().then((data) => {
-      console.log(data);
+      // console.log(data);
       if (data.error) {
         console.log(data.error);
       } else {

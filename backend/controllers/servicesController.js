@@ -1,5 +1,6 @@
 const Service = require("../models/services");
 const User = require("../models/user");
+const Tools = require("../models/marketingTools");
 const formidable = require("formidable");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const slugify = require("slugify");
@@ -7,7 +8,7 @@ const fs = require("fs");
 
 //Create a Service
 exports.Services = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
@@ -19,8 +20,8 @@ exports.Services = async (req, res) => {
           error: "There is some issue",
         });
       }
-      console.log("This is the fields", fields);
-      console.log("This is the files", files);
+      // console.log("This is the fields", fields);
+      // console.log("This is the files", files);
 
       const {
         serviceName,
@@ -91,6 +92,7 @@ exports.Services = async (req, res) => {
       service.ratingAverage = ratings;
 
       let arrayOfTools = tools && tools.split(",");
+      // console.log(arrayOfTools);
 
       if (files.photo) {
         if (files.photo.size > 10000000) {

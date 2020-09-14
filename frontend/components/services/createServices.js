@@ -42,13 +42,7 @@ const CreateServices = ({ router }) => {
 
   //state to get the checkedTool value in the state at the frontend
   const [checkedTool, setCheckedTool] = useState([]);
-  console.log(checkedTool);
-  // const [photoData, setphotoData] = useState({ sendPhotoFile: "" });
-
-  // const { sendPhotoFile } = photoData;
-  // console.log("This is photoData", photoData);
-
-  // const { selectedFile } = photoData;
+  // console.log("This is the state where I store the checkedTool", checkedTool);
 
   useEffect(() => {
     // const checkedData = new FormData();
@@ -60,7 +54,7 @@ const CreateServices = ({ router }) => {
 
   const showToolSideBar = () => {
     getAllTools().then((data) => {
-      console.log(data);
+      // console.log("This are all the tools I m getting from the backend", data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -69,15 +63,68 @@ const CreateServices = ({ router }) => {
     });
   };
 
+  //This is a function returning another function
+
+  const onChange = (name) => (e) => {
+    // console.log("The current input is", e.target.value);
+    // console.log("The name is ", name);
+
+    // const value = e.target.value;
+
+    const value = name === "photo" ? e.target.files[0] : e.target.value;
+
+    // console.log(value);
+
+    formData.set(name, value);
+
+    //after populating we have to update the state
+    setValues({ ...values, [name]: value, formData: formData, error: "" });
+  };
+
+  const handleToggle = (tId) => {
+    //clear the state incase of any error
+    setValues({ ...values, error: "" });
+    const clickedTool = checkedTool.indexOf(tId);
+
+    //storing all the checked Values in allTools
+    const allTools = [...checkedTool];
+
+    if (clickedTool === -1) {
+      allTools.push(tId);
+    } else {
+      allTools.splice(clickedTool, 1);
+    }
+    // console.log("Storing all the check Items in a variable", allTools);
+    setCheckedTool(allTools); // storing all checked value in the state
+
+    formData.set("tools", allTools);
+  };
+
+  const showTools = () => {
+    return tools.map((tool, i) => (
+      <li key={i} className="list-unstyled">
+        <input
+          onChange={() => handleToggle(tool._id)}
+          type="checkbox"
+          className="mr-2"
+        />
+        <label className="form-check-label">{tool.tool}</label>
+      </li>
+    ));
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log("The form is submitted");
-    console.log(formData.get("photo"));
+    // console.log("The form is submitted");
+    // console.log(formData.get("photo"));
 
-    console.log(formData);
+    // console.log(
+    //   "Getting everything in the formData",
+    //   formData.get("checkedTool")
+    // );
     createServices(formData, token).then((data) => {
-      console.log(data);
-      // console.log(formData.values());
+      console.log("This is getting from backend", data);
+
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -97,62 +144,21 @@ const CreateServices = ({ router }) => {
     });
   };
 
-  //This is a function returning another function
-
-  const onChange = (name) => (e) => {
-    // console.log("The current input is", e.target.value);
-    console.log("The name is ", name);
-
-    // const value = e.target.value;
-
-    const value = name === "photo" ? e.target.files[0] : e.target.value;
-
-    console.log(value);
-
-    formData.set(name, value);
-
-    setValues({
-      ...values,
-      [name]: value,
-      error: false,
-      success: false,
-      removed: "",
-    });
-  };
-
-  const handleToggle = (tId) => {
-    //clear the state incase of any error
-    setValues({ ...values, error: "" });
-    const clickedTool = checkedTool.indexOf(tId);
-    const allTools = [...checkedTool];
-
-    if (clickedTool === -1) {
-      allTools.push(tId);
-    } else {
-      allTools.splice(clickedTool, 1);
-    }
-    console.log(allTools);
-    setCheckedTool(allTools); // storing all checked value in the state
-
-    formData.set("tools", allTools);
-  };
-
-  const showTools = () => {
-    return tools.map((tool, i) => (
-      <li key={i} className="list-unstyled">
-        <input
-          onChange={() => handleToggle(tool._id)}
-          type="checkbox"
-          className="mr-2"
-        />
-        <label className="form-check-label">{tool.tool}</label>
-      </li>
-    ));
-  };
-
   //Do the brands and display it tom
 
   const showBrands = () => {};
+
+  // const showSuccess = () => {
+  //   if (success) {
+  //     return <p className="text-success">Service is Created</p>;
+  //   }
+  // };
+
+  // const showError = () => {
+  //   if (error) {
+  //     return <p className="text-danger">Service is there already</p>;
+  //   }
+  // };
   const createServiceForm = () => {
     return (
       <form className="text-center" onSubmit={(e) => onSubmit(e)}>
@@ -300,9 +306,11 @@ const CreateServices = ({ router }) => {
       <div className="container-fluid pb-5 ">
         <div className="row">
           <div className="col-md-8 pb-5">
+            {/* {showSuccess()}
+            {showError()} */}
             {createServiceForm()}
-            {JSON.stringify(checkedTool)}
-            {JSON.stringify(formData)}
+            {/* {JSON.stringify(checkedTool)} */}
+            {/* {JSON.stringify(allTools)} */}
           </div>
 
           <div className="col-md-2 pb-5">
@@ -313,9 +321,6 @@ const CreateServices = ({ router }) => {
                 <label className="btn btn-outline-success">
                   Upload Featured Image
                   <input
-                    // name="sendPhotoFile"
-                    // value={sendPhotoFile || ""}
-                    // onChange={onPhotoChange("sendPhotoFile")}
                     onChange={onChange("photo")}
                     type="file"
                     accept="image/*"

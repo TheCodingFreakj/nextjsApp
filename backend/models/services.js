@@ -57,7 +57,7 @@ const servicesSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
-    marketingTools: [{ type: ObjectId, ref: "Tools", required: true }],
+    tools: [{ type: ObjectId, ref: "Tools", required: true }],
   },
 
   { timestamps: true }

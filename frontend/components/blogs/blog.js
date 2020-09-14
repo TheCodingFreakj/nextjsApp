@@ -168,7 +168,7 @@ const BlogComponent = ({ router }) => {
     //first is the property name then value or e.target....
     formData.set(name, value); //This is the data we will send to bacvkend
 
-    console.log(formData.values());
+    //console.log(formData.values());
     //we have to  take this data from loacl storage and popuate it in the state as default value
     if (typeof window !== "undefined") {
       localStorage.setItem("title", JSON.stringify(value));
