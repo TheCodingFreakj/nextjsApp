@@ -225,11 +225,6 @@ const MarketingTools = () => {
       {showSuccess()}
       {showError()}
 
-      {/* <hr />
-      {JSON.stringify(toolArrayToShow)}
-      <hr />
-      {JSON.stringify(priceArrayToshow)}
-      <hr /> */}
       <div onMouseMove={mouseMoveHandler}>
         {newToolForm()}
         {showTools()}

@@ -9,13 +9,6 @@ const servicesSchema = new mongoose.Schema(
       required: true,
       max: 32,
     },
-    packageName: {
-      type: String,
-      trim: true,
-      required: true,
-      max: 32,
-    },
-
     slug: {
       type: String,
       unique: true,
@@ -28,9 +21,11 @@ const servicesSchema = new mongoose.Schema(
     discountPrice: {
       type: Number,
     },
-    discountedServiceCharges: {
-      type: Number, //service price
-    }, // calculate the service charges
+    discountedServiceCharges: [
+      { type: ObjectId, ref: "Price", required: true },
+    ],
+
+    // .populate("discountedServiceCharges", "_id serviceName discountedServiceCharges slug")
     ratingAverage: {
       type: Number,
       default: 4.5,
@@ -44,6 +39,7 @@ const servicesSchema = new mongoose.Schema(
     },
     reviews: [{ type: ObjectId, ref: "Reviews", required: true }],
     brands: [{ type: ObjectId, ref: "Brands", required: true }],
+    tools: [{ type: ObjectId, ref: "Tools", required: true }],
     process: {
       type: String,
     },
@@ -63,9 +59,7 @@ const servicesSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
-    tools: [{ type: ObjectId, ref: "Tools", required: true }],
   },
-
   { timestamps: true }
 );
 //https://medium.com/@SigniorGratiano/modelling-data-and-advanced-mongoose-175cdbc68bb1

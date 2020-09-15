@@ -49,7 +49,12 @@ exports.getAllTools = async (req, res) => {
   }
 };
 
-//for tool only
+//getting the price from the admin
+//((send this calculated price from the admin section)totalPrice = MRP + your Margin)
+//GIve a discount if the client demands
+//use this route to calculate the clientPrice for tool
+//Use the result of this calculation in the combopackage price
+
 exports.getToolClientPrice = async (req, res) => {
   try {
     //getting the tool price after discount

@@ -1,6 +1,7 @@
 const Service = require("../models/services");
 const User = require("../models/user");
 const Tools = require("../models/marketingTools");
+const ComboPackage = require("../models/comboPackages");
 const formidable = require("formidable");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const slugify = require("slugify");
@@ -143,14 +144,14 @@ exports.ServicesList = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
-exports.removeServices = async (req, res, next) => {
+exports.removeServices = async (req, res) => {
   try {
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
   }
 };
-exports.updateServices = async (req, res, next) => {
+exports.updateServices = async (req, res) => {
   try {
   } catch (error) {
     console.error(error.message);
@@ -159,19 +160,42 @@ exports.updateServices = async (req, res, next) => {
 };
 
 exports.createComboPackage = async (req, res) => {
-  // packageName
-  // desc: summary
-  // serviceOptions: A dropDown
-  // PackagePrice: Based On the listSize
-  // servicedesc:process
+  // comboPackage: {
+  //   (packageName = ""),
+  //     (slug = ""),
+  //     (title = ""),
+  //     (desc = ""),
+  //     packagePrice="", getToolClientPrice + servicePrice
+  //     serviceDescription:""
+
+  // }
+  console.log(req.body);
+
+  try {
+    let package = new ComboPackage();
+    package.packageName = packageName;
+    package.title = title;
+    package.slug = slugify(packageName).toLowerCase(); //slug based on title
+    package.desc = desc;
+    package.realPackagePrice = realPackagePrice;
+    package.discountPrice = discountPrice;
+    package.bundleDescription = bundleDescription;
+
+    //packagePrice calculate
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
 };
 
 // Create a meter that calculated price per words and then check out the process (For contentWriting)
-
 // For packages
 // Give them tools to choose and then calculate price
 // This price = Fixed Price (Tool Price + Margin) + (Changeable Price Price) Service Charges - (any seasonal discount)
+// Service Price = LabourCost + Margin
 
-// Service Price = Labour Cost + Margin
-
-//https://stackoverflow.com/questions/50137648/using-formdata-to-send-image-to-backend?noredirect=1&lq=1
+//Fixed Price: You will use the result what you get from getToolClientPrice route calculation
+//Service Charges= Grab from Services route where you will store the price
+//include any seasonal discount
+//create another calculation route to calculate the service price per service
+//In the frontend  YOu will keep them platform to calculate total price as per service they add

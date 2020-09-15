@@ -1,45 +1,77 @@
-// const Price = require("../models/price");
-// const { errorHandler } = require("../helpers/dbErrorHandler");
+const Price = require("../models/price");
+const { errorHandler } = require("../helpers/dbErrorHandler");
 
-// //Create a Service
-// exports.Prices = async (req, res, next) => {
-//   const { serviceName, servicePrice, duration } = req.body;
-//   console.log(req.body);
-//   try {
-//     let servicePriceInfo = new Price();
-//     servicePriceInfo.serviceName = serviceName;
-//     servicePriceInfo.servicePrice = servicePrice;
-//     servicePriceInfo.duration = duration;
-//     servicePriceInfo.slug = slugify(serviceName).toLowerCase();
+//Create a Service
+exports.CalculateDiscountedServices = async (req, res) => {
+  try {
+    //get totalling of service charges
 
-//     await servicePriceInfo.save(async (err, data) => {
-//       if (err)
-//         return res.status(400).json({
-//           //error: err, // This is the error object. IN front end you have to loop through the erroes and return exact message
-//           error: errorHandler(err), //pass this err obj to the function
-//         });
-//       //change the price add service charges and then send
-//       res.json(data);
-//     });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// };
+    await Price.aggregate([
+      {
+        $project: {
+          //_id: 1, //excludes id
+          serviceName: 1, // I am retrieving the tools field. choose field: 1 whichever you want
 
-// exports.GetPriceList = async (req, res, next) => {
-//   try {
-//     await Price.find({}).exec((err, data) => {
-//       if (err) {
-//         return res.status(400).json({ errors: errorHandler(err) });
-//       }
-//       res.send(data);
-//     });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// };
+          discountedServiceCharges: {
+            $add: [
+              "$indvPrice",
+              {
+                $multiply: ["$indvPrice", { $divide: ["$discountPrice", 100] }],
+              },
+            ],
+          },
+        },
+      },
+    ]).exec((err, results) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err),
+        });
+      } else {
+        res.json(results);
+      }
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.CalculatePackagePrice = async (req, res) => {
+  try {
+    await Price.aggregate([
+      {
+        $project: {
+          //_id: 1, //excludes id
+          packageName: 1, // I am retrieving the tools field. choose field: 1 whichever you want
+
+          packagePrice: {
+            $add: [
+              "$realPackagePrice",
+              {
+                $multiply: [
+                  "$realPackagePrice",
+                  { $divide: ["$discountPrice", 100] },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    ]).exec((err, results) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err),
+        });
+      } else {
+        res.json(results);
+      }
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
 // exports.UpdatePriceList = async (req, res, next) => {
 //   try {
 //   } catch (error) {

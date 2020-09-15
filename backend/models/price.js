@@ -10,16 +10,42 @@ const priceSchema = new mongoose.Schema(
       required: true,
       max: 32,
     },
+
+    packageName: {
+      type: String,
+      trim: true,
+      unique: true,
+      required: true,
+      max: 32,
+    },
     slug: {
       type: String,
       unique: true,
       index: true,
     },
 
-    servicePrice: {
+    indvPrice: {
       type: Number,
-      required: true,
-      min: 1000,
+    },
+    discountPrice: {
+      type: Number,
+    },
+
+    discountedServiceCharges: {
+      type: Number,
+      // calculate the service charges
+    },
+
+    realPackagePrice: {
+      type: Number,
+    },
+
+    discountPrice: {
+      type: Number,
+    },
+    packagePrice: {
+      type: Number,
+      // calculate the package charges
     },
     duration: {
       type: String,
