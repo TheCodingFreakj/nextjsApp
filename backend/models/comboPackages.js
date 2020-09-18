@@ -3,7 +3,7 @@ const { ObjectId } = mongoose.Schema;
 
 const comboPackageSchema = new mongoose.Schema(
   {
-    packageName: {
+    comboPackageName: {
       type: String,
       trim: true,
       required: true,
@@ -12,7 +12,6 @@ const comboPackageSchema = new mongoose.Schema(
     title: {
       type: String,
       trim: true,
-      required: true,
       max: 32,
     },
     slug: {
@@ -20,10 +19,6 @@ const comboPackageSchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
-    packagePrice: [{ type: ObjectId, ref: "Price", required: true }],
-    //populate the packagePrice on basis of packageName
-    // .populate("packagePrice", "_id packageName packagePrice slug")
-
     desc: {
       type: String,
       max: 1000,
@@ -32,7 +27,7 @@ const comboPackageSchema = new mongoose.Schema(
       type: String,
       max: 1000,
     },
-
+    packagePrice: [{ type: ObjectId, ref: "PackagePrice", required: true }],
     createdAt: {
       type: Date,
       required: true,

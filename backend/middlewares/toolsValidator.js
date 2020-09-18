@@ -16,7 +16,7 @@ exports.brandsCreateValidator = [
 
 exports.priceCreateValidator = [
   check("serviceName").not().isEmpty().withMessage(" Name is required"), // incase of rule violation send these messages as error
-  check("servicePrice")
+  check("realServicePrice")
     .not()
     .isEmpty()
     .withMessage("You must provide the price"),

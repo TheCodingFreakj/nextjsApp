@@ -1,35 +1,67 @@
-// const express = require("express");
-// const router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-// //// For routes to be used after "/api"
-// ///Controllers and Middlewares
+//// For routes to be used after "/api"
+///Controllers and Middlewares
 
-// const { priceCreateValidator } = require("../middlewares/toolsValidator");
-// const { runValidation } = require("../middlewares/authController");
-// const { adminMiddleware } = require("../controllers/authController");
-// const tokenAuth = require("../middlewares/tokenAuth");
-// //bring Controller
+const { priceCreateValidator } = require("../middlewares/toolsValidator");
+const { runValidation } = require("../middlewares/authController");
+const { adminMiddleware } = require("../controllers/authController");
+const tokenAuth = require("../middlewares/tokenAuth");
+//bring Controller
 
-// const {
-//   Prices,
-//   GetPriceList,
-//   UpdatePriceList,
-//   RemovePrice,
-// } = require("../controllers/priceController");
+const {
+  createPriceObject,
+  //createComboPackage,
+  createPackagePrice,
+  calculateDiscountedServices,
+  calculatePackagePrice,
+} = require("../controllers/priceController");
+
+router.post(
+  "/price",
+  priceCreateValidator,
+  runValidation,
+  tokenAuth,
+  adminMiddleware,
+  createPriceObject
+);
+
+router.post(
+  "/combo-package-price",
+  priceCreateValidator,
+  runValidation,
+  tokenAuth,
+  adminMiddleware,
+  createPackagePrice
+);
 
 // router.post(
-//   "/createPrice",
+//   "/combo-package",
 //   priceCreateValidator,
 //   runValidation,
 //   tokenAuth,
 //   adminMiddleware,
-//   Prices
+//   createComboPackage
 // );
 
-// router.get("/get-price-list", GetPriceList);
+// router.post(
+//   "/package-price",
+//   priceCreateValidator,
+//   runValidation,
+//   tokenAuth,
+//   adminMiddleware,
+//   createPricePackage
+// );
+router.get("/get-discount-price", calculateDiscountedServices);
 
-// //access :slug using req.params
-// router.get("/price/:slug", UpdatePriceList);
-// router.delete("/price/:slug", tokenAuth, adminMiddleware, RemovePrice);
+//access :slug using req.params
+router.get("/get-discount-package", calculatePackagePrice);
+// router.delete(
+//   "/price/:slug",
+//   tokenAuth,
+//   adminMiddleware,
+//   CalculatePackagePrice
+// );
 
-// module.exports = router;
+module.exports = router;

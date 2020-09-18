@@ -124,6 +124,16 @@ const AdminIndex = () => {
                 </li>
               </ul>
             </div>
+
+            <div className="col-md-4">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/price">
+                    <a>Price Updates</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </Admin>

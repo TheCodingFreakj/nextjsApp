@@ -24,6 +24,30 @@ const Card = ({ comboPackage }) => {
   //   //get the results of getToolClientPrice
   //   //packagePrice="", getToolClientPrice + servicePrice
 
+  //call getToolClientPrice, CalculatePackagePrice, CalculateDiscountedServices
+
+  // CalculatePackagePrice.then((data) => {
+  //   // console.log("This are all the tools I m getting from the backend", data);
+  //   if (data.error) {
+  //     setValues({ ...values, error: data.error });
+  //   } else {
+  //     setTools(data); //Get the Package Price and Store in state
+
+  //     getToolClientPrice.then((data) => {// console.log("This are all the tools I m getting from the backend", data);
+  //     if (data.error) {
+  //       setValues({ ...values, error: data.error });
+  //     } else {
+  //       setTools(data); //store the toolprice in the state
+
+  //     }})
+  //   }
+  // });
+  // }
+
+  // const showPackagePrice = ()=>{
+
+  //   toolData + ClientPrice
+
   // }
   return (
     <React.Fragment>
@@ -67,7 +91,7 @@ const Card = ({ comboPackage }) => {
         </section> */}
 
         <section>
-          <p>{/* <h2> {calcServicePrice()}</h2> */}</p>
+          <p>{/* <h2> {showPackagePrice()}</h2> */}</p>
         </section>
 
         <section>

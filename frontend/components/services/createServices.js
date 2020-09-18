@@ -115,13 +115,6 @@ const CreateServices = ({ router }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // console.log("The form is submitted");
-    // console.log(formData.get("photo"));
-
-    // console.log(
-    //   "Getting everything in the formData",
-    //   formData.get("checkedTool")
-    // );
     createServices(formData, token).then((data) => {
       console.log("This is getting from backend", data);
 
@@ -148,17 +141,6 @@ const CreateServices = ({ router }) => {
 
   const showBrands = () => {};
 
-  // const showSuccess = () => {
-  //   if (success) {
-  //     return <p className="text-success">Service is Created</p>;
-  //   }
-  // };
-
-  // const showError = () => {
-  //   if (error) {
-  //     return <p className="text-danger">Service is there already</p>;
-  //   }
-  // };
   const createServiceForm = () => {
     return (
       <form className="text-center" onSubmit={(e) => onSubmit(e)}>

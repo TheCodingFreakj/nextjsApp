@@ -15,7 +15,7 @@ const categoryRoute = require("./routes/categoryRoute");
 const tagsRoute = require("./routes/tagsRoute");
 const servicesRoute = require("./routes/servicesRoute");
 const toolsRoute = require("./routes/toolsRoute");
-//const priceRoute = require("./routes/toolsRoute");
+const priceRoute = require("./routes/priceRoute");
 
 //app
 const app = express();
@@ -32,9 +32,8 @@ if (process.env.NODE_ENV === "development") {
   app.use(
     cors({
       origin: `${process.env.CLIENT_URL}`,
-      optionsSuccessStatus: 200,
-      preflightContinue: true,
-      credentials: true,
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      optionsSuccessStatus: 204,
     })
   );
 }
@@ -56,7 +55,7 @@ app.use("/api", categoryRoute);
 app.use("/api", tagsRoute);
 app.use("/api", servicesRoute);
 app.use("/api", toolsRoute);
-//app.use("/api", priceRoute);
+app.use("/api", priceRoute);
 
 //Ports
 const port = process.env.PORT || 8000;

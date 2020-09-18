@@ -16,10 +16,6 @@ const ServicesPage = () => {
               <h1 className="display-4 font-weight-bold text-center">
                 Individual Services
               </h1>
-
-              {/* <div className="col-md-12  pt-9 ">
-                <IndvServiceCards />
-              </div> */}
             </div>
 
             <div className="col-md-12 pt-3">

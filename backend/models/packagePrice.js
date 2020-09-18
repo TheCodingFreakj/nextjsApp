@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
 
-const priceSchema = new mongoose.Schema(
+const packagePriceSchema = new mongoose.Schema(
   {
-    serviceName: {
+    packageName: {
       type: String,
       trim: true,
       unique: true,
@@ -17,18 +17,18 @@ const priceSchema = new mongoose.Schema(
       index: true,
     },
 
-    realServicePrice: {
+    realPackagePrice: {
       type: Number,
     },
-    servicedDiscountPrice: {
+    packageDiscountPrice: {
       type: Number,
     },
 
-    discountedServiceCharges: {
+    discountedPackageCharges: {
       type: Number,
       // calculate the service charges
     },
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("Price", priceSchema);
+module.exports = mongoose.model("PackagePrice", packagePriceSchema);

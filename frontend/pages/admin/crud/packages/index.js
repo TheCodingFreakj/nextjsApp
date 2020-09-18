@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Layout from "../../../../components/Layout";
 import ComboPackages from "../../../../components/serviceCrud/combopackages";
+import AddPackagePrice from "../../../../components/serviceCrud/addComboPackagePrice";
 import Admin from "../../../../components/admin";
 
 //bring components
@@ -20,14 +21,9 @@ const ComboPackageComponent = () => {
               <ComboPackages />
             </div>
 
-            {/* <div className="col-md-6">
-              <Brands />
-              <hr />
-              <div className="col-md-6 pt-9 mt-5">
-                <h2>Manage Service And Pricings </h2>
-                <ServicePricesForm />
-              </div>
-            </div> */}
+            <div className="col-md-6">
+              <AddPackagePrice />
+            </div>
           </div>
         </div>
       </Admin>

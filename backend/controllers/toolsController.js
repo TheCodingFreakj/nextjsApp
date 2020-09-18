@@ -83,7 +83,7 @@ exports.getToolClientPrice = async (req, res) => {
           error: errorHandler(err),
         });
       } else {
-        res.json(results);
+        res.json(results); //tool, clientPrice
       }
     });
   } catch (error) {

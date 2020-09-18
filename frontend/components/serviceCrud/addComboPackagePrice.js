@@ -3,36 +3,23 @@ import Link from "next/link";
 import Router from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
 
-const ComboPackages = () => {
-  const [values, setValues] = useState({
-    packageName: "",
-    desc: "",
-    packagePrice: "",
-    bundleDescription: "",
-    error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
-    success: false, //Shows up as a display message when we submit somthing
-    loading: false,
-    reload: false,
+const AddPackagePrice = () => {
+  const [packagePrice, setpackagePrice] = useState({
+    realPackagePrice: "",
+    packageDiscountPrice: "",
+    discountedPackageCharges: "",
   });
 
+  //const [toDateDisabled, toggleDisabled] = useState(false);
+
   const {
-    packageName,
-    desc,
-    bundleDescription,
-    error,
-    success,
-    loading,
-    reload,
-  } = values;
-  const token = getCookie("token");
+    realPackagePrice,
+    packageDiscountPrice,
+    discountedPackageCharges,
+  } = packagePrice;
+
   const onChange = (name) => (e) => {
-    setValues({
-      ...values,
-      [name]: e.target.value,
-      error: false,
-      success: false,
-      removed: "",
-    });
+    setpackagePrice({ ...packagePrice, [name]: e.target.value });
   };
 
   const onSubmit = (e) => {
@@ -62,42 +49,41 @@ const ComboPackages = () => {
     //     // }
     //   });
   };
-  const comboPackagesForm = () => {
+
+  const comboPackagesPriceForm = () => {
     return (
       <form onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
-          <label className="text-muted">Package Name </label>
+          <label className="text-muted">Package Price </label>
           <input
             type="text"
             className="form-control"
-            placeholder="Give The Package Name"
-            onChange={onChange("packageName")}
-            value={packageName}
+            placeholder="Give The Package Price"
+            onChange={onChange("realPackagePrice")}
+            value={realPackagePrice}
             required
           />
         </div>
 
         <div className="form-group">
-          <label className="text-muted">Give the Description </label>
+          <label className="text-muted">Give the Package Description </label>
           <input
             type="text"
             className="form-control"
-            placeholder="Give The Description"
-            onChange={onChange("desc")}
-            value={desc}
+            placeholder="Give the Package Description"
+            onChange={onChange("packageDiscountPrice")}
+            value={packageDiscountPrice}
             required
           />
         </div>
         <div className="form-group">
-          <label className="text-muted">
-            What all is included in the service
-          </label>
+          <label className="text-muted">Discount Charges</label>
           <textarea
             type="text"
             className="form-control"
-            placeholder="bundleDescription"
-            onChange={onChange("bundleDescription")}
-            value={bundleDescription}
+            placeholder="discountedPackageCharges"
+            onChange={onChange("discountedPackageCharges")}
+            value={discountedPackageCharges}
             required
           />
         </div>
@@ -108,8 +94,8 @@ const ComboPackages = () => {
       </form>
     );
   };
-  return <React.Fragment>{comboPackagesForm()}</React.Fragment>;
+
+  return <React.Fragment>{comboPackagesPriceForm()}</React.Fragment>;
 };
 
-export default ComboPackages;
-//https://secure.getresponse.com/pricing/en?_ga=2.176755109.1251534595.1599641268-10827509.1599641268
+export default AddPackagePrice;
