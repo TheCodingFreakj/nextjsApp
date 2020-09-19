@@ -21,3 +21,14 @@ exports.priceCreateValidator = [
     .isEmpty()
     .withMessage("You must provide the price"),
 ];
+
+exports.comboPackageValidator = [
+  check("packageName").not().isEmpty().withMessage(" Name is required"), // incase of rule violation send these messages as error
+];
+
+exports.packagePriceCreateValidator = [
+  check("realPackagePrice")
+    .not()
+    .isEmpty()
+    .withMessage("You must provide the price"),
+];

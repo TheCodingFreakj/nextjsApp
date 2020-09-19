@@ -91,7 +91,7 @@ exports.Services = async (req, res) => {
       service.summary = summary;
       service.ratingQuantity = ratingQuantity;
       service.ratingAverage = ratings;
-      // service.packageName = packageName,
+      // service.discountedServiceCharges = packageName,
       // service.process=process
 
       let arrayOfTools = tools && tools.split(",");
@@ -128,6 +128,19 @@ exports.Services = async (req, res) => {
             });
           } else {
             return res.json(result);
+            // Service.findByIdAndUpdate(
+            //   result.id,
+            //   { $push: { tags: arrayOftags } },
+            //   { new: true }
+            // ).exec((err, result) => {
+            //   if (err) {
+            //     return res.status(400).json({
+            //       error: errorHandler(err),
+            //     });
+            //   } else {
+            //     return res.json(result);
+            //   }
+            // });
           }
         });
       });
@@ -159,34 +172,34 @@ exports.updateServices = async (req, res) => {
   }
 };
 
-exports.createComboPackage = async (req, res) => {
-  // comboPackage: {
-  //   (packageName = ""),
-  //     (slug = ""),
-  //     (title = ""),
-  //     (desc = ""),
-  //     packagePrice="", getToolClientPrice + servicePrice
-  //     serviceDescription:""
+// exports.createComboPackage = async (req, res) => {
+//   // comboPackage: {
+//   //   (packageName = ""),
+//   //     (slug = ""),
+//   //     (title = ""),
+//   //     (desc = ""),
+//   //     packagePrice="", getToolClientPrice + servicePrice
+//   //     serviceDescription:""
 
-  // }
-  console.log(req.body);
+//   // }
+//   console.log(req.body);
 
-  try {
-    let package = new ComboPackage();
-    package.packageName = packageName;
-    package.title = title;
-    package.slug = slugify(packageName).toLowerCase(); //slug based on title
-    package.desc = desc;
-    package.realPackagePrice = realPackagePrice;
-    package.discountPrice = discountPrice;
-    package.bundleDescription = bundleDescription;
+//   try {
+//     let package = new ComboPackage();
+//     package.packageName = packageName;
+//     package.title = title;
+//     package.slug = slugify(packageName).toLowerCase(); //slug based on title
+//     package.desc = desc;
+//     package.realPackagePrice = realPackagePrice;
+//     package.discountPrice = discountPrice;
+//     package.bundleDescription = bundleDescription;
 
-    //packagePrice calculate
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-};
+//     //packagePrice calculate
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Server Error");
+//   }
+// };
 
 // Create a meter that calculated price per words and then check out the process (For contentWriting)
 // For packages

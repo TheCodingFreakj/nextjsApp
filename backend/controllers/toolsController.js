@@ -56,6 +56,7 @@ exports.getAllTools = async (req, res) => {
 //Use the result of this calculation in the combopackage price
 
 exports.getToolClientPrice = async (req, res) => {
+  //https://intellipaat.com/community/34114/how-to-use-aggregate-in-mongoose
   try {
     //getting the tool price after discount
     await Tools.aggregate([

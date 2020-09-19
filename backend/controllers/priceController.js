@@ -5,6 +5,7 @@ const ComboPackage = require("../models/comboPackages");
 const slugify = require("slugify");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
+//This is for storing service price
 exports.createPriceObject = async (req, res) => {
   console.log("This is the data I got from Frontend", req.body);
   const { serviceName, realServicePrice, servicedDiscountPrice } = req.body;
@@ -18,198 +19,77 @@ exports.createPriceObject = async (req, res) => {
 
     const newPrice = await price.save();
     res.json(newPrice);
-
-    // await price.save((err, data) => {
-    //   console.log("This is service Price", data);
-    //   if (err)
-    //     return res.status(400).json({
-    //       error: errorHandler(err), //pass this err obj to the function
-    //     });
-
-    //   res.json(data);
-    // });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
   }
 };
 
-exports.createPackagePrice = async (req, res) => {
-  console.log("This is the data I got from Frontend", req.body);
-  const { packageName, realPackagePrice, packageDiscountPrice } = req.body;
+//This is for create combo Package object
+
+exports.createComboPackage = async (req, res) => {
+  const { comboPackageName, desc, title, bundleDescription } = req.body;
+
+  const packageFields = {};
+  if (comboPackageName) packageFields.packageName = comboPackageName;
+  if (desc) packageFields.desc = desc;
+  if (title) packageFields.title = title;
+  if (bundleDescription) packageFields.bundleDescription = bundleDescription;
+  //get the packagePrice
 
   try {
-    let = new PackagePrice();
-    packagePrice.packageName = packageName;
-    packagePrice.realPackagePrice = realPackagePrice;
-    packagePrice.slug = slugify(packageName).toLowerCase();
-    packagePrice.packageDiscountPrice = packageDiscountPrice;
+    let package = await new ComboPackage(packageFields);
+    package.slug = slugify(comboPackageName).toLowerCase();
 
-    const newPackagePrice = await packagePrice.save();
-    res.json(newPackagePrice);
-
-    // await price.save((err, data) => {
-    //   console.log("This is service Price", data);
-    //   if (err)
-    //     return res.status(400).json({
-    //       error: errorHandler(err), //pass this err obj to the function
-    //     });
-
-    //   res.json(data);
-    // });
+    if (package) {
+      //update
+      package = await ComboPackage.findOneAndUpdate(
+        { packageName: packagePriceFields.packageName },
+        { $set: packageFields },
+        { new: true, upsert: true }
+      );
+      return res.json(package);
+    }
+    await package.save();
+    return res.json(package);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
   }
 };
 
-// exports.createComboPackage = async (req, res) => {
-//   const {
-//     packageName,
-//     desc,
-//     bundleDescription,
+//create combo package price
+exports.createComboPackagePrice = async (req, res) => {
+  const { realPackagePrice, packageDiscountPrice, packageName } = req.body;
+  console.log(req.body);
 
-//   } = req.body;
+  const packagePriceFields = {};
+  if (packageName) packagePriceFields.packageName = packageName;
+  if (realPackagePrice) packagePriceFields.realPackagePrice = realPackagePrice;
+  if (packageDiscountPrice)
+    packagePriceFields.packageDiscountPrice = packageDiscountPrice;
 
-//   try{
-//     let package = await ComboPackage.findOne({ user: req.user.id });
-//   }catch (err) {
-//     console.error(err.message);
-//     res.status(500).send("Server error");
-//   }
+  console.log(packagePriceFields);
+  try {
+    let packagePrice = await new PackagePrice(packagePriceFields);
+    console.log(packagePrice);
 
-//try {
-//       let profile = await Profile.findOne({ user: req.user.id });
-
-//       if (profile) {
-//         //update
-
-//         profile = await Profile.findOneAndUpdate(
-//           { user: req.user.id },
-//           { $set: profileFields },
-//           { new: true, upsert: true }
-//         );
-//         return res.json(profile);
-//       }
-
-//       //if not found then create
-
-//       profile = new Profile(profileFields);
-//       await profile.save();
-//       return res.json(profile);
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send("Server Error");
-//     }
-//   }
-//};
-
-// router.post(
-//   "/",
-//   [
-//     auth,
-//     [
-//       check("status", "Status is required").not().isEmpty(),
-//       check("skills", "Skills is required").not().isEmpty(),
-//     ],
-//   ],
-//   async (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ errors: errors.array() });
-//     }
-
-//     //here we are pulling all the fields from user requests from the frontend
-
-//     const {
-//       company,
-//       location,
-//       website,
-//       bio,
-//       skills,
-//       status,
-//       githubusername,
-//       youtube,
-//       twitter,
-//       instagram,
-//       linkedin,
-//       facebook,
-//     } = req.body;
-
-//     //This is the entire profile object data
-//     //build profile object
-
-//     const profileFields = {};
-//     profileFields.user = req.user.id; //adding the user to the profile object// the token with which the authenticated user is logged in have the id
-//     if (company) profileFields.company = company;
-//     if (website) profileFields.website = website;
-//     if (location) profileFields.location = location;
-//     if (bio) profileFields.bio = bio;
-//     if (status) profileFields.status = status;
-//     if (githubusername) profileFields.githubusername = githubusername;
-
-//     //  "user": "5f2eb733bddf69268835be0d",
-//     //     "company": "Total solutions pvt lmt",
-//     //     "website": "https://totalsolutions.com",
-//     //     "location": "Boston",
-
-//     //turning the skills input to array
-//     //""turn skill string to array
-//     if (skills) {
-//       profileFields.skills = skills.split(",").map((skill) => skill.trim());
-//     }
-
-//     //   "skills": [
-//     //     "wordpress",
-//     //     "php"
-//     // ],
-
-//     // Build social object and add to profileFields
-
-//     profileFields.social = {};
-//     if (youtube) profileFields.social.youtube = youtube;
-//     if (twitter) profileFields.social.twitter = twitter;
-//     if (facebook) profileFields.social.facebook = facebook;
-//     if (instagram) profileFields.social.instagram = instagram;
-//     if (linkedin) profileFields.social.linkedin = linkedin;
-
-//     //   "social": {
-//     //     "twitter": "https://twitter.com/pallav75",
-//     //     "facebook": "https://facebook.com/pallav75",
-//     //     "instagram": "https://instagram.com/solutions",
-//     //     "linkedin": "https://linkedin.com/solutions"
-//     // },
-
-//     // console.log(profileFields.skills);
-
-//     ///I//////////////////////////////////////////////////////////////////
-//     ///////////////INSERT THE BUILT DATA//////////////////////////////////
-
-//     try {
-//       let profile = await Profile.findOne({ user: req.user.id });
-
-//       if (profile) {
-//         //update
-
-//         profile = await Profile.findOneAndUpdate(
-//           { user: req.user.id },
-//           { $set: profileFields },
-//           { new: true, upsert: true }
-//         );
-//         return res.json(profile);
-//       }
-
-//       //if not found then create
-
-//       profile = new Profile(profileFields);
-//       await profile.save();
-//       return res.json(profile);
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send("Server Error");
-//     }
-//   }
-// );
+    if (packagePrice) {
+      packagePrice = await PackagePrice.findOneAndUpdate(
+        { packageName: packagePriceFields.packageName }, // use this to update stuffs
+        { $set: packagePriceFields },
+        { new: true, upsert: true }
+      );
+      return res.json(packagePrice);
+    }
+    //https://docs.mongodb.com/manual/reference/operator/update/set/
+    await packagePrice.save();
+    return res.json(packagePrice);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
 
 //Create a Service
 exports.calculateDiscountedServices = async (req, res) => {
@@ -224,9 +104,12 @@ exports.calculateDiscountedServices = async (req, res) => {
 
           discountedServiceCharges: {
             $add: [
-              "$indvPrice",
+              "$realServicePrice",
               {
-                $multiply: ["$indvPrice", { $divide: ["$discountPrice", 100] }],
+                $multiply: [
+                  "$realServicePrice",
+                  { $divide: ["$servicedDiscountPrice", 100] },
+                ],
               },
             ],
           },

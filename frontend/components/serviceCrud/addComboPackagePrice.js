@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
+import { createNewComboPackagePrice } from "../../actions/comboPackage";
 
 const AddPackagePrice = () => {
   const [packagePrice, setpackagePrice] = useState({
     realPackagePrice: "",
     packageDiscountPrice: "",
-    discountedPackageCharges: "",
+    packageName: "",
+    error: false,
+    success: false,
+    loading: false,
+    reload: false,
   });
 
   //const [toDateDisabled, toggleDisabled] = useState(false);
@@ -15,50 +20,61 @@ const AddPackagePrice = () => {
   const {
     realPackagePrice,
     packageDiscountPrice,
-    discountedPackageCharges,
+    packageName,
+    error,
+    success,
+    loading,
+    reload,
   } = packagePrice;
-
+  const token = getCookie("token");
   const onChange = (name) => (e) => {
-    setpackagePrice({ ...packagePrice, [name]: e.target.value });
+    setpackagePrice({
+      ...packagePrice,
+      [name]: e.target.value,
+      error: false,
+      success: false,
+      removed: "",
+    });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
     console.log("The Form Is Submitted");
 
-    //   setValues({ ...values, loading: true, error: false });
+    const newComboPackagePrice = {
+      realPackagePrice,
+      packageDiscountPrice,
+      packageName,
+    };
 
-    //   //sending the value stored in state as input value from form
-    //   createNewBrand({ brandName }, token).then((data) => {
-    //     console.log(data);
-    //     // if (data.error) {
-    //     //   //setvalues fill the error variable and turn off the success
-
-    //     //   setValues({ ...values, error: data.error, success: false });
-    //     // } else {
-    //     //   //turn all off and make the success true
-
-    //     //   setValues({
-    //     //     ...values,
-    //     //     error: false,
-    //     //     success: true,
-    //     //     name: "",
-    //     //     removed: false,
-    //     //     reload: true,
-    //     //   });
-    //     // }
-    //   });
+    createNewComboPackagePrice(newComboPackagePrice, token).then((data) => {
+      //console.log(data);
+      if (data.error) {
+        setpackagePrice({ ...values, error: data.error, success: false });
+      } else {
+        setpackagePrice({
+          ...packagePrice,
+          realPackagePrice: "",
+          packageDiscountPrice: "",
+          discountedPackageCharges: "",
+          error: false,
+          success: true,
+          loading: false,
+          reload: true,
+        });
+      }
+    });
   };
 
   const comboPackagesPriceForm = () => {
     return (
       <form onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
-          <label className="text-muted">Package Price </label>
+          <label className="text-muted">Real Package Price </label>
           <input
             type="text"
             className="form-control"
-            placeholder="Give The Package Price"
+            placeholder="realPackagePrice"
             onChange={onChange("realPackagePrice")}
             value={realPackagePrice}
             required
@@ -66,24 +82,24 @@ const AddPackagePrice = () => {
         </div>
 
         <div className="form-group">
-          <label className="text-muted">Give the Package Description </label>
+          <label className="text-muted"> Discount Package Charges </label>
           <input
             type="text"
             className="form-control"
-            placeholder="Give the Package Description"
+            placeholder="packageDiscountPrice"
             onChange={onChange("packageDiscountPrice")}
             value={packageDiscountPrice}
             required
           />
         </div>
         <div className="form-group">
-          <label className="text-muted">Discount Charges</label>
-          <textarea
+          <label className="text-muted">Package Name </label>
+          <input
             type="text"
             className="form-control"
-            placeholder="discountedPackageCharges"
-            onChange={onChange("discountedPackageCharges")}
-            value={discountedPackageCharges}
+            placeholder="packageName"
+            onChange={onChange("packageName")}
+            value={packageName}
             required
           />
         </div>

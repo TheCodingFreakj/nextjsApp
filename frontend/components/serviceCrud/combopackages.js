@@ -2,22 +2,25 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
+import { createNewComboPackage } from "../../actions/comboPackage";
 
 const ComboPackages = () => {
   const [values, setValues] = useState({
-    packageName: "",
+    comboPackageName: "",
     desc: "",
     packagePrice: "",
+    title: "",
     bundleDescription: "",
-    error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
-    success: false, //Shows up as a display message when we submit somthing
+    error: false,
+    success: false,
     loading: false,
     reload: false,
   });
 
   const {
-    packageName,
+    comboPackageName,
     desc,
+    title,
     bundleDescription,
     error,
     success,
@@ -39,40 +42,53 @@ const ComboPackages = () => {
     e.preventDefault();
     console.log("The Form Is Submitted");
 
-    //   setValues({ ...values, loading: true, error: false });
+    const newComboPackage = {
+      comboPackageName,
+      title,
+      desc,
+      bundleDescription,
+    };
 
-    //   //sending the value stored in state as input value from form
-    //   createNewBrand({ brandName }, token).then((data) => {
-    //     console.log(data);
-    //     // if (data.error) {
-    //     //   //setvalues fill the error variable and turn off the success
-
-    //     //   setValues({ ...values, error: data.error, success: false });
-    //     // } else {
-    //     //   //turn all off and make the success true
-
-    //     //   setValues({
-    //     //     ...values,
-    //     //     error: false,
-    //     //     success: true,
-    //     //     name: "",
-    //     //     removed: false,
-    //     //     reload: true,
-    //     //   });
-    //     // }
-    //   });
+    createNewComboPackage(newComboPackage, token).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error, success: false });
+      } else {
+        setValues({
+          ...values,
+          packageName: "",
+          desc: "",
+          bundleDescription: "",
+          error: false,
+          success: true,
+          loading: false,
+          reload: true,
+        });
+      }
+    });
   };
   const comboPackagesForm = () => {
     return (
       <form onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
-          <label className="text-muted">Package Name </label>
+          <label className="text-muted">Combo Package Name </label>
           <input
             type="text"
             className="form-control"
             placeholder="Give The Package Name"
-            onChange={onChange("packageName")}
-            value={packageName}
+            onChange={onChange("comboPackageName")}
+            value={comboPackageName}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="text-muted">Combo Package Name </label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Package Title"
+            onChange={onChange("title")}
+            value={title}
             required
           />
         </div>
@@ -112,4 +128,3 @@ const ComboPackages = () => {
 };
 
 export default ComboPackages;
-//https://secure.getresponse.com/pricing/en?_ga=2.176755109.1251534595.1599641268-10827509.1599641268

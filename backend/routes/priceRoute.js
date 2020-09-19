@@ -4,7 +4,11 @@ const router = express.Router();
 //// For routes to be used after "/api"
 ///Controllers and Middlewares
 
-const { priceCreateValidator } = require("../middlewares/toolsValidator");
+const {
+  priceCreateValidator,
+  comboPackageValidator,
+  packagePriceCreateValidator,
+} = require("../middlewares/toolsValidator");
 const { runValidation } = require("../middlewares/authController");
 const { adminMiddleware } = require("../controllers/authController");
 const tokenAuth = require("../middlewares/tokenAuth");
@@ -12,8 +16,8 @@ const tokenAuth = require("../middlewares/tokenAuth");
 
 const {
   createPriceObject,
-  //createComboPackage,
-  createPackagePrice,
+  createComboPackage,
+  createComboPackagePrice,
   calculateDiscountedServices,
   calculatePackagePrice,
 } = require("../controllers/priceController");
@@ -28,12 +32,21 @@ router.post(
 );
 
 router.post(
-  "/combo-package-price",
-  priceCreateValidator,
+  "/combo-package",
+  comboPackageValidator,
   runValidation,
   tokenAuth,
   adminMiddleware,
-  createPackagePrice
+  createComboPackage
+);
+
+router.post(
+  "/combo-package-price",
+  packagePriceCreateValidator,
+  runValidation,
+  tokenAuth,
+  adminMiddleware,
+  createComboPackagePrice
 );
 
 // router.post(
