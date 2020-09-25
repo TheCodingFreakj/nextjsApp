@@ -171,7 +171,6 @@ exports.listAllBlogsByCatAndTags = async (req, res) => {
         }
 
         blogsToBeSent = blogs;
-
         //get all categories
         await Category.find({}).exec(async (err, categories) => {
           if (err) {

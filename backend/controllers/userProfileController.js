@@ -71,10 +71,10 @@ exports.publicUserProfile = async (req, res) => {
 };
 
 exports.updateUserProfile = async (req, res) => {
-  console.log(
-    "This is the entire updated user info I got after update",
-    req.user
-  );
+  // console.log(
+  //   "This is the entire updated user info I got after update",
+  //   req.user
+  // );
   try {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
@@ -89,9 +89,9 @@ exports.updateUserProfile = async (req, res) => {
       console.log("This is the entire user info I got just to update", user);
       user = _.extend(user, fields); //if fields change then they will be merged
 
-      console.log("This is the merged info", user);
-      console.log("The fields which i currently changed", fields);
-      console.log("These are the user files", files);
+      // console.log("This is the merged info", user);
+      // console.log("The fields which i currently changed", fields);
+      // console.log("These are the user files", files);
 
       //checking for password
 

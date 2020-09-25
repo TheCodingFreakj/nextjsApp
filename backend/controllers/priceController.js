@@ -3,11 +3,12 @@ const Service = require("../models/services");
 const PackagePrice = require("../models/packagePrice");
 const ComboPackage = require("../models/comboPackages");
 const slugify = require("slugify");
+const formidable = require("formidable");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 //This is for storing service price
 exports.createPriceObject = async (req, res) => {
-  console.log("This is the data I got from Frontend", req.body);
+  //console.log("This is the data I got from Frontend", req.body);
   const { serviceName, realServicePrice, servicedDiscountPrice } = req.body;
 
   try {
@@ -22,6 +23,70 @@ exports.createPriceObject = async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
+  }
+};
+
+exports.getServicePriceLists = async (req, res) => {
+  try {
+    await Price.find({}).exec((err, pricePackages) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      res.json(pricePackages);
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.updateServicePriceLists = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  console.log("The slug is", slug);
+  try {
+    Price.findOneAndUpdate({ slug }, { new: true }).exec(
+      async (err, oldPricePackage) => {
+        //console.log("The oldPricePackage is", oldPricePackage);
+
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
+
+        const stats = await Price.aggregate([
+          {
+            $project: {
+              _id: "$_id",
+              serviceName: 1, // I am retrieving the tools field. choose field: 1 whichever you want
+              total: {
+                $add: [
+                  "$realServicePrice",
+                  {
+                    $multiply: [
+                      "$realServicePrice",
+                      { $divide: ["$servicedDiscountPrice", 100] },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+        ]);
+
+        for (let i = 0; i < stats.length; i++) {
+          const calculatedPrice = stats[i].total;
+          //console.log(calculatedPrice);
+          oldPricePackage.discountedServiceCharges = calculatedPrice;
+        }
+        const newPricePackage = await oldPricePackage.save();
+        res.json(newPricePackage);
+      }
+    );
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
   }
 };
 
@@ -61,7 +126,7 @@ exports.createComboPackage = async (req, res) => {
 //create combo package price
 exports.createComboPackagePrice = async (req, res) => {
   const { realPackagePrice, packageDiscountPrice, packageName } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
 
   const packagePriceFields = {};
   if (packageName) packagePriceFields.packageName = packageName;
@@ -72,17 +137,20 @@ exports.createComboPackagePrice = async (req, res) => {
   console.log(packagePriceFields);
   try {
     let packagePrice = await new PackagePrice(packagePriceFields);
-    console.log(packagePrice);
+    packagePrice.slug = slugify(
+      packagePrice.packageName.toString()
+    ).toLowerCase();
+    //console.log(packagePrice);
 
     if (packagePrice) {
       packagePrice = await PackagePrice.findOneAndUpdate(
         { packageName: packagePriceFields.packageName }, // use this to update stuffs
-        { $set: packagePriceFields },
+        { $set: packagePrice },
         { new: true, upsert: true }
       );
       return res.json(packagePrice);
     }
-    //https://docs.mongodb.com/manual/reference/operator/update/set/
+
     await packagePrice.save();
     return res.json(packagePrice);
   } catch (err) {
@@ -91,38 +159,14 @@ exports.createComboPackagePrice = async (req, res) => {
   }
 };
 
-//Create a Service
-exports.calculateDiscountedServices = async (req, res) => {
+exports.getComboPackagePrices = async (req, res) => {
   try {
-    //get totalling of service charges
-
-    await Price.aggregate([
-      {
-        $project: {
-          //_id: 1, //excludes id
-          serviceName: 1, // I am retrieving the tools field. choose field: 1 whichever you want
-
-          discountedServiceCharges: {
-            $add: [
-              "$realServicePrice",
-              {
-                $multiply: [
-                  "$realServicePrice",
-                  { $divide: ["$servicedDiscountPrice", 100] },
-                ],
-              },
-            ],
-          },
-        },
-      },
-    ]).exec((err, results) => {
+    await PackagePrice.find({}).exec((err, comboPricePackages) => {
       if (err) {
-        return res.status(400).json({
-          error: errorHandler(err),
-        });
-      } else {
-        res.json(results); //serviceName, discountedServiceCharges
+        return res.status(400).json({ errors: errorHandler(err) });
       }
+
+      res.json(comboPricePackages);
     });
   } catch (error) {
     console.error(error.message);
@@ -130,72 +174,54 @@ exports.calculateDiscountedServices = async (req, res) => {
   }
 };
 
-exports.calculatePackagePrice = async (req, res) => {
+exports.updatePackagePriceLists = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  console.log("The slug is", slug);
+
   try {
-    // await Price.aggregate([
-    //   {
-    //     $project: {
-    //       //_id: 1, //excludes id
-    //       packageName: 1, // I am retrieving the tools field. choose field: 1 whichever you want
-    //       packagePrice: {
-    //         $add: [
-    //           "$realPackagePrice",
-    //           {
-    //             $multiply: [
-    //               "$realPackagePrice",
-    //               { $divide: ["$discountPrice", 100] },
-    //             ],
-    //           },
-    //         ],
-    //       },
-    //     },
-    //   },
-    // ]).exec((err, results) => {
-    //   if (err) {
-    //     return res.status(400).json({
-    //       error: errorHandler(err),
-    //     });
-    //   } else {
-    //     res.json(results); //packageName, packagePrice
-    //   }
-    // });
+    PackagePrice.findOneAndUpdate({ slug }, { new: true }).exec(
+      async (err, oldPricePackage) => {
+        console.log("This is the Package Price", oldPricePackage);
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
+
+        const stats = await PackagePrice.aggregate([
+          {
+            $project: {
+              _id: "$_id",
+              packageName: 1, // I am retrieving the tools field. choose field: 1 whichever you want
+              total: {
+                $subtract: [
+                  "$realPackagePrice",
+                  {
+                    $multiply: [
+                      "$realPackagePrice",
+                      { $divide: ["$packageDiscountPrice", 100] },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+        ]);
+
+        console.log("This is stats after update", stats);
+
+        for (let i = 0; i < stats.length; i++) {
+          const calculatedPrice = stats[i].total;
+          console.log("This is calculated price", calculatedPrice);
+          oldPricePackage.discountedPackageCharges = calculatedPrice;
+          const newPricePackage = await oldPricePackage.save();
+          console.log("This is new Package Price", newPricePackage);
+          res.json(newPricePackage);
+        }
+      }
+    );
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
   }
 };
-
-// exports.UpdatePriceList = async (req, res, next) => {
-//   try {
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// };
-
-// exports.getServiceClientPrice = async (req, res) => {
-//   try {
-//     //getting the service price after discount
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// };
-// exports.RemovePrice = async (req, res, next) => {
-//   const slug = req.params.slug.toLowerCase();
-//   try {
-//     await Price.findOneAndRemove({ slug }).exec((err, tool) => {
-//       if (err) {
-//         return res.status(400).json({ errors: errorHandler(err) });
-//       }
-
-//       return res.json({
-//         tool,
-//         message: "Tool Deleted Successfully",
-//       });
-//     });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// };

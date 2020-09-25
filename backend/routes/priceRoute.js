@@ -3,7 +3,6 @@ const router = express.Router();
 
 //// For routes to be used after "/api"
 ///Controllers and Middlewares
-
 const {
   priceCreateValidator,
   comboPackageValidator,
@@ -12,14 +11,16 @@ const {
 const { runValidation } = require("../middlewares/authController");
 const { adminMiddleware } = require("../controllers/authController");
 const tokenAuth = require("../middlewares/tokenAuth");
-//bring Controller
 
+//bring Controller
 const {
   createPriceObject,
   createComboPackage,
   createComboPackagePrice,
-  calculateDiscountedServices,
-  calculatePackagePrice,
+  getComboPackagePrices,
+  getServicePriceLists,
+  updateServicePriceLists,
+  updatePackagePriceLists,
 } = require("../controllers/priceController");
 
 router.post(
@@ -29,6 +30,14 @@ router.post(
   tokenAuth,
   adminMiddleware,
   createPriceObject
+);
+
+router.get("/get-price", getServicePriceLists);
+router.put(
+  "/update-price/:slug",
+  tokenAuth,
+  adminMiddleware,
+  updateServicePriceLists
 );
 
 router.post(
@@ -49,32 +58,13 @@ router.post(
   createComboPackagePrice
 );
 
-// router.post(
-//   "/combo-package",
-//   priceCreateValidator,
-//   runValidation,
-//   tokenAuth,
-//   adminMiddleware,
-//   createComboPackage
-// );
+router.get("/get-combo-price", getComboPackagePrices);
 
-// router.post(
-//   "/package-price",
-//   priceCreateValidator,
-//   runValidation,
-//   tokenAuth,
-//   adminMiddleware,
-//   createPricePackage
-// );
-router.get("/get-discount-price", calculateDiscountedServices);
-
-//access :slug using req.params
-router.get("/get-discount-package", calculatePackagePrice);
-// router.delete(
-//   "/price/:slug",
-//   tokenAuth,
-//   adminMiddleware,
-//   CalculatePackagePrice
-// );
+router.put(
+  "/update-package-price/:slug",
+  tokenAuth,
+  adminMiddleware,
+  updatePackagePriceLists
+);
 
 module.exports = router;

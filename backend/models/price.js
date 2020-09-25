@@ -27,9 +27,10 @@ const priceSchema = new mongoose.Schema(
     //Fill the value of the calculateDiscountedServices route
     discountedServiceCharges: {
       type: Number,
-      // calculate the service charges
+      default: 0,
     },
   },
   { timestamps: true }
 );
+
 module.exports = mongoose.model("Price", priceSchema);

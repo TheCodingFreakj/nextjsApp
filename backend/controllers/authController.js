@@ -241,10 +241,10 @@ exports.adminMiddleware = async (req, res, next) => {
 
 exports.canUpdateAndDeleteBlog = async (req, res, next) => {
   const slug = req.params.slug.toLowerCase();
-  console.log(
-    "This is the slug I got from params. I will use this to find the blogs",
-    slug
-  );
+  // console.log(
+  //   "This is the slug I got from params. I will use this to find the blogs",
+  //   slug
+  // );
   try {
     Blog.findOne({ slug }).exec((err, data) => {
       if (err) {
@@ -253,7 +253,7 @@ exports.canUpdateAndDeleteBlog = async (req, res, next) => {
         });
       }
 
-      console.log("This is blog data that user can update and delete", data);
+      //console.log("This is blog data that user can update and delete", data);
       //we are checking the blog's user id is equal to the logged in user
       let authorizedUser =
         data.postedBy._id.toString() === req.user._id.toString(); //This is avalable using the auth middleware auth

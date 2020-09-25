@@ -10,6 +10,11 @@ const packagePriceSchema = new mongoose.Schema(
       max: 32,
     },
 
+    slug: {
+      type: String,
+      unique: true,
+      index: true,
+    },
     realPackagePrice: {
       type: Number,
     },
@@ -19,7 +24,7 @@ const packagePriceSchema = new mongoose.Schema(
 
     discountedPackageCharges: {
       type: Number,
-      // calculate the service charges
+      default: 0,
     },
   },
   { timestamps: true }

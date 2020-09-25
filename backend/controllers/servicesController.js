@@ -91,7 +91,7 @@ exports.Services = async (req, res) => {
       service.summary = summary;
       service.ratingQuantity = ratingQuantity;
       service.ratingAverage = ratings;
-      // service.discountedServiceCharges = packageName,
+      // service.discountedServiceCharges = discountedServiceCharges,
       // service.process=process
 
       let arrayOfTools = tools && tools.split(",");
