@@ -16,8 +16,10 @@ const tagsRoute = require("./routes/tagsRoute");
 const servicesRoute = require("./routes/servicesRoute");
 const toolsRoute = require("./routes/toolsRoute");
 const priceRoute = require("./routes/priceRoute");
+const brandsRoute = require("./routes/brandsRoute");
 
 //app
+
 const app = express();
 
 //middlewares
@@ -54,8 +56,9 @@ app.use("/api", userProfileRoute);
 app.use("/api", categoryRoute);
 app.use("/api", tagsRoute);
 app.use("/api", servicesRoute);
-app.use("/api", toolsRoute);
 app.use("/api", priceRoute);
+app.use("/api", toolsRoute);
+app.use("/api", brandsRoute);
 
 //Ports
 const port = process.env.PORT || 8000;

@@ -15,12 +15,6 @@ const servicesSchema = new mongoose.Schema(
       index: true,
     },
 
-    indvPrice: {
-      type: Number,
-    },
-    discountPrice: {
-      type: Number,
-    },
     //Insert this value with update functionality in the service route
     discountedServiceCharges: [
       { type: ObjectId, ref: "Price", required: true },

@@ -187,42 +187,6 @@ const CreateServices = ({ router }) => {
 
         <div className="form-group">
           <label className="text-muted">
-            <h3>Price </h3>
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Provide The Service Charges"
-            value={servicePrice}
-            onChange={onChange("servicePrice")}
-            required
-          />
-        </div>
-
-        <label className="text-muted">
-          <h3>Discount Price </h3>
-        </label>
-
-        <div className="form-group">
-          <select
-            name="status"
-            className="form-control"
-            type="text"
-            value={pricePercent}
-            onChange={onChange("pricePercent")}
-          >
-            <option value="0">* Discount Percentage</option>
-            <option value="10">10</option>
-            <option value="10">15</option>
-            <option value="10">20</option>
-            <option value="10">21</option>
-            <option value="10">25</option>
-            <option value="10">30</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label className="text-muted">
             <h3>Duration</h3>
           </label>
 

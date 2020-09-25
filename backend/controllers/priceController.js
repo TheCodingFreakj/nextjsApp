@@ -6,6 +6,18 @@ const slugify = require("slugify");
 const formidable = require("formidable");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
+//Content Marketing
+//Seo
+//Funnel Marketing
+//Static Websites
+//Single Page Website
+//Ecommerce Websites
+//Author Websites
+//Resturant Websites
+//Corporate Websites
+//Personal Blogs
+//Mobile Apps
+
 //This is for storing service price
 exports.createPriceObject = async (req, res) => {
   //console.log("This is the data I got from Frontend", req.body);
@@ -41,6 +53,8 @@ exports.getServicePriceLists = async (req, res) => {
   }
 };
 
+//updates only the updatesServiceLists
+
 exports.updateServicePriceLists = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   console.log("The slug is", slug);
@@ -61,7 +75,7 @@ exports.updateServicePriceLists = async (req, res) => {
               _id: "$_id",
               serviceName: 1, // I am retrieving the tools field. choose field: 1 whichever you want
               total: {
-                $add: [
+                $subtract: [
                   "$realServicePrice",
                   {
                     $multiply: [
@@ -75,12 +89,18 @@ exports.updateServicePriceLists = async (req, res) => {
           },
         ]);
 
+        let calculatedPrice = "";
+
         for (let i = 0; i < stats.length; i++) {
-          const calculatedPrice = stats[i].total;
-          //console.log(calculatedPrice);
-          oldPricePackage.discountedServiceCharges = calculatedPrice;
+          //console.log("This is calculated price", calculatedPrice);
+          if (stats[i].serviceName === oldPricePackage.serviceName) {
+            calculatedPrice = stats[i].total;
+            oldPricePackage.discountedServiceCharges = calculatedPrice;
+          }
         }
+
         const newPricePackage = await oldPricePackage.save();
+        //console.log("This is new Package Price", newPricePackage);
         res.json(newPricePackage);
       }
     );
@@ -210,14 +230,19 @@ exports.updatePackagePriceLists = async (req, res) => {
 
         console.log("This is stats after update", stats);
 
+        let calculatedPrice = "";
+
         for (let i = 0; i < stats.length; i++) {
-          const calculatedPrice = stats[i].total;
-          console.log("This is calculated price", calculatedPrice);
-          oldPricePackage.discountedPackageCharges = calculatedPrice;
-          const newPricePackage = await oldPricePackage.save();
-          console.log("This is new Package Price", newPricePackage);
-          res.json(newPricePackage);
+          //console.log("This is calculated price", calculatedPrice);
+          if (stats[i].packageName === oldPricePackage.packageName) {
+            calculatedPrice = stats[i].total;
+            oldPricePackage.discountedPackageCharges = calculatedPrice;
+          }
         }
+
+        const newPricePackage = await oldPricePackage.save();
+        //console.log("This is new Package Price", newPricePackage);
+        res.json(newPricePackage);
       }
     );
   } catch (error) {
