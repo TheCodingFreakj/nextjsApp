@@ -31,8 +31,7 @@ const servicesSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
-    reviews: [{ type: ObjectId, ref: "Reviews", required: true }],
-    brands: [{ type: ObjectId, ref: "Brands", required: true }],
+
     tools: [{ type: ObjectId, ref: "Tools", required: true }],
     process: {
       type: String,
