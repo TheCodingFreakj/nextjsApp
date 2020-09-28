@@ -1,5 +1,5 @@
 const Service = require("../models/services");
-const User = require("../models/user");
+const Price = require("../models/price");
 const Tools = require("../models/marketingTools");
 const ComboPackage = require("../models/comboPackages");
 const formidable = require("formidable");
@@ -21,41 +21,27 @@ exports.Services = async (req, res) => {
           error: "There is some issue",
         });
       }
-      // console.log("This is the fields", fields);
+      console.log("This is the fields", fields);
       // console.log("This is the files", files);
 
       const {
-        serviceName,
-        servicePrice,
-        duration,
-        pricePercent,
-        ratingQuantity,
         summary,
-        ratings,
+        process,
+        duration,
+        serviceName,
+        discountedPrice,
         tools,
       } = fields;
 
-      if (!tools || !tools.length) {
+      if (!summary || !summary.length) {
         return res.status(400).json({
-          error: "tools is required",
+          error: "summary is required",
         });
       }
 
-      if (!servicePrice || !servicePrice.length) {
+      if (!process || !process.length) {
         return res.status(400).json({
-          error: "servicePrice is required",
-        });
-      }
-
-      if (!serviceName || !serviceName.length) {
-        return res.status(400).json({
-          error: "serviceName is required",
-        });
-      }
-
-      if (!pricePercent || !pricePercent.length) {
-        return res.status(400).json({
-          error: "pricePercent is required",
+          error: "summary is required",
         });
       }
 
@@ -65,35 +51,33 @@ exports.Services = async (req, res) => {
         });
       }
 
-      if (!ratingQuantity || !ratingQuantity.length) {
+      if (!serviceName || !serviceName.length) {
         return res.status(400).json({
-          error: "ratingQuantity is required",
+          error: "serviceName is required",
         });
       }
-
-      if (!ratings || !ratings.length) {
-        return res.status(400).json({
-          error: "ratings is required",
-        });
-      }
-
-      if (!summary || !summary.length) {
+      if (!discountedPrice || !discountedPrice.length) {
         return res.status(400).json({
           error: "summary is required",
+        });
+      }
+
+      if (!tools || !tools.length) {
+        return res.status(400).json({
+          error: "tools is required",
         });
       }
 
       let service = new Service();
       service.title = serviceName;
       service.slug = slugify(serviceName).toLowerCase();
-      service.indvPrice = servicePrice;
-      service.discountPrice = pricePercent;
       service.summary = summary;
-      service.ratingQuantity = ratingQuantity;
-      service.ratingAverage = ratings;
+      service.process = process;
+      service.duration = duration;
 
       let arrayOfTools = tools && tools.split(",");
       // console.log(arrayOfTools);
+      let arrayOfprice = discountedPrice && discountedPrice.split(",");
 
       if (files.photo) {
         if (files.photo.size > 10000000) {
@@ -125,20 +109,21 @@ exports.Services = async (req, res) => {
               error: errorHandler(err),
             });
           } else {
-            return res.json(result);
-            // Service.findByIdAndUpdate(
-            //   result.id,
-            //   { $push: { tags: arrayOftags } },
-            //   { new: true }
-            // ).exec((err, result) => {
-            //   if (err) {
-            //     return res.status(400).json({
-            //       error: errorHandler(err),
-            //     });
-            //   } else {
-            //     return res.json(result);
-            //   }
-            // });
+            //return res.json(result);
+
+            Service.findByIdAndUpdate(
+              result.id,
+              { $push: { discountedServiceCharges: arrayOfprice } },
+              { new: true }
+            ).exec((err, result) => {
+              if (err) {
+                return res.status(400).json({
+                  error: errorHandler(err),
+                });
+              } else {
+                return res.json(result);
+              }
+            });
           }
         });
       });
@@ -149,7 +134,20 @@ exports.Services = async (req, res) => {
   }
 };
 exports.ServicesList = async (req, res) => {
+  //find the discountServiceCharges for a service
   try {
+    await Service.find({})
+      //.populate({ path: "discountedServiceCharges", model: "Price" })
+      .populate("discountedServiceCharges", "_id discountedServiceCharges slug")
+      .select(
+        "_id title slug discountedServiceCharges process summary duration"
+      )
+      .exec((err, serviceLists) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+        res.json(serviceLists);
+      });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
@@ -169,35 +167,6 @@ exports.updateServices = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
-
-// exports.createComboPackage = async (req, res) => {
-//   // comboPackage: {
-//   //   (packageName = ""),
-//   //     (slug = ""),
-//   //     (title = ""),
-//   //     (desc = ""),
-//   //     packagePrice="", getToolClientPrice + servicePrice
-//   //     serviceDescription:""
-
-//   // }
-//   console.log(req.body);
-
-//   try {
-//     let package = new ComboPackage();
-//     package.packageName = packageName;
-//     package.title = title;
-//     package.slug = slugify(packageName).toLowerCase(); //slug based on title
-//     package.desc = desc;
-//     package.realPackagePrice = realPackagePrice;
-//     package.discountPrice = discountPrice;
-//     package.bundleDescription = bundleDescription;
-
-//     //packagePrice calculate
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// };
 
 // Create a meter that calculated price per words and then check out the process (For contentWriting)
 // For packages

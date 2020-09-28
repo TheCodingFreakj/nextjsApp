@@ -24,7 +24,6 @@ const priceSchema = new mongoose.Schema(
       type: Number,
     },
 
-    //Fill the value of the calculateDiscountedServices route
     discountedServiceCharges: {
       type: Number,
       default: 0,

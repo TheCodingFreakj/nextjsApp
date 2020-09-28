@@ -28,8 +28,8 @@ exports.create = (req, res) => {
 
       const { title, body, categories, tags } = fields; //felds we pass from frontend
 
-      console.log("This is the fields", fields);
-      console.log("This is the files", files);
+      // console.log("This is the fields", fields);
+      // console.log("This is the files", files);
       if (!title || !title.length) {
         return res.status(400).json({
           error: "Title is required",
@@ -150,7 +150,6 @@ exports.listAllBlogsByCatAndTags = async (req, res) => {
   //if user clicks load more then additional req will be sent and then the previous blogs are skipped then rest are send
   let limit = req.body.limit ? parseInt(req.body.limit) : 10; //by default is skip
   let skip = req.body.skip ? parseInt(req.body.skip) : 0;
-
   let blogsToBeSent;
   let categoriesToBeSent;
   let tagsToBeSent;

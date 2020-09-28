@@ -45,38 +45,60 @@ export const createNewPrice = async (newPriceInfo, token) => {
   }
 };
 
-// //get the tool info and client price to display
-// export const getAllServicesOptions = async (token) => {
-//   try {
-//     const config = {
-//       method: "GET",
-//       headers: {
-//         Accept: "application/json",
-//         Authorization: ` Bearer ${token}`,
-//         "Content-Type": "application/json",
-//         "Access-Control-Allow-Origin": "*",
-//         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-//       },
-//     };
+//get the tool info and client price to display
+export const getAllServicePriceOptions = async () => {
+  try {
+    const config = {
+      method: "GET",
+    };
 
-//     const response = await axios.get(`${API}/api/get-price-list`, config); //handing the backedn register user
-//     return response.data;
-//     console.log(response.data); // this is the token from backend
-//     console.log(response.status);
-//     console.log(response.statusText);
-//     console.log(response.headers);
-//     console.log(response.config);
-//     //we can use this token to access protected routes
-//   } catch (error) {
-//     if (error.response) {
-//       // The request was made and the server responded with a status code
-//       // that falls out of the range of 2xx
-//       console.log(error.response.data);
-//       console.log(error.response.status);
-//       console.log(error.response.headers);
-//     } else {
-//       // Something happened in setting up the request that triggered an Error
-//       console.log("Error", error.message);
-//     }
-//   }
-// };
+    const response = await axios.get(`${API}/api/get-price`, config); //handing the backedn register user
+    return response.data;
+    console.log(response.data); // this is the token from backend
+    console.log(response.status);
+    console.log(response.statusText);
+    console.log(response.headers);
+    console.log(response.config);
+    //we can use this token to access protected routes
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log("Error", error.message);
+    }
+  }
+};
+
+//get the tool info and client price to display
+export const getAllPackagePriceOptions = async () => {
+  try {
+    const config = {
+      method: "GET",
+    };
+
+    const response = await axios.get(`${API}/api/get-combo-price`, config); //handing the backedn register user
+    return response.data;
+    console.log(response.data); // this is the token from backend
+    console.log(response.status);
+    console.log(response.statusText);
+    console.log(response.headers);
+    console.log(response.config);
+    //we can use this token to access protected routes
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log("Error", error.message);
+    }
+  }
+};

@@ -15,7 +15,7 @@ const {
 } = require("../controllers/servicesController");
 
 router.post("/services", tokenAuth, adminMiddleware, Services);
-router.get("/services", ServicesList);
+router.post("/all-services", ServicesList);
 router.delete("/services/:slug", tokenAuth, adminMiddleware, removeServices);
 router.put("/services/:slug", tokenAuth, adminMiddleware, updateServices);
 

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
+import { withRouter } from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
 import { createNewComboPackage } from "../../actions/comboPackage";
+import { getAllPackagePriceOptions } from "../../actions/price";
 
-const ComboPackages = () => {
+const ComboPackages = ({ router }) => {
   const [values, setValues] = useState({
     comboPackageName: "",
     desc: "",
@@ -27,6 +29,57 @@ const ComboPackages = () => {
     loading,
     reload,
   } = values;
+
+  const [packagePrice, setPackagePrice] = useState([]);
+  // const [discountedPrice, setDiscountedPrice] = useState([]);
+
+  useEffect(() => {
+    showPriceBar();
+  }, [router]);
+  const showPriceBar = () => {
+    getAllPackagePriceOptions().then((data) => {
+      // console.log("This are all the tools I m getting from the backend", data);
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setPackagePrice(data);
+      }
+    });
+  };
+
+  // const handleToggle = (pId) => {
+  //   //clear the state incase of any error
+  //   setValues({ ...values, error: "" });
+  //   const clickedPrice = checkedPrice.indexOf(pId);
+
+  //   //storing all the checked Values in allTools
+  //   const allTools = [...checkedPrice];
+
+  //   if (clickedTool === -1) {
+  //     allTools.push(tId);
+  //   } else {
+  //     allTools.splice(clickedPrice, 1);
+  //   }
+  //   // console.log("Storing all the check Items in a variable", allTools);
+  //   setCheckedTool(allTools); // storing all checked value in the state
+
+  //   // formData.set("tools", allTools);
+  // };
+  const showDiscountedPackagePrice = () => {
+    return packagePrice.map((price, i) => (
+      <li key={i} className="list-unstyled">
+        <input
+          onChange={() => handlePriceToggle(price._id)}
+          type="checkbox"
+          className="mr-2"
+        />
+        <label className="form-check-label">
+          <h5>{price.packageName}</h5>
+          {price.discountedPackageCharges}
+        </label>
+      </li>
+    ));
+  };
   const token = getCookie("token");
   const onChange = (name) => (e) => {
     setValues({
@@ -124,7 +177,29 @@ const ComboPackages = () => {
       </form>
     );
   };
-  return <React.Fragment>{comboPackagesForm()}</React.Fragment>;
+  return (
+    <React.Fragment>
+      {" "}
+      <div className="container-fluid pb-5 ">
+        <div className="col-md-8 pb-5">
+          <div>
+            <h5>Select Service and Discounted Price</h5>
+            <ul
+              style={{
+                maxHeight: "300px",
+                overflowY: "scroll",
+              }}
+            >
+              {showDiscountedPackagePrice()}
+            </ul>
+
+            <hr />
+          </div>
+          {comboPackagesForm()}
+        </div>
+      </div>
+    </React.Fragment>
+  );
 };
 
 export default ComboPackages;

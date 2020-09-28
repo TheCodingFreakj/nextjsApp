@@ -2,7 +2,7 @@ import axios from "axios";
 import { API } from "../config";
 
 export const createServices = async (serviceInfo, token) => {
-  //console.log("This is the data I am sending to server", serviceInfo);
+  console.log("This is the data I am sending to server", serviceInfo);
 
   try {
     const config = {
@@ -42,7 +42,7 @@ export const createServices = async (serviceInfo, token) => {
   }
 };
 
-export const getSingleService = async (params) => {
+export const getDiscountedPrice = async () => {
   try {
     const config = {
       method: "GET",
@@ -72,6 +72,37 @@ export const getSingleService = async (params) => {
     }
   }
 };
+
+// export const getSingleService = async (params) => {
+//   try {
+//     const config = {
+//       method: "GET",
+//     };
+
+//     const response = await axios.get(`${API}/api/services`, config); //handing the backedn register user
+//     return response.data;
+//     console.log(response.data); // this is the token from backend
+//     console.log(response.status);
+//     console.log(response.statusText);
+//     console.log(response.headers);
+//     console.log(response.config);
+//     //we can use this token to access protected routes
+//   } catch (error) {
+//     if (error.response) {
+//       // The request was made and the server responded with a status code
+//       // that falls out of the range of 2xx
+
+//       return error.response.data;
+//       console.log(error.response.data);
+//       console.log(error.response.status);
+//       console.log(error.response.headers);
+//     } else {
+//       // Something happened in setting up the request that triggered an Error
+//       return error.message;
+//       console.log("Error", error.message);
+//     }
+//   }
+// };
 
 export const updateService = async (slug, token) => {
   try {

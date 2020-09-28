@@ -33,4 +33,23 @@ const ServicesPage = () => {
   );
 };
 
+
+// export const getServerSideProps = async (context) => {
+//   //now all the returns are avaialble as props
+
+//   const data = await listServicesWith(skip, limit);
+
+//   // console.log(data);
+
+//   //console.log("getServerProps", data, context.params, context.query);
+
+//   if (data.error) {
+//     console.log(data.error);
+//   } else {
+//     return {
+//       props: { ...data, blogLimit: limit, blogSkip: skip },
+//     };
+//   }
+// };
+
 export default ServicesPage;

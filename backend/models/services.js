@@ -14,27 +14,20 @@ const servicesSchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
-
-    //Insert this value with update functionality in the service route
     discountedServiceCharges: [
       { type: ObjectId, ref: "Price", required: true },
     ],
-    // .populate("discountedServiceCharges", "_id serviceName discountedServiceCharges slug")
-    ratingAverage: {
-      type: Number,
-      default: 4.5,
-    },
-    ratingQuantity: {
-      type: Number,
-    },
+
     imageCover: {
       data: Buffer,
       contentType: String,
     },
 
     tools: [{ type: ObjectId, ref: "Tools", required: true }],
+
     process: {
       type: String,
+      max: 1000,
     },
     summary: {
       type: String,

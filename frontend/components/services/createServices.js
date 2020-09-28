@@ -4,19 +4,17 @@ import Router from "next/router";
 import { withRouter } from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
 import { createServices } from "../../actions/services";
+import { getAllServicePriceOptions } from "../../actions/price";
 import { getAllTools } from "../../actions/tools";
 
 const CreateServices = ({ router }) => {
   //getting all values from form inputs
   const [values, setValues] = useState({
     serviceName: "",
-    servicePrice: "",
     duration: "",
-    ratingQuantity: "",
     summary: "",
-    pricePercent: "",
-    ratings: "",
     formData: "",
+    process: "",
     error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
     success: false, //Shows up as a display message when we submit somthing
     loading: false,
@@ -25,12 +23,9 @@ const CreateServices = ({ router }) => {
 
   const {
     serviceName,
-    servicePrice,
     duration,
-    pricePercent,
-    ratingQuantity,
     summary,
-    ratings,
+    process,
     formData,
     error,
     loading,
@@ -39,15 +34,18 @@ const CreateServices = ({ router }) => {
 
   //state to get the tools from backend
   const [tools, setTools] = useState([]);
+  const [discountedPrice, setDiscountedPrice] = useState([]);
 
   //state to get the checkedTool value in the state at the frontend
   const [checkedTool, setCheckedTool] = useState([]);
   // console.log("This is the state where I store the checkedTool", checkedTool);
+  const [checkedPrice, setCheckedPrice] = useState([]);
 
   useEffect(() => {
     // const checkedData = new FormData();
     setValues({ ...values, formData: new FormData() });
     showToolSideBar();
+    showPriceSideBar();
   }, [router]);
 
   const token = getCookie("token");
@@ -59,6 +57,17 @@ const CreateServices = ({ router }) => {
         setValues({ ...values, error: data.error });
       } else {
         setTools(data);
+      }
+    });
+  };
+
+  const showPriceSideBar = () => {
+    getAllServicePriceOptions().then((data) => {
+      //console.log("The price tag is", data);
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setDiscountedPrice(data);
       }
     });
   };
@@ -113,6 +122,41 @@ const CreateServices = ({ router }) => {
     ));
   };
 
+  const handlePriceToggle = (pId) => {
+    //clear the state incase of any error
+    setValues({ ...values, error: "" });
+    const clickedPrice = checkedPrice.indexOf(pId);
+
+    //storing all the checked Values in allTools
+    const choosenPrices = [...checkedPrice];
+
+    if (clickedPrice === -1) {
+      choosenPrices.push(pId);
+    } else {
+      choosenPrices.splice(checkedPrice, 1);
+    }
+    console.log("Storing all the check Items in a variable", choosenPrices);
+    setCheckedPrice(choosenPrices); // storing all checked value in the state
+
+    formData.set("discountedPrice", choosenPrices);
+  };
+
+  const showDiscountedPrice = () => {
+    return discountedPrice.map((price, i) => (
+      <li key={i} className="list-unstyled">
+        <input
+          onChange={() => handlePriceToggle(price._id)}
+          type="checkbox"
+          className="mr-2"
+        />
+        <label className="form-check-label">
+          <h5>{price.serviceName}</h5>
+          {price.discountedServiceCharges}
+        </label>
+      </li>
+    ));
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
     createServices(formData, token).then((data) => {
@@ -124,22 +168,15 @@ const CreateServices = ({ router }) => {
         setValues({
           ...values,
           serviceName: "",
-          servicePrice: "",
           duration: "",
-          pricePercent: "",
-          ratingQuantity: "",
+          process: "",
           summary: "",
-          ratings: "",
           error: "",
           success: `A new service :"${data.serviceName}" is created `,
         });
       }
     });
   };
-
-  //Do the brands and display it tom
-
-  const showBrands = () => {};
 
   const createServiceForm = () => {
     return (
@@ -175,7 +212,7 @@ const CreateServices = ({ router }) => {
           <h3>Brief Summarry</h3>
         </label>
         <div className="form-group">
-          <textarea
+          <input
             type="text"
             className="form-control"
             name="summary"
@@ -193,7 +230,7 @@ const CreateServices = ({ router }) => {
           <input
             type="text"
             className="form-control"
-            placeholder="Input the Price Here"
+            placeholder="Input the Duration Here"
             value={duration}
             onChange={onChange("duration")}
             required
@@ -202,42 +239,16 @@ const CreateServices = ({ router }) => {
 
         <div className="form-group">
           <label className="text-muted">
-            <h3>Rating Average</h3>
-          </label>
-          <select
-            name="status"
-            className="form-control"
-            type="text"
-            value={ratings}
-            onChange={onChange("ratings")}
-          >
-            <option value="0">* Ratings for the service package</option>
-            <option value="4.0">4.0</option>
-            <option value="4.1">4.1</option>
-            <option value="4.2">4.2</option>
-            <option value="4.3">4.3</option>
-            <option value="4.4">4.4</option>
-            <option value="4.5">4.5</option>
-            <option value="4.6">4.6</option>
-            <option value="4.7">4.7</option>
-            <option value="4.8">4.8</option>
-            <option value="4.9">4.9</option>
-            <option value="5.0">5.0</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label className="text-muted">
-            <h3>Ratings Quantity</h3>
+            <h3>Process</h3>
           </label>
 
           <input
             type="text"
             className="form-control"
-            name="ratingQuantity"
-            value={ratingQuantity} // This value should be coming from the state
-            onChange={onChange("ratingQuantity")} //setFormData
-            //required
+            placeholder="Input the Process Here"
+            value={process}
+            onChange={onChange("process")}
+            required
           />
         </div>
 
@@ -254,8 +265,23 @@ const CreateServices = ({ router }) => {
           <div className="col-md-8 pb-5">
             {/* {showSuccess()}
             {showError()} */}
+            <div className="col-md-8 pb-5">
+              <div>
+                <h5>Select Service and Discounted Price</h5>
+                <ul
+                  style={{
+                    maxHeight: "300px",
+                    overflowY: "scroll",
+                  }}
+                >
+                  {showDiscountedPrice()}
+                </ul>
+
+                <hr />
+              </div>
+            </div>
             {createServiceForm()}
-            {/* {JSON.stringify(checkedTool)} */}
+            {/* {JSON.stringify(discountedPrice)} */}
             {/* {JSON.stringify(allTools)} */}
           </div>
 
@@ -282,13 +308,6 @@ const CreateServices = ({ router }) => {
               </ul>
 
               <hr />
-            </div>
-
-            <div>
-              <h5>Select From Brands Worked</h5>
-              <ul style={{ maxHeight: "100px", overflowY: "scroll" }}>
-                {showBrands()}
-              </ul>
             </div>
           </div>
         </div>

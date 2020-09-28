@@ -19,12 +19,12 @@ const reviewsSchema = new mongoose.Schema(
     },
     postedBy: [{ type: ObjectId, ref: "Brand", required: true }],
 
-    // //populate the title,slug
-    // servicesTaken: {
-    //   type: ObjectId,
-    //   ref: "Service",
-    //   required: [true, "ServicesTaken Must Belong to a Service Package"],
-    // },
+    //populate the title,slug
+    servicesTaken: {
+      type: ObjectId,
+      ref: "Service",
+      required: [true, "ServicesTaken Must Belong to a Service Package"],
+    },
 
     createdAt: {
       type: Date,
