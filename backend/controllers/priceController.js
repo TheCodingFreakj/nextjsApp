@@ -131,15 +131,19 @@ exports.createComboPackage = async (req, res) => {
       checkedPrice && checkedPrice.toString().split(",");
   }
 
+  //console.log(packageFields);
+
   try {
     let package = await new ComboPackage(packageFields);
-    package.slug = slugify(comboPackageName).toLowerCase();
+    package.slug = slugify(title).toLowerCase();
+
+    //console.log(package);
 
     if (package) {
       //update
       package = await ComboPackage.findOneAndUpdate(
         { comboPackageName: packageFields.comboPackageName },
-        { $set: packageFields },
+        { $set: package },
         { new: true, upsert: true }
       );
       return res.json(package);
@@ -152,7 +156,6 @@ exports.createComboPackage = async (req, res) => {
   }
 };
 
-//https://docs.w3cub.com/mongoose/populate/
 exports.getComboPackages = async (req, res) => {
   try {
     await ComboPackage.find({}).exec((err, comboPackages) => {

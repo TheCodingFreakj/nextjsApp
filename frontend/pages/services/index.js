@@ -9,20 +9,18 @@ import Card from "../../components/services/ServiceCards/serviceCards";
 
 const ServicesPage = ({ data }) => {
   console.log("The Page Props Are", data);
+
   const showAllServicePackages = () => {
-    return (
-      <div className="row">
-        <div className="col-md-3 pl-5">
-          <ul className="list-group">
-            <li className="list-group-item">
-              <Card comboPackage={data} />
-              <button className="btn btn-success">Book Now</button>
-            </li>
-          </ul>
+    return data.map((comboPackage, i) => (
+      <div key={i} className="d-flex justify-content-around">
+        <div className="p-2 bd-highlight">
+          <Card comboPackage={comboPackage} />
+          <button className="btn btn-success">Book Now</button>
         </div>
       </div>
-    );
+    ));
   };
+
   return (
     <Layout>
       <main>
@@ -38,7 +36,9 @@ const ServicesPage = ({ data }) => {
               <h1 className="display-4 font-weight-bold text-center pb-9 ">
                 ComboPackages
               </h1>
-              <div className="col-md-12  pt-9 ">{showAllServicePackages()}</div>
+              <div className="d-flex justify-content-around">
+                {showAllServicePackages()}
+              </div>
             </div>
           </header>
         </div>
