@@ -154,14 +154,18 @@ exports.ServicesList = async (req, res) => {
   }
 };
 exports.removeServices = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
   try {
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-};
-exports.updateServices = async (req, res) => {
-  try {
+    await Service.findOneAndRemove({ slug }).exec((err, service) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      return res.json({
+        service,
+        message: "service Deleted Successfully",
+      });
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

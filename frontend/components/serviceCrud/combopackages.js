@@ -4,7 +4,7 @@ import Router from "next/router";
 import { withRouter } from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
 import { createNewComboPackage } from "../../actions/comboPackage";
-import { getAllPackagePriceOptions } from "../../actions/price";
+import { getAllPackagePriceOptions } from "../../actions/comboPackage";
 
 const ComboPackages = ({ router }) => {
   const [values, setValues] = useState({
@@ -13,6 +13,7 @@ const ComboPackages = ({ router }) => {
     packagePrice: "",
     title: "",
     bundleDescription: "",
+    //formData: "",
     error: false,
     success: false,
     loading: false,
@@ -24,6 +25,7 @@ const ComboPackages = ({ router }) => {
     desc,
     title,
     bundleDescription,
+    //formData,
     error,
     success,
     loading,
@@ -31,9 +33,12 @@ const ComboPackages = ({ router }) => {
   } = values;
 
   const [packagePrice, setPackagePrice] = useState([]);
-  // const [discountedPrice, setDiscountedPrice] = useState([]);
+  //const [discountedPrice, setDiscountedPrice] = useState({});
+  const [checkedPrice, setCheckedPrice] = useState([]);
 
   useEffect(() => {
+    setValues({ ...values });
+
     showPriceBar();
   }, [router]);
   const showPriceBar = () => {
@@ -47,24 +52,24 @@ const ComboPackages = ({ router }) => {
     });
   };
 
-  // const handleToggle = (pId) => {
-  //   //clear the state incase of any error
-  //   setValues({ ...values, error: "" });
-  //   const clickedPrice = checkedPrice.indexOf(pId);
+  const handlePriceToggle = (pId) => {
+    //clear the state incase of any error
+    setValues({ ...values, error: "" });
+    const clickedPrice = checkedPrice.indexOf(pId);
 
-  //   //storing all the checked Values in allTools
-  //   const allTools = [...checkedPrice];
+    //storing all the checked Values in a variable
+    const choosenPrices = [...checkedPrice];
 
-  //   if (clickedTool === -1) {
-  //     allTools.push(tId);
-  //   } else {
-  //     allTools.splice(clickedPrice, 1);
-  //   }
-  //   // console.log("Storing all the check Items in a variable", allTools);
-  //   setCheckedTool(allTools); // storing all checked value in the state
-
-  //   // formData.set("tools", allTools);
-  // };
+    if (clickedPrice === -1) {
+      choosenPrices.push(pId);
+    } else {
+      choosenPrices.splice(checkedPrice, 1);
+    }
+    console.log("Storing all the check Items in a variable", choosenPrices);
+    setCheckedPrice(choosenPrices); // storing all checked value in the state
+    //setDiscountedPrice(checkedPrice);
+    //formData.set("discountedPrice", choosenPrices);
+  };
   const showDiscountedPackagePrice = () => {
     return packagePrice.map((price, i) => (
       <li key={i} className="list-unstyled">
@@ -93,14 +98,15 @@ const ComboPackages = ({ router }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log("The Form Is Submitted");
-
     const newComboPackage = {
       comboPackageName,
       title,
       desc,
       bundleDescription,
+      checkedPrice,
     };
+
+    console.log("This is the object from frontend", newComboPackage);
 
     createNewComboPackage(newComboPackage, token).then((data) => {
       if (data.error) {
@@ -179,7 +185,6 @@ const ComboPackages = ({ router }) => {
   };
   return (
     <React.Fragment>
-      {" "}
       <div className="container-fluid pb-5 ">
         <div className="col-md-8 pb-5">
           <div>
@@ -196,10 +201,11 @@ const ComboPackages = ({ router }) => {
             <hr />
           </div>
           {comboPackagesForm()}
+          {JSON.stringify(checkedPrice)}
         </div>
       </div>
     </React.Fragment>
   );
 };
 
-export default ComboPackages;
+export default withRouter(ComboPackages);

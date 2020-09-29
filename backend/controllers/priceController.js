@@ -110,17 +110,26 @@ exports.updateServicePriceLists = async (req, res) => {
   }
 };
 
-//This is for create combo Package object
-
 exports.createComboPackage = async (req, res) => {
-  const { comboPackageName, desc, title, bundleDescription } = req.body;
+  //console.log(req.body);
+  const {
+    comboPackageName,
+    desc,
+    title,
+    bundleDescription,
+    checkedPrice,
+  } = req.body;
 
   const packageFields = {};
-  if (comboPackageName) packageFields.packageName = comboPackageName;
+  if (comboPackageName) packageFields.comboPackageName = comboPackageName;
   if (desc) packageFields.desc = desc;
   if (title) packageFields.title = title;
   if (bundleDescription) packageFields.bundleDescription = bundleDescription;
   //get the packagePrice
+  if (checkedPrice) {
+    packageFields.checkedPrice =
+      checkedPrice && checkedPrice.toString().split(",");
+  }
 
   try {
     let package = await new ComboPackage(packageFields);
@@ -129,7 +138,7 @@ exports.createComboPackage = async (req, res) => {
     if (package) {
       //update
       package = await ComboPackage.findOneAndUpdate(
-        { packageName: packagePriceFields.packageName },
+        { comboPackageName: packageFields.comboPackageName },
         { $set: packageFields },
         { new: true, upsert: true }
       );
@@ -140,6 +149,40 @@ exports.createComboPackage = async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
+  }
+};
+
+//https://docs.w3cub.com/mongoose/populate/
+exports.getComboPackages = async (req, res) => {
+  try {
+    await ComboPackage.find({}).exec((err, comboPackages) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+      res.json(comboPackages);
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.removeComboPackage = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    await ComboPackage.findOneAndRemove({ slug }).exec((err, package) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      return res.json({
+        package,
+        message: "package Deleted Successfully",
+      });
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
   }
 };
 
@@ -154,7 +197,7 @@ exports.createComboPackagePrice = async (req, res) => {
   if (packageDiscountPrice)
     packagePriceFields.packageDiscountPrice = packageDiscountPrice;
 
-  console.log(packagePriceFields);
+  // console.log(packagePriceFields);
   try {
     let packagePrice = await new PackagePrice(packagePriceFields);
     packagePrice.slug = slugify(

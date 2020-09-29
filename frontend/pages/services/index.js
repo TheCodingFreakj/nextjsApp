@@ -2,11 +2,27 @@ import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
-import ServiceCards from "../../components/services/servicecards";
+import { getComboPackages } from "../../actions/comboPackage";
+import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
+import { withRouter } from "next/router";
+import Card from "../../components/services/ServiceCards/serviceCards";
 
-import { API } from "../../config";
-
-const ServicesPage = () => {
+const ServicesPage = ({ data }) => {
+  console.log("The Page Props Are", data);
+  const showAllServicePackages = () => {
+    return (
+      <div className="row">
+        <div className="col-md-3 pl-5">
+          <ul className="list-group">
+            <li className="list-group-item">
+              <Card comboPackage={data} />
+              <button className="btn btn-success">Book Now</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    );
+  };
   return (
     <Layout>
       <main>
@@ -22,9 +38,7 @@ const ServicesPage = () => {
               <h1 className="display-4 font-weight-bold text-center pb-9 ">
                 ComboPackages
               </h1>
-              <div className="col-md-12  pt-9 ">
-                <ServiceCards />
-              </div>
+              <div className="col-md-12  pt-9 ">{showAllServicePackages()}</div>
             </div>
           </header>
         </div>
@@ -33,23 +47,18 @@ const ServicesPage = () => {
   );
 };
 
+export const getServerSideProps = async (context) => {
+  //data required here//getComboPackages
 
-// export const getServerSideProps = async (context) => {
-//   //now all the returns are avaialble as props
+  const data = await getComboPackages();
+  console.log(data);
 
-//   const data = await listServicesWith(skip, limit);
-
-//   // console.log(data);
-
-//   //console.log("getServerProps", data, context.params, context.query);
-
-//   if (data.error) {
-//     console.log(data.error);
-//   } else {
-//     return {
-//       props: { ...data, blogLimit: limit, blogSkip: skip },
-//     };
-//   }
-// };
-
-export default ServicesPage;
+  if (data.error) {
+    console.log(data.error);
+  } else {
+    return {
+      props: { data },
+    };
+  }
+};
+export default withRouter(ServicesPage);

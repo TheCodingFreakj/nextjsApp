@@ -23,7 +23,7 @@ exports.priceCreateValidator = [
 ];
 
 exports.comboPackageValidator = [
-  check("packageName").not().isEmpty().withMessage(" Name is required"), // incase of rule violation send these messages as error
+  check("comboPackageName").not().isEmpty().withMessage(" Name is required"), // incase of rule violation send these messages as error
 ];
 
 exports.packagePriceCreateValidator = [

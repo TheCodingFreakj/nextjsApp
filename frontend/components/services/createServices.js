@@ -317,7 +317,3 @@ const CreateServices = ({ router }) => {
 };
 
 export default withRouter(CreateServices);
-
-//https://draftjs.org/docs/quickstart-api-basics
-//https://github.com/vercel/next.js/blob/canary/examples/with-draft-js/pages/index.js
-//https://blog.learningdollars.com/2020/04/01/how-to-add-a-rich-text-editor-in-your-react-app-using-draft-js-and-react-draft-wysiwyg/

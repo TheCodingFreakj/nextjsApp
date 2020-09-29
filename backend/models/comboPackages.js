@@ -27,9 +27,7 @@ const comboPackageSchema = new mongoose.Schema(
       type: String,
       max: 1000,
     },
-    calculatedPackagePrice: [
-      { type: ObjectId, ref: "PackagePrice", required: true },
-    ],
+    checkedPrice: [{ type: ObjectId, ref: "PackagePrice", required: true }],
     createdAt: {
       type: Date,
       required: true,

@@ -16,13 +16,16 @@ const tokenAuth = require("../middlewares/tokenAuth");
 const {
   createPriceObject,
   createComboPackage,
+  getComboPackages,
   createComboPackagePrice,
   getComboPackagePrices,
+  removeComboPackage,
   getServicePriceLists,
   updateServicePriceLists,
   updatePackagePriceLists,
 } = require("../controllers/priceController");
 
+//////// All About Service Price ////////////////
 router.post(
   "/price",
   priceCreateValidator,
@@ -40,15 +43,25 @@ router.put(
   updateServicePriceLists
 );
 
+/////////////////////All About ComboPackages//////////////////////
 router.post(
-  "/combo-package",
+  "/comboPackage",
   comboPackageValidator,
   runValidation,
   tokenAuth,
   adminMiddleware,
   createComboPackage
 );
+router.get("/comboPackage", getComboPackages);
 
+router.delete(
+  "/comboPackage/:slug",
+  tokenAuth,
+  adminMiddleware,
+  removeComboPackage
+);
+
+//////////////////////All About ComboPackagePrice /////////////////////////
 router.post(
   "/combo-package-price",
   packagePriceCreateValidator,

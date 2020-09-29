@@ -11,12 +11,10 @@ const {
   Services,
   ServicesList,
   removeServices,
-  updateServices,
 } = require("../controllers/servicesController");
 
 router.post("/services", tokenAuth, adminMiddleware, Services);
 router.post("/all-services", ServicesList);
 router.delete("/services/:slug", tokenAuth, adminMiddleware, removeServices);
-router.put("/services/:slug", tokenAuth, adminMiddleware, updateServices);
 
 module.exports = router;
