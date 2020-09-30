@@ -57,7 +57,7 @@ exports.getServicePriceLists = async (req, res) => {
 
 exports.updateServicePriceLists = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
-  console.log("The slug is", slug);
+  //console.log("The slug is", slug);
   try {
     Price.findOneAndUpdate({ slug }, { new: true }).exec(
       async (err, oldPricePackage) => {
@@ -158,12 +158,18 @@ exports.createComboPackage = async (req, res) => {
 
 exports.getComboPackages = async (req, res) => {
   try {
-    await ComboPackage.find({}).exec((err, comboPackages) => {
-      if (err) {
-        return res.status(400).json({ errors: errorHandler(err) });
-      }
-      res.json(comboPackages);
-    });
+    await ComboPackage.find({})
+      //.populate({ path: "discountedServiceCharges", model: "Price" })
+      .populate("checkedPrice", "_id discountedPackageCharges slug")
+      .select(
+        "_id comboPackageName title desc bundleDescription slug checkedPrice "
+      )
+      .exec((err, comboPackages) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+        res.json(comboPackages);
+      });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
@@ -242,7 +248,7 @@ exports.getComboPackagePrices = async (req, res) => {
 
 exports.updatePackagePriceLists = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
-  console.log("The slug is", slug);
+  //console.log("The slug is", slug);
 
   try {
     PackagePrice.findOneAndUpdate({ slug }, { new: true }).exec(

@@ -52,7 +52,9 @@ router.post(
   adminMiddleware,
   createComboPackage
 );
-router.get("/comboPackage", getComboPackages);
+
+router.post("/all-combo-Packages", getComboPackages);
+//router.get("/comboPackage", getComboPackages);
 
 router.delete(
   "/comboPackage/:slug",

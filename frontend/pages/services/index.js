@@ -8,14 +8,20 @@ import { withRouter } from "next/router";
 import Card from "../../components/services/ServiceCards/serviceCards";
 
 const ServicesPage = ({ data }) => {
-  console.log("The Page Props Are", data);
-
+  //console.log("The Page Props Are", data);
+  //col-lg-4 d-flex align-items-stretch
+  //bg-warning text-dark align-self-stretch
   const showAllServicePackages = () => {
     return data.map((comboPackage, i) => (
-      <div key={i} className="d-flex justify-content-around">
-        <div className="p-2 bd-highlight">
+      <div key={i} className="col-md-3 d-flex align-items-center">
+        <div className="text-justify p-2 bd-highlight">
           <Card comboPackage={comboPackage} />
-          <button className="btn btn-success">Book Now</button>
+          <button
+            className="mt-4 mx-auto btn btn-success"
+            style={{ width: "200px" }}
+          >
+            Book Now
+          </button>
         </div>
       </div>
     ));
@@ -36,7 +42,7 @@ const ServicesPage = ({ data }) => {
               <h1 className="display-4 font-weight-bold text-center pb-9 ">
                 ComboPackages
               </h1>
-              <div className="d-flex justify-content-around">
+              <div className="bg-primary text-white d-flex justify-content-around">
                 {showAllServicePackages()}
               </div>
             </div>
@@ -51,7 +57,7 @@ export const getServerSideProps = async (context) => {
   //data required here//getComboPackages
 
   const data = await getComboPackages();
-  console.log(data);
+  //console.log(data);
 
   if (data.error) {
     console.log(data.error);

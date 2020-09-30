@@ -3,23 +3,22 @@ import Link from "next/link";
 import Router from "next/router";
 
 const Card = ({ comboPackage }) => {
-  console.log("This is comboPackage", comboPackage);
+  //console.log("This is comboPackage", comboPackage);
 
   const showCheckedPrice = () => {
     return comboPackage.checkedPrice.map((price, i) => (
-      <article key={i}>
-        discountedPackageCharges
-        <hr />
-      </article>
+      <p className="text-center" key={i}>
+        {price.discountedPackageCharges}
+      </p>
     ));
   };
   return (
     <React.Fragment>
-      <div className="lead pb-4 ">
+      <div className=" bg-success text-white lead pb-4 ">
         <header>
           <Link href={`/blogs/${comboPackage.slug}`}>
             <a>
-              <h2 className=" pt-3 pb-3 font-weight-bold">
+              <h2 className=" text-center bg-success text-dark pt-3 pb-3 font-weight-bold">
                 {comboPackage.title}
               </h2>
             </a>
@@ -27,21 +26,21 @@ const Card = ({ comboPackage }) => {
         </header>
 
         <section>
-          <p className="lead mark mt-3">
+          <div className="bg-danger text-white lead mark mt-3">
             <h5>{comboPackage.desc}</h5>
-          </p>
+          </div>
         </section>
 
         <section>
-          <p className="lead mark mt-3">
-            <h5>{showCheckedPrice()}</h5>
-          </p>
+          <div className="bg-success text-white lead mark mt-3">
+            <h5 className="text-center">{showCheckedPrice()}</h5>
+          </div>
         </section>
 
         <section>
-          <p className="lead mark mt-3">
-            <h5>{comboPackage.bundleDescription}</h5>
-          </p>
+          <div className=" bg-danger text-white lead mark pl-2 pr-2">
+            <p>{comboPackage.bundleDescription}</p>
+          </div>
         </section>
       </div>
     </React.Fragment>

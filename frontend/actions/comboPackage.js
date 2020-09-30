@@ -119,10 +119,14 @@ export const getAllPackagePriceOptions = async () => {
 export const getComboPackages = async () => {
   try {
     const config = {
-      method: "GET",
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      },
     };
-
-    const response = await axios.get(`${API}/api/comboPackage`, config); //handing the backedn register user
+    const response = await axios.post(`${API}/api/all-combo-Packages`, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);

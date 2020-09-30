@@ -21,7 +21,7 @@ exports.Services = async (req, res) => {
           error: "There is some issue",
         });
       }
-      console.log("This is the fields", fields);
+      //console.log("This is the fields", fields);
       // console.log("This is the files", files);
 
       const {
@@ -91,7 +91,7 @@ exports.Services = async (req, res) => {
       }
 
       await service.save((err, result) => {
-        console.log("This is the result for save", result);
+        //console.log("This is the result for save", result);
         if (err) {
           return res.status(400).json({
             error: errorHandler(err),
@@ -103,7 +103,7 @@ exports.Services = async (req, res) => {
           { $push: { tools: arrayOfTools } },
           { new: true }
         ).exec((err, result) => {
-          console.log("This is the result with tools update", result);
+          //console.log("This is the result with tools update", result);
           if (err) {
             return res.status(400).json({
               error: errorHandler(err),
