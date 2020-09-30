@@ -22,7 +22,7 @@ const Search = () => {
 
     //pass the search query
     listSearch({ search }).then((data) => {
-      console.log(data);
+      //console.log(data);
       setValues({
         ...values,
         results: data, //data we get from backedn
@@ -33,7 +33,7 @@ const Search = () => {
   };
 
   const onChange = (name) => (e) => {
-    console.log(e.target.value);
+    //console.log(e.target.value);
 
     setValues({
       ...values,

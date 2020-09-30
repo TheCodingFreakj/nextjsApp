@@ -54,38 +54,83 @@ exports.getAllTools = async (req, res) => {
 //use this route to calculate the clientPrice for tool
 //Use the result of this calculation in the combopackage price
 
-exports.getToolClientPrice = async (req, res) => {
-  //https://intellipaat.com/community/34114/how-to-use-aggregate-in-mongoose
+exports.updateToolClientPrice = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
   try {
-    //getting the tool price after discount
-    await Tools.aggregate([
-      {
-        $project: {
-          //_id: 1, //excludes id
-          tool: 1, // I am retrieving the tools field. choose field: 1 whichever you want
+    Tools.findOneAndUpdate({ slug }, { new: true }).exec(
+      async (err, toolPrice) => {
+        //console.log("The oldPricePackage is", oldPricePackage);
 
-          clientPrice: {
-            $add: [
-              "$totalPrice",
-              {
-                $multiply: [
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
+
+        const stats = await Tools.aggregate([
+          {
+            $project: {
+              _id: "$_id",
+              tool: 1, // I am retrieving the tools field. choose field: 1 whichever you want
+              total: {
+                $subtract: [
                   "$totalPrice",
-                  { $divide: ["$discountPrice", 100] },
+                  {
+                    $multiply: [
+                      "$totalPrice",
+                      { $divide: ["$discountPrice", 100] },
+                    ],
+                  },
                 ],
               },
-            ],
+            },
           },
-        },
-      },
-    ]).exec((err, results) => {
-      if (err) {
-        return res.status(400).json({
-          error: errorHandler(err),
-        });
-      } else {
-        res.json(results); //tool, clientPrice
+        ]);
+
+        let calculatedPrice = "";
+
+        for (let i = 0; i < stats.length; i++) {
+          //console.log("This is calculated price", calculatedPrice);
+          if (stats[i].tool === toolPrice.tool) {
+            calculatedPrice = stats[i].total;
+            toolPrice.clientPrice = calculatedPrice;
+          }
+        }
+
+        const newToolPrice = await toolPrice.save();
+        //console.log("This is new Package Price", newPricePackage);
+        res.json(newToolPrice);
       }
-    });
+    );
+    // //getting the tool price after discount
+    // await Tools.aggregate([
+    //   {
+    //     $project: {
+    //       //_id: 1, //excludes id
+    //       tool: 1, // I am retrieving the tools field. choose field: 1 whichever you want
+
+    //       clientPrice: {
+    //         $add: [
+    //           "$totalPrice",
+    //           {
+    //             $multiply: [
+    //               "$totalPrice",
+    //               { $divide: ["$discountPrice", 100] },
+    //             ],
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   },
+    // ]).exec((err, results) => {
+    //   if (err) {
+    //     return res.status(400).json({
+    //       error: errorHandler(err),
+    //     });
+    //   } else {
+    //     res.json(results); //tool, clientPrice
+    //   }
+    // });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");

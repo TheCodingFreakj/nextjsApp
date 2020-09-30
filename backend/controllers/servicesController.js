@@ -21,7 +21,7 @@ exports.Services = async (req, res) => {
           error: "There is some issue",
         });
       }
-      //console.log("This is the fields", fields);
+      console.log("This is the fields", fields);
       // console.log("This is the files", files);
 
       const {

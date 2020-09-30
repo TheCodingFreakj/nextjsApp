@@ -35,7 +35,7 @@ module.exports = function (req, res, next) {
     ); //{ id: '5f4a62c47d66e00b14316a3c', email: 'ppriya@gmail.com' }
     next();
   } catch (err) {
-    console.error("something wrong with auth middleware");
+    console.error("something wrong with  middleware");
     res.status(500).json({ msg: "Server Error" });
   }
 };

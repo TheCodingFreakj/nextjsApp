@@ -3,7 +3,7 @@ import Link from "next/link";
 import Router from "next/router";
 
 const Card = ({ comboPackage }) => {
-  //console.log("This is comboPackage", comboPackage);
+  //onsole.log("This is comboPackage", comboPackage);
 
   const showCheckedPrice = () => {
     return comboPackage.checkedPrice.map((price, i) => (
@@ -26,8 +26,8 @@ const Card = ({ comboPackage }) => {
         </header>
 
         <section>
-          <div className="bg-danger text-white lead mark mt-3">
-            <h5>{comboPackage.desc}</h5>
+          <div className="bg-danger text-white pl-2 mt-1">
+            {comboPackage.desc}
           </div>
         </section>
 
@@ -39,7 +39,12 @@ const Card = ({ comboPackage }) => {
 
         <section>
           <div className=" bg-danger text-white lead mark pl-2 pr-2">
-            <p>{comboPackage.bundleDescription}</p>
+            <ul className="list-group">
+              <li className="list-group-item list-group-item-success">
+                {comboPackage.bundleDescription}
+                <hr />
+              </li>
+            </ul>
           </div>
         </section>
       </div>

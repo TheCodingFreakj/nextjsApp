@@ -12,7 +12,7 @@ const tokenAuth = require("../middlewares/tokenAuth");
 //get the module where real logic is written
 const {
   createTools,
-  getToolClientPrice,
+  updateToolClientPrice,
   getAllTools,
   removeTool,
 } = require("../controllers/toolsController");
@@ -29,11 +29,11 @@ router.post(
 router.get("/getTools", getAllTools);
 
 //call this route when displaying toolprice
-router.get(
-  "/getToolClientPrice",
+router.put(
+  "/update-tool-price/:slug",
   tokenAuth,
   adminMiddleware,
-  getToolClientPrice
+  updateToolClientPrice
 );
 
 router.delete("/tool/:slug", tokenAuth, adminMiddleware, removeTool);

@@ -54,7 +54,6 @@ router.post(
 );
 
 router.post("/all-combo-Packages", getComboPackages);
-//router.get("/comboPackage", getComboPackages);
 
 router.delete(
   "/comboPackage/:slug",
