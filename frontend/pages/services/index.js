@@ -14,15 +14,21 @@ const ServicesPage = ({ data }) => {
   const [services, setServices] = useState([]);
   const showAllServicePackages = () => {
     return data.map((comboPackage, i) => (
-      <div key={i} className="col-md-3 d-flex align-items-center">
-        <div className="text-justify p-2 bd-highlight">
+      <div key={i} className="col-md-3 d-flex align-items-start">
+        <div>
           <Card comboPackage={comboPackage} />
-          <button
-            className="mt-4 ml-auto btn btn-success"
-            style={{ width: "200px" }}
-          >
-            Book Now
-          </button>
+          <div className="col-md-4">
+            <Link key={i} href={`/comboPackage/${comboPackage.slug}`}>
+              <a>
+                <button
+                  className="mt-4 btn-lg btn-block btn btn-success"
+                  style={{ width: "235px" }}
+                >
+                  Book Now
+                </button>
+              </a>
+            </Link>
+          </div>
         </div>
       </div>
     ));
@@ -62,21 +68,26 @@ const ServicesPage = ({ data }) => {
               <h1 className="display-4 font-weight-bold text-center pb-9 ">
                 ComboPackages
               </h1>
-              <div className="bg-primary text-white d-flex justify-content-around">
-                {showAllServicePackages()}
-              </div>
-            </div>
-
-            <div className="col-md-12 pt-3">
-              <h1 className="display-4 font-weight-bold text-center">
-                Individual Services
-              </h1>
-              <div className=" d-flex justify-content-around">
-                {/* {JSON.stringify(services)} */}
-                {showIndvServices()}
-              </div>
             </div>
           </header>
+          {/* <div className="bg-primary text-white d-flex justify-content-around"> */}
+          <div className="container-fluid">
+            <div className="row justify-content-md-center">
+              {showAllServicePackages()}
+            </div>
+          </div>
+          <div className="col-md-12 pt-3">
+            <h1 className="display-4 font-weight-bold text-center">
+              Individual Services
+            </h1>
+          </div>
+        </div>
+
+        <div className="container-fluid">
+          <div className="row justify-content-md-center">
+            {/* {JSON.stringify(services)} */}
+            {showIndvServices()}
+          </div>
         </div>
       </main>
     </Layout>

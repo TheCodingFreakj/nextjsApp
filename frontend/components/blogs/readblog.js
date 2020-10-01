@@ -67,6 +67,7 @@ const ReadBlogs = ({ username }) => {
 
   const showAllBlogs = () => {
     return blogs.map((blog, i) => {
+      console.log(blog);
       return (
         <div key={i} className="pb-5">
           <h3>{blog.title}</h3>
@@ -89,8 +90,6 @@ const ReadBlogs = ({ username }) => {
 
   return (
     <React.Fragment>
-      <p>Display all blogs created by admin and all user profile</p>
-
       <div className="row">
         <div className="col-md-12">
           {successDeleteMessage && (
