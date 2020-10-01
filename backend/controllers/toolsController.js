@@ -7,7 +7,7 @@ exports.createTools = async (req, res) => {
 
   const { tool, price, summary, serviceCharges } = req.body; //This is the thing you get from the body
 
-  console.log(req.body);
+  //console.log(req.body);
 
   try {
     let newTool = new Tools();

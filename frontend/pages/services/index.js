@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
 import { getComboPackages } from "../../actions/comboPackage";
+import { getAllServices } from "../../actions/services";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { withRouter } from "next/router";
 import Card from "../../components/services/ServiceCards/serviceCards";
+import SmallCard from "../../components/services/indvservices";
 
 const ServicesPage = ({ data }) => {
   //console.log("The Page Props Are", data);
-
+  const [services, setServices] = useState([]);
   const showAllServicePackages = () => {
     return data.map((comboPackage, i) => (
       <div key={i} className="col-md-3 d-flex align-items-center">
@@ -22,6 +24,31 @@ const ServicesPage = ({ data }) => {
             Book Now
           </button>
         </div>
+      </div>
+    ));
+  };
+
+  const loadIndvServices = () => {
+    getAllServices().then((data) => {
+      //console.log(data);
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setServices(data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadIndvServices();
+  }, []);
+
+  const showIndvServices = () => {
+    return services.map((service, i) => (
+      <div key={i} className="col-md-4">
+        <article>
+          <SmallCard service={service} />
+        </article>
       </div>
     ));
   };
@@ -44,6 +71,10 @@ const ServicesPage = ({ data }) => {
               <h1 className="display-4 font-weight-bold text-center">
                 Individual Services
               </h1>
+              <div className=" d-flex justify-content-around">
+                {/* {JSON.stringify(services)} */}
+                {showIndvServices()}
+              </div>
             </div>
           </header>
         </div>
@@ -56,6 +87,7 @@ export const getServerSideProps = async (context) => {
   //data required here//getComboPackages
 
   const data = await getComboPackages();
+
   //console.log(data);
 
   if (data.error) {
@@ -66,4 +98,12 @@ export const getServerSideProps = async (context) => {
     };
   }
 };
+
+// export const getStaticProps = async (context) => {
+//   const serviceData = await getAllServices();
+//   console.log(serviceData);
+//   return {
+//     props: { serviceData }, // will be passed to the page component as props
+//   };
+// };
 export default withRouter(ServicesPage);
