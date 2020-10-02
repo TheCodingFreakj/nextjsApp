@@ -216,7 +216,7 @@ exports.ServicesList = async (req, res) => {
       //.populate({ path: "discountedServiceCharges", model: "Price" })
       .populate("discountedServiceCharges", "_id discountedServiceCharges slug")
       .select(
-        "_id title slug discountedServiceCharges process summary duration"
+        "_id title slug discountedServiceCharges process summary duration ratingsAverage ratingsQuantity"
       )
       .exec((err, serviceLists) => {
         if (err) {

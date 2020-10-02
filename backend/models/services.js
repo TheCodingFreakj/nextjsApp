@@ -14,6 +14,17 @@ const servicesSchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
+
+    ratingsAverage: {
+      type: Number,
+      default: 4.5,
+    },
+
+    ratingsQuantity: {
+      type: Number,
+      default: 4.5,
+    },
+
     discountedServiceCharges: [
       { type: ObjectId, ref: "Price", required: true },
     ],

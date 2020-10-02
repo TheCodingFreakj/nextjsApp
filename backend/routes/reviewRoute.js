@@ -5,12 +5,12 @@ const { adminMiddleware } = require("../controllers/authController");
 const tokenAuth = require("../middlewares/tokenAuth");
 const {
   CreateReviews,
-  CalcAverage,
+  //CalcAverage,
   ReviewsList,
 } = require("../controllers/reviewsController");
 
 router.post("/create-reviews", tokenAuth, adminMiddleware, CreateReviews);
-router.get("/get-reviews", ReviewsList);
-router.get("/calcAverage", CalcAverage);
+router.post("/all-reviews", ReviewsList);
+//router.get("/calcAverage/:serviceId", CalcAverage);
 
 module.exports = router;

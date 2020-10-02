@@ -98,7 +98,7 @@ const AdminIndex = () => {
             <div className="col-md-4">
               <ul className="list-group">
                 <li className="list-group-item">
-                  <Link href="">
+                  <Link href="/admin/reviews">
                     <a>Create Reviews</a>
                   </Link>
                 </li>

@@ -1,20 +1,118 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
+import { withRouter } from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
-import { createNewReview } from "../../actions/tools";
+import { createNewReview, getAllBrands } from "../../actions/reviews";
+import { getAllServices } from "../../actions/services";
 
-const Reviews = () => {
+const Reviews = ({ router }) => {
   const [values, setValues] = useState({
-    reviewName: "",
+    review: "",
+    rating: "",
     error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
     success: false, //Shows up as a display message when we submit somthing
     loading: false,
     reload: false,
   });
 
-  const { reviewName, success, error, loading, reload } = values;
+  const { review, rating, success, error, loading, reload } = values;
+  const [services, setServices] = useState([]);
+  const [checkedService, setCheckedService] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [reviewedBy, setreviewedBy] = useState([]);
   const token = getCookie("token");
+
+  useEffect(() => {
+    setValues({ ...values });
+
+    loadServices();
+    loadBrands();
+  }, [router]);
+
+  const loadBrands = () => {
+    getAllBrands().then((data) => {
+      // console.log("This are all the tools I m getting from the backend", data);
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setBrands(data);
+      }
+    });
+  };
+
+  const loadServices = () => {
+    getAllServices().then((data) => {
+      // console.log("This are all the tools I m getting from the backend", data);
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setServices(data);
+      }
+    });
+  };
+
+  const showServicesTaken = () => {
+    return services.map((service, i) => (
+      <li key={i} className="list-unstyled">
+        <input
+          onChange={() => handleToggle(service._id)}
+          type="checkbox"
+          className="mr-2"
+        />
+        <label className="form-check-label">
+          <h5>{service.title}</h5>
+        </label>
+      </li>
+    ));
+  };
+
+  const handleToggle = (sId) => {
+    //clear the state incase of any error
+    setValues({ ...values, error: "" });
+    const clickedService = checkedService.indexOf(sId);
+
+    //storing all the checked Values in a variable
+    const choosenServices = [...checkedService];
+
+    if (clickedService === -1) {
+      choosenServices.push(sId);
+    } else {
+      choosenServices.splice(checkedService, 1);
+    }
+    console.log("Storing all the check Items in a variable", choosenServices);
+    setCheckedService(choosenServices); // storing all checked value in the state
+  };
+  const showBrands = () => {
+    return brands.map((brand, i) => (
+      <li key={i} className="list-unstyled">
+        <input
+          onChange={() => handleBrandToggle(brand._id)}
+          type="checkbox"
+          className="mr-2"
+        />
+        <label className="form-check-label">
+          <h5>{brand.brandName}</h5>
+        </label>
+      </li>
+    ));
+  };
+  const handleBrandToggle = (bId) => {
+    //clear the state incase of any error
+    setValues({ ...values, error: "" });
+    const clickedBrand = reviewedBy.indexOf(bId);
+
+    //storing all the checked Values in a variable
+    const choosenBrands = [...reviewedBy];
+
+    if (clickedBrand === -1) {
+      choosenBrands.push(bId);
+    } else {
+      choosenBrands.splice(reviewedBy, 1);
+    }
+    console.log("Storing all the check Items in a variable", choosenBrands);
+    setreviewedBy(choosenBrands); // storing all checked value in the state
+  };
   const onChange = (name) => (e) => {
     setValues({
       ...values,
@@ -27,29 +125,37 @@ const Reviews = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log("The Form Is Submitted");
+    //console.log("The Form Is Submitted");
 
     setValues({ ...values, loading: true, error: false });
 
+    const dataForBackened = {
+      review,
+      rating,
+      checkedService,
+      reviewedBy,
+    };
+
     //sending the value stored in state as input value from form
-    createNewReview({ reviewName }, token).then((data) => {
-      console.log(data);
-      // if (data.error) {
-      //   //setvalues fill the error variable and turn off the success
+    createNewReview(dataForBackened, token).then((data) => {
+      //console.log(data);
+      if (data.error) {
+        //setvalues fill the error variable and turn off the success
 
-      //   setValues({ ...values, error: data.error, success: false });
-      // } else {
-      //   //turn all off and make the success true
+        setValues({ ...values, error: data.error, success: false });
+      } else {
+        //turn all off and make the success true
 
-      //   setValues({
-      //     ...values,
-      //     error: false,
-      //     success: true,
-      //     name: "",
-      //     removed: false,
-      //     reload: true,
-      //   });
-      // }
+        setValues({
+          ...values,
+          error: false,
+          success: `A new service :"${data.slug}" is created`,
+          review: "",
+          rating: "",
+          removed: false,
+          reload: true,
+        });
+      }
     });
   };
   const newReviewForm = () => {
@@ -57,12 +163,24 @@ const Reviews = () => {
       <form onSubmit={(e) => onSubmit(e)}>
         <div className="form-group">
           <label className="text-muted">Review Name </label>
-          <input
+          <textarea
             type="text"
             className="form-control"
             placeholder="Insert Review"
-            onChange={onChange("reviewName")}
-            value={reviewName}
+            onChange={onChange("review")}
+            value={review}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="text-muted">Review Name </label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Ratings"
+            onChange={onChange("rating")}
+            value={rating}
             required
           />
         </div>
@@ -73,7 +191,40 @@ const Reviews = () => {
       </form>
     );
   };
-  return <React.Fragment>{newReviewForm()}</React.Fragment>;
+  return (
+    <React.Fragment>
+      <div className="container-fluid pb-5 ">
+        <div>
+          <h5>Select Service and Discounted Price</h5>
+          <ul
+            style={{
+              maxHeight: "300px",
+              overflowY: "scroll",
+            }}
+          >
+            {showServicesTaken()}
+          </ul>
+
+          <hr />
+        </div>
+
+        <div>
+          <h5>Select Brands</h5>
+          <ul
+            style={{
+              maxHeight: "300px",
+              overflowY: "scroll",
+            }}
+          >
+            {showBrands()}
+          </ul>
+
+          <hr />
+        </div>
+        {newReviewForm()}
+      </div>
+    </React.Fragment>
+  );
 };
 
-export default Reviews;
+export default withRouter(Reviews);

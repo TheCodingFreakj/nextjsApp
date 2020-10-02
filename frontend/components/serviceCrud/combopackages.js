@@ -201,7 +201,7 @@ const ComboPackages = ({ router }) => {
             <hr />
           </div>
           {comboPackagesForm()}
-          {JSON.stringify(checkedPrice)}
+          {/* {JSON.stringify(checkedPrice)} */}
         </div>
       </div>
     </React.Fragment>
