@@ -214,7 +214,11 @@ exports.ServicesList = async (req, res) => {
   try {
     await Service.find({})
       //.populate({ path: "discountedServiceCharges", model: "Price" })
-      .populate("discountedServiceCharges", "_id discountedServiceCharges slug")
+      .populate(
+        "discountedServiceCharges",
+        "_id serviceName discountedServiceCharges slug"
+      )
+      .populate("tools", "_id tool clientPrice slug")
       .select(
         "_id title slug discountedServiceCharges process summary duration ratingsAverage ratingsQuantity"
       )
@@ -223,6 +227,26 @@ exports.ServicesList = async (req, res) => {
           return res.status(400).json({ errors: errorHandler(err) });
         }
         res.json(serviceLists);
+      });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.SingleService = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  // console.log(id);
+  try {
+    await Service.findOne({ slug })
+      .populate([{ path: "reviews" }])
+      .select("-photo")
+      .exec((err, service) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+        // console.log(_reviews);
+        res.json(service);
       });
   } catch (error) {
     console.error(error.message);

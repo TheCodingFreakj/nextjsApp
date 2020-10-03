@@ -15,12 +15,14 @@ const {
   read,
   publicUserProfile,
   updateUserProfile,
+  getAllUsers,
   getUserProfilephoto,
 } = require("../controllers/userProfileController");
 
 //bring validators
 
-router.get("/user/profile", tokenAuth, authMiddleware, read); // for private profile to update delete
+router.get("/user/profile", tokenAuth, authMiddleware, read);
+router.get("/users", getAllUsers); // for private profile to update delete
 router.get("/user/:username", publicUserProfile);
 router.put("/user/update", tokenAuth, authMiddleware, updateUserProfile); //if you want to update the profile this applies
 router.get("/user/photo/:userId", getUserProfilephoto); //for upload profile image

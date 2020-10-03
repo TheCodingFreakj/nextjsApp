@@ -60,11 +60,44 @@ exports.CreateReviews = async (req, res) => {
   }
 };
 
+exports.Reviews = async (req, res) => {
+  const reviewData = req.body;
+  try {
+    let review = await Review.create(reviewData);
+    res.status(201).json({
+      status: "success",
+      data: {
+        review: review,
+      },
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// exports.getAllReviews = async (req, res) => {
+//   try {
+//     const reviews = Review.find({});
+//     res.status(200).json({
+//       status: "success",
+//       result: reviews.length,
+//       data: {
+//         reviews,
+//       },
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Server Error");
+//   }
+// };
+
 exports.ReviewsList = async (req, res) => {
   try {
     await Review.find({})
       //.populate({ path: "discountedServiceCharges", model: "Price" })
       .populate("reviewedBy", "_id brandName slug")
+      .populate("client", "_id name ")
       .populate("checkedService", "_id title slug duration")
       .select("_id review rating slug  reviewedBy checkedService")
       .exec((err, reviews) => {
@@ -80,7 +113,8 @@ exports.ReviewsList = async (req, res) => {
 };
 
 // exports.CalcAverage = async (req, res) => {
-//   const serviceId = req.body._id;
+//   const serviceId = req.params._id;
+//   console.log(serviceId);
 //   try {
 //     await Review.calAverageRatings(serviceId);
 //   } catch (error) {

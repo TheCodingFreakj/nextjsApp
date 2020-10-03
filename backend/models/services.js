@@ -51,13 +51,27 @@ const servicesSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
+
+    reviews: [{ type: ObjectId, ref: "Review", required: true }],
     createdAt: {
       type: Date,
       required: true,
       default: Date.now,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
+  {
+    toJson: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
-//https://medium.com/@SigniorGratiano/modelling-data-and-advanced-mongoose-175cdbc68bb1
+
+// //virtual populate
+// servicesSchema.virtual("the_reviews", {
+//   ref: "Review",
+//   foreignField: "_id",
+//   localField: "reviews",
+//   justOne: false,
+// });
+
 module.exports = mongoose.model("Service", servicesSchema);

@@ -161,3 +161,21 @@ exports.getUserProfilephoto = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    await User.find()
+      .select("-photo")
+      .exec((err, users) => {
+        if (err) {
+          return res
+            .status(400)
+            .json({ error: "This user does not exist in the database" });
+        }
+        res.send(users);
+      });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};

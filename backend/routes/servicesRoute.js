@@ -10,6 +10,7 @@ const tokenAuth = require("../middlewares/tokenAuth");
 const {
   Services,
   ServicesList,
+  SingleService,
   removeServices,
   photo,
   updateService,
@@ -17,6 +18,7 @@ const {
 
 router.post("/services", tokenAuth, adminMiddleware, Services);
 router.post("/all-services", ServicesList);
+router.get("/service/:slug", SingleService);
 router.get("/services/photo/:slug", photo);
 router.delete("/services/:slug", tokenAuth, adminMiddleware, removeServices);
 router.put("/service/:slug", tokenAuth, adminMiddleware, updateService);

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
+const Service = require("../models/services");
 
 const reviewsSchema = new mongoose.Schema(
   {
@@ -11,15 +12,9 @@ const reviewsSchema = new mongoose.Schema(
       min: 1,
       max: 5,
     },
-
-    slug: {
-      type: String,
-      unique: true,
-      index: true,
-    },
-    reviewedBy: [{ type: ObjectId, ref: "Brand", required: true }],
-
-    //populate the title,slug
+    reviewedBy: [{ type: ObjectId, ref: "Brand" }], //name of the person who gave the review
+    client: [{ type: ObjectId, ref: "User" }],
+    //populate the title,slug //This is parent referencing//Each review know what service it belongs to
     checkedService: [
       {
         type: ObjectId,
@@ -33,39 +28,52 @@ const reviewsSchema = new mongoose.Schema(
       default: Date.now,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
+  {
+    toJson: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
-//https://stackoverflow.com/questions/29664499/mongoose-static-methods-vs-instance-methods
+// reviewsSchema.pre(/^find/, function(next){
+//   this.populate({
+//     path:"checkedService",
+//     select:""
+//   })
+//   next()
+// })
 
-// //calculating the number of ratings and average of all ratings for a particular service
-// reviewsSchema.statics.calAverageRatings = async function (serviceId) {
-//   this.aggregate([
-//     { $match: { checkedService: serviceId } }, //matches the service iD
-//     {
-//       $group: {
-//         _id: "$servicesTaken",
-//         totalRating: { $sum: 1 },
-//         avgRating: { $avg: "$rating" },
-//       },
-//     },
-//   ]),
-//     async function (err, result) {
-//       if (err) {
-//         console.log(err);
-//       }
-//       console.log(result);
-//       //return result.average;
+//calculating the number of ratings and average of all ratings for a particular service
+//This function takes in a serviceId and calc the average rating and number of ratings for the service
+//This function will also update the corresponding service documents
+//We will use middleware to call this function each time a new review is added or updated or deletes
 
-//       await Service.findByIdAndUpdate(serviceId, {
-//         ratingsQuantity: stats[0].totalRating,
-//         ratingsAverage: stats[0].avgRating,
-//       });
-//     };
-// };
+reviewsSchema.statics.calAverageRatings = async function (serviceId) {
+  console.log(serviceId);
+  const stats = await this.aggregate([
+    { $match: { checkedService: serviceId } }, //matches the service iD
+    {
+      $group: {
+        _id: "$checkedService",
+        nRating: { $sum: 1 },
+        avgRating: { $avg: "$rating" },
+      },
+    },
+  ]);
+  //console.log("The stats are", stats);
 
-// reviewsSchema.post("save", function (next) {
-//   this.constructor.calAverageRatings(this.checkedService);
-// });
+  await Service.findByIdAndUpdate(serviceId, {
+    ratingsQuantity: stats[0].nRating,
+    ratingsAverage: stats[0].avgRating,
+  });
+};
+
+reviewsSchema.post("save", function (next) {
+  this.constructor.calAverageRatings(this.checkedService);
+});
 
 module.exports = mongoose.model("Review", reviewsSchema);
+//store the average rating and number of ratings on each service package
+//so that we dont have to query the reviews and calculate the avg each time for all the services
+//we will calculate the average rating and number of ratings of the service each time  a new
+//review is added or updated or deleted
