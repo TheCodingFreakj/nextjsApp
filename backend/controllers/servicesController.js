@@ -1,5 +1,6 @@
 const Service = require("../models/services");
 const Price = require("../models/price");
+const Portfolio = require("../models/portfolio");
 const Tools = require("../models/marketingTools");
 const ComboPackage = require("../models/comboPackages");
 const formidable = require("formidable");
@@ -234,12 +235,44 @@ exports.ServicesList = async (req, res) => {
   }
 };
 
+exports.listRelatedPortfolio = async (req, res) => {
+  //find the discountServiceCharges for a service
+  const slug = req.params.slug.toLowerCase();
+  try {
+    // await Service.find({})
+    //   //.populate({ path: "discountedServiceCharges", model: "Price" })
+    //   .populate(
+    //     "discountedServiceCharges",
+    //     "_id serviceName discountedServiceCharges slug"
+    //   )
+    //   .populate("tools", "_id tool clientPrice slug")
+    //   .select(
+    //     "_id title slug discountedServiceCharges process summary duration ratingsAverage ratingsQuantity"
+    //   )
+    //   .exec((err, serviceLists) => {
+    //     if (err) {
+    //       return res.status(400).json({ errors: errorHandler(err) });
+    //     }
+    //     res.json(serviceLists);
+    //   });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 exports.SingleService = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
-  // console.log(id);
+  // console.log(slug);
   try {
     await Service.findOne({ slug })
-      .populate([{ path: "reviews" }])
+      .populate([{ path: "the_reviews" }])
+      .populate([{ path: "the_portfolios" }])
+      .populate(
+        "discountedServiceCharges",
+        "_id serviceName discountedServiceCharges slug"
+      )
+      .populate("tools", "_id tool clientPrice slug")
       .select("-photo")
       .exec((err, service) => {
         if (err) {
@@ -274,7 +307,6 @@ exports.removeServices = async (req, res) => {
 };
 
 exports.photo = async (req, res) => {
-  //get the data from form body
   const slug = req.params.slug.toLowerCase();
   try {
     await Service.findOne({ slug })
@@ -289,6 +321,32 @@ exports.photo = async (req, res) => {
       });
   } catch (error) {
     console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.CreatePortfolio = async (req, res) => {
+  //console.log(req.body);
+
+  try {
+    const { name, technical_sheet, technologies, company } = req.body;
+    let newPortfolio = new Portfolio();
+    newPortfolio.name = name;
+    newPortfolio.technical_sheet = technical_sheet;
+    newPortfolio.slug = slugify(name).toLowerCase();
+    newPortfolio.technologies = technologies;
+    newPortfolio.company = company;
+
+    newPortfolio.save((err, result) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err),
+        });
+      }
+      return res.json(result);
+    });
+  } catch (error) {
+    console.error(error.message);
     res.status(500).send("Server Error");
   }
 };

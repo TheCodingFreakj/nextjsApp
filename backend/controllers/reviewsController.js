@@ -76,21 +76,21 @@ exports.Reviews = async (req, res) => {
   }
 };
 
-// exports.getAllReviews = async (req, res) => {
-//   try {
-//     const reviews = Review.find({});
-//     res.status(200).json({
-//       status: "success",
-//       result: reviews.length,
-//       data: {
-//         reviews,
-//       },
-//     });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// };
+exports.updateReviews = async (req, res) => {
+  try {
+    const reviews = Review.findByIdAndUpdate(req.params.id);
+    res.status(200).json({
+      status: "success",
+      result: reviews.length,
+      data: {
+        reviews,
+      },
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
 
 exports.ReviewsList = async (req, res) => {
   try {
@@ -111,15 +111,3 @@ exports.ReviewsList = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
-
-// exports.CalcAverage = async (req, res) => {
-//   const serviceId = req.params._id;
-//   console.log(serviceId);
-//   try {
-//     await Review.calAverageRatings(serviceId);
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// };
-//https://medium.com/@SigniorGratiano/modelling-data-and-advanced-mongoose-175cdbc68bb1

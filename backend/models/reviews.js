@@ -72,6 +72,11 @@ reviewsSchema.post("save", function (next) {
   this.constructor.calAverageRatings(this.checkedService);
 });
 
+reviewsSchema.pre(/^findOneAnd/, async function (next) {
+  const rev = await this.findOne();
+  console.log(rev);
+});
+
 module.exports = mongoose.model("Review", reviewsSchema);
 //store the average rating and number of ratings on each service package
 //so that we dont have to query the reviews and calculate the avg each time for all the services

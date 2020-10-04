@@ -22,12 +22,12 @@ exports.read = (req, res) => {
 
 exports.publicUserProfile = async (req, res) => {
   //we need a username
-  console.log(
-    "This is params..This is the query object passed from getServerSideprops",
-    req.params
-  );
+  // console.log(
+  //   "This is params..This is the query object passed from getServerSideprops",
+  //   req.params
+  // );
   let username = req.params.username;
-  console.log("This is the username as per req params", username);
+  // console.log("This is the username as per req params", username);
   let user;
   let blogs;
 

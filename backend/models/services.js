@@ -52,7 +52,7 @@ const servicesSchema = new mongoose.Schema(
       contentType: String,
     },
 
-    reviews: [{ type: ObjectId, ref: "Review", required: true }],
+    // reviews: [{ type: ObjectId, ref: "Review" }],
     createdAt: {
       type: Date,
       required: true,
@@ -61,17 +61,26 @@ const servicesSchema = new mongoose.Schema(
   },
   { timestamps: true },
   {
-    toJson: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
 
-// //virtual populate
-// servicesSchema.virtual("the_reviews", {
-//   ref: "Review",
-//   foreignField: "_id",
-//   localField: "reviews",
-//   justOne: false,
-// });
+servicesSchema.set("toJSON", { virtuals: true });
+
+//virtual populate
+servicesSchema.virtual("the_reviews", {
+  ref: "Review",
+  foreignField: "checkedService",
+  localField: "_id",
+  justOne: false,
+});
+
+//virtual populate
+servicesSchema.virtual("the_portfolios", {
+  ref: "Portfolio",
+  foreignField: "checkedService",
+  localField: "_id",
+  justOne: false,
+});
 
 module.exports = mongoose.model("Service", servicesSchema);

@@ -14,13 +14,20 @@ const {
   removeServices,
   photo,
   updateService,
+  listRelatedPortfolio,
+  CreatePortfolio,
 } = require("../controllers/servicesController");
 
 router.post("/services", tokenAuth, adminMiddleware, Services);
+router.delete("/services/:slug", tokenAuth, adminMiddleware, removeServices);
+router.put("/service/:slug", tokenAuth, adminMiddleware, updateService);
 router.post("/all-services", ServicesList);
 router.get("/service/:slug", SingleService);
 router.get("/services/photo/:slug", photo);
-router.delete("/services/:slug", tokenAuth, adminMiddleware, removeServices);
-router.put("/service/:slug", tokenAuth, adminMiddleware, updateService);
+router.post("/blogs/related", listRelatedPortfolio);
+
+//Portfolio
+
+router.post("/portfolio", tokenAuth, adminMiddleware, CreatePortfolio);
 
 module.exports = router;

@@ -28,6 +28,7 @@ const comboPackageSchema = new mongoose.Schema(
       max: 1000,
     },
     checkedPrice: [{ type: ObjectId, ref: "PackagePrice", required: true }],
+    // bookings: [{ type: ObjectId, ref: "Booking", required: true }],
     createdAt: {
       type: Date,
       required: true,

@@ -403,13 +403,13 @@ exports.listByUser = async (req, res) => {
           error: errorHandler(err),
         });
       }
-      console.log(
-        "This is the entire user info I found using the username",
-        user
-      );
+      // console.log(
+      //   "This is the entire user info I found using the username",
+      //   user
+      // );
       let userId = user[0]._id;
 
-      console.log("This is userId I target", userId);
+      // console.log("This is userId I target", userId);
 
       //find the blog using userid
       Blog.find({ postedBy: userId })
@@ -424,10 +424,10 @@ exports.listByUser = async (req, res) => {
             });
           }
 
-          console.log(
-            "This is the entire list of blogs I got using the userId i got from user whoes username i got from params",
-            data
-          );
+          // console.log(
+          //   "This is the entire list of blogs I got using the userId i got from user whoes username i got from params",
+          //   data
+          // );
           res.json(data);
         });
     });
