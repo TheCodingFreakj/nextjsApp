@@ -19,8 +19,8 @@ import moment from "moment";
 //import SmallCard from "../../components/blogs/smallcard";
 
 const SingleService = ({ service, query }) => {
-  console.log(query);
-  console.log(service);
+  // console.log(query);
+  // console.log(service);
   //   const [related, setRelated] = useState([]);
   //   const loadRelated = () => {
   //     listRelatedBlog({ blog }).then((data) => {
@@ -36,28 +36,73 @@ const SingleService = ({ service, query }) => {
   //   useEffect(() => {
   //     loadRelated();
   //   }, []);
-
+  const [checkedPrice, setCheckedPrice] = useState([]);
   const showServiceCharges = (service) => {
     return service.discountedServiceCharges.map((price, i) => (
-      //   console.log(price.discountedServiceCharges)
-      <article key={i}>
-        <p className="btn btn-outline-danger mr-1 ml-1 mt-3">
-          {price.discountedServiceCharges}
-        </p>
-      </article>
+      <div key={i} className="container">
+        <div className="row">
+          <h4>Price Range :</h4>
+          <div
+            className="btn btn-outline-danger mx-auto font-weight-bold "
+            style={{ width: "700px" }}
+          >
+            <h5>{price.discountedServiceCharges}</h5>
+          </div>
+        </div>
+      </div>
     ));
+  };
+
+  const handlePriceToggle = (price, tid) => {
+    // console.log(price);
+
+    checkedPrice.push(price);
+
+    let choosenPrices = "";
+    choosenPrices = [...checkedPrice];
+    console.log("The choosen Ones", choosenPrices);
+    if (checkedPrice) {
+      for (let i = 0; i < checkedPrice.length; i++) {
+        const price = checkedPrice[i] + checkedPrice[i - 1];
+        console.log(price);
+      }
+    } else {
+      choosenPrices.splice(checkedPrice.indexOf(tid), 1);
+    }
+
+    setCheckedPrice(choosenPrices);
+    console.log("The updated Price", checkedPrice);
   };
 
   const showTools = (service) => {
     return service.tools.map((tool, i) => (
-      <article key={i}>
-        <p className="btn btn-outline-danger mr-1 ml-1 mt-3">
-          {tool.clientPrice}
-        </p>
-        <p className="btn btn-outline-danger mr-1 ml-1 mt-3">{tool.tool}</p>
-      </article>
+      <li key={i} className="list-unstyled">
+        <input
+          onChange={() => handlePriceToggle(tool.clientPrice, tool._id)}
+          type="checkbox"
+          className="mr-2"
+        />
+        <label className="form-check-label">
+          <h5>
+            {tool.tool} : {tool.clientPrice} $
+          </h5>
+        </label>
+      </li>
     ));
   };
+
+  // const showTotalPrice = () => {
+  //   return checkedPrice.map((price, i) => (
+  //     // console.log(price)
+  //     <div
+  //       key={i}
+  //       className="btn btn-outline-danger mx-auto font-weight-bold "
+  //       style={{ width: "700px" }}
+  //     >
+  //       <h5>{price}</h5>
+  //     </div>
+  //   ));
+  // };
 
   return (
     <React.Fragment>
@@ -80,9 +125,17 @@ const SingleService = ({ service, query }) => {
                     {service.title}
                   </h1>
 
-                  <div className="pb-3">
+                  <div className="container-fluid">
                     {showServiceCharges(service)}
+
+                    <br />
+                    <br />
+                  </div>
+
+                  <div className="container-fluid">
                     {showTools(service)}
+                    {JSON.stringify(checkedPrice)}
+                    {/* <div>{showTotalPrice()}</div> */}
 
                     <br />
                     <br />
