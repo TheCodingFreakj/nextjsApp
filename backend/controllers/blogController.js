@@ -20,6 +20,7 @@ exports.create = (req, res) => {
   try {
     //convert formData into valid javascript obj
     form.parse(req, (err, fields, files) => {
+      console.log(req);
       if (err) {
         return res.status(400).json({
           error: "Image could not upload",

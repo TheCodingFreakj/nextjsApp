@@ -328,23 +328,104 @@ exports.photo = async (req, res) => {
 exports.CreatePortfolio = async (req, res) => {
   //console.log(req.body);
 
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
   try {
-    const { name, technical_sheet, technologies, company } = req.body;
-    let newPortfolio = new Portfolio();
-    newPortfolio.name = name;
-    newPortfolio.technical_sheet = technical_sheet;
-    newPortfolio.slug = slugify(name).toLowerCase();
-    newPortfolio.technologies = technologies;
-    newPortfolio.company = company;
-
-    newPortfolio.save((err, result) => {
+    form.parse(req, (err, fields, files) => {
       if (err) {
         return res.status(400).json({
-          error: errorHandler(err),
+          error: "Image could not upload",
         });
       }
-      return res.json(result);
+
+      const { name, technicalSheet, technologies, company, services } = fields;
+
+      // console.log("This is the fields", fields);
+      // console.log("This is the files", files);
+      if (!name || !name.length) {
+        return res.status(400).json({
+          error: "name is required",
+        });
+      }
+
+      if (!technicalSheet || !technicalSheet.length) {
+        return res.status(400).json({
+          error: "technicalSheet is required",
+        });
+      }
+
+      if (!technologies || !technologies.length) {
+        return res.status(400).json({
+          error: "technologies is required",
+        });
+      }
+
+      if (!company || !company.length) {
+        return res.status(400).json({
+          error: "company is required",
+        });
+      }
+
+      let newPortfolio = new Portfolio();
+      newPortfolio.name = name;
+      newPortfolio.technicalSheet = technicalSheet;
+      newPortfolio.slug = slugify(name).toLowerCase();
+      newPortfolio.technologies = technologies;
+      newPortfolio.company = company;
+
+      let arrayOfServices = services && services.split(",");
+      if (files.photo) {
+        if (files.photo.size > 10000000) {
+          return res.status(400).json({
+            error: "Image should be less then 1mb in size",
+          });
+        }
+
+        newPortfolio.photo.data = fs.readFileSync(files.photo.path);
+        newPortfolio.photo.contentType = files.photo.type;
+      }
+
+      newPortfolio.save((err, result) => {
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
+        // return res.json(result);
+
+        Portfolio.findByIdAndUpdate(
+          result.id,
+          { $push: { services: arrayOfServices } },
+          { new: true }
+        ).exec((err, result) => {
+          //console.log("This is the result with tools update", result);
+          if (err) {
+            return res.status(400).json({
+              error: errorHandler(err),
+            });
+          } else {
+            return res.json(result);
+          }
+        });
+      });
     });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.PortfolioList = async (req, res) => {
+  try {
+    await Portfolio.find({})
+      .populate("services", "_id title slug duration")
+      .select(" name technicalSheet slug  technologies company services")
+      .exec((err, portfolios) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+        res.json(portfolios);
+      });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

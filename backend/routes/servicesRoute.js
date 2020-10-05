@@ -16,6 +16,7 @@ const {
   updateService,
   listRelatedPortfolio,
   CreatePortfolio,
+  PortfolioList,
 } = require("../controllers/servicesController");
 
 router.post("/services", tokenAuth, adminMiddleware, Services);
@@ -29,5 +30,6 @@ router.post("/blogs/related", listRelatedPortfolio);
 //Portfolio
 
 router.post("/portfolio", tokenAuth, adminMiddleware, CreatePortfolio);
+router.post("/all-portfolios", PortfolioList);
 
 module.exports = router;

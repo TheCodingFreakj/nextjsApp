@@ -78,7 +78,7 @@ servicesSchema.virtual("the_reviews", {
 //virtual populate
 servicesSchema.virtual("the_portfolios", {
   ref: "Portfolio",
-  foreignField: "checkedService",
+  foreignField: "services",
   localField: "_id",
   justOne: false,
 });
