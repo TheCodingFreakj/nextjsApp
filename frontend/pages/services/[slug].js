@@ -37,6 +37,10 @@ const SingleService = ({ service, query }) => {
   //     loadRelated();
   //   }, []);
   const [checkedPrice, setCheckedPrice] = useState([]);
+  // const [checkedId, setCheckedId] = useState([]);
+  const [checkedTool, setCheckedTool] = useState([]);
+  // const [choosenPrice, setChoosenPrice] = useState([]);
+
   const showServiceCharges = (service) => {
     return service.discountedServiceCharges.map((price, i) => (
       <div key={i} className="container">
@@ -53,35 +57,56 @@ const SingleService = ({ service, query }) => {
     ));
   };
 
-  const handlePriceToggle = (price, tid) => {
-    // console.log(price);
+  const handlePriceToggle = (tool) => {
+    const clickedId = checkedTool.indexOf(tool._id);
 
-    checkedPrice.push(price);
+    const allTools = [...checkedTool]; //keep all the reference of id
+    console.log(clickedId);
+    let total = 0;
+    let subtotal = 0;
+    if (clickedId === -1) {
+      allTools.push(tool._id);
+      checkedPrice.push(tool.clientPrice);
+      console.log(checkedPrice);
+      const choosenPrice = [...checkedPrice];
 
-    let choosenPrices = "";
-    choosenPrices = [...checkedPrice];
-    console.log("The choosen Ones", choosenPrices);
-    if (checkedPrice) {
-      for (let i = 0; i < checkedPrice.length; i++) {
-        const price = checkedPrice[i] + checkedPrice[i - 1];
-        console.log(price);
+      for (let i = 1; i < choosenPrice.length; i++) {
+        if (choosenPrice[i]) {
+          total = choosenPrice[i] + choosenPrice[i - 1];
+        }
       }
     } else {
-      choosenPrices.splice(checkedPrice.indexOf(tid), 1);
+      allTools.splice(checkedTool, 1);
+      checkedPrice.pop();
+      console.log(checkedPrice);
+      const reducePrice = [...checkedPrice];
+      console.log("This is reduced price", reducePrice);
+      console.log("This is total value", total);
+
+      for (let i = 0; i < reducePrice.length; i++) {
+        if (reducePrice[i]) {
+          subtotal = total - reducePrice[i];
+        }
+      }
     }
 
-    setCheckedPrice(choosenPrices);
-    console.log("The updated Price", checkedPrice);
+    setCheckedTool(allTools);
+    console.log(allTools);
+
+    console.log("The total is", total);
+    console.log("The subtotal is", subtotal);
   };
 
   const showTools = (service) => {
     return service.tools.map((tool, i) => (
       <li key={i} className="list-unstyled">
         <input
-          onChange={() => handlePriceToggle(tool.clientPrice, tool._id)}
+          onChange={() => handlePriceToggle(tool)}
           type="checkbox"
+          name="checkbox"
           className="mr-2"
         />
+
         <label className="form-check-label">
           <h5>
             {tool.tool} : {tool.clientPrice} $
@@ -92,16 +117,16 @@ const SingleService = ({ service, query }) => {
   };
 
   // const showTotalPrice = () => {
-  //   return checkedPrice.map((price, i) => (
-  //     // console.log(price)
-  //     <div
-  //       key={i}
-  //       className="btn btn-outline-danger mx-auto font-weight-bold "
-  //       style={{ width: "700px" }}
-  //     >
-  //       <h5>{price}</h5>
-  //     </div>
-  //   ));
+  //   return checkedPrice.map(
+  //     (price, i) => console.log(price)
+  //     // <div
+  //     //   key={i}
+  //     //   className="btn btn-outline-danger mx-auto font-weight-bold "
+  //     //   style={{ width: "700px" }}
+  //     // >
+  //     //   <h5>{price}</h5>
+  //     // </div>
+  //   );
   // };
 
   return (
@@ -134,7 +159,9 @@ const SingleService = ({ service, query }) => {
 
                   <div className="container-fluid">
                     {showTools(service)}
-                    {JSON.stringify(checkedPrice)}
+                    {/* {showTotalPrice(clickedPrice)} */}
+                    {/* {JSON.stringify(checkedTool)} */}
+
                     {/* <div>{showTotalPrice()}</div> */}
 
                     <br />

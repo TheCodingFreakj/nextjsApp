@@ -187,7 +187,7 @@ const CreateServices = ({ router }) => {
 
         <div className="form-group">
           <select
-            name="status"
+            name="serviceName"
             className="form-control"
             type="text"
             value={serviceName}
