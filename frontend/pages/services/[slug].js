@@ -59,47 +59,45 @@ const SingleService = ({ service, query }) => {
 
   const handlePriceToggle = (tool) => {
     const clickedId = checkedTool.indexOf(tool._id);
-    console.log("This is clickedid", clickedId);
+    // console.log("This is clickedid", clickedId);
     const allTools = [...checkedTool];
 
     let total = 0;
-    let subtotal = 0;
+
     if (clickedId === -1) {
       allTools.push(tool._id);
       checkedPrice.push(tool.clientPrice);
       const choosenPrice = [...checkedPrice];
 
       for (let i = 0; i < choosenPrice.length; i++) {
-        // console.log("the i is ", i);
         if (choosenPrice[i]) {
           total = choosenPrice[i] + total;
         }
       }
     } else {
-      // const unclickedId = checkedTool.indexOf(tool._id); // we already have many ids, we need to remove the clicked id
-      // console.log("This is unclikced", checkedTool);
-      // const allTools = [...checkedTool];
-
       allTools.splice(clickedId, 1);
-      //https://www.geeksforgeeks.org/remove-elements-from-a-javascript-array/
-      checkedPrice.splice(tool.clientPrice); //you have to remove that same price whoes id is clicked from checkedprice
-      // console.log(checkedPrice);
-      const reducePrice = [...checkedPrice];
-      console.log("This is reduced price", reducePrice);
-      // console.log("This is total value", total);
 
-      for (let i = 1; i < reducePrice.length; i++) {
-        if (reducePrice[i]) {
-          subtotal = reducePrice[i] + subtotal;
-        }
-      }
+      const reducedPrice = [...checkedPrice];
+      // console.log(reducedPrice);
+
+      reducedPrice.splice(clickedId, 1);
+      // subtotal = reducedPrice[i] + subtotal;
+      // console.log(reducedPrice);
+      setCheckedPrice(reducedPrice);
+
+      let subtotal = reducedPrice.reduce(function (accumulator, currentValue) {
+        return accumulator + currentValue;
+      }, 0);
+
+      // console.log(subtotal);
+      setSubTotal(subtotal);
     }
     setCheckedTool(allTools);
-    console.log("This is updated tools", allTools);
+    // console.log("This is updated tools", allTools);
     setTotal(total);
-    setSubTotal(subtotal);
-    console.log("The total is", total);
-    console.log("The subtotal is", subtotal);
+
+    // console.log("The total is", total);
+    // console.log("The subtotal is", subtotal);
   };
 
   const showTools = (service) => {
@@ -120,19 +118,6 @@ const SingleService = ({ service, query }) => {
       </li>
     ));
   };
-
-  // const showTotalPrice = () => {
-  //   return checkedPrice.map(
-  //     (price, i) => console.log(price)
-  //     // <div
-  //     //   key={i}
-  //     //   className="btn btn-outline-danger mx-auto font-weight-bold "
-  //     //   style={{ width: "700px" }}
-  //     // >
-  //     //   <h5>{price}</h5>
-  //     // </div>
-  //   );
-  // };
 
   return (
     <React.Fragment>
@@ -163,12 +148,42 @@ const SingleService = ({ service, query }) => {
                   </div>
 
                   <div className="container-fluid">
-                    {showTools(service)}
-                    {/* {showTotalPrice(clickedPrice)} */}
+                    <div className="row">
+                      <div className="col-md-4 pt-5 pb-5">
+                        {showTools(service)}
+                      </div>
+                      <div className="col-md-8 pt-5 pb-5">
+                        <div className="container-fluid">
+                          <div className="row">
+                            <div className="col-md-3  pb-5">
+                              <p>Add to see the totalPrice</p>
+                              <button
+                                className="mt-4 btn-lg btn-block btn btn-success"
+                                style={{ width: "100px" }}
+                              >
+                                {total}
+                              </button>
+                              {/* <h2>{total}</h2> */}
+                            </div>
+                            <div className="col-md-3  pb-5">
+                              <p>Deduct to see the totalPrice</p>
 
-                    <h4>{JSON.stringify(total)}</h4>
-                    <h4>{JSON.stringify(subtotal)}</h4>
+                              <button
+                                className="mt-4 btn-lg btn-block btn btn-success"
+                                style={{ width: "100px" }}
+                              >
+                                {subtotal}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
+                    {/* <h4>{JSON.stringify(total)}</h4> */}
+                    {/* <h4>{JSON.stringify(subtotal)}</h4> */}
+                    {/* <h4>{JSON.stringify(checkedTool)}</h4>
+                    <h4>{JSON.stringify(checkedPrice)}</h4> */}
                     {/* <div>{showTotalPrice()}</div> */}
 
                     <br />
@@ -188,18 +203,27 @@ const SingleService = ({ service, query }) => {
                   Average Ratings{service.ratingsAverage}
                 </div>
               </div>
-              <button
-                className="mt-4 btn-lg btn-block btn btn-success"
-                style={{ width: "235px" }}
-              >
-                Book Now
-              </button>
-              <button
-                className="mt-4 btn-lg btn-block btn btn-success"
-                style={{ width: "235px" }}
-              >
-                Enquiry Now
-              </button>
+
+              <div className="container">
+                <div className="row">
+                  <div className="col-md-6 lead">
+                    <button
+                      className="mt-4 btn-lg btn-block btn btn-success"
+                      style={{ width: "235px" }}
+                    >
+                      Book Now
+                    </button>
+                  </div>
+                  <div className="col-md-6 lead">
+                    <button
+                      className="mt-4 btn-lg btn-block btn btn-success"
+                      style={{ width: "235px" }}
+                    >
+                      Enquiry Now
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* <div className="container pb-5">
