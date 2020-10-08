@@ -19,8 +19,8 @@ import moment from "moment";
 //import SmallCard from "../../components/blogs/smallcard";
 
 const SingleService = ({ service, query }) => {
-  // console.log(query);
-  // console.log(service);
+  //console.log(query);
+  //console.log(service);
   //   const [related, setRelated] = useState([]);
   //   const loadRelated = () => {
   //     listRelatedBlog({ blog }).then((data) => {

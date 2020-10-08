@@ -135,81 +135,6 @@ exports.Services = async (req, res) => {
   }
 };
 
-exports.updateService = async (req, res) => {
-  //get the data from form body
-  const slug = req.params.slug.toLowerCase();
-  try {
-    await Service.findOne({ slug }).exec((err, oldService) => {
-      if (err) {
-        return res.status(400).json({ errors: errorHandler(err) });
-      }
-
-      let form = new formidable.IncomingForm();
-      form.keepExtensions = true; //if we have files in formData we want to keep the extensions
-      //convert formData into valid javascript obj
-      form.parse(req, (err, fields, files) => {
-        if (err) {
-          return res.status(400).json({
-            error: "Image could not upload",
-          });
-        }
-
-        let slugBeforeMerge = oldService.slug; // saving such that slug dont change
-
-        oldService = _.merge(oldService, fields); //merge new fields
-        oldService.slug = slugBeforeMerge;
-
-        //update the body cat tag desc
-
-        const {
-          summary,
-          process,
-          duration,
-          serviceName,
-          discountedPrice,
-          tools,
-        } = fields;
-
-        // if (summary) {
-        //   oldService.excerpt = smartTrim(body, 320, " ", " ....");
-        //   oldService.desc = stripHtml(body.substring(0, 160));
-        // }
-
-        // if (process) {
-        //   oldService.categories = categories.split(",");
-        // }
-
-        if (tools) {
-          oldService.tools = tools.split(",");
-        }
-
-        if (files.photo) {
-          if (files.photo.size > 10000000) {
-            return res.status(400).json({
-              error: "Image should be less then 1mb in size",
-            });
-          }
-
-          oldService.photo.data = fs.readFileSync(files.photo.path);
-          oldService.photo.contentType = files.photo.type;
-        }
-
-        oldService.save((err, result) => {
-          if (err) {
-            return res.status(400).json({
-              error: errorHandler(err),
-            });
-          }
-
-          // result.photo = undefined;
-        });
-      });
-    });
-  } catch (error) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-};
 exports.ServicesList = async (req, res) => {
   //find the discountServiceCharges for a service
   try {
@@ -278,7 +203,6 @@ exports.SingleService = async (req, res) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
         }
-        // console.log(_reviews);
         res.json(service);
       });
   } catch (error) {

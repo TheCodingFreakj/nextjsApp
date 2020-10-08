@@ -13,7 +13,6 @@ const {
   SingleService,
   removeServices,
   photo,
-  updateService,
   listRelatedPortfolio,
   CreatePortfolio,
   PortfolioList,
@@ -21,15 +20,14 @@ const {
 
 router.post("/services", tokenAuth, adminMiddleware, Services);
 router.delete("/services/:slug", tokenAuth, adminMiddleware, removeServices);
-router.put("/service/:slug", tokenAuth, adminMiddleware, updateService);
 router.post("/all-services", ServicesList);
 router.get("/service/:slug", SingleService);
 router.get("/services/photo/:slug", photo);
-router.post("/blogs/related", listRelatedPortfolio);
 
 //Portfolio
 
 router.post("/portfolio", tokenAuth, adminMiddleware, CreatePortfolio);
 router.post("/all-portfolios", PortfolioList);
+router.post("/portfolios/related", listRelatedPortfolio);
 
 module.exports = router;

@@ -99,7 +99,7 @@ exports.ReviewsList = async (req, res) => {
       .populate("reviewedBy", "_id brandName slug")
       .populate("client", "_id name ")
       .populate("checkedService", "_id title slug duration")
-      .select("_id review rating slug  reviewedBy checkedService")
+      .select("_id review rating slug ")
       .exec((err, reviews) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });

@@ -35,14 +35,6 @@ const reviewsSchema = new mongoose.Schema(
   }
 );
 
-// reviewsSchema.pre(/^find/, function(next){
-//   this.populate({
-//     path:"checkedService",
-//     select:""
-//   })
-//   next()
-// })
-
 //calculating the number of ratings and average of all ratings for a particular service
 //This function takes in a serviceId and calc the average rating and number of ratings for the service
 //This function will also update the corresponding service documents
@@ -70,11 +62,6 @@ reviewsSchema.statics.calAverageRatings = async function (serviceId) {
 
 reviewsSchema.post("save", function (next) {
   this.constructor.calAverageRatings(this.checkedService);
-});
-
-reviewsSchema.pre(/^findOneAnd/, async function (next) {
-  const rev = await this.findOne();
-  console.log(rev);
 });
 
 module.exports = mongoose.model("Review", reviewsSchema);
