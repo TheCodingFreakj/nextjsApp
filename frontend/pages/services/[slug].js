@@ -16,26 +16,12 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { withRouter } from "next/router";
 import renderHTML from "react-render-html";
 import moment from "moment";
-//import SmallCard from "../../components/blogs/smallcard";
+import SmallCard from "../../components/portfolio/serviceCard";
 
 const SingleService = ({ service, query }) => {
   //console.log(query);
-  //console.log(service);
-  //   const [related, setRelated] = useState([]);
-  //   const loadRelated = () => {
-  //     listRelatedBlog({ blog }).then((data) => {
-  //       //console.log(data);
-  //       if (data.error) {
-  //         console.log(data.error);
-  //       } else {
-  //         setRelated(data);
-  //       }
-  //     });
-  //   };
+  //console.log(service.the_portfolios);
 
-  //   useEffect(() => {
-  //     loadRelated();
-  //   }, []);
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
   const [total, setTotal] = useState([]);
@@ -53,6 +39,16 @@ const SingleService = ({ service, query }) => {
             <h5>{price.discountedServiceCharges}</h5>
           </div>
         </div>
+      </div>
+    ));
+  };
+
+  const showPortFolio = (service) => {
+    return service.the_portfolios.map((portfolio, i) => (
+      <div key={i} className="col-md-4">
+        <article>
+          <SmallCard service={service.the_portfolios} />
+        </article>
       </div>
     ));
   };
@@ -226,11 +222,11 @@ const SingleService = ({ service, query }) => {
               </div>
             </div>
 
-            {/* <div className="container pb-5">
+            <div className="container pb-5">
               <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
               <hr />
-              <div className="row">{showPortFolio()}</div>
-            </div> */}
+              <div className="row">{showPortFolio(service)}</div>
+            </div>
           </article>
         </main>
       </Layout>

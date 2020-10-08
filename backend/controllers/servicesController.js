@@ -193,12 +193,12 @@ exports.SingleService = async (req, res) => {
     await Service.findOne({ slug })
       .populate([{ path: "the_reviews" }])
       .populate([{ path: "the_portfolios" }])
+      .select("-photo")
       .populate(
         "discountedServiceCharges",
         "_id serviceName discountedServiceCharges slug"
       )
       .populate("tools", "_id tool clientPrice slug")
-      .select("-photo")
       .exec((err, service) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
