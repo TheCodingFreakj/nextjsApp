@@ -111,3 +111,22 @@ exports.ReviewsList = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+exports.SingleReview = async (req, res) => {
+  console.log(req.params.id);
+  try {
+    await Review.findById(req.params.id)
+      .populate("client", "_id name ")
+      .populate("checkedService", "_id title slug duration")
+      .select("_id review rating slug, createdAt client ")
+      .exec((err, review) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+        res.json(review);
+      });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};

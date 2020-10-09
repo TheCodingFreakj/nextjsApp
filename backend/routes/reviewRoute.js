@@ -11,11 +11,13 @@ const {
   Reviews,
   updateReviews,
   ReviewsList,
+  SingleReview,
 } = require("../controllers/reviewsController");
 
 router.post("/create-reviews", tokenAuth, adminMiddleware, CreateReviews); //admin can do this
 router.post("/reviews", tokenAuth, authMiddleware, Reviews); //authenticated user post reviews
 router.post("/all-reviews", ReviewsList);
+router.post("/review/:id", SingleReview);
 router.put("/review/:id", tokenAuth, adminMiddleware, updateReviews);
 //router.get("/calcAverage/:serviceId", CalcAverage);
 

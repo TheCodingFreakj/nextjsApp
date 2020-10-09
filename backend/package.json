@@ -28,6 +28,7 @@
     "short-id": "0.1.0-1",
     "slugify": "^1.4.5",
     "string-strip-html": "^4.5.1",
+    "stripe": "^8.108.0",
     "supports-color": "^7.1.0"
   }
 }

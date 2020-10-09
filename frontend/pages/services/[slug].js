@@ -20,7 +20,7 @@ import SmallCard from "../../components/portfolio/serviceCard";
 
 const SingleService = ({ service, query }) => {
   //console.log(query);
-  //console.log(service.the_portfolios);
+  //console.log(service.the_reviews);
 
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
@@ -47,8 +47,21 @@ const SingleService = ({ service, query }) => {
     return service.the_portfolios.map((portfolio, i) => (
       <div key={i} className="col-md-4">
         <article>
-          <SmallCard service={service.the_portfolios} />
+          <SmallCard service={portfolio} />
         </article>
+      </div>
+    ));
+  };
+
+  const showReviews = (service) => {
+    return service.the_reviews.map((review, i) => (
+      <div key={i} className="card">
+        <div className="card-body p-3 mb-2 bg-success text-white">
+          <p className="card-text">{review.review}</p>
+          <p className="card-text">Average Rating : {review.rating}</p>
+          <p className="card-text">Given By : {review.client}</p>
+          <p className="card-text"> {moment(review.createdAt).fromNow()}</p>
+        </div>
       </div>
     ));
   };
@@ -176,12 +189,6 @@ const SingleService = ({ service, query }) => {
                       </div>
                     </div>
 
-                    {/* <h4>{JSON.stringify(total)}</h4> */}
-                    {/* <h4>{JSON.stringify(subtotal)}</h4> */}
-                    {/* <h4>{JSON.stringify(checkedTool)}</h4>
-                    <h4>{JSON.stringify(checkedPrice)}</h4> */}
-                    {/* <div>{showTotalPrice()}</div> */}
-
                     <br />
                     <br />
                   </div>
@@ -191,12 +198,20 @@ const SingleService = ({ service, query }) => {
 
             <div className="container">
               <div className="row">
-                <div className="col-md-6 lead">
+                <div className="col-md-4 lead">
+                  <h2>Summary</h2>
                   {renderHTML(service.process)}
                 </div>
 
-                <div className="col-md-6 ml-6">
+                <div className="col-md-4 ml-6">
+                  <h2>Ratings</h2>
                   Average Ratings{service.ratingsAverage}
+                </div>
+
+                <div className="col-md-4 lead ">
+                  <h2>What they think of Us</h2>
+                  <hr />
+                  <div className="row">{showReviews(service)}</div>
                 </div>
               </div>
 

@@ -18,6 +18,7 @@ const toolsRoute = require("./routes/toolsRoute");
 const priceRoute = require("./routes/priceRoute");
 const brandsRoute = require("./routes/brandsRoute");
 const reviewRoute = require("./routes/reviewRoute");
+const bookingRoute = require("./routes/bookingRoute");
 
 //app
 
@@ -61,6 +62,7 @@ app.use("/api", priceRoute);
 app.use("/api", toolsRoute);
 app.use("/api", brandsRoute);
 app.use("/api", reviewRoute);
+app.use("/api", bookingRoute);
 
 //Ports
 const port = process.env.PORT || 8000;

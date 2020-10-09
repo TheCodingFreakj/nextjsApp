@@ -4,7 +4,7 @@ const Portfolio = require("../models/portfolio");
 const Tools = require("../models/marketingTools");
 const ComboPackage = require("../models/comboPackages");
 const formidable = require("formidable");
-const { errorHandler } = require("../helpers/dbErrorHandler");
+
 const slugify = require("slugify");
 const fs = require("fs");
 
@@ -191,14 +191,18 @@ exports.SingleService = async (req, res) => {
   // console.log(slug);
   try {
     await Service.findOne({ slug })
-      .populate([{ path: "the_reviews" }])
-      .populate([{ path: "the_portfolios" }])
-      .select("-photo")
+      .populate([
+        {
+          path: "the_reviews",
+        },
+      ])
+      .populate([{ path: "the_portfolios", options: { select: "-photo" } }])
       .populate(
         "discountedServiceCharges",
         "_id serviceName discountedServiceCharges slug"
       )
       .populate("tools", "_id tool clientPrice slug")
+
       .exec((err, service) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
@@ -352,6 +356,25 @@ exports.PortfolioList = async (req, res) => {
       });
   } catch (error) {
     console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.Portfoliophoto = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    await Portfolio.findOne({ slug })
+      .select("photo")
+      .exec((err, portfolio) => {
+        if (err || !portfolio) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+
+        res.set("Content-Type", portfolio.photo.contentType);
+        return res.send(portfolio.photo.data);
+      });
+  } catch (error) {
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 };

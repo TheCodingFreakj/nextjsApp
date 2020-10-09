@@ -16,6 +16,7 @@ const {
   listRelatedPortfolio,
   CreatePortfolio,
   PortfolioList,
+  Portfoliophoto,
 } = require("../controllers/servicesController");
 
 router.post("/services", tokenAuth, adminMiddleware, Services);
@@ -29,5 +30,6 @@ router.get("/services/photo/:slug", photo);
 router.post("/portfolio", tokenAuth, adminMiddleware, CreatePortfolio);
 router.post("/all-portfolios", PortfolioList);
 router.post("/portfolios/related", listRelatedPortfolio);
+router.get("/portfolios/photo/:slug", Portfoliophoto);
 
 module.exports = router;
