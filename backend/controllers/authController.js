@@ -10,7 +10,7 @@ const bcrypt = require("bcryptjs");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 exports.Signup = async (req, res) => {
-  const { username, name, email, password } = req.body;
+  const { username, name, email, password, role, customerRole } = req.body;
   try {
     //see if the user exists
     let user = await User.findOne({ email });
@@ -33,15 +33,25 @@ exports.Signup = async (req, res) => {
       username,
     });
 
+    // console.log(user);
+
     const salt = await bcrypt.genSalt(10);
 
     user.hashed_password = await bcrypt.hash(password, salt);
+
+    if (user.customerRole) {
+      user.customerRole = customerRole;
+    } else {
+      user.role = role;
+    }
 
     await user.save((err, success) => {
       if (err)
         return res.status(400).json({
           error: err,
         });
+
+      console.log(user);
     });
 
     const payload = {
@@ -231,6 +241,32 @@ exports.adminMiddleware = async (req, res, next) => {
     next();
   } catch (error) {
     console.error("something wrong with adminMiddleware");
+    res.status(500).json({ msg: "Server Error" });
+  }
+};
+
+exports.customerMiddleware = async (req, res, next) => {
+  //console.log(req.user.id);
+  //need the user id
+  try {
+    const customerUserID = req.user.id;
+
+    //console.log(adminUserID);
+    let customerUser = await User.findById({ _id: customerUserID });
+    //no user
+    if (!customerUser) {
+      return res.status(400).json({ errors: [{ msg: "There is no user" }] });
+    }
+
+    if (customerUser.customerRole != "consumer") {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "You dont have access to this page" }] });
+    }
+    req.user = customerUser;
+    next();
+  } catch (error) {
+    console.error("something wrong with customerMiddleware");
     res.status(500).json({ msg: "Server Error" });
   }
 };

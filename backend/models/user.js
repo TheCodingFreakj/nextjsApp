@@ -40,7 +40,10 @@ const userSchema = new mongoose.Schema(
     role: {
       type: Number,
       trim: true,
-      default: 0,
+    },
+    customerRole: {
+      type: String,
+      default: "basic",
     },
     photo: {
       data: Buffer,

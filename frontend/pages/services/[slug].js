@@ -13,9 +13,11 @@ import Link from "next/link";
 import Layout from "../../components/Layout";
 import { singleService } from "../../actions/services";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
+import { isAuth } from "../../actions/setAuthToken";
 import { withRouter } from "next/router";
 import renderHTML from "react-render-html";
 import moment from "moment";
+
 import SmallCard from "../../components/portfolio/serviceCard";
 
 const SingleService = ({ service, query }) => {
@@ -156,42 +158,47 @@ const SingleService = ({ service, query }) => {
                     <br />
                   </div>
 
-                  <div className="container-fluid">
-                    <div className="row">
-                      <div className="col-md-4 pt-5 pb-5">
-                        {showTools(service)}
-                      </div>
-                      <div className="col-md-8 pt-5 pb-5">
-                        <div className="container-fluid">
-                          <div className="row">
-                            <div className="col-md-3  pb-5">
-                              <p>Add to see the totalPrice</p>
-                              <button
-                                className="mt-4 btn-lg btn-block btn btn-success"
-                                style={{ width: "100px" }}
-                              >
-                                {total}
-                              </button>
-                              {/* <h2>{total}</h2> */}
-                            </div>
-                            <div className="col-md-3  pb-5">
-                              <p>Deduct to see the totalPrice</p>
+                  {isAuth() && isAuth().role === 0 && (
+                    //Admin
+                    <>
+                      <div className="container-fluid">
+                        <div className="row">
+                          <div className="col-md-4 pt-5 pb-5">
+                            {showTools(service)}
+                          </div>
+                          <div className="col-md-8 pt-5 pb-5">
+                            <div className="container-fluid">
+                              <div className="row">
+                                <div className="col-md-3  pb-5">
+                                  <p>Add to see the totalPrice</p>
+                                  <button
+                                    className="mt-4 btn-lg btn-block btn btn-success"
+                                    style={{ width: "100px" }}
+                                  >
+                                    {total}
+                                  </button>
+                                  {/* <h2>{total}</h2> */}
+                                </div>
+                                <div className="col-md-3  pb-5">
+                                  <p>Deduct to see the totalPrice</p>
 
-                              <button
-                                className="mt-4 btn-lg btn-block btn btn-success"
-                                style={{ width: "100px" }}
-                              >
-                                {subtotal}
-                              </button>
+                                  <button
+                                    className="mt-4 btn-lg btn-block btn btn-success"
+                                    style={{ width: "100px" }}
+                                  >
+                                    {subtotal}
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
 
-                    <br />
-                    <br />
-                  </div>
+                        <br />
+                        <br />
+                      </div>
+                    </>
+                  )}
                 </div>
               </section>
             </div>
@@ -218,20 +225,30 @@ const SingleService = ({ service, query }) => {
               <div className="container">
                 <div className="row">
                   <div className="col-md-6 lead">
-                    <button
-                      className="mt-4 btn-lg btn-block btn btn-success"
-                      style={{ width: "235px" }}
-                    >
-                      Book Now
-                    </button>
+                    {isAuth() && isAuth().role === 0 && (
+                      //Admin
+                      <>
+                        <Link href={`/checkout-session/${service._id}`}>
+                          <a
+                            className="mt-4 btn-lg btn-block btn btn-success"
+                            style={{ width: "235px" }}
+                          >
+                            Book Now
+                          </a>
+                        </Link>
+                      </>
+                    )}
                   </div>
-                  <div className="col-md-6 lead">
-                    <button
-                      className="mt-4 btn-lg btn-block btn btn-success"
-                      style={{ width: "235px" }}
-                    >
-                      Enquiry Now
-                    </button>
+
+                  <div className="col-md-6  text-center  lead">
+                    <Link href="">
+                      <a
+                        className="mt-4 btn-lg btn-block btn btn-success"
+                        style={{ width: "235px" }}
+                      >
+                        Enquiry Now
+                      </a>
+                    </Link>
                   </div>
                 </div>
               </div>

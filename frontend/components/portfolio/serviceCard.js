@@ -41,6 +41,14 @@ const SmallCard = ({ service }) => {
         <div className="p-3 mb-2 bg-warning text-dark">
           <h5>Service Name</h5>
           <p className="card-text">{service.name}</p>
+          <Link href="">
+            <a
+              className="mt-4 btn-lg btn-block btn btn-success"
+              style={{ width: "235px" }}
+            >
+              See More
+            </a>
+          </Link>
         </div>
       </div>
     </div>
