@@ -158,7 +158,7 @@ const SingleService = ({ service, query }) => {
                     <br />
                   </div>
 
-                  {isAuth() && isAuth().role === 0 && (
+                  {isAuth() && isAuth().customerRole === "consumer" && (
                     //Admin
                     <>
                       <div className="container-fluid">
@@ -225,7 +225,7 @@ const SingleService = ({ service, query }) => {
               <div className="container">
                 <div className="row">
                   <div className="col-md-6 lead">
-                    {isAuth() && isAuth().role === 0 && (
+                    {isAuth() && isAuth().customerRole === "consumer" && (
                       //Admin
                       <>
                         <Link href={`/checkout-session/${service._id}`}>

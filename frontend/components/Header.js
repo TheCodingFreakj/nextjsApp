@@ -67,8 +67,45 @@ const Header = () => {
                   <a className="text-light  font-weight-bold  h5">Services</a>
                 </Link>
               </NavItem>
+
+              <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                <Link href="/customerSignup">
+                  <a className="text-light  font-weight-bold  h5">
+                    create Account
+                  </a>
+                </Link>
+              </NavItem>
+
+              <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                <Link href="/customerSignin">
+                  <a className="text-light  font-weight-bold  h5">CustSignin</a>
+                </Link>
+              </NavItem>
             </React.Fragment>
 
+            {isAuth() && isAuth().customerRole === "consumer" ? (
+              <NavItem className="ml-5 text-light font-weight-bold  h5">
+                <a
+                  className="text-light font-weight-bold  h5"
+                  onClick={() =>
+                    signout(() => Router.replace("/customerSignin"))
+                  }
+                >
+                  SignOut
+                </a>
+              </NavItem>
+            ) : (
+              <NavItem className="ml-5 text-light font-weight-bold  h5">
+                <a
+                  className="text-light font-weight-bold  h5"
+                  onClick={() => signout(() => Router.replace("/authSignin"))}
+                >
+                  SignOut
+                </a>
+              </NavItem>
+            )}
+
+            {console.log(isAuth())}
             {!isAuth() && (
               <>
                 <NavItem className="ml-5 text-light  font-weight-bold  h5">
@@ -78,8 +115,6 @@ const Header = () => {
                 </NavItem>
               </>
             )}
-            {/* {console.log(isAuth())} */}
-
             {isAuth() && isAuth().role !== 1 && (
               //User
               <NavItem className="ml-5 text-light font-weight-bold  h5">
@@ -90,7 +125,6 @@ const Header = () => {
                 </Link>
               </NavItem>
             )}
-
             {isAuth() && isAuth().role !== 0 && (
               //Admin
               <>
@@ -108,24 +142,12 @@ const Header = () => {
                 </NavItem>
               </>
             )}
-
-            {isAuth() && (
-              //Both
-              <NavItem className="ml-5 text-light font-weight-bold  h5">
-                <a
-                  className="text-light font-weight-bold  h5"
-                  onClick={() => signout(() => Router.replace("/authSignin"))}
-                >
-                  SignOut
-                </a>
-              </NavItem>
-            )}
-
-            <NavItem className="ml-5 text-light font-weight-bold  h5">
+            {console.log(isAuth())}
+            {/* <NavItem className="ml-5 text-light font-weight-bold  h5">
               <Link href="/user/blogs">
                 <a className="text-light font-weight-bold  h5">Write a Blog</a>
               </Link>
-            </NavItem>
+            </NavItem> */}
           </Nav>
         </Collapse>
       </Navbar>

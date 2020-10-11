@@ -110,11 +110,4 @@ export const getServerSideProps = async (context) => {
   }
 };
 
-// export const getStaticProps = async (context) => {
-//   const serviceData = await getAllServices();
-//   console.log(serviceData);
-//   return {
-//     props: { serviceData }, // will be passed to the page component as props
-//   };
-// };
 export default withRouter(ServicesPage);
