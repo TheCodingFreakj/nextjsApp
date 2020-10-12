@@ -39,7 +39,12 @@ export const authenticate = (data, next) => {
   //console.log(data);
 
   setCookie("token", data.token);
-  setLocatStorage("user", data.user);
+  // setLocatStorage("customerRole", data.user.customerRole)
+  setLocatStorage("user", data.user); //called during signin
+  //can use the .role prop to decide where it can login
+  //role: 0 -> user dashboard
+  //role: 1 -> admin dashboard
+  //customer-role -> customer page
 
   next();
 };

@@ -37,11 +37,15 @@ const SigninComp = () => {
     };
 
     signin(user).then((data) => {
-      if (data.error) {
+      if (data.errors) {
         // console.log(data.error);
-        setFormData({ ...formData, loading: false, error: data.error });
+        setFormData({
+          ...formData,
+          loading: false,
+          error: [data.errors[0].msg],
+        });
       } else {
-        console.log(data.response);
+        //console.log(data.response);
 
         //save the user token either in cookie or local storage in front end
         //save the user info in local storage
@@ -50,11 +54,13 @@ const SigninComp = () => {
 
         authenticate(data, () => {
           //sending routes based on role during login
-          console.log(data);
+          //console.log(data);
           if (isAuth().role === 1) {
             Router.push("/admin");
           } else if (isAuth().role === 0) {
             Router.push("/user");
+          } else if (isAuth().customerRole === "consumer") {
+            Router.push("/customerSignin");
           }
         });
       }

@@ -31,6 +31,8 @@ exports.Signup = async (req, res) => {
       password,
       profile,
       username,
+      customerRole,
+      role,
     });
 
     // console.log(user);
@@ -104,7 +106,7 @@ exports.Signin = async (req, res) => {
   const { email, password } = req.body;
   try {
     let user = await User.findOne({ email });
-
+    console.log(user);
     //no user
     if (!user) {
       return res.status(400).json({ errors: [{ msg: "There is no user" }] });

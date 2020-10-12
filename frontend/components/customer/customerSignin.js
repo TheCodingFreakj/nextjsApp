@@ -37,11 +37,15 @@ const CustomerSigninComp = () => {
     };
 
     signin(user).then((data) => {
-      if (data.error) {
-        // console.log(data.error);
-        setFormData({ ...formData, loading: false, error: data.error });
+      if (data.errors) {
+        console.log(data.error);
+        setFormData({
+          ...formData,
+          loading: false,
+          error: [data.errors[0].msg],
+        });
       } else {
-        console.log(data.response);
+        //console.log(data.response);
 
         //save the user token either in cookie or local storage in front end
         //save the user info in local storage
@@ -53,7 +57,9 @@ const CustomerSigninComp = () => {
           console.log(data);
           if (isAuth().customerRole === "consumer") {
             Router.push("/services");
-          } else {
+          } else if (isAuth().role === 1) {
+            Router.push("/");
+          } else if (isAuth().role === 0) {
             Router.push("/");
           }
         });

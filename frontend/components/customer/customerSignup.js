@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Router from "next/router";
 import { signup } from "../../actions/auth";
+import Link from "next/link";
 //bring components
 
 import { isAuth } from "../../actions/setAuthToken";
@@ -50,9 +51,12 @@ const CustomerSignupComp = () => {
     };
 
     signup(newUser).then((data) => {
-      if (data.error) {
-        // console.log(data.error);
-        setFormData({ ...formData, loading: false, error: data.error });
+      if (data.errors) {
+        setFormData({
+          ...formData,
+          loading: false,
+          error: [data.errors[0].msg],
+        });
       } else {
         // console.log(data.response);
 
@@ -85,7 +89,17 @@ const CustomerSignupComp = () => {
     error ? <div className="alert alert-danger">{error}</div> : "";
 
   const showMessage = () =>
-    message ? <div className="alert alert-info">{message}</div> : "";
+    message ? (
+      <div className="alert alert-info">
+        {message}
+
+        <Link href={`/customerSignin `}>
+          <a className="btn btn-small btn-success">Sign In </a>
+        </Link>
+      </div>
+    ) : (
+      ""
+    );
 
   const signupForm = () => {
     return (
@@ -125,6 +139,10 @@ const CustomerSignupComp = () => {
 
         <div>
           <input type="submit" className="btn btn-primary" value="Signup" />
+
+          <Link href={`/customerSignin `}>
+            <a className="btn btn-small btn-success">Sign In </a>
+          </Link>
         </div>
       </form>
     );
@@ -135,6 +153,8 @@ const CustomerSignupComp = () => {
       {showError()}
       {showLoading()}
       {showMessage()}
+
+      {/* {JSON.stringify(error)} */}
 
       {/* show sign up form only if showForm is true//by default its true
   once user sign in it wont show the signup form */}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Router from "next/router";
+import Link from "next/link";
 import { signup } from "../actions/auth";
 //bring components
 
@@ -11,12 +12,22 @@ const SignupComp = () => {
     email: "",
     password: "",
     message: "",
+    role: 0,
     error: "",
     loading: false,
     showForm: true,
   });
 
-  const { name, email, password, message, error, loading, showForm } = formData;
+  const {
+    name,
+    email,
+    password,
+    message,
+    role,
+    error,
+    loading,
+    showForm,
+  } = formData;
 
   useEffect(() => {
     //decide when you want to run this
@@ -35,12 +46,17 @@ const SignupComp = () => {
       name,
       email,
       password,
+      role,
     };
 
     signup(newUser).then((data) => {
-      if (data.error) {
+      if (data.errors) {
         // console.log(data.error);
-        setFormData({ ...formData, loading: false, error: data.error });
+        setFormData({
+          ...formData,
+          loading: false,
+          error: [data.errors[0].msg],
+        });
       } else {
         // console.log(data.response);
 
@@ -113,6 +129,9 @@ const SignupComp = () => {
 
         <div>
           <input type="submit" className="btn btn-primary" value="Signup" />
+          <Link href="/authSignin">
+            <a className="text-light  font-weight-bold  h5">Staff Login</a>
+          </Link>
         </div>
       </form>
     );

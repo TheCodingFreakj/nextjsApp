@@ -43,7 +43,6 @@ const userSchema = new mongoose.Schema(
     },
     customerRole: {
       type: String,
-      default: "basic",
     },
     photo: {
       data: Buffer,

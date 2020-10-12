@@ -18,19 +18,19 @@ import Router from "next/router";
 
 import NProgress from "nprogress";
 
-import { APP_NAME } from "../config";
-import { signout } from "../actions/auth";
+import { APP_NAME } from "../../config";
+import { signout } from "../../actions/auth";
 
-import { isAuth } from "../actions/setAuthToken";
+import { isAuth } from "../../actions/setAuthToken";
 
-import "../node_modules/nprogress/nprogress.css";
-import Search from "../components/blogs/search";
+import "../../node_modules/nprogress/nprogress.css";
+import Search from "../../components/blogs/search";
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
 Router.onRouteChangeError = (url) => NProgress.done();
 
-const Header = () => {
+const CustomerHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
@@ -67,54 +67,48 @@ const Header = () => {
                   <a className="text-light  font-weight-bold  h5">Services</a>
                 </Link>
               </NavItem>
-
-              <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                <Link href="/authSignin">
-                  <a className="text-light  font-weight-bold  h5">Login</a>
-                </Link>
-              </NavItem>
-
-              <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                <Link href="/customerSignup">
-                  <a className="text-light  font-weight-bold  h5">
-                    Create Account
-                  </a>
-                </Link>
-              </NavItem>
             </React.Fragment>
 
-            {console.log(isAuth())}
-
-            {isAuth() && (
-              //User
+            {isAuth() && isAuth().customerRole === "consumer" && (
               <NavItem className="ml-5 text-light font-weight-bold  h5">
                 <a
                   className="text-light font-weight-bold  h5"
-                  onClick={() => signout(() => Router.replace("/authSignin"))}
+                  onClick={() =>
+                    signout(() => Router.replace("/customerSignin"))
+                  }
                 >
-                  StaffSignOut
+                  SignOut
                 </a>
               </NavItem>
             )}
 
-            {isAuth() && isAuth().role !== 1 && (
-              //User
-              <NavItem className="ml-5 text-light font-weight-bold  h5">
-                <Link href="/user">
-                  <a className="text-light font-weight-bold  h5">{`${
-                    isAuth().name
-                  }'s Dashboard`}</a>
+            {console.log(isAuth())}
+
+            {/* {!isAuth() && (
+              <>
+                <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                  <Link href="/customerSignin">
+                    <a className="text-light  font-weight-bold  h5">
+                      CustSignin
+                    </a>
+                  </Link>
+                </NavItem>
+              </>
+            )} */}
+
+            {isAuth() && isAuth().customerRole === "consumer" && (
+              <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                <Link href="/customer">
+                  <a className="text-light  font-weight-bold  h5">
+                    View Your Cart
+                  </a>
                 </Link>
               </NavItem>
             )}
-            {isAuth() && isAuth().role !== 0 && (
-              //Admin
+
+            {isAuth() && isAuth().customerRole === "consumer" && (
+              //cusomer
               <>
-                <NavItem className="ml-5 text-light font-weight-bold  h5">
-                  <Link href="/authSignup">
-                    <a className="text-light font-weight-bold  h5">Signup</a>
-                  </Link>
-                </NavItem>
                 <NavItem className="ml-5 text-light font-weight-bold  h5">
                   <Link href="/admin">
                     <a className="text-light font-weight-bold  h5">
@@ -124,13 +118,6 @@ const Header = () => {
                 </NavItem>
               </>
             )}
-
-            {/* {console.log(isAuth())} */}
-            {/* <NavItem className="ml-5 text-light font-weight-bold  h5">
-              <Link href="/user/blogs">
-                <a className="text-light font-weight-bold  h5">Write a Blog</a>
-              </Link>
-            </NavItem> */}
           </Nav>
         </Collapse>
       </Navbar>
@@ -140,4 +127,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default CustomerHeader;
