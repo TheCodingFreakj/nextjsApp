@@ -31,7 +31,7 @@ exports.getCheckoutSession = async (req, res) => {
           amount: service.discountedServiceCharges[0].discountedServiceCharges,
           currency: "usd",
           quantity: 1,
-          // images: [service.photo], //create the user id from user email
+          images: [service.photo], //create the user id from user email
         },
       ], // some details about the product purchased
     });
@@ -42,6 +42,10 @@ exports.getCheckoutSession = async (req, res) => {
       status: "success",
       session,
     });
+
+    // A Checkout Session controls what your customer sees in the Stripe-hosted payment page such as line items,
+    // the order amount and currency, and acceptable payment methods.
+    // Return the Checkout Session's ID in the response to reference the Session on the client.
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
@@ -51,3 +55,5 @@ exports.getCheckoutSession = async (req, res) => {
 //Try this https://stripe.com/docs/payments/accept-a-payment
 //https://github.com/stripe-samples/checkout-one-time-payments
 //https://stripe.com/docs/api/authentication
+
+//total solution: https://stripe.com/docs/checkout/integration-builder

@@ -14,6 +14,7 @@ import Layout from "../../components/Layout";
 import { singleService } from "../../actions/services";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { isAuth } from "../../actions/setAuthToken";
+import { bookService } from "../../actions/stripe";
 import { withRouter } from "next/router";
 import renderHTML from "react-render-html";
 import moment from "moment";
@@ -28,6 +29,12 @@ const SingleService = ({ service, query }) => {
   const [checkedTool, setCheckedTool] = useState([]);
   const [total, setTotal] = useState([]);
   const [subtotal, setSubTotal] = useState([]);
+
+  const head = () => (
+    <Head>
+      <script src="https://js.stripe.com/v3/"></script>
+    </Head>
+  );
 
   const showServiceCharges = (service) => {
     return service.discountedServiceCharges.map((price, i) => (
@@ -130,8 +137,23 @@ const SingleService = ({ service, query }) => {
     ));
   };
 
+  //  const checkOutSession = (id) => {
+
+  //   bookService().then((data) => {
+  //     console.log(data);
+  //     // if (data.error) {
+  //     //   console.log(data.error);
+  //     // } else {
+  //     //   setRelated(data);
+  //     // }
+  //   });
+  // };
+
+  // }
+
   return (
     <React.Fragment>
+      {head()}
       <Layout>
         <main>
           <article>
@@ -232,6 +254,8 @@ const SingleService = ({ service, query }) => {
                           <a
                             className="mt-4 btn-lg btn-block btn btn-success"
                             style={{ width: "235px" }}
+                            data-serv-id={`${service._id}`}
+                            // onClick={()=> }
                           >
                             Book Now
                           </a>

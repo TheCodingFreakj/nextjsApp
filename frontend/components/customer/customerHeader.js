@@ -98,7 +98,7 @@ const CustomerHeader = () => {
 
             {isAuth() && isAuth().customerRole === "consumer" && (
               <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                <Link href="/customer">
+                <Link href="/cart">
                   <a className="text-light  font-weight-bold  h5">
                     View Your Cart
                   </a>
@@ -110,7 +110,7 @@ const CustomerHeader = () => {
               //cusomer
               <>
                 <NavItem className="ml-5 text-light font-weight-bold  h5">
-                  <Link href="/admin">
+                  <Link href="/customer">
                     <a className="text-light font-weight-bold  h5">
                       {`${isAuth().name}'s Dashboard`}
                     </a>
