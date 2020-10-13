@@ -20,18 +20,32 @@ const { errorHandler } = require("../helpers/dbErrorHandler");
 
 //This is for storing service price
 exports.createPriceObject = async (req, res) => {
-  //console.log("This is the data I got from Frontend", req.body);
   const { serviceName, realServicePrice, servicedDiscountPrice } = req.body;
+  // console.log(req.body);
 
+  const servicePriceFields = {};
+  if (serviceName) servicePriceFields.serviceName = serviceName;
+  if (realServicePrice) servicePriceFields.realServicePrice = realServicePrice;
+  if (servicedDiscountPrice)
+    servicedDiscountPrice.servicePriceFields = servicedDiscountPrice;
+
+  // console.log(packagePriceFields);
   try {
-    let price = new Price();
-    price.serviceName = serviceName;
-    price.realServicePrice = realServicePrice;
-    price.slug = slugify(serviceName).toLowerCase();
-    price.servicedDiscountPrice = servicedDiscountPrice;
+    let price = await new Price(servicePriceFields);
+    price.slug = slugify(price.serviceName.toString()).toLowerCase();
+    //console.log(packagePrice);
 
-    const newPrice = await price.save();
-    res.json(newPrice);
+    if (price) {
+      price = await Price.findOneAndUpdate(
+        { serviceName: servicePriceFields.serviceName }, // use this to update stuffs
+        { $set: price },
+        { new: true, upsert: true }
+      );
+      return res.json(price);
+    }
+
+    await price.save();
+    return res.json(price);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

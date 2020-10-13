@@ -6,17 +6,8 @@ import CustomerHeader from "../components/customer/customerHeader";
 import { isAuth } from "../actions/setAuthToken";
 
 const Layout = ({ children }) => {
-  const renderHeader = () => {
-    if (isAuth() && isAuth().customerRole === "consumer") {
-      return <CustomerHeader />;
-    } else if (isAuth() && isAuth().role !== 0) {
-      return <Header />;
-    } else if (isAuth() && isAuth().role !== 1) {
-      return <Header />;
-    } else {
-      return <Header />;
-    }
-  };
+  //console.log(children);
+
   return (
     <div>
       <Head>
@@ -40,10 +31,9 @@ const Layout = ({ children }) => {
         <link href="/static/styles.css" rel="stylesheet" />
         <title>My Next Website App </title>
       </Head>
-      {renderHeader()}
-      {/* <Header /> */}
-      {/* if(isAuth() && isAuth().customerRole === "consumer"){<CustomerHeader />}
-      else {<Header />} */}
+
+      <Header />
+
       {children}
       <h1>Footer</h1>
     </div>

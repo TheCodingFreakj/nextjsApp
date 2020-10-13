@@ -14,7 +14,7 @@ import Layout from "../../components/Layout";
 import { singleService } from "../../actions/services";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { isAuth } from "../../actions/setAuthToken";
-import { bookService } from "../../actions/stripe";
+// import { bookService } from "../../actions/stripe";
 import { withRouter } from "next/router";
 import renderHTML from "react-render-html";
 import moment from "moment";
@@ -30,11 +30,11 @@ const SingleService = ({ service, query }) => {
   const [total, setTotal] = useState([]);
   const [subtotal, setSubTotal] = useState([]);
 
-  const head = () => (
-    <Head>
-      <script src="https://js.stripe.com/v3/"></script>
-    </Head>
-  );
+  // const head = () => (
+  //   <Head>
+  //     <script src="https://js.stripe.com/v3/"></script>
+  //   </Head>
+  // );
 
   const showServiceCharges = (service) => {
     return service.discountedServiceCharges.map((price, i) => (
@@ -153,7 +153,7 @@ const SingleService = ({ service, query }) => {
 
   return (
     <React.Fragment>
-      {head()}
+      {/* {head()} */}
       <Layout>
         <main>
           <article>

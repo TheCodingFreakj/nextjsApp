@@ -21,7 +21,7 @@ import NProgress from "nprogress";
 import { APP_NAME } from "../config";
 import { signout } from "../actions/auth";
 
-import { isAuth } from "../actions/setAuthToken";
+import { isAuth, userRole } from "../actions/setAuthToken";
 
 import "../node_modules/nprogress/nprogress.css";
 import Search from "../components/blogs/search";
@@ -32,9 +32,93 @@ Router.onRouteChangeError = (url) => NProgress.done();
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-
   const toggle = () => setIsOpen(!isOpen);
+  const renderHeader = (userRole) => {
+    switch (userRole) {
+      case "consumer":
+        return (
+          <>
+            <NavItem className="ml-5 text-light font-weight-bold  h5">
+              <a
+                className="text-light font-weight-bold  h5"
+                onClick={() => signout(() => Router.replace("/customerSignin"))}
+              >
+                SignOut
+              </a>
+            </NavItem>
 
+            <NavItem className="ml-5 text-light  font-weight-bold  h5">
+              <Link href="/cart">
+                <a className="text-light  font-weight-bold  h5">
+                  View Your Cart
+                </a>
+              </Link>
+            </NavItem>
+
+            <NavItem className="ml-5 text-light font-weight-bold  h5">
+              <Link href="/customer">
+                <a className="text-light font-weight-bold  h5">
+                  {`${isAuth().name}'s Dashboard`}
+                </a>
+              </Link>
+            </NavItem>
+          </>
+        );
+        break;
+      case 0:
+        return (
+          <>
+            <NavItem className="ml-5 text-light font-weight-bold  h5">
+              <Link href="/user">
+                <a className="text-light font-weight-bold  h5">{`${
+                  isAuth().name
+                }'s Dashboard`}</a>
+              </Link>
+            </NavItem>
+
+            <NavItem className="ml-5 text-light font-weight-bold  h5">
+              <a
+                className="text-light font-weight-bold  h5"
+                onClick={() => signout(() => Router.replace("/authSignin"))}
+              >
+                StaffSignOut
+              </a>
+            </NavItem>
+          </>
+        );
+        break;
+
+      case 1:
+        return (
+          <>
+            <NavItem className="ml-5 text-light font-weight-bold  h5">
+              <Link href="/authSignup">
+                <a className="text-light font-weight-bold  h5">Signup</a>
+              </Link>
+            </NavItem>
+            <NavItem className="ml-5 text-light font-weight-bold  h5">
+              <Link href="/admin">
+                <a className="text-light font-weight-bold  h5">
+                  {`${isAuth().name}'s Dashboard`}
+                </a>
+              </Link>
+            </NavItem>
+
+            <NavItem className="ml-5 text-light font-weight-bold  h5">
+              <a
+                className="text-light font-weight-bold  h5"
+                onClick={() => signout(() => Router.replace("/authSignin"))}
+              >
+                StaffSignOut
+              </a>
+            </NavItem>
+          </>
+        );
+        break;
+      default:
+        return null;
+    }
+  };
   return (
     <React.Fragment>
       <Navbar
@@ -67,7 +151,6 @@ const Header = () => {
                   <a className="text-light  font-weight-bold  h5">Services</a>
                 </Link>
               </NavItem>
-
               <NavItem className="ml-5 text-light  font-weight-bold  h5">
                 <Link href="/authSignin">
                   <a className="text-light  font-weight-bold  h5">Login</a>
@@ -83,49 +166,10 @@ const Header = () => {
               </NavItem>
             </React.Fragment>
 
+            {renderHeader(userRole())}
+            {console.log(userRole())}
             {console.log(isAuth())}
 
-            {isAuth() && (
-              //User
-              <NavItem className="ml-5 text-light font-weight-bold  h5">
-                <a
-                  className="text-light font-weight-bold  h5"
-                  onClick={() => signout(() => Router.replace("/authSignin"))}
-                >
-                  StaffSignOut
-                </a>
-              </NavItem>
-            )}
-
-            {isAuth() && isAuth().role !== 1 && (
-              //User
-              <NavItem className="ml-5 text-light font-weight-bold  h5">
-                <Link href="/user">
-                  <a className="text-light font-weight-bold  h5">{`${
-                    isAuth().name
-                  }'s Dashboard`}</a>
-                </Link>
-              </NavItem>
-            )}
-            {isAuth() && isAuth().role !== 0 && (
-              //Admin
-              <>
-                <NavItem className="ml-5 text-light font-weight-bold  h5">
-                  <Link href="/authSignup">
-                    <a className="text-light font-weight-bold  h5">Signup</a>
-                  </Link>
-                </NavItem>
-                <NavItem className="ml-5 text-light font-weight-bold  h5">
-                  <Link href="/admin">
-                    <a className="text-light font-weight-bold  h5">
-                      {`${isAuth().name}'s Dashboard`}
-                    </a>
-                  </Link>
-                </NavItem>
-              </>
-            )}
-
-            {/* {console.log(isAuth())} */}
             {/* <NavItem className="ml-5 text-light font-weight-bold  h5">
               <Link href="/user/blogs">
                 <a className="text-light font-weight-bold  h5">Write a Blog</a>

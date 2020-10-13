@@ -11,7 +11,7 @@ exports.getCheckoutSession = async (req, res) => {
       "discountedServiceCharges",
       "_id serviceName discountedServiceCharges slug"
     );
-    //console.log(service);
+    console.log(service);
     //console.log(service.discountedServiceCharges[0].discountedServiceCharges);
 
     //create checkout session
@@ -28,10 +28,11 @@ exports.getCheckoutSession = async (req, res) => {
         {
           name: `${service.title} Service`,
           description: service.summary,
-          amount: service.discountedServiceCharges[0].discountedServiceCharges,
+          amount:
+            service.discountedServiceCharges[0].discountedServiceCharges / 2,
           currency: "usd",
           quantity: 1,
-          images: [service.photo], //create the user id from user email
+          // images: [service.photo], //create the user id from user email
         },
       ], // some details about the product purchased
     });

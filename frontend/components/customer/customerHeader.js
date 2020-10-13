@@ -82,8 +82,6 @@ const CustomerHeader = () => {
               </NavItem>
             )}
 
-            {console.log(isAuth())}
-
             {/* {!isAuth() && (
               <>
                 <NavItem className="ml-5 text-light  font-weight-bold  h5">

@@ -36,11 +36,11 @@ export const removeLocatStorage = (key, value) => {
 
 //authenticate user by passing the data what you got got in post login axios req while signin
 export const authenticate = (data, next) => {
-  //console.log(data);
+  console.log(data);
 
   setCookie("token", data.token);
-  // setLocatStorage("customerRole", data.user.customerRole)
-  setLocatStorage("user", data.user); //called during signin
+  setLocatStorage("user", data.user);
+  //called during signin
   //can use the .role prop to decide where it can login
   //role: 0 -> user dashboard
   //role: 1 -> admin dashboard
@@ -56,7 +56,42 @@ export const isAuth = () => {
     // console.log(cookiesChecked);
     if (cookiesChecked) {
       if (localStorage.getItem("user")) {
-        return JSON.parse(localStorage.getItem("user"));
+        try {
+          return JSON.parse(localStorage.getItem("user"));
+        } catch (error) {
+          console.log(error);
+          console.error("Not a JSON response");
+        }
+
+        //return JSON.parse(localStorage.getItem("user") || "");
+      } else {
+        return false;
+      }
+    }
+  }
+};
+
+export const userRole = () => {
+  if (typeof window !== "undefined") {
+    const cookiesChecked = getCookie("token");
+
+    // console.log(cookiesChecked);
+    if (cookiesChecked) {
+      if (localStorage.getItem("user")) {
+        try {
+          const user = JSON.parse(localStorage.getItem("user"));
+          if (user.role === 1 || user.role === 0) {
+            return user.role;
+          } else if (user.customerRole === "consumer") {
+            return user.customerRole;
+          }
+          // console.log("the user", user);
+        } catch (error) {
+          console.log(error);
+          console.error("Not a JSON response");
+        }
+
+        //return JSON.parse(localStorage.getItem("user") || "");
       } else {
         return false;
       }
