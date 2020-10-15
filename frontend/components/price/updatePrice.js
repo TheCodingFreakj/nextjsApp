@@ -3,54 +3,64 @@ import Link from "next/link";
 import Router from "next/router";
 import { withRouter } from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
-import { createNewPrice } from "../../actions/price";
+import { updatePrice, SinglePrice } from "../../actions/price";
 
 //bring components
 
-const PriceForms = () => {
-  const [serviceValues, setServiceValues] = useState({
+const UpdatePriceForms = ({ router }) => {
+  const [priceValues, setPriceValues] = useState({
     serviceName: "",
     realServicePrice: "",
     servicedDiscountPrice: "",
-    discountedServiceCharges: "",
-    formData: "",
     serviceError: false,
     serviceSuccess: false,
-    serviceLoading: false,
-    serviceReload: false,
   });
 
   const {
     serviceName,
     realServicePrice,
-    formData,
     servicedDiscountPrice,
-    discountedServiceCharges,
     serviceError,
     serviceSuccess,
-    serviceLoading,
-    serviceReload,
-  } = serviceValues;
+  } = priceValues;
 
   useEffect(() => {
-    //fill the state with new values
-    //we are fill on the text data to the instance of this formData using set() in respective handlers and then send to the backedn
-    setServiceValues({ ...serviceValues });
-  }, []); //anytime the router change this useeffect will run
+    initPrices();
+  }, [router]);
+
+  const initPrices = () => {
+    //grab the slug from router props
+
+    if (router.query.slug) {
+      SinglePrice(router.query.slug).then((data) => {
+        console.log("This is single price data for the slug", data);
+        if (data.error) {
+          setPriceValues({ ...priceValues, error: data.serviceError });
+        } else {
+          setPriceValues({
+            ...priceValues,
+            serviceName: data[0].serviceName,
+            realServicePrice: data[0].realServicePrice,
+            servicedDiscountPrice: data[0].servicedDiscountPrice,
+          }); //storing the initial price in the state
+        }
+      });
+    }
+  };
 
   const token = getCookie("token");
-
+  //Need to alter the valuues in the state and again send to replace the value
   const onChange = (name) => (e) => {
-    // const value = e.target.value;
-    // console.log(value);
+    const value = e.target.value;
+    console.log(value);
     setPriceValues({
-      ...serviceValues,
+      ...priceValues,
       [name]: value, //keping the target values in state
       serviceError: false,
     });
   };
 
-  const onSubmit = (e) => {
+  const editPrice = (e) => {
     e.preventDefault();
 
     console.log("This is onSubmit");
@@ -59,32 +69,48 @@ const PriceForms = () => {
       realServicePrice,
       servicedDiscountPrice,
     };
-    createNewPrice(formData, token).then((data) => {
+    updatePrice(formData, token, router.query.slug).then((data) => {
       console.log("This is getting from backend", data);
       if (data.error) {
-        setServiceValues({
-          ...serviceValues,
+        setPriceValues({
+          ...priceValues,
           serviceSuccess: false,
-          serviceReload: false,
           serviceError: data.error,
         });
       } else {
-        setServiceValues({
-          ...serviceValues,
+        setPriceValues({
+          ...priceValues,
           serviceName: "",
           realServicePrice: "",
           servicedDiscountPrice: "",
           serviceError: "",
           serviceSuccess: `A new service :"${data.serviceName}" is created `,
-          serviceLoading: false,
-          serviceReload: true,
         });
+        Router.replace(`/admin`);
       }
     });
   };
-  const createServicePricingForm = () => {
+
+  const showError = () => (
+    <div
+      className="alert alert-danger"
+      style={{ display: serviceError ? "" : "none" }}
+    >
+      {serviceError}
+    </div>
+  );
+
+  const showSuccess = () => (
+    <div
+      className="alert alert-success"
+      style={{ display: serviceSuccess ? "" : "none" }}
+    >
+      {serviceSuccess}
+    </div>
+  );
+  const updateServicePricingForm = () => {
     return (
-      <form className="text-center" onSubmit={(e) => onSubmit(e)}>
+      <form className="text-center" onSubmit={(e) => editPrice(e)}>
         <label className="text-muted">
           <h4>Service Name </h4>
         </label>
@@ -93,7 +119,7 @@ const PriceForms = () => {
             type="text"
             className="form-control"
             name="serviceName"
-            value={serviceName || ""}
+            value={serviceName}
             onChange={onChange("serviceName")}
             required
           />
@@ -107,7 +133,7 @@ const PriceForms = () => {
             type="number"
             className="form-control"
             name="realServicePrice"
-            value={realServicePrice || ""} // This value should be coming from the state
+            value={realServicePrice} // This value should be coming from the state
             onChange={onChange("realServicePrice")} //setFormData
             required
           />
@@ -121,14 +147,14 @@ const PriceForms = () => {
             type="number"
             className="form-control"
             name="servicedDiscountPrice"
-            value={servicedDiscountPrice || ""} // This value should be coming from the state
+            value={servicedDiscountPrice} // This value should be coming from the state
             onChange={onChange("servicedDiscountPrice")} //setFormData
             required
           />
         </div>
 
         <div>
-          <input type="submit" className="btn btn-success" value="Submit" />
+          <input type="submit" className="btn btn-success" value="Update" />
         </div>
       </form>
     );
@@ -138,15 +164,19 @@ const PriceForms = () => {
     <React.Fragment>
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-6 pt-5 pb-5">{createServicePricingForm()}</div>
+          <div className="col-md-6 pt-5 pb-5">
+            {updateServicePricingForm()}
+
+            {JSON.stringify(priceValues)}
+            <div className="pb-5">
+              {showError()}
+              {showSuccess()}
+            </div>
+          </div>
         </div>
       </div>
     </React.Fragment>
   );
 };
 
-export default withRouter(PriceForms);
-//https://upmostly.com/tutorials/upload-a-file-from-a-react-component
-//https://medium.com/@everdimension/how-to-handle-forms-with-just-react-ac066c48bd4f
-//https://blog.stvmlbrn.com/2017/04/07/submitting-form-data-with-react.html
-//https://stackoverflow.com/questions/51346619/how-to-send-form-data-with-react
+export default withRouter(UpdatePriceForms);

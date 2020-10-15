@@ -3,8 +3,9 @@ import Link from "next/link";
 import Router from "next/router";
 import { withRouter } from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
-import { createNewReview, getAllBrands } from "../../actions/reviews";
+import { createNewReview } from "../../actions/reviews";
 import { getAllServices } from "../../actions/services";
+import { getAllUsers } from "../../actions/user";
 
 const Reviews = ({ router }) => {
   const [values, setValues] = useState({
@@ -19,8 +20,9 @@ const Reviews = ({ router }) => {
   const { review, rating, success, error, loading, reload } = values;
   const [services, setServices] = useState([]);
   const [checkedService, setCheckedService] = useState([]);
-  const [brands, setBrands] = useState([]);
+  const [client, setClient] = useState([]);
   const [reviewedBy, setreviewedBy] = useState([]);
+
   const token = getCookie("token");
 
   useEffect(() => {
@@ -31,12 +33,12 @@ const Reviews = ({ router }) => {
   }, [router]);
 
   const loadBrands = () => {
-    getAllBrands().then((data) => {
+    getAllUsers().then((data) => {
       // console.log("This are all the tools I m getting from the backend", data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
-        setBrands(data);
+        setClient(data);
       }
     });
   };
@@ -83,35 +85,35 @@ const Reviews = ({ router }) => {
     console.log("Storing all the check Items in a variable", choosenServices);
     setCheckedService(choosenServices); // storing all checked value in the state
   };
-  const showBrands = () => {
-    return brands.map((brand, i) => (
+  const showCustomers = () => {
+    return client.map((cust, i) => (
       <li key={i} className="list-unstyled">
         <input
-          onChange={() => handleBrandToggle(brand._id)}
+          onChange={() => handleCustomerToggle(cust._id)}
           type="checkbox"
           className="mr-2"
         />
         <label className="form-check-label">
-          <h5>{brand.brandName}</h5>
+          <div>{cust.customerRole ? <p>{cust.name}</p> : " "}</div>
         </label>
       </li>
     ));
   };
-  const handleBrandToggle = (bId) => {
+  const handleCustomerToggle = (cId) => {
     //clear the state incase of any error
     setValues({ ...values, error: "" });
-    const clickedBrand = reviewedBy.indexOf(bId);
+    const clickedCustomer = reviewedBy.indexOf(cId);
 
     //storing all the checked Values in a variable
-    const choosenBrands = [...reviewedBy];
+    const choosenCustomers = [...reviewedBy];
 
-    if (clickedBrand === -1) {
-      choosenBrands.push(bId);
+    if (clickedCustomer === -1) {
+      choosenCustomers.push(cId);
     } else {
-      choosenBrands.splice(reviewedBy, 1);
+      choosenCustomers.splice(reviewedBy, 1);
     }
-    console.log("Storing all the check Items in a variable", choosenBrands);
-    setreviewedBy(choosenBrands); // storing all checked value in the state
+    console.log("Storing all the check Items in a variable", choosenCustomers);
+    setreviewedBy(choosenCustomers); // storing all checked value in the state
   };
   const onChange = (name) => (e) => {
     setValues({
@@ -209,14 +211,14 @@ const Reviews = ({ router }) => {
         </div>
 
         <div>
-          <h5>Select Brands</h5>
+          <h5>Select Customers</h5>
           <ul
             style={{
               maxHeight: "300px",
               overflowY: "scroll",
             }}
           >
-            {showBrands()}
+            {showCustomers()}
           </ul>
 
           <hr />

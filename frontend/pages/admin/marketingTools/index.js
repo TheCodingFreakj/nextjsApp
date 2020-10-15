@@ -2,22 +2,22 @@ import React from "react";
 import Link from "next/link";
 import Layout from "../../../components/Layout";
 import Admin from "../../../components/admin";
-import PriceForms from "../../../components/price/price";
+import MarketingTools from "../../../components/serviceCrud/marketingTools";
 
 //bring components
 
-const PricingDashboard = () => {
+const ToolsDashboard = () => {
   return (
     <Layout>
       <Admin>
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-12 pt-5 pb-5">
-              <h2>Add Pricings To the Service Packages</h2>
+              <h2>Manage Tools</h2>
             </div>
 
             <div className="col-md-12">
-              <PriceForms />
+              <MarketingTools />
             </div>
           </div>
         </div>
@@ -26,4 +26,4 @@ const PricingDashboard = () => {
   );
 };
 
-export default PricingDashboard;
+export default ToolsDashboard;

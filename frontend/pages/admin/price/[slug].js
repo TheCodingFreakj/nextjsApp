@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Layout from "../../../components/Layout";
 import Admin from "../../../components/admin";
-import PriceForms from "../../../components/price/price";
+import UpdatePriceForms from "../../../components/price/updatePrice";
 
 //bring components
 
@@ -10,14 +10,14 @@ const PricingDashboard = () => {
   return (
     <Layout>
       <Admin>
-        <div className="container-fluid">
+        <div className="container">
           <div className="row">
             <div className="col-md-12 pt-5 pb-5">
-              <h2>Add Pricings To the Service Packages</h2>
+              <h2>Update the Price Object </h2>
             </div>
 
             <div className="col-md-12">
-              <PriceForms />
+              <UpdatePriceForms />
             </div>
           </div>
         </div>
@@ -25,5 +25,4 @@ const PricingDashboard = () => {
     </Layout>
   );
 };
-
 export default PricingDashboard;

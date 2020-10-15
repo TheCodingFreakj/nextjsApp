@@ -12,8 +12,14 @@ const reviewsSchema = new mongoose.Schema(
       min: 1,
       max: 5,
     },
-    reviewedBy: [{ type: ObjectId, ref: "Brand" }], //name of the person who gave the review
-    client: [{ type: ObjectId, ref: "User" }],
+    //name of the person who gave the review
+    reviewedBy: [
+      {
+        type: ObjectId,
+        ref: "User",
+        required: [true, "User must be mentioned"],
+      },
+    ],
     //populate the title,slug //This is parent referencing//Each review know what service it belongs to
     checkedService: [
       {

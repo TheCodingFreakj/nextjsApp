@@ -205,6 +205,10 @@ const CreateServices = ({ router }) => {
             <option value="corporateWebsites">Corporate Websites</option>
             <option value="personalBlogs">Personal Blogs</option>
             <option value="mobileApps">Mobile Apps</option>
+            <option value="emailMarketing">Email Marketing</option>
+            <option value="facebookMarketing">Facebook Marketing</option>
+            <option value="customWebsite">Custom Website Design </option>
+            <option value="wordPressWebsite">Wordpress Website </option>
           </select>
         </div>
 

@@ -67,6 +67,69 @@ exports.getServicePriceLists = async (req, res) => {
   }
 };
 
+exports.SinglePrice = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    await Price.find({ slug }).exec((err, price) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      res.json(price);
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.removePrice = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    await Price.findOneAndRemove({ slug }).exec((err, price) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      res.json({ price, message: "price Deleted Successfully" });
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.updatePriceObject = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  const { serviceName, realServicePrice, servicedDiscountPrice } = req.body;
+
+  const updatePriceObject = {};
+  if (serviceName) updatePriceObject.serviceName = serviceName;
+  if (realServicePrice) updatePriceObject.realServicePrice = realServicePrice;
+  if (servicedDiscountPrice)
+    updatePriceObject.servicedDiscountPrice = servicedDiscountPrice;
+
+  try {
+    Price.findOneAndUpdate(
+      { slug },
+      { $set: updatePriceObject },
+      {
+        new: true,
+        select: "serviceName realServicePrice servicedDiscountPrice",
+      }
+    ).exec((err, updatedPrice) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      res.json(updatedPrice);
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 //updates only the updatesServiceLists
 
 exports.updateServicePriceLists = async (req, res) => {
@@ -253,6 +316,54 @@ exports.getComboPackagePrices = async (req, res) => {
       }
 
       res.json(comboPricePackages);
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.SinglePackagePrice = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    await PackagePrice.find({ slug }).exec((err, price) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      res.json(price);
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.updatePackagePriceObject = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  const { packageName, realPackagePrice, packageDiscountPrice } = req.body;
+
+  const updatePackagePriceObject = {};
+  if (packageName) updatePackagePriceObject.packageName = packageName;
+  if (realPackagePrice)
+    updatePackagePriceObject.realPackagePrice = realPackagePrice;
+  if (packageDiscountPrice)
+    updatePackagePriceObject.packageDiscountPrice = packageDiscountPrice;
+
+  try {
+    PackagePrice.findOneAndUpdate(
+      { slug },
+      { $set: updatePackagePriceObject },
+      {
+        new: true,
+        select: "packageName realPackagePrice packageDiscountPrice",
+      }
+    ).exec((err, updatedPackagePrice) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      res.json(updatedPackagePrice);
     });
   } catch (error) {
     console.error(error.message);

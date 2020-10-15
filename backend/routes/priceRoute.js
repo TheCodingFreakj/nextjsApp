@@ -15,10 +15,15 @@ const tokenAuth = require("../middlewares/tokenAuth");
 //bring Controller
 const {
   createPriceObject,
+  updatePriceObject,
+  SinglePrice,
+  removePrice,
   createComboPackage,
   getComboPackages,
   createComboPackagePrice,
+  updatePackagePriceObject,
   getComboPackagePrices,
+  SinglePackagePrice,
   removeComboPackage,
   getServicePriceLists,
   updateServicePriceLists,
@@ -36,12 +41,17 @@ router.post(
 );
 
 router.get("/get-price", getServicePriceLists);
+router.get("/price/:slug", SinglePrice);
 router.put(
   "/update-price/:slug",
   tokenAuth,
   adminMiddleware,
   updateServicePriceLists
 );
+
+router.delete("/price/:slug", tokenAuth, adminMiddleware, removePrice);
+
+router.put("/price/:slug", tokenAuth, adminMiddleware, updatePriceObject);
 
 /////////////////////All About ComboPackages//////////////////////
 router.post(
@@ -54,7 +64,8 @@ router.post(
 );
 
 router.post("/all-combo-Packages", getComboPackages);
-
+//router.put("/comboPackage/:slug", updateComboPackage);
+//router.get("/comboPackage/:slug", SinglePackage);
 router.delete(
   "/comboPackage/:slug",
   tokenAuth,
@@ -73,7 +84,14 @@ router.post(
 );
 
 router.get("/get-combo-price", getComboPackagePrices);
-
+router.get("/combo-package-price/:slug", SinglePackagePrice);
+router.put(
+  "/combo-package-price/:slug",
+  tokenAuth,
+  adminMiddleware,
+  updatePackagePriceObject
+);
+// router.delete("/combo-package-price/:slug", tokenAuth, adminMiddleware, removePackagePrice);
 router.put(
   "/update-package-price/:slug",
   tokenAuth,

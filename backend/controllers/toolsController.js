@@ -1,11 +1,12 @@
 const Tools = require("../models/marketingTools");
+const ToolPrice = require("../models/toolPrice");
 const slugify = require("slugify");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 exports.createTools = async (req, res) => {
   //expecting the newTool fields from the req.body
 
-  const { tool, price, summary, serviceCharges } = req.body; //This is the thing you get from the body
+  const { tool, totalPrice, summary, discountPrice } = req.body; //This is the thing you get from the body
 
   //console.log(req.body);
 
@@ -14,8 +15,8 @@ exports.createTools = async (req, res) => {
     newTool.tool = tool;
     newTool.summary = summary;
     newTool.slug = slugify(tool).toLowerCase();
-    newTool.totalPrice = price;
-    newTool.discountPrice = serviceCharges;
+    newTool.totalPrice = totalPrice;
+    newTool.discountPrice = discountPrice;
     //How to data which is transformed
 
     await newTool.save(async (err, data) => {
@@ -26,6 +27,39 @@ exports.createTools = async (req, res) => {
         });
       //change the price add service charges and then send
       res.json(data);
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+//get all tools
+exports.updateTool = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  const { totalPrice, summary, discountPrice } = req.body;
+
+  const updateToolObject = {};
+
+  if (summary) updateToolObject.summary = summary;
+  if (totalPrice) updateToolObject.totalPrice = totalPrice;
+
+  if (discountPrice) updateToolObject.discountPrice = discountPrice;
+
+  try {
+    Tools.findOneAndUpdate(
+      { slug },
+      { $set: updateToolObject },
+      {
+        new: true,
+        select: "summary totalPrice discountPrice",
+      }
+    ).exec((err, updatedTool) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      res.json(updatedTool);
     });
   } catch (err) {
     console.error(err.message);
@@ -48,18 +82,12 @@ exports.getAllTools = async (req, res) => {
   }
 };
 
-//getting the price from the admin
-//((send this calculated price from the admin section)totalPrice = MRP + your Margin)
-//GIve a discount if the client demands
-//use this route to calculate the clientPrice for tool
-//Use the result of this calculation in the combopackage price
-
 exports.updateToolClientPrice = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   try {
     Tools.findOneAndUpdate({ slug }, { new: true }).exec(
       async (err, toolPrice) => {
-        //console.log("The oldPricePackage is", oldPricePackage);
+        //console.log("The toolPrice is", toolPrice);
 
         if (err) {
           return res.status(400).json({
@@ -102,35 +130,6 @@ exports.updateToolClientPrice = async (req, res) => {
         res.json(newToolPrice);
       }
     );
-    // //getting the tool price after discount
-    // await Tools.aggregate([
-    //   {
-    //     $project: {
-    //       //_id: 1, //excludes id
-    //       tool: 1, // I am retrieving the tools field. choose field: 1 whichever you want
-
-    //       clientPrice: {
-    //         $add: [
-    //           "$totalPrice",
-    //           {
-    //             $multiply: [
-    //               "$totalPrice",
-    //               { $divide: ["$discountPrice", 100] },
-    //             ],
-    //           },
-    //         ],
-    //       },
-    //     },
-    //   },
-    // ]).exec((err, results) => {
-    //   if (err) {
-    //     return res.status(400).json({
-    //       error: errorHandler(err),
-    //     });
-    //   } else {
-    //     res.json(results); //tool, clientPrice
-    //   }
-    // });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
@@ -156,52 +155,3 @@ exports.removeTool = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-
-// //update all tools // to be done
-// exports.updateTool = async (req, res) => {
-//   console.log(req.params.slug);
-//   // console.log(req.query);
-//   const toolSlug = req.params.slug.toLowerCase();
-//   // console.log(id);
-//   try {
-
-//     let tool = await Tools.findOne( { toolSlug });
-
-//       if (tool) {
-//         //update
-
-//         tool = await Profile.findOneAndUpdate(
-//           { toolSlug },
-//           { $set: profileFields },
-//           { new: true, upsert: true }
-//         );
-//         return res.json(profile);
-//       }
-
-//       await profile.save();
-//       return res.json(profile);
-
-//     await Tools.findOneAndUpdate(
-//       { toolSlug },
-//       { new: true, upsert: true }
-//     );
-
-//     return res.json(profile);
-
-//     // .exec(
-//     //   (err, data) => {
-//     //     console.log(data);
-//     //     if (err) {
-//     //       return res.status(400).json({ errors: errorHandler(err) });
-//     //     }
-//     //     return res.json({
-//     //       data,
-//     //       message: "Tool Updated Successfully",
-//     //     });
-//     //   }
-//     // );
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send("Server error");
-//   }
-// };

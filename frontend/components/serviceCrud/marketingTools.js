@@ -12,10 +12,11 @@ import {
 const MarketingTools = () => {
   const [values, setValues] = useState({
     name: "",
-    price: "",
+    totalPrice: "",
+    discountPrice: "",
     tool: "",
     summary: "",
-    serviceCharges: "",
+
     toolArrayToShow: [],
     priceArrayToshow: [],
     error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
@@ -27,10 +28,10 @@ const MarketingTools = () => {
 
   const {
     name,
-    price,
     tool,
     summary,
-    serviceCharges,
+    totalPrice,
+    discountPrice,
     success,
     error,
     loading,
@@ -76,9 +77,9 @@ const MarketingTools = () => {
 
     const newToolInfo = {
       tool,
-      price,
+      totalPrice,
+      discountPrice,
       summary,
-      serviceCharges,
     };
 
     //call the frontend action where you write frontend logic to create tools category
@@ -191,23 +192,22 @@ const MarketingTools = () => {
             type="text"
             className="form-control"
             placeholder="Give the Price"
-            value={price}
-            onChange={onChange("price")}
+            value={totalPrice}
+            onChange={onChange("totalPrice")}
             required
           />
         </div>
-        <div
-          className="form-group"
-          value={serviceCharges}
-          onChange={onChange("serviceCharges")}
-        >
-          <select name="status" className="form-control" type="text">
-            <option value="0">* Select Service Charges</option>
-            <option value="4.0">4.0</option>
-            <option value="4.1">4.1</option>
-            <option value="4.2">4.2</option>
-            <option value="4.3">4.3</option>
-          </select>
+
+        <div className="form-group">
+          <label className="text-muted">Price Name </label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Give the Service Charges"
+            value={discountPrice}
+            onChange={onChange("discountPrice")}
+            required
+          />
         </div>
 
         <button type="submit" className="btn btn-success">

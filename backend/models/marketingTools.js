@@ -26,8 +26,18 @@ const toolsSchema = new mongoose.Schema(
     discountPrice: {
       type: Number,
     },
+
     clientPrice: {
       type: Number,
+      default: 0,
+    },
+
+    // clientPrice: [{ type: ObjectId, ref: "ToolPrice", required: true }],
+
+    createdAt: {
+      type: Date,
+      required: true,
+      default: Date.now,
     },
   },
   { timestamps: true }

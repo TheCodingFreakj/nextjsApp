@@ -59,7 +59,7 @@ exports.Services = async (req, res) => {
       }
       if (!discountedPrice || !discountedPrice.length) {
         return res.status(400).json({
-          error: "summary is required",
+          error: "discountedPrice is required",
         });
       }
 

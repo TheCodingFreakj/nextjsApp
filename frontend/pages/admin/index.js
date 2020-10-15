@@ -65,7 +65,7 @@ const AdminIndex = () => {
               </ul>
             </div>
 
-            <div className="col-md-8">
+            <div className="col-md-3">
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/services">
@@ -75,7 +75,7 @@ const AdminIndex = () => {
               </ul>
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-3">
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/services/crud/service">
@@ -85,27 +85,27 @@ const AdminIndex = () => {
               </ul>
             </div>
 
-            <div className="col-md-8">
+            <div className="col-md-3">
               <ul className="list-group">
                 <li className="list-group-item">
-                  <Link href="/admin/crud/toolsBrands">
-                    <a>Create Marketing Tools Options</a>
+                  <Link href="/admin/price">
+                    <a>Service Price Updates</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-3">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/price/crud/price">
+                    <a>Update/Delete Service Price</a>
                   </Link>
                 </li>
               </ul>
             </div>
 
             <div className="col-md-4">
-              <ul className="list-group">
-                <li className="list-group-item">
-                  <Link href="/admin/reviews">
-                    <a>Create Reviews</a>
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="col-md-8">
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/crud/packages">
@@ -128,8 +128,48 @@ const AdminIndex = () => {
             <div className="col-md-4">
               <ul className="list-group">
                 <li className="list-group-item">
-                  <Link href="/admin/price">
-                    <a>Price Updates</a>
+                  <Link href="/admin/crud/packages/pack">
+                    <a>Update/Delete CombopackagePrice</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-6">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/marketingTools">
+                    <a>Create Marketing Tools Options</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-6">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/marketingTools">
+                    <a>Update Marketing Tools Options</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-6">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/portfolio">
+                    <a>Portfolios</a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-md-6">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/portfolio">
+                    <a>Update Portfolios</a>
                   </Link>
                 </li>
               </ul>
@@ -138,8 +178,8 @@ const AdminIndex = () => {
             <div className="col-md-4">
               <ul className="list-group">
                 <li className="list-group-item">
-                  <Link href="/admin/portfolio">
-                    <a>Portfolios</a>
+                  <Link href="/admin/reviews">
+                    <a>Create Reviews</a>
                   </Link>
                 </li>
               </ul>

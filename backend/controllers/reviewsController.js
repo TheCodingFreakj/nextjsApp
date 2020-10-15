@@ -96,10 +96,9 @@ exports.ReviewsList = async (req, res) => {
   try {
     await Review.find({})
       //.populate({ path: "discountedServiceCharges", model: "Price" })
-      .populate("reviewedBy", "_id brandName slug")
       .populate("client", "_id name ")
       .populate("checkedService", "_id title slug duration")
-      .select("_id review rating slug ")
+      .select("_id review rating  client slug ")
       .exec((err, reviews) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
