@@ -21,19 +21,19 @@ const { errorHandler } = require("../helpers/dbErrorHandler");
 //This is for storing service price
 exports.createPriceObject = async (req, res) => {
   const { serviceName, realServicePrice, servicedDiscountPrice } = req.body;
-  // console.log(req.body);
+  //console.log(req.body);
 
   const servicePriceFields = {};
   if (serviceName) servicePriceFields.serviceName = serviceName;
   if (realServicePrice) servicePriceFields.realServicePrice = realServicePrice;
   if (servicedDiscountPrice)
-    servicedDiscountPrice.servicePriceFields = servicedDiscountPrice;
+    servicePriceFields.servicedDiscountPrice = servicedDiscountPrice;
 
-  // console.log(packagePriceFields);
+  //console.log(servicePriceFields);
   try {
     let price = await new Price(servicePriceFields);
     price.slug = slugify(price.serviceName.toString()).toLowerCase();
-    //console.log(packagePrice);
+    //console.log(price);
 
     if (price) {
       price = await Price.findOneAndUpdate(
@@ -405,7 +405,7 @@ exports.updatePackagePriceLists = async (req, res) => {
           },
         ]);
 
-        console.log("This is stats after update", stats);
+        //console.log("This is stats after update", stats);
 
         let calculatedPrice = "";
 

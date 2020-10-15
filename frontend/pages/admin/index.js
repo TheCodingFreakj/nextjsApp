@@ -19,7 +19,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/crud">
-                    <a>Create Category</a>
+                    <a className=" btn btn-small btn-success">
+                      Create Category
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -29,7 +31,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   {/* <Link href="/admin/crud"> */}
-                  <a href="/admin/crud">Create Tags</a>
+                  <a href="/admin/crud" className=" btn btn-small btn-success">
+                    Create Tags
+                  </a>
                   {/* </Link> */}
                 </li>
               </ul>
@@ -39,7 +43,7 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/crud/blogs">
-                    <a>Create Blogs</a>
+                    <a className=" btn btn-small btn-success">Create Blogs</a>
                   </Link>
                 </li>
               </ul>
@@ -49,7 +53,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/crud/blogs/blog">
-                    <a>Update/Delete Blogs</a>
+                    <a className=" btn btn-small btn-success">
+                      Update/Delete Blogs
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -59,7 +65,7 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/adminUpdate">
-                    <a>Update Profile</a>
+                    <a className=" btn btn-small btn-success">Update Profile</a>
                   </Link>
                 </li>
               </ul>
@@ -69,7 +75,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/services">
-                    <a>Create Services</a>
+                    <a className=" btn btn-small btn-success">
+                      Create Services
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -79,7 +87,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/services/crud/service">
-                    <a>Update/Delete Services</a>
+                    <a className=" btn btn-small btn-success">
+                      Update/Delete Services
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -89,7 +99,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/price">
-                    <a>Service Price Updates</a>
+                    <a className=" btn btn-small btn-success">
+                      Service Price Updates
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -99,7 +111,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/price/crud/price">
-                    <a>Update/Delete Service Price</a>
+                    <a className=" btn btn-small btn-success">
+                      Update/Delete Service Price
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -109,7 +123,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/crud/packages">
-                    <a>Create Combo-Packages</a>
+                    <a className=" btn btn-small btn-success">
+                      Create Combo-Packages
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -119,7 +135,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="">
-                    <a>Update/Delete Combo-Packages</a>
+                    <a className=" btn btn-small btn-success">
+                      Update/Delete Combo-Packages
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -129,7 +147,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/crud/packages/pack">
-                    <a>Update/Delete CombopackagePrice</a>
+                    <a className=" btn btn-small btn-success">
+                      Update/Delete CombopackagePrice
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -139,7 +159,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/marketingTools">
-                    <a>Create Marketing Tools Options</a>
+                    <a className=" btn btn-small btn-success">
+                      Create Marketing Tools Options
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -148,8 +170,10 @@ const AdminIndex = () => {
             <div className="col-md-6">
               <ul className="list-group">
                 <li className="list-group-item">
-                  <Link href="/admin/marketingTools">
-                    <a>Update Marketing Tools Options</a>
+                  <Link href="/admin/marketingTools/crud/tool">
+                    <a className=" btn btn-small btn-success">
+                      Update Marketing Tools Options
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -159,7 +183,7 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/portfolio">
-                    <a>Portfolios</a>
+                    <a className=" btn btn-small btn-success">Portfolios</a>
                   </Link>
                 </li>
               </ul>
@@ -169,7 +193,9 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/portfolio">
-                    <a>Update Portfolios</a>
+                    <a className=" btn btn-small btn-success">
+                      Update Portfolios
+                    </a>
                   </Link>
                 </li>
               </ul>
@@ -179,7 +205,7 @@ const AdminIndex = () => {
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/reviews">
-                    <a>Create Reviews</a>
+                    <a className=" btn btn-small btn-success">Create Reviews</a>
                   </Link>
                 </li>
               </ul>

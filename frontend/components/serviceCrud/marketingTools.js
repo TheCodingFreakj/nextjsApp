@@ -16,7 +16,6 @@ const MarketingTools = () => {
     discountPrice: "",
     tool: "",
     summary: "",
-
     toolArrayToShow: [],
     priceArrayToshow: [],
     error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend

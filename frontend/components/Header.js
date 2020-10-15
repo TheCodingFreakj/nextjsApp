@@ -167,8 +167,8 @@ const Header = () => {
             </React.Fragment>
 
             {renderHeader(userRole())}
-            {console.log(userRole())}
-            {console.log(isAuth())}
+            {/* {console.log(userRole())}
+            {console.log(isAuth())} */}
 
             {/* <NavItem className="ml-5 text-light font-weight-bold  h5">
               <Link href="/user/blogs">

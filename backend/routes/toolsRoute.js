@@ -14,6 +14,7 @@ const {
   createTools,
   updateToolClientPrice,
   getAllTools,
+  SingleTool,
   removeTool,
   updateTool,
 } = require("../controllers/toolsController");
@@ -30,7 +31,7 @@ router.post(
 router.get("/getTools", getAllTools);
 router.put("/tool/:slug", tokenAuth, adminMiddleware, updateTool); //update price as well
 //call this route when displaying toolprice
-
+router.get("/tool/:slug", SingleTool);
 router.delete("/tool/:slug", tokenAuth, adminMiddleware, removeTool);
 
 //////////////////////All About ToolPrice /////////////////////////

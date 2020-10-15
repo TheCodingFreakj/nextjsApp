@@ -22,6 +22,7 @@ const priceSchema = new mongoose.Schema(
     },
     servicedDiscountPrice: {
       type: Number,
+      default: 0,
     },
 
     discountedServiceCharges: {

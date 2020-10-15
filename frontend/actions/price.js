@@ -2,7 +2,7 @@ import axios from "axios";
 import { API } from "../config";
 
 export const createNewPrice = async (newPriceInfo, token) => {
-  console.log("This is newPrice object", newPriceInfo);
+  //console.log("This is newPrice object", newPriceInfo);
   try {
     const config = {
       method: "POST",
@@ -20,7 +20,7 @@ export const createNewPrice = async (newPriceInfo, token) => {
     };
 
     const body = JSON.stringify(newPriceInfo);
-    console.log("This is the body send", body);
+    //console.log("This is the body send", body);
     //Fine;
 
     const response = await axios.post(`${API}/api/price`, body, config); //handing the backedn register user

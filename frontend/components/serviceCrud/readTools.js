@@ -2,33 +2,33 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
-import { getComboPackages, removePackage } from "../../actions/comboPackage";
+import { getAllTools, removeSingleTool } from "../../actions/tools";
 
-const ReadPackagePriceForms = () => {
-  const [packages, setPackages] = useState([]);
+const ReadTools = () => {
+  const [tools, setTools] = useState([]);
   const [successDeleteMessage, setSuccessDeleteMessage] = useState("");
   const token = getCookie("token");
   useEffect(() => {
-    loadPackages();
+    loadTools();
   }, []);
 
-  const loadPackages = () => {
-    getComboPackages().then((data) => {
+  const loadTools = () => {
+    getAllTools().then((data) => {
       //console.log(data);
       if (data.error) {
         console.log(data.error);
       } else {
-        setPackages(data);
+        setTools(data);
       }
     });
   };
-  const deletePackage = (slug) => {
-    removePackage(slug, token).then((data) => {
+  const deleteTool = (slug) => {
+    removeSingleTool(slug, token).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
         setSuccessDeleteMessage(data.message);
-        loadPackages(); //once we delete we need to load blog with page refresh
+        loadTools(); //once we delete we need to load blog with page refresh
       }
     });
   };
@@ -36,40 +36,35 @@ const ReadPackagePriceForms = () => {
   const deleteConfirm = (slug) => {
     let answer = window.confirm("Are you sure to delete the blog? ");
     if (answer) {
-      deletePackage(slug);
+      deleteTool(slug);
     }
   };
 
-  const showUpdateButton = (pack) => {
+  const showUpdateButton = (tool) => {
     return (
-      <Link href={`/admin/crud/packages/${pack.slug}`}>
+      <Link href={`/admin/marketingTools/${tool.slug}`}>
         <a className=" btn btn-small btn-success">Admin Update</a>
       </Link>
     );
   };
 
-  const showAllPackages = () => {
-    return packages.map((pack, i) => {
+  const showAllTools = () => {
+    return tools.map((tool, i) => {
       //console.log(pack);
-      const getCurrentPrice = (checkedPrice) => {
-        //console.log(checkedPrice);
-        return checkedPrice[0].discountedPackageCharges;
-      };
-      // console.log(service);
+
       return (
         <div key={i} className="pb-5">
-          <h3>{pack.title}</h3>
+          <h3>{tool.tool}</h3>
           <p className="mark">
-            {getCurrentPrice(pack.checkedPrice)}
             <button
               className="btn btn-small btn-danger"
-              onClick={() => deleteConfirm(pack.slug)}
+              onClick={() => deleteConfirm(tool.slug)}
             >
               Delete
             </button>
           </p>
 
-          {showUpdateButton(pack)}
+          {showUpdateButton(tool)}
         </div>
       );
     });
@@ -81,11 +76,11 @@ const ReadPackagePriceForms = () => {
           {successDeleteMessage && (
             <div className="alert alert-warning">{successDeleteMessage}</div>
           )}
-          {showAllPackages()}
+          {showAllTools()}
         </div>
       </div>
     </React.Fragment>
   );
 };
 
-export default ReadPackagePriceForms;
+export default ReadTools;

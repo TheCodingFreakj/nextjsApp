@@ -135,7 +135,7 @@ const CreateServices = ({ router }) => {
     } else {
       choosenPrices.splice(checkedPrice, 1);
     }
-    console.log("Storing all the check Items in a variable", choosenPrices);
+    //console.log("Storing all the check Items in a variable", choosenPrices);
     setCheckedPrice(choosenPrices); // storing all checked value in the state
 
     formData.set("discountedPrice", choosenPrices);
@@ -160,7 +160,7 @@ const CreateServices = ({ router }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     createServices(formData, token).then((data) => {
-      console.log("This is getting from backend", data);
+      //console.log("This is getting from backend", data);
 
       if (data.error) {
         setValues({ ...values, error: data.error });

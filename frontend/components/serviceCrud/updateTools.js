@@ -3,27 +3,18 @@ import Link from "next/link";
 import Router from "next/router";
 import { withRouter } from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
-import {
-  SinglePackagePrice,
-  updatePackagePriceObject,
-} from "../../actions/comboPackage";
+import { getSingleTool, updateToolPrice } from "../../actions/tools";
 
-const UpdatePackagePriceForms = ({ router }) => {
+const UpdateTools = ({ router }) => {
   const [priceValues, setPriceValues] = useState({
-    realPackagePrice: "",
-    packageDiscountPrice: "",
-    packageName: "",
+    summary: "",
+    totalPrice: "",
+    discountPrice: "",
     error: false,
     success: false,
   });
 
-  const {
-    realPackagePrice,
-    packageDiscountPrice,
-    packageName,
-    error,
-    success,
-  } = priceValues;
+  const { summary, totalPrice, discountPrice, success, error } = priceValues;
 
   useEffect(() => {
     initPrices();
@@ -33,17 +24,17 @@ const UpdatePackagePriceForms = ({ router }) => {
     //grab the slug from router props
 
     if (router.query.slug) {
-      SinglePackagePrice(router.query.slug).then((data) => {
+      getSingleTool(router.query.slug).then((data) => {
         //console.log(router.query.slug);
-        //console.log("This is single price data for the slug", data);
+        console.log("This is single price data for the slug", data);
         if (data.error) {
           setPriceValues({ ...priceValues, error: data[0].error });
         } else {
           setPriceValues({
             ...priceValues,
-            packageName: data[0].packageName,
-            realPackagePrice: data[0].realPackagePrice,
-            packageDiscountPrice: data[0].packageDiscountPrice,
+            summary: data[0].summary,
+            totalPrice: data[0].totalPrice,
+            discountPrice: data[0].discountPrice,
           }); //storing the initial price in the state
         }
       });
@@ -67,33 +58,30 @@ const UpdatePackagePriceForms = ({ router }) => {
 
     console.log("This is onSubmit");
     const formData = {
-      realPackagePrice,
-      packageDiscountPrice,
-      packageName,
+      summary,
+      totalPrice,
+      discountPrice,
     };
-    updatePackagePriceObject(formData, token, router.query.slug).then(
-      (data) => {
-        console.log("This is getting from backend", data);
-        if (data.error) {
-          setPriceValues({
-            ...priceValues,
-            success: false,
-            error: data.error,
-          });
-        } else {
-          setPriceValues({
-            ...priceValues,
-
-            realPackagePrice: "",
-            packageDiscountPrice: "",
-            packageName: "",
-            error: "",
-            success: `A new service :"${data.packageName}" is created `,
-          });
-          Router.replace(`/admin`);
-        }
+    updateToolPrice(formData, token, router.query.slug).then((data) => {
+      console.log("This is getting from backend", data);
+      if (data.error) {
+        setPriceValues({
+          ...priceValues,
+          success: false,
+          error: data.error,
+        });
+      } else {
+        setPriceValues({
+          ...priceValues,
+          summary: "",
+          totalPrice: "",
+          discountPrice: "",
+          error: "",
+          success: `A new tool is created `,
+        });
+        Router.replace(`/admin`);
       }
-    );
+    });
   };
 
   const showError = () => (
@@ -113,7 +101,8 @@ const UpdatePackagePriceForms = ({ router }) => {
       {success}
     </div>
   );
-  const updatePackagePricingForm = () => {
+
+  const updateToolPricingForm = () => {
     return (
       <form onSubmit={(e) => editPrice(e)}>
         <div className="form-group">
@@ -121,9 +110,9 @@ const UpdatePackagePriceForms = ({ router }) => {
           <input
             type="text"
             className="form-control"
-            placeholder="realPackagePrice"
-            onChange={onChange("realPackagePrice")}
-            value={realPackagePrice}
+            placeholder="totalPrice"
+            onChange={onChange("totalPrice")}
+            value={totalPrice}
             required
           />
         </div>
@@ -133,20 +122,20 @@ const UpdatePackagePriceForms = ({ router }) => {
           <input
             type="text"
             className="form-control"
-            placeholder="packageDiscountPrice"
-            onChange={onChange("packageDiscountPrice")}
-            value={packageDiscountPrice}
+            placeholder="discountPrice"
+            onChange={onChange("discountPrice")}
+            value={discountPrice}
             required
           />
         </div>
         <div className="form-group">
-          <label className="text-muted">Package Name </label>
+          <label className="text-muted">Summary </label>
           <input
             type="text"
             className="form-control"
-            placeholder="packageName"
-            onChange={onChange("packageName")}
-            value={packageName}
+            placeholder="summary"
+            onChange={onChange("summary")}
+            value={summary}
             required
           />
         </div>
@@ -163,7 +152,7 @@ const UpdatePackagePriceForms = ({ router }) => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-6 pt-5 pb-5">
-            {updatePackagePricingForm()}
+            {updateToolPricingForm()}
 
             {JSON.stringify(priceValues)}
             <div className="pb-5">
@@ -177,4 +166,4 @@ const UpdatePackagePriceForms = ({ router }) => {
   );
 };
 
-export default withRouter(UpdatePackagePriceForms);
+export default withRouter(UpdateTools);

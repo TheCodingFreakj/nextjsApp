@@ -12,8 +12,6 @@ const PriceForms = () => {
     serviceName: "",
     realServicePrice: "",
     servicedDiscountPrice: "",
-    discountedServiceCharges: "",
-    formData: "",
     serviceError: false,
     serviceSuccess: false,
     serviceLoading: false,
@@ -23,9 +21,7 @@ const PriceForms = () => {
   const {
     serviceName,
     realServicePrice,
-    formData,
     servicedDiscountPrice,
-    discountedServiceCharges,
     serviceError,
     serviceSuccess,
     serviceLoading,
@@ -41,9 +37,9 @@ const PriceForms = () => {
   const token = getCookie("token");
 
   const onChange = (name) => (e) => {
-    // const value = e.target.value;
+    const value = e.target.value;
     // console.log(value);
-    setPriceValues({
+    setServiceValues({
       ...serviceValues,
       [name]: value, //keping the target values in state
       serviceError: false,
@@ -60,7 +56,7 @@ const PriceForms = () => {
       servicedDiscountPrice,
     };
     createNewPrice(formData, token).then((data) => {
-      console.log("This is getting from backend", data);
+      //console.log("This is getting from backend", data);
       if (data.error) {
         setServiceValues({
           ...serviceValues,
@@ -93,7 +89,7 @@ const PriceForms = () => {
             type="text"
             className="form-control"
             name="serviceName"
-            value={serviceName || ""}
+            value={serviceName}
             onChange={onChange("serviceName")}
             required
           />
@@ -107,7 +103,7 @@ const PriceForms = () => {
             type="number"
             className="form-control"
             name="realServicePrice"
-            value={realServicePrice || ""} // This value should be coming from the state
+            value={realServicePrice} // This value should be coming from the state
             onChange={onChange("realServicePrice")} //setFormData
             required
           />
@@ -121,7 +117,7 @@ const PriceForms = () => {
             type="number"
             className="form-control"
             name="servicedDiscountPrice"
-            value={servicedDiscountPrice || ""} // This value should be coming from the state
+            value={servicedDiscountPrice} // This value should be coming from the state
             onChange={onChange("servicedDiscountPrice")} //setFormData
             required
           />

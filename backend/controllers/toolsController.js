@@ -34,6 +34,22 @@ exports.createTools = async (req, res) => {
   }
 };
 
+exports.SingleTool = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    await Tools.find({ slug }).exec((err, tool) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      res.json(tool);
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 //get all tools
 exports.updateTool = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
