@@ -201,14 +201,14 @@ const CreateServices = ({ router }) => {
             <option value="singlePageWebsite">Single Page Website</option>
             <option value="ecommerceWebsites">Ecommerce Websites</option>
             <option value="Author Websites">Author Websites</option>
-            <option value="resturantWebsites">Resturant Websites</option>
-            <option value="corporateWebsites">Corporate Websites</option>
+            <option value="Resturant-Websites">Resturant-Websites</option>
+            <option value="Corporate-Websites">Corporate-Websites</option>
             <option value="personalBlogs">Personal Blogs</option>
             <option value="mobileApps">Mobile Apps</option>
             <option value="emailMarketing">Email Marketing</option>
             <option value="facebookMarketing">Facebook Marketing</option>
             <option value="customWebsite">Custom Website Design </option>
-            <option value="wordPressWebsite">Wordpress Website </option>
+            <option value="Wordpress-Website">Wordpress-Website </option>
           </select>
         </div>
 

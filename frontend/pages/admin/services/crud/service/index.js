@@ -17,7 +17,6 @@ const Services = () => {
             </div>
 
             <div className="col-md-12">
-              This is for updating and deleting service packages
               <ReadServices />
             </div>
           </div>

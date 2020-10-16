@@ -15,7 +15,7 @@ const ReadServices = ({ slug }) => {
   }, []);
 
   const loadServices = () => {
-    getAllServices(slug).then((data) => {
+    getAllServices().then((data) => {
       //console.log(data);
       if (data.error) {
         console.log(data.error);
@@ -44,7 +44,7 @@ const ReadServices = ({ slug }) => {
 
   const showUpdateButton = (service) => {
     return (
-      <Link href={`/admin/services/crud/${service.slug}`}>
+      <Link href={`/admin/services/${service.slug}`}>
         <a className=" btn btn-small btn-success">Admin Update</a>
       </Link>
     );

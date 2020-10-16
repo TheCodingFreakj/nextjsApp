@@ -3,7 +3,7 @@ import Link from "next/link";
 import Layout from "../../../../components/Layout";
 import Admin from "../../../../components/admin";
 import UpdatePackagePriceForms from "../../../../components/serviceCrud/updatePackagePrice";
-
+import UpdatePackages from "../../../../components/serviceCrud/updateCombopackages";
 //bring components
 
 const PackagePricingDashboard = () => {
@@ -16,7 +16,11 @@ const PackagePricingDashboard = () => {
               <h2>Update the Combo Package Price Object </h2>
             </div>
 
-            <div className="col-md-12">
+            <div className="col-md-6">
+              <UpdatePackages />
+            </div>
+
+            <div className="col-md-6">
               <UpdatePackagePriceForms />
             </div>
           </div>

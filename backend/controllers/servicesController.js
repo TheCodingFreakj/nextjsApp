@@ -4,6 +4,8 @@ const Portfolio = require("../models/portfolio");
 const Tools = require("../models/marketingTools");
 const ComboPackage = require("../models/comboPackages");
 const formidable = require("formidable");
+const _ = require("lodash");
+const { errorHandler } = require("../helpers/dbErrorHandler");
 
 const slugify = require("slugify");
 const fs = require("fs");
@@ -126,6 +128,97 @@ exports.Services = async (req, res) => {
               }
             });
           }
+        });
+      });
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.updateService = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  console.log("This is slug from the backend", slug);
+  try {
+    await Service.findOne({ slug }).exec((err, oldService) => {
+      console.log("this is old service", oldService);
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      let form = new formidable.IncomingForm();
+      form.keepExtensions = true; //if we have files in formData we want to keep the extensions
+      //convert formData into valid javascript obj
+      form.parse(req, (err, fields, files) => {
+        console.log("This is files", files);
+
+        console.log("This is fields", fields);
+        if (err) {
+          return res.status(400).json({
+            error: "Image could not upload",
+          });
+        }
+
+        let slugBeforeMerge = oldService.slug; // saving such that slug dont change
+
+        oldService = _.merge(oldService, fields); //merge new fields
+        oldService.slug = slugBeforeMerge;
+
+        //update the body cat tag desc
+
+        const {
+          summary,
+          process,
+          duration,
+          serviceName,
+          discountedPrice,
+          tools,
+        } = fields;
+
+        if (serviceName) {
+          oldService.title = serviceName;
+        }
+
+        if (summary) {
+          oldService.summary = summary;
+        }
+
+        if (process) {
+          oldService.process = process;
+        }
+
+        if (duration) {
+          oldService.duration = duration;
+        }
+
+        if (tools) {
+          oldService.tools = tools.split(",");
+        }
+
+        if (discountedPrice) {
+          oldService.discountedPrice = discountedPrice.split(",");
+        }
+
+        if (files.photo) {
+          if (files.photo.size > 10000000) {
+            return res.status(400).json({
+              error: "Image should be less then 1mb in size",
+            });
+          }
+
+          oldService.photo.data = fs.readFileSync(files.photo.path);
+          oldService.photo.contentType = files.photo.type;
+        }
+
+        oldService.save((err, result) => {
+          if (err) {
+            return res.status(400).json({
+              error: errorHandler(err),
+            });
+          }
+          res.json(result);
+          // result.photo = undefined;
         });
       });
     });

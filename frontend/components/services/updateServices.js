@@ -4,11 +4,14 @@ import Router from "next/router";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
 //get the service price
 import { withRouter } from "next/router";
+import { API } from "../../config";
 
 import { getAllServicePriceOptions } from "../../actions/price";
 import { getAllTools } from "../../actions/tools";
-import { updateService } from "../../actions/services";
+import { updateService, singleService } from "../../actions/services";
 const UpdateServices = ({ router }) => {
+  console.log("This is router object", router.query);
+  //console.log("This is router object", router);
   //getting all values from form inputs
   const [values, setValues] = useState({
     serviceName: "",
@@ -45,30 +48,76 @@ const UpdateServices = ({ router }) => {
   useEffect(() => {
     // const checkedData = new FormData();
     setValues({ ...values, formData: new FormData() });
-    showToolSideBar();
-    showPriceSideBar();
+    initService();
+    //make  the formdata availabk\le
+
+    initServicePrices();
+    initTools();
   }, [router]);
 
   const token = getCookie("token");
+  console.log(router.query.slug);
+  const initService = () => {
+    if (router.query.slug) {
+      singleService(router.query.slug).then((data) => {
+        console.log(data);
+        if (data.error) {
+          console.log(error);
+        } else {
+          setValues({
+            ...values,
+            serviceName: data.title,
+            duration: data.duration,
+            summary: data.summary,
 
-  const showToolSideBar = () => {
-    getAllTools().then((data) => {
-      // console.log("This are all the tools I m getting from the backend", data);
-      if (data.error) {
-        setValues({ ...values, error: data.error });
-      } else {
-        setTools(data);
-      }
-    });
+            process: data.process,
+          });
+
+          setdiscountPriceArray(data.discountedServiceCharges);
+          setToolsArray(data.tools);
+        }
+      });
+    }
   };
 
-  const showPriceSideBar = () => {
+  const setdiscountPriceArray = (servicePrices) => {
+    console.log(servicePrices);
+    let serviceArray = [];
+    servicePrices.map((price, i) => {
+      //console.log(price);
+      serviceArray.push(price._id);
+    });
+
+    setCheckedPrice(serviceArray);
+  };
+
+  const setToolsArray = (toolsData) => {
+    let toolsArray = [];
+    toolsData.map((tool, i) => {
+      toolsArray.push(tool._id);
+    });
+
+    setCheckedTool(toolsArray);
+  };
+
+  const initServicePrices = () => {
     getAllServicePriceOptions().then((data) => {
       //console.log("The price tag is", data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
         setDiscountedPrice(data);
+      }
+    });
+  };
+
+  const initTools = () => {
+    getAllTools().then((data) => {
+      //console.log("The price tag is", data);
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setTools(data);
       }
     });
   };
@@ -110,11 +159,21 @@ const UpdateServices = ({ router }) => {
     formData.set("tools", allTools);
   };
 
+  const findOutTools = (toolId) => {
+    const result = checkedTool.indexOf(toolId);
+    if (result !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const showTools = () => {
     return tools.map((tool, i) => (
       <li key={i} className="list-unstyled">
         <input
           onChange={() => handleToggle(tool._id)}
+          checked={findOutTools(tool._id)}
           type="checkbox"
           className="mr-2"
         />
@@ -142,11 +201,21 @@ const UpdateServices = ({ router }) => {
     formData.set("discountedPrice", choosenPrices);
   };
 
+  const findOutServicePrices = (priceId) => {
+    const result = checkedPrice.indexOf(priceId);
+    if (result !== -1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const showDiscountedPrice = () => {
     return discountedPrice.map((price, i) => (
       <li key={i} className="list-unstyled">
         <input
           onChange={() => handlePriceToggle(price._id)}
+          checked={findOutServicePrices(price._id)}
           type="checkbox"
           className="mr-2"
         />
@@ -158,9 +227,27 @@ const UpdateServices = ({ router }) => {
     ));
   };
 
-  const onSubmit = (e) => {
+  const showError = () => (
+    <div
+      className="alert alert-danger"
+      style={{ display: error ? "" : "none" }}
+    >
+      {error}
+    </div>
+  );
+
+  const showSuccess = () => (
+    <div
+      className="alert alert-success"
+      style={{ display: success ? "" : "none" }}
+    >
+      {success}
+    </div>
+  );
+
+  const editService = (e) => {
     e.preventDefault();
-    updateService(formData, token).then((data) => {
+    updateService(formData, router.query.slug, token).then((data) => {
       console.log("This is getting from backend", data);
 
       if (data.error) {
@@ -173,25 +260,27 @@ const UpdateServices = ({ router }) => {
           process: "",
           summary: "",
           error: "",
-          success: `A new service :"${data.serviceName}" is created `,
+          success: `A new service  is created `,
         });
+
+        Router.replace(`/admin`);
       }
     });
   };
 
-  const createServiceForm = () => {
+  const updateServiceForm = () => {
     return (
-      <form className="text-center" onSubmit={(e) => onSubmit(e)}>
+      <form className="text-center" onSubmit={(e) => editService(e)}>
         <label className="text-muted">
           <h3>Service Packages </h3>
         </label>
 
         <div className="form-group">
           <select
-            name="status"
+            name="serviceName"
             className="form-control"
             type="text"
-            value={serviceName}
+            value={serviceName || ""}
             onChange={onChange("serviceName")}
           >
             <option value="0">* Select Service Packages</option>
@@ -206,18 +295,22 @@ const UpdateServices = ({ router }) => {
             <option value="corporateWebsites">Corporate Websites</option>
             <option value="personalBlogs">Personal Blogs</option>
             <option value="mobileApps">Mobile Apps</option>
+            <option value="emailMarketing">Email Marketing</option>
+            <option value="facebookMarketing">Facebook Marketing</option>
+            <option value="customWebsite">Custom Website Design </option>
+            <option value="Wordpress-Website">Wordpress-Website </option>
           </select>
         </div>
 
         <label className="text-muted">
-          <h3>Brief Summarry</h3>
+          <h3>Brief Summary</h3>
         </label>
         <div className="form-group">
           <input
             type="text"
             className="form-control"
             name="summary"
-            value={summary} // This value should be coming from the state
+            value={summary || ""} // This value should be coming from the state
             onChange={onChange("summary")} //setFormData
             required
           />
@@ -232,7 +325,7 @@ const UpdateServices = ({ router }) => {
             type="text"
             className="form-control"
             placeholder="Input the Duration Here"
-            value={duration}
+            value={duration || ""}
             onChange={onChange("duration")}
             required
           />
@@ -247,14 +340,14 @@ const UpdateServices = ({ router }) => {
             type="text"
             className="form-control"
             placeholder="Input the Process Here"
-            value={process}
+            value={process || ""}
             onChange={onChange("process")}
             required
           />
         </div>
 
         <div>
-          <input type="submit" className="btn btn-success" value="Submit" />
+          <input type="submit" className="btn btn-success" value="Update" />
         </div>
       </form>
     );
@@ -264,14 +357,12 @@ const UpdateServices = ({ router }) => {
       <div className="container-fluid pb-5 ">
         <div className="row">
           <div className="col-md-8 pb-5">
-            {/* {showSuccess()}
-          {showError()} */}
             <div className="col-md-8 pb-5">
               <div>
                 <h5>Select Service and Discounted Price</h5>
                 <ul
                   style={{
-                    maxHeight: "300px",
+                    maxHeight: "400px",
                     overflowY: "scroll",
                   }}
                 >
@@ -281,9 +372,22 @@ const UpdateServices = ({ router }) => {
                 <hr />
               </div>
             </div>
-            {createServiceForm()}
+            {updateServiceForm()}
             {/* {JSON.stringify(discountedPrice)} */}
             {/* {JSON.stringify(allTools)} */}
+
+            {/* <div className="pb-5">
+              {showError()}
+              {showSuccess()}
+            </div> */}
+
+            {values && (
+              <img
+                src={`${API}/api/services/photo/${router.query.slug}`}
+                alt={serviceName}
+                style={{ width: "100%" }}
+              />
+            )}
           </div>
 
           <div className="col-md-2 pb-5">

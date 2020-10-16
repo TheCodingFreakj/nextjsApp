@@ -106,8 +106,14 @@ export const getAllServices = async () => {
   }
 };
 
-export const updateService = async (slug, token) => {
+export const updateService = async (formData, slug, token) => {
+  console.log("This is the blog sent for update", formData);
+  console.log(slug);
+  let updateEndPoint;
   try {
+    updateEndPoint = `${API}/api/services/${slug}`;
+
+    // console.log(updateBlogsEndPoint);
     const config = {
       method: "PUT",
       headers: {
@@ -119,9 +125,10 @@ export const updateService = async (slug, token) => {
       },
     };
 
-    const response = await axios.put(`${API}/api/services/${slug}`, config); //handing the backedn register user
+    const body = formData; //we are sending the formData to get posted on the backend
+    const response = await axios.put(`${updateEndPoint}`, body, config); //handing the backedn register user
     return response.data;
-    console.log(response.data); // this is the token from backend
+    console.log("This is updated response for blog", response.data); // this is the token from backend
     console.log(response.status);
     console.log(response.statusText);
     console.log(response.headers);

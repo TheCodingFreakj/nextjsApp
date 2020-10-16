@@ -20,6 +20,7 @@ const {
   removePrice,
   createComboPackage,
   getComboPackages,
+  updateComboPackage,
   createComboPackagePrice,
   updatePackagePriceObject,
   getComboPackagePrices,
@@ -64,7 +65,7 @@ router.post(
 );
 
 router.post("/all-combo-Packages", getComboPackages);
-//router.put("/comboPackage/:slug", updateComboPackage);
+router.put("/comboPackage/:slug", updateComboPackage);
 //router.get("/comboPackage/:slug", SinglePackage);
 router.delete(
   "/comboPackage/:slug",

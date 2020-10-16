@@ -25,6 +25,7 @@ const uniqueMessage = (error) => {
  * Get the error message from error object
  */
 exports.errorHandler = (error) => {
+  console.log("The error info from dbErrorHandler file", error);
   let message = "";
 
   if (error.code) {
@@ -45,3 +46,7 @@ exports.errorHandler = (error) => {
 
   return message;
 };
+
+//mongoose validation error
+//wrong id error
+//duplicate key slug already exists meaning the resource already exists

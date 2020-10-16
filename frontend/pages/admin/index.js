@@ -134,16 +134,16 @@ const AdminIndex = () => {
             <div className="col-md-4">
               <ul className="list-group">
                 <li className="list-group-item">
-                  <Link href="">
+                  <Link href="/admin/crud/packages/pack">
                     <a className=" btn btn-small btn-success">
-                      Update/Delete Combo-Packages
+                      Update/Delete Combo-Packages and CombopackagePrice
                     </a>
                   </Link>
                 </li>
               </ul>
             </div>
 
-            <div className="col-md-4">
+            {/* <div className="col-md-4">
               <ul className="list-group">
                 <li className="list-group-item">
                   <Link href="/admin/crud/packages/pack">
@@ -153,7 +153,7 @@ const AdminIndex = () => {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
             <div className="col-md-6">
               <ul className="list-group">

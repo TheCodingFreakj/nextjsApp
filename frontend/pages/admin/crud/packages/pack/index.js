@@ -3,6 +3,7 @@ import Link from "next/link";
 import Layout from "../../../../../components/Layout";
 import Admin from "../../../../../components/admin";
 import ReadPackagePrices from "../../../../../components/serviceCrud/readComboPackageprice";
+import ReadPackages from "../../../../../components/serviceCrud/readComboPackages";
 
 //bring components
 
@@ -16,7 +17,12 @@ const PackagePricingDashboard = () => {
               <h2>Manage ComboPackagePrice-Update and Delete </h2>
             </div>
 
-            <div className="col-md-12">
+            <div className="col-md-6">
+              This is for updating and deleting service prices
+              <ReadPackages />
+            </div>
+
+            <div className="col-md-6">
               This is for updating and deleting service prices
               <ReadPackagePrices />
             </div>

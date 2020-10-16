@@ -7,7 +7,8 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 //bring routes
-
+const globalErrorHandler = require("./helpers/errorHandler");
+const AppError = require("./helpers/AppError");
 const blogRoute = require("./routes/blogRoute");
 const authRoute = require("./routes/authRoute");
 const userProfileRoute = require("./routes/userProfileRoute");
@@ -63,6 +64,25 @@ app.use("/api", toolsRoute);
 app.use("/api", brandsRoute);
 app.use("/api", reviewRoute);
 app.use("/api", bookingRoute);
+
+//this executes if any of the above routes fails
+app.all("*", (req, res, next) => {
+  //creating instance of the class in AppError Class
+  next(new AppError(`can't find ${req.originalUrl} on the server!`, 400));
+});
+
+//handle operational errors
+//
+app.use(globalErrorHandler);
+
+process
+  .on("unhandledRejection", (reason, p) => {
+    console.error(reason, "Unhandled Rejection at Promise", p);
+  })
+  .on("uncaughtException", (err) => {
+    console.error(err, "Uncaught Exception thrown");
+    process.exit(1);
+  });
 
 //Ports
 const port = process.env.PORT || 8000;

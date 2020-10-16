@@ -233,6 +233,91 @@ exports.createComboPackage = async (req, res) => {
   }
 };
 
+exports.updateComboPackage = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    await Service.findOne({ slug }).exec((err, oldService) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
+
+      let form = new formidable.IncomingForm();
+      form.keepExtensions = true; //if we have files in formData we want to keep the extensions
+      //convert formData into valid javascript obj
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          return res.status(400).json({
+            error: "Image could not upload",
+          });
+        }
+
+        let slugBeforeMerge = oldService.slug; // saving such that slug dont change
+
+        oldService = _.merge(oldService, fields); //merge new fields
+        oldService.slug = slugBeforeMerge;
+
+        //update the body cat tag desc
+
+        const {
+          summary,
+          process,
+          duration,
+          serviceName,
+          discountedPrice,
+          tools,
+        } = fields;
+
+        if (serviceName) {
+          oldService.title = serviceName;
+        }
+
+        if (summary) {
+          oldService.summary = summary;
+        }
+
+        if (process) {
+          oldService.process = process;
+        }
+
+        if (duration) {
+          oldService.duration = duration;
+        }
+
+        if (tools) {
+          oldService.tools = tools.split(",");
+        }
+
+        if (discountedPrice) {
+          oldService.discountedPrice = discountedPrice.split(",");
+        }
+
+        if (files.photo) {
+          if (files.photo.size > 10000000) {
+            return res.status(400).json({
+              error: "Image should be less then 1mb in size",
+            });
+          }
+
+          oldService.photo.data = fs.readFileSync(files.photo.path);
+          oldService.photo.contentType = files.photo.type;
+        }
+
+        oldService.save((err, result) => {
+          if (err) {
+            return res.status(400).json({
+              error: errorHandler(err),
+            });
+          }
+
+          // result.photo = undefined;
+        });
+      });
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
 exports.getComboPackages = async (req, res) => {
   try {
     await ComboPackage.find({})
