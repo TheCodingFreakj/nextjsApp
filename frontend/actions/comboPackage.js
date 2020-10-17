@@ -2,7 +2,7 @@ import axios from "axios";
 import { API } from "../config";
 
 export const createNewComboPackage = async (comboPackage, token) => {
-  console.log("This is the data I am sending to server", comboPackage);
+  //console.log("This is the data I am sending to server", comboPackage);
 
   try {
     const config = {
@@ -46,14 +46,9 @@ export const createNewComboPackage = async (comboPackage, token) => {
 export const getComboPackages = async () => {
   try {
     const config = {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-      },
+      method: "GET",
     };
-    const response = await axios.post(`${API}/api/all-combo-Packages`, config); //handing the backedn register user
+    const response = await axios.get(`${API}/api/all-combo-Packages`, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);
@@ -76,8 +71,8 @@ export const getComboPackages = async () => {
 };
 
 export const updatePackage = async (formData, slug, token) => {
-  console.log("This is the blog sent for update", formData);
-  console.log(slug);
+  // console.log("This is the blog sent for update", formData);
+  // console.log(slug);
   let updateEndPoint;
   try {
     updateEndPoint = `${API}/api/comboPackage/${slug}`;
@@ -298,7 +293,7 @@ export const SinglePackagePrice = async (slug) => {
 };
 
 export const updatePackagePriceObject = async (formData, token, slug) => {
-  console.log("This is the blog sent for update", formData);
+  //console.log("This is the blog sent for update", formData);
   let updateEndPoint;
   try {
     updateEndPoint = `${API}/api/combo-package-price/${slug}`;

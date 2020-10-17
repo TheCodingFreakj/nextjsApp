@@ -71,6 +71,7 @@ const ReadPackages = ({ slug }) => {
       );
     });
   };
+
   return (
     <React.Fragment>
       <div className="row">

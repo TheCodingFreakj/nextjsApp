@@ -21,6 +21,7 @@ const {
   createComboPackage,
   getComboPackages,
   updateComboPackage,
+  SinglePackage,
   createComboPackagePrice,
   updatePackagePriceObject,
   getComboPackagePrices,
@@ -64,9 +65,9 @@ router.post(
   createComboPackage
 );
 
-router.post("/all-combo-Packages", getComboPackages);
+router.get("/all-combo-Packages", getComboPackages);
 router.put("/comboPackage/:slug", updateComboPackage);
-//router.get("/comboPackage/:slug", SinglePackage);
+router.get("/comboPackage/:slug", SinglePackage);
 router.delete(
   "/comboPackage/:slug",
   tokenAuth,
