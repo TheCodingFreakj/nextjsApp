@@ -46,8 +46,8 @@ router.get("/get-price", getServicePriceLists);
 router.get("/price/:slug", SinglePrice);
 router.put(
   "/update-price/:slug",
-  tokenAuth,
-  adminMiddleware,
+  //tokenAuth,
+  //adminMiddleware,
   updateServicePriceLists
 );
 

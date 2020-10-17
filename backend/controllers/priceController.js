@@ -115,14 +115,49 @@ exports.updatePriceObject = async (req, res) => {
       { $set: updatePriceObject },
       {
         new: true,
-        select: "serviceName realServicePrice servicedDiscountPrice",
+        select:
+          "serviceName realServicePrice servicedDiscountPrice slug discountedServiceCharges ",
       }
-    ).exec((err, updatedPrice) => {
+    ).exec(async (err, updatedPrice) => {
       if (err) {
         return res.status(400).json({ errors: errorHandler(err) });
       }
 
-      res.json(updatedPrice);
+      //res.json(updatedPrice);
+
+      const stats = await Price.aggregate([
+        {
+          $project: {
+            _id: "$_id",
+            serviceName: 1, // I am retrieving the tools field. choose field: 1 whichever you want
+            total: {
+              $subtract: [
+                "$realServicePrice",
+                {
+                  $multiply: [
+                    "$realServicePrice",
+                    { $divide: ["$servicedDiscountPrice", 100] },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      ]);
+
+      let calculatedPrice = "";
+
+      for (let i = 0; i < stats.length; i++) {
+        //console.log("This is calculated price", calculatedPrice);
+        if (stats[i].serviceName === updatedPrice.serviceName) {
+          calculatedPrice = stats[i].total;
+          updatedPrice.discountedServiceCharges = calculatedPrice;
+        }
+      }
+
+      const newPricePackage = await updatedPrice.save();
+      //console.log("This is new Package Price", newPricePackage);
+      res.json(newPricePackage);
     });
   } catch (error) {
     console.error(error.message);
@@ -265,93 +300,6 @@ exports.updateComboPackage = async (req, res) => {
   }
 };
 
-// exports.updateComboPackage = async (req, res) => {
-//   const slug = req.params.slug.toLowerCase();
-
-//   console.log(slug);
-//   try {
-//     await ComboPackage.findOne({ slug }).exec((err, oldPackage) => {
-//       console.log("The old package", oldPackage);
-//       if (err) {
-//         return res.status(400).json({ errors: errorHandler(err) });
-//       }
-
-//       let form = new formidable.IncomingForm();
-//       form.keepExtensions = true; //if we have files in formData we want to keep the extensions
-//       //convert formData into valid javascript obj
-//       form.parse(req, (err, fields, files) => {
-//         if (err) {
-//           return res.status(400).json({
-//             error: "Image could not upload",
-//           });
-//         }
-
-//         let slugBeforeMerge = oldPackage.slug; // saving such that slug dont change
-
-//         oldPackage = _.merge(oldPackage, fields); //merge new fields
-//         oldPackage.slug = slugBeforeMerge;
-
-//         //update the body cat tag desc
-
-//         const {
-//           comboPackageName,
-//           title,
-//           desc,
-//           bundleDescription,
-//           // checkedPrice,
-//         } = fields;
-
-//         console.log("This is fields", fields);
-
-//         if (comboPackageName) {
-//           oldPackage.comboPackageName = comboPackageName;
-//         }
-
-//         if (title) {
-//           oldPackage.title = title;
-//         }
-
-//         if (desc) {
-//           oldPackage.desc = desc;
-//         }
-
-//         if (bundleDescription) {
-//           oldPackage.bundleDescription = bundleDescription;
-//         }
-
-//         // if (checkedPrice) {
-//         //   oldPackage.checkedPrice = checkedPrice.split(",");
-//         // }
-
-//         if (files.photo) {
-//           if (files.photo.size > 10000000) {
-//             return res.status(400).json({
-//               error: "Image should be less then 1mb in size",
-//             });
-//           }
-
-//           oldPackage.photo.data = fs.readFileSync(files.photo.path);
-//           oldPackage.photo.contentType = files.photo.type;
-//         }
-
-//         oldPackage.save((err, result) => {
-//           if (err) {
-//             return res.status(400).json({
-//               error: errorHandler(err),
-//             });
-//           }
-
-//           console.log(result);
-//           return res.json(result);
-//           // result.photo = undefined;
-//         });
-//       });
-//     });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// };
 exports.getComboPackages = async (req, res) => {
   try {
     await ComboPackage.find({})
@@ -495,14 +443,51 @@ exports.updatePackagePriceObject = async (req, res) => {
       { $set: updatePackagePriceObject },
       {
         new: true,
-        select: "packageName realPackagePrice packageDiscountPrice",
+        select:
+          "packageName realPackagePrice packageDiscountPrice discountedPackageCharges",
       }
-    ).exec((err, updatedPackagePrice) => {
+    ).exec(async (err, updatedPackagePrice) => {
       if (err) {
         return res.status(400).json({ errors: errorHandler(err) });
       }
 
-      res.json(updatedPackagePrice);
+      //res.json(updatedPackagePrice);
+
+      const stats = await PackagePrice.aggregate([
+        {
+          $project: {
+            _id: "$_id",
+            packageName: 1, // I am retrieving the tools field. choose field: 1 whichever you want
+            total: {
+              $subtract: [
+                "$realPackagePrice",
+                {
+                  $multiply: [
+                    "$realPackagePrice",
+                    { $divide: ["$packageDiscountPrice", 100] },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      ]);
+
+      //console.log("This is stats after update", stats);
+
+      let calculatedPrice = "";
+
+      for (let i = 0; i < stats.length; i++) {
+        //console.log("This is calculated price", calculatedPrice);
+        if (stats[i].packageName === updatedPackagePrice.packageName) {
+          calculatedPrice = stats[i].total;
+          updatedPackagePrice.discountedPackageCharges = calculatedPrice;
+        }
+      }
+
+      const newPricePackage = await updatedPackagePrice.save();
+      //console.log("This is new Package Price", newPricePackage);
+      res.json(newPricePackage);
     });
   } catch (error) {
     console.error(error.message);

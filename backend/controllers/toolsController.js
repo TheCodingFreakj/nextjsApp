@@ -68,7 +68,7 @@ exports.updateTool = async (req, res) => {
       { $set: updateToolObject },
       {
         new: true,
-        select: "summary totalPrice discountPrice",
+        select: "summary totalPrice discountPrice clientPrice",
       }
     ).exec((err, updatedTool) => {
       if (err) {

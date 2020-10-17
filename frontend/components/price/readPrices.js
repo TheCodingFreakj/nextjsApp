@@ -50,6 +50,14 @@ const ReadPrices = ({ slug }) => {
     );
   };
 
+  const showDiscountPriceUpdate = (price) => {
+    return (
+      <Link href={`/admin/price/${price.slug}`}>
+        <a className=" btn btn-small btn-success"> Discount Price Update</a>
+      </Link>
+    );
+  };
+
   const showAllPrices = () => {
     return price.map((pri, i) => {
       //console.log(pri);
@@ -65,6 +73,8 @@ const ReadPrices = ({ slug }) => {
           </button>
 
           {showUpdateButton(pri)}
+
+          {showDiscountPriceUpdate(pri)}
         </div>
       );
     });

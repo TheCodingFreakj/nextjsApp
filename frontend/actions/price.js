@@ -105,6 +105,7 @@ export const getAllServicePriceOptions = async () => {
 
 export const updatePrice = async (formData, token, slug) => {
   console.log("This is the blog sent for update", formData);
+  console.log("Token at backend update main finction", token);
   let updateEndPoint;
   try {
     updateEndPoint = `${API}/api/price/${slug}`;

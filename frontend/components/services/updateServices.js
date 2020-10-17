@@ -284,20 +284,22 @@ const UpdateServices = ({ router }) => {
             onChange={onChange("serviceName")}
           >
             <option value="0">* Select Service Packages</option>
-            <option value="contentMarketing">Content Marketing</option>
+            <option value="Content-Marketing">Content-Marketing</option>
             <option value="seo">Seo</option>
-            <option value="funnelMarketing">Funnel Marketing</option>
-            <option value="StaticWebsites">Static Websites</option>
-            <option value="singlePageWebsite">Single Page Website</option>
-            <option value="ecommerceWebsites">Ecommerce Websites</option>
-            <option value="Author Websites">Author Websites</option>
-            <option value="resturantWebsites">Resturant Websites</option>
-            <option value="corporateWebsites">Corporate Websites</option>
-            <option value="personalBlogs">Personal Blogs</option>
-            <option value="mobileApps">Mobile Apps</option>
-            <option value="emailMarketing">Email Marketing</option>
-            <option value="facebookMarketing">Facebook Marketing</option>
-            <option value="customWebsite">Custom Website Design </option>
+            <option value="Funnel-Marketing">Funnel-Marketing</option>
+            <option value="Static-Websites">Static-Websites</option>
+            <option value="Single-Page-Website">Single-Page-Website</option>
+            <option value="Ecommerce-Websites">Ecommerce-Websites</option>
+            <option value="Author-Websites">Author-Websites</option>
+            <option value="Resturant-Websites">Resturant-Websites</option>
+            <option value="Corporate-Websites">Corporate-Websites</option>
+            <option value="Personal-Blogs">Personal-Blogs</option>
+            <option value="Mobile-Apps">Mobile-Apps</option>
+            <option value="Email-Marketing">Email-Marketing</option>
+            <option value="Facebook-Marketing">Facebook-Marketing</option>
+            <option value="Custom-Website-Design">
+              Custom-Website-Design{" "}
+            </option>
             <option value="Wordpress-Website">Wordpress-Website </option>
           </select>
         </div>
