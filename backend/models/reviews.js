@@ -47,7 +47,7 @@ const reviewsSchema = new mongoose.Schema(
 //We will use middleware to call this function each time a new review is added or updated or deletes
 
 reviewsSchema.statics.calAverageRatings = async function (serviceId) {
-  console.log(serviceId);
+  console.log("This is service on which the review is made", serviceId);
   const stats = await this.aggregate([
     { $match: { checkedService: serviceId } }, //matches the service iD
     {
@@ -58,7 +58,7 @@ reviewsSchema.statics.calAverageRatings = async function (serviceId) {
       },
     },
   ]);
-  //console.log("The stats are", stats);
+  console.log("The stats are", stats);
 
   await Service.findByIdAndUpdate(serviceId, {
     ratingsQuantity: stats[0].nRating,
@@ -66,7 +66,9 @@ reviewsSchema.statics.calAverageRatings = async function (serviceId) {
   });
 };
 
+//runs everytime I create a new review
 reviewsSchema.post("save", function (next) {
+  console.log("Checking the checked service", this.checkedService);
   this.constructor.calAverageRatings(this.checkedService);
 });
 

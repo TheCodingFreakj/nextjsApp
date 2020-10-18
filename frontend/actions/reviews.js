@@ -2,7 +2,7 @@ import axios from "axios";
 import { API } from "../config";
 
 export const createNewReview = async (dataForBackened, token) => {
-  console.log("This is the data I am sending to server", dataForBackened);
+  //console.log("This is the data I am sending to server", dataForBackened);
 
   try {
     const config = {

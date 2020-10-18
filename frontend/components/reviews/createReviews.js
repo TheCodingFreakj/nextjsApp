@@ -29,10 +29,10 @@ const Reviews = ({ router }) => {
     setValues({ ...values });
 
     loadServices();
-    loadBrands();
+    loadClients();
   }, [router]);
 
-  const loadBrands = () => {
+  const loadClients = () => {
     getAllUsers().then((data) => {
       // console.log("This are all the tools I m getting from the backend", data);
       if (data.error) {
@@ -45,7 +45,7 @@ const Reviews = ({ router }) => {
 
   const loadServices = () => {
     getAllServices().then((data) => {
-      // console.log("This are all the tools I m getting from the backend", data);
+      //console.log("This are all the tools I m getting from the backend", data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -82,7 +82,7 @@ const Reviews = ({ router }) => {
     } else {
       choosenServices.splice(checkedService, 1);
     }
-    console.log("Storing all the check Items in a variable", choosenServices);
+    //console.log("Storing all the check Items in a variable", choosenServices);
     setCheckedService(choosenServices); // storing all checked value in the state
   };
   const showCustomers = () => {
@@ -94,7 +94,13 @@ const Reviews = ({ router }) => {
           className="mr-2"
         />
         <label className="form-check-label">
-          <div>{cust.customerRole ? <p>{cust.name}</p> : " "}</div>
+          <div>
+            {cust.customerRole ? (
+              <p>{cust.name}</p>
+            ) : (
+              " This User is not a customer "
+            )}
+          </div>
         </label>
       </li>
     ));
@@ -112,7 +118,7 @@ const Reviews = ({ router }) => {
     } else {
       choosenCustomers.splice(reviewedBy, 1);
     }
-    console.log("Storing all the check Items in a variable", choosenCustomers);
+    //console.log("Storing all the check Items in a variable", choosenCustomers);
     setreviewedBy(choosenCustomers); // storing all checked value in the state
   };
   const onChange = (name) => (e) => {
@@ -198,6 +204,7 @@ const Reviews = ({ router }) => {
       <div className="container-fluid pb-5 ">
         <div>
           <h5>Select Service and Discounted Price</h5>
+          {/* {JSON.stringify(client)} */}
           <ul
             style={{
               maxHeight: "300px",
@@ -221,6 +228,7 @@ const Reviews = ({ router }) => {
             {showCustomers()}
           </ul>
 
+          {/* {JSON.stringify(services)} */}
           <hr />
         </div>
         {newReviewForm()}

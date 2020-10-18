@@ -1,9 +1,10 @@
 const Review = require("../models/reviews");
+const User = require("../models/user");
 const slugify = require("slugify");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 exports.CreateReviews = async (req, res) => {
-  //console.log(req.body);
+  console.log(req.body);
 
   try {
     const { review, rating, checkedService, reviewedBy } = req.body;
@@ -13,10 +14,10 @@ exports.CreateReviews = async (req, res) => {
     newReview.slug = slugify(review).toLowerCase();
 
     let ArrayOfreviewedBy = reviewedBy && reviewedBy.toString().split(",");
-    // console.log(arrayOfTools);
+    // console.log(ArrayOfreviewedBy);
     let ArrayOfcheckedService =
       checkedService && checkedService.toString().split(",");
-
+    console.log(ArrayOfcheckedService);
     newReview.save((err, result) => {
       if (err) {
         return res.status(400).json({
@@ -96,9 +97,9 @@ exports.ReviewsList = async (req, res) => {
   try {
     await Review.find({})
       //.populate({ path: "discountedServiceCharges", model: "Price" })
-      .populate("client", "_id name ")
+      .populate("reviewedBy", "_id name ")
       .populate("checkedService", "_id title slug duration")
-      .select("_id review rating  client slug ")
+      .select("_id review rating  reviewedBy slug ")
       .exec((err, reviews) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
@@ -112,7 +113,7 @@ exports.ReviewsList = async (req, res) => {
 };
 
 exports.SingleReview = async (req, res) => {
-  console.log(req.params.id);
+  // console.log(req.params.id);
   try {
     await Review.findById(req.params.id)
       .populate("client", "_id name ")

@@ -23,7 +23,7 @@ import SmallCard from "../../components/portfolio/serviceCard";
 
 const SingleService = ({ service, query }) => {
   //console.log(query);
-  //console.log(service.the_reviews);
+  //console.log(service);
 
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
