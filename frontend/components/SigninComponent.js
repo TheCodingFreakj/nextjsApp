@@ -54,7 +54,7 @@ const SigninComp = () => {
 
         authenticate(data, () => {
           //sending routes based on role during login
-          //console.log(data);
+          console.log("The data of logged in user", data);
           if (isAuth().role === 1) {
             Router.push("/admin");
           } else if (isAuth().role === 0) {

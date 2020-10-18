@@ -15,9 +15,9 @@ exports.CreateReviews = async (req, res) => {
 
     let ArrayOfreviewedBy = reviewedBy && reviewedBy.toString().split(",");
     // console.log(ArrayOfreviewedBy);
-    let ArrayOfcheckedService =
-      checkedService && checkedService.toString().split(",");
-    console.log(ArrayOfcheckedService);
+    let ArrayOfcheckedService = checkedService && checkedService;
+    console.log("Stage1: The array of checked service", ArrayOfcheckedService);
+
     newReview.save((err, result) => {
       if (err) {
         return res.status(400).json({
@@ -49,6 +49,7 @@ exports.CreateReviews = async (req, res) => {
                 error: errorHandler(err),
               });
             } else {
+              console.log(" Step 5: This is ultimate result", result);
               return res.json(result);
             }
           });
@@ -62,14 +63,28 @@ exports.CreateReviews = async (req, res) => {
 };
 
 exports.Reviews = async (req, res) => {
-  const reviewData = req.body;
+  console.log(req.body);
+  //const reviewData = req.body;
   try {
-    let review = await Review.create(reviewData);
-    res.status(201).json({
-      status: "success",
-      data: {
-        review: review,
-      },
+    const { review, rating, user, serviceId } = req.body;
+
+    let newReview = new Review();
+    newReview.review = review;
+    newReview.rating = rating;
+    newReview.slug = slugify(review).toLowerCase();
+    newReview.checkedService = serviceId;
+    newReview.reviewedBy = user;
+
+    newReview.save((err, result) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err),
+        });
+      }
+
+      // [CastError]
+
+      return res.json(result);
     });
   } catch (error) {
     console.error(error.message);
@@ -99,7 +114,7 @@ exports.ReviewsList = async (req, res) => {
       //.populate({ path: "discountedServiceCharges", model: "Price" })
       .populate("reviewedBy", "_id name ")
       .populate("checkedService", "_id title slug duration")
-      .select("_id review rating  reviewedBy slug ")
+      .select("_id review rating  reviewedBy  checkedService slug ")
       .exec((err, reviews) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
@@ -125,6 +140,31 @@ exports.SingleReview = async (req, res) => {
         }
         res.json(review);
       });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.getCurrentLoggedUser = async (req, res) => {
+  //we need a username
+  // console.log(
+  //   "This is params..This is the query object passed from getServerSideprops",
+  //   req.params
+  // );
+  let username = req.params.username;
+  // console.log("This is the username as per req params", username);
+
+  try {
+    await User.findOne({ username }).exec(async (err, userFromDb) => {
+      if (err || !userFromDb) {
+        return res.status(400).json({
+          error: "We did not find the user",
+        });
+      }
+
+      res.json(userFromDb);
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

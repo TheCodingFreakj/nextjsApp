@@ -20,10 +20,11 @@ import renderHTML from "react-render-html";
 import moment from "moment";
 
 import SmallCard from "../../components/portfolio/serviceCard";
+import ReviewForm from "../../components/reviews/submitReview";
 
 const SingleService = ({ service, query }) => {
   //console.log(query);
-  //console.log(service);
+  console.log(service);
 
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
@@ -282,6 +283,14 @@ const SingleService = ({ service, query }) => {
               <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
               <hr />
               <div className="row">{showPortFolio(service)}</div>
+            </div>
+
+            <div className="container pb-5">
+              <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
+              <hr />
+              <div className="row">
+                <ReviewForm serviceId={service.id} />
+              </div>
             </div>
           </article>
         </main>
