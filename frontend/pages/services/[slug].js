@@ -14,7 +14,8 @@ import Layout from "../../components/Layout";
 import { singleService } from "../../actions/services";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { isAuth } from "../../actions/setAuthToken";
-// import { bookService } from "../../actions/stripe";
+import { bookService } from "../../actions/stripe";
+import { getCookie } from "../../actions/setAuthToken";
 import { withRouter } from "next/router";
 import renderHTML from "react-render-html";
 import moment from "moment";
@@ -22,6 +23,10 @@ import moment from "moment";
 import SmallCard from "../../components/portfolio/serviceCard";
 import ReviewForm from "../../components/reviews/submitReview";
 
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(
+  "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
+);
 const SingleService = ({ service, query }) => {
   //console.log(query);
   console.log(service);
@@ -36,7 +41,7 @@ const SingleService = ({ service, query }) => {
   //     <script src="https://js.stripe.com/v3/"></script>
   //   </Head>
   // );
-
+  const token = getCookie("token");
   const showServiceCharges = (service) => {
     return service.discountedServiceCharges.map((price, i) => (
       <div key={i} className="container">
@@ -136,6 +141,35 @@ const SingleService = ({ service, query }) => {
         </label>
       </li>
     ));
+  };
+
+  const handleClick = async (event) => {
+    console.log(event);
+    // Get Stripe.js instance
+    const stripe = await stripePromise;
+
+    // Call your backend to create the Checkout Session
+    bookService(event, token).then((data) => {
+      console.log(data);
+      // if (data.error) {
+      //   console.log(data.error);
+      // } else {
+      //   setRelated(data);
+      // }
+    });
+
+    // const session = await response.json();
+
+    // // When the customer clicks on the button, redirect them to Checkout.
+    // const result = await stripe.redirectToCheckout({
+    //   sessionId: session.id,
+    // });
+
+    // if (result.error) {
+    //   // If `redirectToCheckout` fails due to a browser or network
+    //   // error, display the localized error message to your customer
+    //   // using `result.error.message`.
+    // }
   };
 
   //  const checkOutSession = (id) => {
@@ -251,16 +285,24 @@ const SingleService = ({ service, query }) => {
                     {isAuth() && isAuth().customerRole === "consumer" && (
                       //Admin
                       <>
-                        <Link href={`/checkout-session/${service._id}`}>
+                        <button
+                          className="mt-4 btn-lg btn-block btn btn-success"
+                          style={{ width: "235px" }}
+                          role="link"
+                          onClick={() => handleClick(service._id)}
+                        >
+                          Book Now
+                        </button>
+                        {/* <Link href={`/checkout-session/${service._id}`}>
                           <a
                             className="mt-4 btn-lg btn-block btn btn-success"
                             style={{ width: "235px" }}
                             data-serv-id={`${service._id}`}
-                            // onClick={()=> }
+                            onClick={handleClick}
                           >
                             Book Now
                           </a>
-                        </Link>
+                        </Link> */}
                       </>
                     )}
                   </div>

@@ -20,6 +20,14 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+
+    priceUnit1Id: {
+      type: String,
+    },
+
+    priceUnit2Id: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

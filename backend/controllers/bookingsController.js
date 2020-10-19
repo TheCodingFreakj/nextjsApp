@@ -104,6 +104,8 @@ exports.createPrices = async (req, res) => {
 
     product.priceUnit1 = priceUnit1.unit_amount;
     product.priceUnit2 = priceUnit2.unit_amount;
+    product.priceUnit1Id = priceUnit1.id;
+    product.priceUnit2Id = priceUnit2.id;
 
     await product.save();
 
@@ -141,7 +143,7 @@ exports.createCustomers = async (req, res) => {
 
 //billing the customers using checkout
 exports.getCheckoutSession = async (req, res) => {
-  console.log(req.params.id);
+  console.log(req.params.servId);
   try {
     //get the currently booked service
 
@@ -154,45 +156,49 @@ exports.getCheckoutSession = async (req, res) => {
 
     //create checkout session
 
+    //ref: session object: https://stripe.com/docs/api/checkout/sessions/object
     const service = await Service.findById(req.params.servId).exec(
       async (err, service) => {
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
         }
-        console.log(service);
+        console.log(service.title);
 
-        const priceUnits = await Product.findOne({ prodName: service.title });
+        const title = service.title;
+
+        const priceUnits = await Product.findOne({ prodName: title });
 
         console.log(priceUnits);
         //return res.json(blog);
+
+        const session = await stripe.checkout.sessions.create({
+          customer_email: req.user.email,
+          payment_method_types: ["card"],
+          client_reference_id: req.params.servId,
+          mode: "subscription",
+          billing_address_collection: "required",
+          line_items: [
+            {
+              price: priceUnits.priceUnit1Id,
+              quantity: 1,
+            },
+            {
+              price: priceUnits.priceUnit2Id,
+              quantity: 1,
+            },
+          ],
+          success_url: `${req.protocol}://${req.get("host")}/`, // This is the url called when the credit card is successfully charged
+          cancel_url: `${req.protocol}://${req.get("host")}/service/${
+            service.slug
+          }`,
+        });
+
+        res.status(200).json({
+          status: "success",
+          session, //need the session id at the client for the checkout process
+        });
       }
     );
-
-    const session = await stripe.checkout.sessions.create({
-      customer_email: req.user.email,
-      payment_method_types: ["card"],
-      client_reference_id: req.params.servId,
-      line_items: [
-        {
-          name: `${service.title} Service`,
-          description: service.summary,
-          currency: "usd",
-          price: priceUnits.priceUnit1,
-          quantity: 1,
-        },
-        {
-          name: `${service.title} Service`,
-          description: service.summary,
-          currency: "usd",
-          price: priceUnits.priceUnit2,
-          quantity: 1,
-        },
-      ],
-      success_url: `${req.protocol}://${req.get("host")}/`, // This is the url called when the credit card is successfully charged
-      cancel_url: `${req.protocol}://${req.get("host")}/service/${
-        service.slug
-      }`,
-    });
 
     // const session = await stripe.checkout.sessions.create({
     //   payment_method_types: ["card"],
@@ -216,11 +222,6 @@ exports.getCheckoutSession = async (req, res) => {
     // });
 
     //send the session to client
-
-    res.status(200).json({
-      status: "success",
-      session,
-    });
 
     // A Checkout Session controls what your customer sees in the Stripe-hosted payment page such as line items,
     // the order amount and currency, and acceptable payment methods.
