@@ -9,7 +9,7 @@ import { isAuth } from "../../actions/setAuthToken";
 
 const ReviewForm = ({ serviceId }) => {
   //console.log(serviceId);
-  console.log(isAuth());
+  console.log(isAuth()); // works only for logged in user // dont load the slug
   const [reviews, setReviews] = useState({
     review: "",
     rating: "",
@@ -28,14 +28,16 @@ const ReviewForm = ({ serviceId }) => {
 
   const token = getCookie("token");
   const loadLoggedInuser = () => {
-    getCurrentLoggedUser(isAuth().username).then((data) => {
-      console.log("The price logged in user is", data);
-      if (data.error) {
-        setReviews({ ...reviews, error: data.error });
-      } else {
-        setUser(data.username);
-      }
-    });
+    if (isAuth()) {
+      getCurrentLoggedUser(isAuth().username).then((data) => {
+        console.log("The price logged in user is", data);
+        if (data.error) {
+          setReviews({ ...reviews, error: data.error });
+        } else {
+          setUser(data.username);
+        }
+      });
+    }
   };
   const onChange = (name) => (e) => {
     const value = e.target.value;

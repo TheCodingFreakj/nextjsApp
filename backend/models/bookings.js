@@ -3,12 +3,13 @@ const { ObjectId } = mongoose.Schema;
 
 const bookingSchema = new mongoose.Schema(
   {
-    brandName: {
-      type: String,
-      trim: true,
-      required: true,
-      max: 32,
-    },
+    productName: [
+      {
+        type: ObjectId,
+        ref: "Service",
+        required: [true, "Service must be mentioned"],
+      },
+    ],
 
     slug: {
       type: String,
@@ -16,10 +17,13 @@ const bookingSchema = new mongoose.Schema(
       index: true,
     },
 
-    revenuesGenerated: {
-      type: Number,
-      default: 4.5,
-    },
+    productPrice: [
+      {
+        type: ObjectId,
+        ref: "Service",
+        required: [true, "Service must be mentioned"],
+      },
+    ],
   },
   { timestamps: true }
 );
