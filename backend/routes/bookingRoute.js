@@ -26,7 +26,12 @@ router.post(
 router.post("/create-prices", tokenAuth, adminMiddleware, createPrices);
 
 //Route for creating customer
-router.post("/create-customer", tokenAuth, adminMiddleware, createCustomers);
+router.get(
+  "/get-customer/:username",
+  tokenAuth,
+  authMiddleware,
+  createCustomers
+);
 //billing the  customer using checkout
 router.get(
   "/checkout-session/:servId",

@@ -54,40 +54,63 @@ exports.createPrices = async (req, res) => {
       "discountedServiceCharges",
       "_id serviceName discountedServiceCharges slug"
     );
-    // console.log(parseInt(service.duration) - 1);
-    // console.log(service.discountedServiceCharges[0].discountedServiceCharges);
-    // console.log(
-    //   (service.discountedServiceCharges[0].discountedServiceCharges * 40) / 100
-    // );
 
-    let dueInitial =
+    // let durationRange = parseInt(service.duration, 10).valueOf();
+    // console.log(durationRange);
+    // console.log(typeof "durationRange");
+
+    // let duration = parseInt(service.duration, 16) - 1;
+
+    // console.log("The Duration", duration);
+
+    // console.log(typeof "duration");
+
+    // let discountCharge =
+    //   service.discountedServiceCharges[0].discountedServiceCharges;
+
+    // console.log(typeof "discountCharge");
+
+    // console.log("The service charge", discountCharge);
+
+    // console.log(typeof "discountCharge");
+
+    const dueInitial =
       (service.discountedServiceCharges[0].discountedServiceCharges * 40) / 100;
 
-    let recurringDue =
+    // console.log("The initial Payment", dueInitial);
+    // console.log(typeof "dueInitial");
+
+    const recurringDue =
       (service.discountedServiceCharges[0].discountedServiceCharges -
         dueInitial) /
       (parseInt(service.duration) - 1);
-    // console.log(recurringDue);
 
+    // console.log("The recurrent amount", recurringDue);
+    // console.log(typeof "recurringDue");
     const priceUnit1 = await stripe.prices.create({
       product: product.prodId,
-      unit_amount: dueInitial,
+      unit_amount: Math.round(dueInitial),
       currency: "usd",
     });
 
     const priceUnit2 = await stripe.prices.create({
       product: product.prodId,
-      unit_amount: recurringDue,
+      unit_amount: Math.round(recurringDue),
       currency: "usd",
       recurring: {
         interval: "month",
       },
     });
 
+    product.priceUnit1 = priceUnit1.unit_amount;
+    product.priceUnit2 = priceUnit2.unit_amount;
+
+    await product.save();
+
     res.status(200).json({
       status: "success",
       priceUnit1,
-      //priceUnit2,
+      priceUnit2,
     });
   } catch (error) {
     console.error(error.message);
@@ -97,8 +120,9 @@ exports.createPrices = async (req, res) => {
 
 exports.createCustomers = async (req, res) => {
   try {
+    //get the business model and get the phone address of the consumer
     const customer = await stripe.customers.create({
-      email: req.user.email,
+      email: req.user.email, // This is the user who had logged in
       payment_method: "pm_card_visa",
       invoice_settings: {
         default_payment_method: "pm_card_visa",
@@ -117,52 +141,79 @@ exports.createCustomers = async (req, res) => {
 
 //billing the customers using checkout
 exports.getCheckoutSession = async (req, res) => {
+  console.log(req.params.id);
   try {
     //get the currently booked service
 
-    const service = await Service.findById(req.params.servId).populate(
-      "discountedServiceCharges",
-      "_id serviceName discountedServiceCharges slug"
-    );
-    console.log(service);
+    // const service = await Service.findById(req.params.servId).populate(
+    //   "discountedServiceCharges",
+    //   "_id serviceName discountedServiceCharges slug"
+    // );
+    // console.log(service);
     //console.log(service.discountedServiceCharges[0].discountedServiceCharges);
 
     //create checkout session
 
-    // const session = await stripe.checkout.sessions.create({
-    //   customer: '{{CUSTOMER_ID}}',
-    //   payment_method_types: ['card'],
-    //   line_items: [{
-    //     price: '{{PRICE_ID_1}}',
-    //     quantity: 1,
-    //   }, {
-    //     price: '{{PRICE_ID_2}}',
-    //     quantity: 1,
-    //   }],
-    //   success_url: 'https://example.com/success',
-    //   cancel_url: 'https://example.com/cancel',
-    // });
+    const service = await Service.findById(req.params.servId).exec(
+      async (err, service) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+        console.log(service);
+
+        const priceUnits = await Product.findOne({ prodName: service.title });
+
+        console.log(priceUnits);
+        //return res.json(blog);
+      }
+    );
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      success_url: `${req.protocol}://${req.get("host")}/`, // This is the url called when the credit card is successfully charged
-      cancel_url: `${req.protocol}://${req.get("host")}/service/${
-        service.slug
-      }`, // This is the url called when the person choose to cancel the payment
       customer_email: req.user.email,
-      client_reference_id: req.params.servId, //this will allow to pass some data about the session .Later once the purchase was successful, we will get access to session object,by then we need to create a new booking in db
+      payment_method_types: ["card"],
+      client_reference_id: req.params.servId,
       line_items: [
         {
           name: `${service.title} Service`,
           description: service.summary,
-          amount:
-            service.discountedServiceCharges[0].discountedServiceCharges / 2,
           currency: "usd",
+          price: priceUnits.priceUnit1,
           quantity: 1,
-          // images: [service.photo], //create the user id from user email
         },
-      ], // some details about the product purchased
+        {
+          name: `${service.title} Service`,
+          description: service.summary,
+          currency: "usd",
+          price: priceUnits.priceUnit2,
+          quantity: 1,
+        },
+      ],
+      success_url: `${req.protocol}://${req.get("host")}/`, // This is the url called when the credit card is successfully charged
+      cancel_url: `${req.protocol}://${req.get("host")}/service/${
+        service.slug
+      }`,
     });
+
+    // const session = await stripe.checkout.sessions.create({
+    //   payment_method_types: ["card"],
+    //   success_url: `${req.protocol}://${req.get("host")}/`, // This is the url called when the credit card is successfully charged
+    //   cancel_url: `${req.protocol}://${req.get("host")}/service/${
+    //     service.slug
+    //   }`, // This is the url called when the person choose to cancel the payment
+    //   customer_email: req.user.email,
+    //   client_reference_id: req.params.servId, //this will allow to pass some data about the session .Later once the purchase was successful, we will get access to session object,by then we need to create a new booking in db
+    //   line_items: [
+    //     {
+    //       name: `${service.title} Service`,
+    //       description: service.summary,
+    //       amount:
+    //         service.discountedServiceCharges[0].discountedServiceCharges / 2,
+    //       currency: "usd",
+    //       quantity: 1,
+    //       // images: [service.photo], //create the user id from user email
+    //     },
+    //   ], // some details about the product purchased
+    // });
 
     //send the session to client
 

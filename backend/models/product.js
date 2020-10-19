@@ -11,7 +11,12 @@ const productSchema = new mongoose.Schema(
       type: String,
     },
 
-    price: {
+    priceUnit1: {
+      type: Number,
+      default: 0,
+    },
+
+    priceUnit2: {
       type: Number,
       default: 0,
     },
