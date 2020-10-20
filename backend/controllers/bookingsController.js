@@ -1,3 +1,4 @@
+const ComboPackage = require("../models/comboPackages");
 const Service = require("../models/services");
 const Product = require("../models/product");
 const Customer = require("../models/customers");
@@ -125,21 +126,13 @@ exports.createPrices = async (req, res) => {
 exports.createCustomers = async (req, res) => {
   try {
     //get the business model and get the phone address of the consumer
-    // const user = await User.findOne({ username: req.params.username });
-    // console.log(user);
-
-    // let newCustomer = new Customer({
-    //   customerName: user.name,
-    //   email: user.email,
-    //   custId: user._id,
-    // });
+    const user = await Customer.findOne({ username: req.params.username });
 
     const customer = await stripe.customers.create({
-      name: req.user.name,
-      email: req.user.email, // This is the user who had logged in
-      description: "This is description",
-      phone: "",
-      address: "",
+      name: user.customerName,
+      email: user.email, // This is the user who had logged in
+      description: user.description,
+      phone: user.phone,
       payment_method: "pm_card_visa",
       invoice_settings: {
         default_payment_method: "pm_card_visa",
@@ -261,6 +254,46 @@ exports.retrieveItems = async (req, res) => {
 
 ////////////////////////////////////////Subscriptions/////////////////////////////////////////
 
+exports.createCombopackageSubscribeProducts = async (req, res) => {
+  //console.log(req);
+  try {
+    const combopackage = await ComboPackage.findById(req.params.packageId);
+
+    const package = await stripe.products.create({
+      name: `${combopackage.comboPackageName} `,
+    });
+
+    //extracting the product Id
+
+    //console.log(product);
+
+    let packageId = package.id;
+    let packageName = package.name;
+    // console.log(prodName);
+    // console.log(productId);
+    // console.log(typeof productId);
+
+    let productDB = new Product({
+      prodId: packageId,
+      prodName: packageName,
+    });
+
+    //console.log(productDB);
+    await productDB.save();
+
+    res.status(200).json({
+      status: "success",
+      product,
+      productDB,
+    });
+
+    //return res.json(product);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+};
+
 exports.createSubscriptions = async (req, res) => {
   try {
     //get the business model and get the phone address of the consumer
@@ -290,3 +323,37 @@ exports.createSubscriptions = async (req, res) => {
 };
 //https://stripe.com/docs/api/subscriptions/create?lang=node
 //https://stripe.com/docs/billing/subscriptions/subscription-schedules
+
+exports.createSubscribedCustomers = async (req, res) => {
+  try {
+    //get the customer info from frontend which is stored in customer object
+    //create a landing page and store the customer info in customer collection
+    // const customer = await stripe.customers.create({
+    //   name: user.customerName,
+    //   email: user.email, // This is the user who had logged in
+    //   description: user.description,
+    //   phone: user.phone,
+    //   payment_method: "pm_card_visa",
+    //   invoice_settings: {
+    //     default_payment_method: "pm_card_visa",
+    //   },
+    // });
+    // res.status(200).json({
+    //   status: "success",
+    //   customer,
+    // });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+};
+
+//see example: https://xt7b9.sse.codesandbox.io/
+
+//combopackage....
+
+// frontend shows total price with discount rate... also shows per month biilings
+// click the button...goes to subscriptio page
+
+//use these two: https://stripe.com/docs/billing/subscriptions/fixed-price#create-customer
+//https://stripe.com/docs/billing/subscriptions/overview#integration-example

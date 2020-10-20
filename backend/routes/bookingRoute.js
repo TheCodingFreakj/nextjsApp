@@ -14,6 +14,8 @@ const {
   createCustomers,
   retrieveItems,
   createSubscriptions,
+  createSubscribedCustomers,
+  createCombopackageSubscribeProducts,
 } = require("../controllers/bookingsController");
 
 //Route for creating the product
@@ -28,8 +30,8 @@ router.post(
 router.post("/create-prices", tokenAuth, adminMiddleware, createPrices);
 
 //Route for creating customer
-router.get(
-  "/get-customer/:username",
+router.post(
+  "/create-customer/:username",
   tokenAuth,
   authMiddleware,
   createCustomers
@@ -52,6 +54,20 @@ router.get(
 ////////////////////////////////////////Subscriptions/////////////////////////////////////////
 
 //Route for creating subscriptions for the product
+
+router.post(
+  "/create-combo-products/:packageId",
+  tokenAuth,
+  adminMiddleware,
+  createCombopackageSubscribeProducts
+);
+
+router.post(
+  "/create-subsription-customer/:username",
+  tokenAuth,
+  authMiddleware,
+  createSubscribedCustomers
+);
 router.post(
   "/create-subscriptions",
   tokenAuth,

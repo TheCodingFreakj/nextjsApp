@@ -23,9 +23,17 @@ const ServicesPage = ({ data }) => {
                 <button
                   className="mt-4 btn-lg btn-block btn btn-success"
                   style={{ width: "235px" }}
+                  role="link"
+                  // onClick={() => handleClick(comboPackage._id)}
+                >
+                  Subscribe Now
+                </button>
+                {/* <button
+                  className="mt-4 btn-lg btn-block btn btn-success"
+                  style={{ width: "235px" }}
                 >
                   Book Now
-                </button>
+                </button> */}
               </a>
             </Link>
           </div>

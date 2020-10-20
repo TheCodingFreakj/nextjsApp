@@ -48,6 +48,30 @@ const BusinessDetailsForms = ({ router }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
+    //     address.city
+    // string
+    // City, district, suburb, town, or village.
+
+    // address.country
+    // string
+    // Two-letter country code (ISO 3166-1 alpha-2).
+
+    // address.line1
+    // string
+    // Address line 1 (e.g., street, PO Box, or company name).
+
+    // address.line2
+    // string
+    // Address line 2 (e.g., apartment, suite, unit, or building).
+
+    // address.postal_code
+    // string
+    // ZIP or postal code.
+
+    // address.state
+    // string
+    // State, county, province, or region.
+
     const formData = {
       location,
       region,
