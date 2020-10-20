@@ -35,6 +35,7 @@ const SingleService = ({ service, query }) => {
   const [checkedTool, setCheckedTool] = useState([]);
   const [total, setTotal] = useState([]);
   const [subtotal, setSubTotal] = useState([]);
+  const [session, setSession] = useState();
 
   // const head = () => (
   //   <Head>
@@ -149,13 +150,16 @@ const SingleService = ({ service, query }) => {
     const stripe = await stripePromise;
 
     // Call your backend to create the Checkout Session
-    bookService(event, token).then((data) => {
+    bookService(event, token).then(async (data) => {
       console.log(data);
-      // if (data.error) {
-      //   console.log(data.error);
-      // } else {
-      //   setRelated(data);
-      // }
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        const result = await stripe.redirectToCheckout({
+          sessionId: data.id,
+        });
+        setSession(data);
+      }
     });
 
     // const session = await response.json();

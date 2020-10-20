@@ -4,10 +4,10 @@ import Router from "next/router";
 import { withRouter } from "next/router";
 import { getCookie } from "../../actions/setAuthToken";
 import { isAuth } from "../../actions/setAuthToken";
-import { getBusinessDetails } from "../../actions/user";
-import EditBusinessDetails from "../../components/customer/editBusinessDetails";
+import { getBusinessDetails, getCurrentCustomer } from "../../actions/user";
 
-const BusinessDetailsForms = ({ router }) => {
+const EditBusinessDetails = ({ router }) => {
+  console.log(isAuth());
   //getting all values from form inputs
   const [values, setValues] = useState({
     location: "",
@@ -21,9 +21,8 @@ const BusinessDetailsForms = ({ router }) => {
     loading: false,
     reload: false,
   });
-  // {
-  //   console.log(isAuth());
-  // }
+  const token = getCookie("token");
+
   const {
     location,
     region,
@@ -35,17 +34,33 @@ const BusinessDetailsForms = ({ router }) => {
     loading,
     reload,
   } = values;
+  useEffect(() => {
+    getCurrentCustomer(isAuth().username, token).then((data) => {
+      console.log(data);
+
+      if (data.error) {
+        setValues({ ...values, error: data.error });
+      } else {
+        setValues({
+          description: data.description,
+          phone: data.phone,
+          location: data.address[0].location,
+          region: data.address[0].region,
+          city: data.address[0].city,
+          pinCode: data.address[0].pinCode,
+        });
+      }
+    });
+  }, [router]);
 
   const [displayAddressInputs, toggledisplayAddressInputs] = useState(false);
-
-  const token = getCookie("token");
 
   const onChange = (e) => {
     console.log(e.target.value);
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = (e) => {
+  const onEdit = (e) => {
     e.preventDefault();
 
     const formData = {
@@ -80,7 +95,7 @@ const BusinessDetailsForms = ({ router }) => {
 
   const createBusinessDetailsForm = () => {
     return (
-      <form className="text-center" onSubmit={(e) => onSubmit(e)}>
+      <form className="text-center" onSubmit={(e) => onEdit(e)}>
         <div className="form-group">
           <label className="text-muted">
             <h3>Description</h3>
@@ -209,12 +224,9 @@ const BusinessDetailsForms = ({ router }) => {
     <React.Fragment>
       <div className="container-fluid pb-5 ">
         <div className="row">
-          <div className="col-md-6 pb-5">
+          <div className="col-md-8 pb-5">
             {createBusinessDetailsForm()}
             {/* {JSON.stringify(users)} */}
-          </div>
-          <div className="col-md-6 pb-5">
-            <EditBusinessDetails />
           </div>
         </div>
       </div>
@@ -224,4 +236,4 @@ const BusinessDetailsForms = ({ router }) => {
 
 //This picks a logged in user
 
-export default withRouter(BusinessDetailsForms);
+export default withRouter(EditBusinessDetails);

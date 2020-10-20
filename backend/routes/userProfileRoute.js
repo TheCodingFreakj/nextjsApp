@@ -17,6 +17,8 @@ const {
   updateUserProfile,
   getAllUsers,
   getUserProfilephoto,
+  getBusinessDetails,
+  getCurrentCustomer,
 } = require("../controllers/userProfileController");
 
 //bring validators
@@ -26,7 +28,19 @@ router.get("/users", getAllUsers); // for private profile to update delete
 router.get("/user/:username", publicUserProfile);
 router.put("/user/update", tokenAuth, authMiddleware, updateUserProfile); //if you want to update the profile this applies
 router.get("/user/photo/:userId", getUserProfilephoto); //for upload profile image
+router.post(
+  "/get-business-details",
+  tokenAuth,
+  authMiddleware,
+  getBusinessDetails
+);
 
+router.get(
+  "/get-current-customer",
+  tokenAuth,
+  authMiddleware,
+  getCurrentCustomer
+);
 //router.get("/blog/photo/:slug", photo);
 
 // exports.photo = async (req, res) => {

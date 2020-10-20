@@ -1,10 +1,10 @@
 const User = require("../models/user");
 const Blog = require("../models/blog");
+const Customer = require("../models/customers");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const _ = require("lodash");
 const formidable = require("formidable");
 const fs = require("fs");
-const { result } = require("lodash");
 
 exports.read = (req, res) => {
   console.log("The verified user is again passed to read method ", req.user); //Also getting the verified user
@@ -174,6 +174,72 @@ exports.getAllUsers = async (req, res) => {
         }
         res.send(users);
       });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.getBusinessDetails = async (req, res) => {
+  // console.log(
+  //   "This is the entire updated user info I got after update",
+  //   req.user
+  // );
+
+  const { location, region, city, description, pinCode, phone } = req.body;
+  console.log(req.body);
+
+  const customerDetails = {};
+
+  if (description) customerDetails.description = description;
+  if (phone) customerDetails.phone = phone;
+
+  customerDetails.address = {};
+  if (city) customerDetails.address.city = city;
+  if (pinCode) customerDetails.address.pinCode = pinCode;
+  if (location) customerDetails.address.location = location;
+  if (region) customerDetails.address.region = region;
+
+  console.log(customerDetails);
+
+  //I am a business person with a motive of building xyz stuff for yus community
+  try {
+    let customer = await Customer.findOne({ customerName: req.user.username });
+
+    if (customer) {
+      //update
+
+      customer = await Customer.findOneAndUpdate(
+        { customerName: req.user.username },
+        { $set: customerDetails },
+        { new: true, upsert: true }
+      );
+      return res.json(customer);
+    }
+
+    customer = new Customer(customerDetails);
+    customer.customerName = req.user.name;
+    await customer.save();
+    return res.json(customer);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.getCurrentCustomer = async (req, res) => {
+  //I am a business person with a motive of building xyz stuff for yus community
+
+  //console.log(req.body);
+  try {
+    let customer = await Customer.findOne({ customerName: req.user.name });
+    //console.log(customer);
+
+    if (!customer) {
+      return res.status(400).json({ msg: "There is no customer" });
+    }
+    //or else send the profile
+    res.json(customer);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

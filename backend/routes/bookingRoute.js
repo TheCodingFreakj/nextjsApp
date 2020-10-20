@@ -12,6 +12,8 @@ const {
   createProducts,
   createPrices,
   createCustomers,
+  retrieveItems,
+  createSubscriptions,
 } = require("../controllers/bookingsController");
 
 //Route for creating the product
@@ -22,7 +24,7 @@ router.post(
   adminMiddleware,
   createProducts
 );
-//Route for creating the prices of the product
+//Route for creating the check out prices of the product
 router.post("/create-prices", tokenAuth, adminMiddleware, createPrices);
 
 //Route for creating customer
@@ -40,8 +42,27 @@ router.get(
   getCheckoutSession
 );
 
+router.get(
+  "/checkout-session/:servId/line_items",
+  tokenAuth,
+  authMiddleware,
+  retrieveItems
+);
+
+////////////////////////////////////////Subscriptions/////////////////////////////////////////
+
+//Route for creating subscriptions for the product
+router.post(
+  "/create-subscriptions",
+  tokenAuth,
+  adminMiddleware,
+  createSubscriptions
+);
+
 module.exports = router;
 
 // https://stripe.com/docs/billing/prices-guide
 // https://stripe.com/docs/billing/subscriptions/checkout/fixed-price#create-business-model
 //https://stripe.com/docs/billing/subscriptions/checkout/fixed-price#create-business-model
+
+//use this for combopackages:: https://stripe.com/docs/billing/subscriptions/fixed-price#how-to-model-it-on-stripe
