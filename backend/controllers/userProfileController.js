@@ -188,6 +188,7 @@ exports.getBusinessDetails = async (req, res) => {
 
   const { location, region, city, description, pinCode, phone } = req.body;
   console.log(req.body);
+  console.log(req.params);
 
   const customerDetails = {};
 
@@ -202,25 +203,29 @@ exports.getBusinessDetails = async (req, res) => {
 
   console.log(customerDetails);
 
+  const username = req.user.username;
+
   //I am a business person with a motive of building xyz stuff for yus community
   try {
-    let customer = await Customer.findOne({ customerName: req.user.username });
+    let customer = await Customer.findOne({ username });
 
     if (customer) {
       //update
 
       customer = await Customer.findOneAndUpdate(
-        { customerName: req.user.username },
-        { $set: customerDetails },
-        { new: true, upsert: true }
+        { customerName: req.user.name },
+        { $set: customerDetails }
       );
+      await customer.save();
+      return res.json(customer);
+    } else if (!customer) {
+      customer = new Customer(customerDetails);
+      customer.customerName = req.user.name;
+      customer.email = req.user.email;
+      customer.username = username;
+      await customer.save();
       return res.json(customer);
     }
-
-    customer = new Customer(customerDetails);
-    customer.customerName = req.user.name;
-    await customer.save();
-    return res.json(customer);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

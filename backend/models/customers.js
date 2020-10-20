@@ -5,25 +5,34 @@ const customerSchema = new mongoose.Schema(
   {
     customerName: {
       type: String,
+      trim: true,
+      required: true,
+      max: 32,
+    },
+    username: {
+      type: String,
+      trim: true,
+      required: true,
+      max: 32,
       unique: true,
       index: true,
+      lowercase: true,
     },
 
     email: {
       type: String,
       unique: true,
-      index: true,
     },
     custId: {
       type: String,
       unique: true,
-      index: true,
+      default: "0",
     },
 
     address: [
       {
         location: {
-          type: Number,
+          type: String,
           required: true,
         },
         city: {
