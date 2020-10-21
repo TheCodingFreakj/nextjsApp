@@ -9,12 +9,18 @@ const UpdateTools = ({ router }) => {
   const [priceValues, setPriceValues] = useState({
     summary: "",
     totalPrice: "",
-    discountPrice: "",
+    serviceChargeRate: "",
     error: false,
     success: false,
   });
 
-  const { summary, totalPrice, discountPrice, success, error } = priceValues;
+  const {
+    summary,
+    totalPrice,
+    serviceChargeRate,
+    success,
+    error,
+  } = priceValues;
 
   useEffect(() => {
     initPrices();
@@ -34,7 +40,7 @@ const UpdateTools = ({ router }) => {
             ...priceValues,
             summary: data[0].summary,
             totalPrice: data[0].totalPrice,
-            discountPrice: data[0].discountPrice,
+            serviceChargeRate: data[0].serviceChargeRate,
           }); //storing the initial price in the state
         }
       });
@@ -60,7 +66,7 @@ const UpdateTools = ({ router }) => {
     const formData = {
       summary,
       totalPrice,
-      discountPrice,
+      serviceChargeRate,
     };
     updateToolPrice(formData, token, router.query.slug).then((data) => {
       console.log("This is getting from backend", data);
@@ -77,7 +83,7 @@ const UpdateTools = ({ router }) => {
           totalPrice: "",
           discountPrice: "",
           error: "",
-          success: `A new tool is created `,
+          success: `A new tool is updated `,
         });
         Router.replace(`/admin`);
       }
@@ -118,13 +124,13 @@ const UpdateTools = ({ router }) => {
         </div>
 
         <div className="form-group">
-          <label className="text-muted"> Discount Package Charges </label>
+          <label className="text-muted"> Service Charges </label>
           <input
             type="text"
             className="form-control"
-            placeholder="discountPrice"
-            onChange={onChange("discountPrice")}
-            value={discountPrice}
+            placeholder="serviceChargeRate"
+            onChange={onChange("serviceChargeRate")}
+            value={serviceChargeRate}
             required
           />
         </div>
@@ -154,7 +160,7 @@ const UpdateTools = ({ router }) => {
           <div className="col-md-6 pt-5 pb-5">
             {updateToolPricingForm()}
 
-            {JSON.stringify(priceValues)}
+            {/* {JSON.stringify(priceValues)} */}
             <div className="pb-5">
               {showError()}
               {showSuccess()}

@@ -49,14 +49,23 @@ exports.createProducts = async (req, res) => {
 };
 
 exports.createPrices = async (req, res) => {
+  console.log(req.body);
   try {
-    let product = await Product.findOneAndUpdate(req.body);
-    //console.log(product);
+    let product = await Product.findOneAndUpdate({
+      prodName: req.body.prodName,
+    });
+    console.log(product);
 
-    const service = await Service.findOneAndUpdate(req.body).populate(
+    console.log(req.body);
+
+    const service = await Service.findOneAndUpdate({
+      title: req.body.prodName,
+    }).populate(
       "discountedServiceCharges",
       "_id serviceName discountedServiceCharges slug"
     );
+
+    console.log(service);
 
     // let durationRange = parseInt(service.duration, 10).valueOf();
     // console.log(durationRange);
@@ -77,46 +86,46 @@ exports.createPrices = async (req, res) => {
 
     // console.log(typeof "discountCharge");
 
-    const dueInitial =
-      (service.discountedServiceCharges[0].discountedServiceCharges * 40) / 100;
+    // const dueInitial =
+    //   (service.discountedServiceCharges[0].discountedServiceCharges * 40) / 100;
 
     // console.log("The initial Payment", dueInitial);
-    // console.log(typeof "dueInitial");
+    // // console.log(typeof "dueInitial");
 
-    const recurringDue =
-      (service.discountedServiceCharges[0].discountedServiceCharges -
-        dueInitial) /
-      (parseInt(service.duration) - 1);
+    // const recurringDue =
+    //   (service.discountedServiceCharges[0].discountedServiceCharges -
+    //     dueInitial) /
+    //   (parseInt(service.duration) - 1);
 
     // console.log("The recurrent amount", recurringDue);
-    // console.log(typeof "recurringDue");
-    const priceUnit1 = await stripe.prices.create({
-      product: product.prodId,
-      unit_amount: Math.round(dueInitial),
-      currency: "usd",
-    });
+    // // console.log(typeof "recurringDue");
+    // const priceUnit1 = await stripe.prices.create({
+    //   product: product.prodId,
+    //   unit_amount: Math.round(dueInitial),
+    //   currency: "usd",
+    // });
 
-    const priceUnit2 = await stripe.prices.create({
-      product: product.prodId,
-      unit_amount: Math.round(recurringDue),
-      currency: "usd",
-      recurring: {
-        interval: "month",
-      },
-    });
+    // const priceUnit2 = await stripe.prices.create({
+    //   product: product.prodId,
+    //   unit_amount: Math.round(recurringDue),
+    //   currency: "usd",
+    //   recurring: {
+    //     interval: "month",
+    //   },
+    // });
 
-    product.priceUnit1 = priceUnit1.unit_amount;
-    product.priceUnit2 = priceUnit2.unit_amount;
-    product.priceUnit1Id = priceUnit1.id;
-    product.priceUnit2Id = priceUnit2.id;
+    // product.priceUnit1 = priceUnit1.unit_amount;
+    // product.priceUnit2 = priceUnit2.unit_amount;
+    // product.priceUnit1Id = priceUnit1.id;
+    // product.priceUnit2Id = priceUnit2.id;
 
-    await product.save();
+    // await product.save();
 
-    res.status(200).json({
-      status: "success",
-      priceUnit1,
-      priceUnit2,
-    });
+    // res.status(200).json({
+    //   status: "success",
+    //   priceUnit1,
+    //   priceUnit2,
+    // });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
@@ -283,11 +292,95 @@ exports.createCombopackageSubscribeProducts = async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      product,
+      package,
       productDB,
     });
 
     //return res.json(product);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.createComboPrices = async (req, res) => {
+  console.log(req.body);
+  console.log(req.params);
+  try {
+    let product = await Product.findOneAndUpdate({
+      prodName: req.body.prodName,
+    });
+    console.log(product);
+
+    const package = await ComboPackage.findOne({
+      comboPackageName: req.body.prodName,
+    }).populate(
+      "checkedPrice",
+      "_id comboPackageName discountedPackageCharges slug"
+    );
+
+    console.log(package);
+
+    // let durationRange = parseInt(service.duration, 10).valueOf();
+    // console.log(durationRange);
+    // console.log(typeof "durationRange");
+
+    // console.log("The Duration", duration);
+
+    // console.log(typeof "duration");
+
+    let discountCharge = package.checkedPrice[0].discountedPackageCharges;
+
+    // console.log(typeof "discountCharge");
+
+    // console.log("The service charge", discountCharge);
+
+    // console.log(typeof "discountCharge");
+
+    // const dueInitial =
+    //   (package.discountedPackageCharges[0].discountedPackageCharges * 30) / 100;
+
+    const dueInitial = (discountCharge * 30) / 100;
+
+    console.log("The initial Payment", dueInitial);
+    // console.log(typeof "dueInitial");
+
+    // const recurringDue =
+    //   (service.discountedServiceCharges[0].discountedServiceCharges -
+    //     dueInitial) /
+    //   (parseInt(service.duration) - 1);
+
+    const recurringDue = discountCharge - dueInitial;
+
+    console.log("The recurrent amount", recurringDue);
+    // console.log(typeof "recurringDue");
+    const priceUnit1 = await stripe.prices.create({
+      product: product.prodId,
+      unit_amount: Math.round(dueInitial),
+      currency: "usd",
+    });
+
+    const priceUnit2 = await stripe.prices.create({
+      product: product.prodId,
+      unit_amount: Math.round(recurringDue),
+      currency: "usd",
+      recurring: {
+        interval: "month",
+      },
+    });
+
+    product.priceUnit1 = priceUnit1.unit_amount;
+    product.priceUnit2 = priceUnit2.unit_amount;
+    product.priceUnit1Id = priceUnit1.id;
+    product.priceUnit2Id = priceUnit2.id;
+
+    await product.save();
+
+    res.status(200).json({
+      status: "success",
+      priceUnit1,
+      priceUnit2,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");

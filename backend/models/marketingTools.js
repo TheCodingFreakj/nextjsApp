@@ -23,7 +23,7 @@ const toolsSchema = new mongoose.Schema(
     totalPrice: {
       type: Number,
     },
-    discountPrice: {
+    serviceChargeRate: {
       type: Number,
     },
 
@@ -31,8 +31,6 @@ const toolsSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-
-    // clientPrice: [{ type: ObjectId, ref: "ToolPrice", required: true }],
 
     createdAt: {
       type: Date,

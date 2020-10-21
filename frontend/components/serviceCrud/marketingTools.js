@@ -5,15 +5,13 @@ import { getCookie } from "../../actions/setAuthToken";
 import {
   createNewTool,
   getAllTools,
-  getToolDetails,
   removeSingleTool,
 } from "../../actions/tools";
 
 const MarketingTools = () => {
   const [values, setValues] = useState({
-    name: "",
     totalPrice: "",
-    discountPrice: "",
+    serviceChargeRate: "",
     tool: "",
     summary: "",
     toolArrayToShow: [],
@@ -26,11 +24,10 @@ const MarketingTools = () => {
   });
 
   const {
-    name,
     tool,
     summary,
     totalPrice,
-    discountPrice,
+    serviceChargeRate,
     success,
     error,
     loading,
@@ -77,7 +74,7 @@ const MarketingTools = () => {
     const newToolInfo = {
       tool,
       totalPrice,
-      discountPrice,
+      serviceChargeRate,
       summary,
     };
 
@@ -87,7 +84,12 @@ const MarketingTools = () => {
       if (data.error) {
         //setvalues fill the error variable and turn off the success
 
-        setValues({ ...values, error: data.error, success: false });
+        setValues({
+          ...values,
+          error: data.error,
+          success: false,
+          reload: true,
+        });
       } else {
         //turn all off and make the success true
 
@@ -95,9 +97,12 @@ const MarketingTools = () => {
           ...values,
           error: false,
           success: true,
-          name: "",
-          removed: false,
-          reload: true,
+          totalPrice: "",
+          serviceChargeRate: "",
+          tool: "",
+          summary: "",
+          success: true,
+          reload: false,
         });
       }
     });
@@ -174,7 +179,9 @@ const MarketingTools = () => {
         </div>
 
         <div className="form-group">
-          <label className="text-muted">Give Some Summary</label>
+          <label className="text-muted">
+            Tell What you will with this tool
+          </label>
           <textarea
             type="text"
             className="form-control"
@@ -202,9 +209,9 @@ const MarketingTools = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="Give the Service Charges"
-            value={discountPrice}
-            onChange={onChange("discountPrice")}
+            placeholder="Give the servicec charge rate"
+            value={serviceChargeRate}
+            onChange={onChange("serviceChargeRate")}
             required
           />
         </div>

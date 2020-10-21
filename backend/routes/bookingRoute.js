@@ -16,6 +16,7 @@ const {
   createSubscriptions,
   createSubscribedCustomers,
   createCombopackageSubscribeProducts,
+  createComboPrices,
 } = require("../controllers/bookingsController");
 
 //Route for creating the product
@@ -60,6 +61,13 @@ router.post(
   tokenAuth,
   adminMiddleware,
   createCombopackageSubscribeProducts
+);
+
+router.post(
+  "/create-combo-prices",
+  tokenAuth,
+  adminMiddleware,
+  createComboPrices
 );
 
 router.post(
