@@ -78,6 +78,20 @@ const PriceForms = () => {
       }
     });
   };
+
+  // <option value="Content-Marketing">Content-Marketing</option>
+  // <option value="seo">Seo</option>
+  // <option value="Funnel-Marketing">Funnel-Marketing</option>
+  //<option value="Facebook-Marketing">Facebook-Marketing</option>
+  // <option value="Email-Marketing">Email-Marketing</option>
+  //
+  //           <option value="Custom-Website-Design">Custom-Website-Design</option>
+  // <option value="Static-Websites">Static-Websites</option>
+  //           <option value="Wordpress-Website">Wordpress-Website </option>
+  //           <option value="Ecommerce-Websites">Ecommerce-Websites</option>
+  //           <option value="Author-Websites">Author-Websites</option>
+  //           <option value="Corporate-Websites">Corporate-Websites</option>
+  //           <option value="Personal-Blogs">Personal-Blogs</option>
   const createServicePricingForm = () => {
     return (
       <form className="text-center" onSubmit={(e) => onSubmit(e)}>

@@ -36,7 +36,7 @@ const UpdatePriceForms = ({ router }) => {
 
     if (router.query.slug) {
       SinglePrice(router.query.slug).then((data) => {
-        console.log("This is single price data for the slug", data);
+        // console.log("This is single price data for the slug", data);
         if (data.error) {
           setPriceValues({ ...priceValues, error: data.serviceError });
         } else {
@@ -52,23 +52,6 @@ const UpdatePriceForms = ({ router }) => {
     }
   };
   const token = getCookie("token");
-
-  // const initDiscountPrices = () => {
-  //   updateServicePriceLists(router.query.slug).then((data) => {
-  //     console.log("This is discounted price", data);
-
-  //     // if (data.error) {
-  //     //   setPriceValues({ ...priceValues, error: data.serviceError });
-  //     // } else {
-  //     //   setPriceValues({
-  //     //     ...priceValues,
-  //     //     serviceName: data[0].serviceName,
-  //     //     realServicePrice: data[0].realServicePrice,
-  //     //     servicedDiscountPrice: data[0].servicedDiscountPrice,
-  //     //   }); //storing the initial price in the state
-  //     // }
-  //   });
-  // };
 
   //Need to alter the valuues in the state and again send to replace the value
   const onChange = (name) => (e) => {
@@ -91,8 +74,8 @@ const UpdatePriceForms = ({ router }) => {
       servicedDiscountPrice,
     };
     updatePrice(formData, token, router.query.slug).then((data) => {
-      console.log("This is getting from backend", data);
-      console.log("Token at update main function", token);
+      // console.log("This is getting from backend", data);
+      // console.log("Token at update main function", token);
       if (data.error) {
         setPriceValues({
           ...priceValues,
@@ -174,55 +157,12 @@ const UpdatePriceForms = ({ router }) => {
           />
         </div>
 
-        {/* <label className="text-muted">
-          <h4>Discounted Price </h4>
-        </label>
-        <div className="form-group">
-          <input
-            type="string"
-            className="form-control"
-            // name="discountedServiceCharges"
-            // value={discountedServiceCharges} // This value should be coming from the state
-            onChange={calCulateDiscountPrice(priceValues)} //setFormData
-            required
-          />
-        </div> */}
-
         <div>
           <input type="submit" className="btn btn-success" value="Update" />
         </div>
       </form>
     );
   };
-
-  // const calCulateDiscountPrice = () => {
-  //   const price = priceValues.realServicePrice;
-  //   const discount = priceValues.servicedDiscountPrice;
-
-  //   const discountedServiceCharges = price + (price * discount) / 100;
-
-  //   return discountedServiceCharges;
-  // };
-
-  // const discountedPrice = () => {
-  //   return (
-  //     <form className="text-center">
-  //       <label className="text-muted">
-  //         <h4>Discounted Price </h4>
-  //       </label>
-  //       <div className="form-group">
-  //         <input
-  //           type="number"
-  //           className="form-control"
-  //           // name="discountedServiceCharges"
-  //           // value={discountedServiceCharges} // This value should be coming from the state
-  //           // onChange={onChangePrice("discountedServiceCharges")} //setFormData
-  //           required
-  //         />
-  //       </div>
-  //     </form>
-  //   );
-  // };
 
   return (
     <React.Fragment>
@@ -231,7 +171,7 @@ const UpdatePriceForms = ({ router }) => {
           <div className="col-md-6 pt-5 pb-5">
             {updateServicePricingForm()}
 
-            {JSON.stringify(priceValues)}
+            {/* {JSON.stringify(priceValues)} */}
             <div className="pb-5">
               {showError()}
               {showSuccess()}

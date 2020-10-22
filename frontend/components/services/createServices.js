@@ -135,7 +135,7 @@ const CreateServices = ({ router }) => {
     } else {
       choosenPrices.splice(checkedPrice, 1);
     }
-    //console.log("Storing all the check Items in a variable", choosenPrices);
+    console.log("Storing all the check Items in a variable", choosenPrices);
     setCheckedPrice(choosenPrices); // storing all checked value in the state
 
     formData.set("discountedPrice", choosenPrices);
@@ -150,8 +150,9 @@ const CreateServices = ({ router }) => {
           className="mr-2"
         />
         <label className="form-check-label">
-          <h5>{price.serviceName}</h5>
-          {price.discountedServiceCharges}
+          <h5>
+            {price.serviceName}: {price.discountedServiceCharges}
+          </h5>
         </label>
       </li>
     ));

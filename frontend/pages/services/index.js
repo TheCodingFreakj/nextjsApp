@@ -74,12 +74,31 @@ const ServicesPage = ({ data }) => {
           <header>
             <div className="col-md-12 pt-3">
               <h1 className="display-4 font-weight-bold text-center pb-9 ">
-                ComboPackages
+                How Do We Prefer To Work
               </h1>
+              <div className="col-md-12 pt-3">
+                <p>
+                  Website development aint about creating a non-living software.
+                  It is about creating a stoppage for customers,users as per
+                  what they value. At Marketing Solutions App, we adopt the
+                  agile methodology for website development.
+                </p>
+
+                <Link href="/about-us">
+                  <a className=" btn btn-small btn-success ">
+                    Learn More About We Can Help You
+                  </a>
+                </Link>
+              </div>
             </div>
           </header>
           {/* <div className="bg-primary text-white d-flex justify-content-around"> */}
           <div className="container-fluid">
+            <div className="col-md-12 pt-3">
+              <h1 className="display-4 font-weight-bold text-center pb-9 ">
+                ComboPackages
+              </h1>
+            </div>
             <div className="row justify-content-md-center">
               {showAllServicePackages()}
             </div>
