@@ -44,7 +44,7 @@ const ServicesPage = ({ data }) => {
 
   const loadIndvServices = () => {
     getAllServices().then((data) => {
-      //console.log(data);
+      console.log(data);
       if (data.error) {
         console.log(data.error);
       } else {

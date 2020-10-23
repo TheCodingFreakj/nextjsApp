@@ -119,8 +119,10 @@ exports.updateTool = async (req, res) => {
 
 //get all tools
 exports.getAllTools = async (req, res) => {
+  //console.log(req);
   try {
     await Tools.find({}).exec((err, data) => {
+      //console.log(err);
       if (err) {
         return res.status(400).json({ errors: errorHandler(err) });
       }

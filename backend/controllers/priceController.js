@@ -56,7 +56,7 @@ exports.getServicePriceLists = async (req, res) => {
   try {
     await Price.find({}).exec((err, pricePackages) => {
       if (err) {
-        return res.status(400).json({ errors: errorHandler(err) });
+        return res.status(400).json({ error: errorHandler(err) });
       }
 
       res.json(pricePackages);
@@ -72,6 +72,7 @@ exports.SinglePrice = async (req, res) => {
   try {
     await Price.find({ slug }).exec((err, price) => {
       if (err) {
+        console.log(err);
         return res.status(400).json({ errors: errorHandler(err) });
       }
 

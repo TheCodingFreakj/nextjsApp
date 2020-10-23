@@ -295,8 +295,11 @@ exports.SingleService = async (req, res) => {
         "_id serviceName discountedServiceCharges slug"
       )
       .populate("tools", "_id tool clientPrice slug")
-
+      .select(
+        "_id slug the_reviews the_portfolios discountedServiceCharges serviceName duration summary process"
+      )
       .exec((err, service) => {
+        console.log(err);
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
         }

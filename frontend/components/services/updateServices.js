@@ -5,20 +5,23 @@ import { isAuth, getCookie } from "../../actions/setAuthToken";
 //get the service price
 import { withRouter } from "next/router";
 import { API } from "../../config";
-
+import dynamic from "next/dynamic"; //ReactQuill runs only on client side
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "../../node_modules/react-quill/dist/quill.snow.css";
 import { getAllServicePriceOptions } from "../../actions/price";
 import { getAllTools } from "../../actions/tools";
 import { updateService, singleService } from "../../actions/services";
 const UpdateServices = ({ router }) => {
-  console.log("This is router object", router.query);
+  console.log("This is router object", router.query.slug);
   //console.log("This is router object", router);
   //getting all values from form inputs
+
+  const [process, setProcess] = useState();
   const [values, setValues] = useState({
     serviceName: "",
     duration: "",
     summary: "",
     formData: "",
-    process: "",
     error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
     success: false, //Shows up as a display message when we submit somthing
     loading: false,
@@ -29,7 +32,6 @@ const UpdateServices = ({ router }) => {
     serviceName,
     duration,
     summary,
-    process,
     formData,
     error,
     loading,
@@ -56,11 +58,11 @@ const UpdateServices = ({ router }) => {
   }, [router]);
 
   const token = getCookie("token");
-  console.log(router.query.slug);
+  //console.log(router.query.slug);
   const initService = () => {
     if (router.query.slug) {
       singleService(router.query.slug).then((data) => {
-        console.log(data);
+        //console.log(data);
         if (data.error) {
           console.log(error);
         } else {
@@ -69,10 +71,8 @@ const UpdateServices = ({ router }) => {
             serviceName: data.title,
             duration: data.duration,
             summary: data.summary,
-
-            process: data.process,
           });
-
+          setProcess(data.process);
           setdiscountPriceArray(data.discountedServiceCharges);
           setToolsArray(data.tools);
         }
@@ -81,7 +81,7 @@ const UpdateServices = ({ router }) => {
   };
 
   const setdiscountPriceArray = (servicePrices) => {
-    console.log(servicePrices);
+    //console.log(servicePrices);
     let serviceArray = [];
     servicePrices.map((price, i) => {
       //console.log(price);
@@ -113,7 +113,7 @@ const UpdateServices = ({ router }) => {
 
   const initTools = () => {
     getAllTools().then((data) => {
-      //console.log("The price tag is", data);
+      //console.log("The tools data", data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -157,6 +157,20 @@ const UpdateServices = ({ router }) => {
     setCheckedTool(allTools); // storing all checked value in the state
 
     formData.set("tools", allTools);
+  };
+
+  const onHandleChange = (e) => {
+    //console.log(e);
+    setProcess(e); //pass whole event
+    formData.set("process", e); //update the formData
+
+    // //populate this body in local storage so that in refersh its not lost
+    // if (typeof window !== "undefined") {
+    //   //if we have a window then store the blog
+    //   localStorage.setItem("blog", JSON.stringify(e));
+    // }
+
+    console.log("This is the updated formData", formData);
   };
 
   const findOutTools = (toolId) => {
@@ -248,7 +262,7 @@ const UpdateServices = ({ router }) => {
   const editService = (e) => {
     e.preventDefault();
     updateService(formData, router.query.slug, token).then((data) => {
-      console.log("This is getting from backend", data);
+      //console.log("This is getting from backend", data);
 
       if (data.error) {
         setValues({ ...values, error: data.error });
@@ -257,7 +271,6 @@ const UpdateServices = ({ router }) => {
           ...values,
           serviceName: "",
           duration: "",
-          process: "",
           summary: "",
           error: "",
           success: `A new service  is created `,
@@ -338,14 +351,15 @@ const UpdateServices = ({ router }) => {
             <h3>Process</h3>
           </label>
 
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Input the Process Here"
-            value={process || ""}
-            onChange={onChange("process")}
-            required
-          />
+          <div className="form-group">
+            <ReactQuill
+              value={process || ""}
+              placeholder="Write Somthing Amazing Here"
+              modules={UpdateServices.modules}
+              formats={UpdateServices.formats}
+              onChange={(e) => onHandleChange(e)}
+            />
+          </div>
         </div>
 
         <div>
@@ -383,7 +397,7 @@ const UpdateServices = ({ router }) => {
               {showSuccess()}
             </div> */}
 
-            {values && (
+            {process && (
               <img
                 src={`${API}/api/services/photo/${router.query.slug}`}
                 alt={serviceName}
@@ -422,5 +436,34 @@ const UpdateServices = ({ router }) => {
     </React.Fragment>
   );
 };
+
+UpdateServices.modules = {
+  toolbar: [
+    [{ header: "1" }, { header: "2" }, { header: [3, 4, 5, 6] }, { font: [] }],
+    [{ size: [] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["link", "image", "video"],
+    ["clean"],
+    ["code-block"],
+  ],
+};
+
+UpdateServices.formats = [
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "link",
+  "image",
+  "video",
+  "code-block",
+];
 
 export default withRouter(UpdateServices);

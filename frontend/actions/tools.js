@@ -65,6 +65,7 @@ export const getAllTools = async () => {
       console.log(error.response.headers);
     } else {
       // Something happened in setting up the request that triggered an Error
+      console.log("The error object", error);
       console.log("Error", error.message);
     }
   }

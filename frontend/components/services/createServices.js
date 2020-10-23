@@ -6,15 +6,33 @@ import { getCookie } from "../../actions/setAuthToken";
 import { createServices } from "../../actions/services";
 import { getAllServicePriceOptions } from "../../actions/price";
 import { getAllTools } from "../../actions/tools";
+import dynamic from "next/dynamic"; //ReactQuill runs only on client side
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "../../node_modules/react-quill/dist/quill.snow.css";
 
 const CreateServices = ({ router }) => {
+  const processFromLS = () => {
+    //dont have window avaliable
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    //if we have a item called blog in local storage and then we want that
+    if (localStorage.getItem("process")) {
+      // we are storing the value as json object we need to convert that as js object which is showed ion the editor
+      return JSON.parse(localStorage.getItem("process"));
+    } else {
+      return false;
+    }
+  };
   //getting all values from form inputs
+  const [process, setProcess] = useState(processFromLS());
+
   const [values, setValues] = useState({
     serviceName: "",
     duration: "",
     summary: "",
     formData: "",
-    process: "",
     error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
     success: false, //Shows up as a display message when we submit somthing
     loading: false,
@@ -25,7 +43,6 @@ const CreateServices = ({ router }) => {
     serviceName,
     duration,
     summary,
-    process,
     formData,
     error,
     loading,
@@ -88,6 +105,18 @@ const CreateServices = ({ router }) => {
 
     //after populating we have to update the state
     setValues({ ...values, [name]: value, formData: formData, error: "" });
+  };
+
+  const onHandleChange = (e) => {
+    //console.log(e);
+    setProcess(e); //pass whole event
+    formData.set("process", e);
+
+    //populate this body in local storage so that in refersh its not lost
+    if (typeof window !== "undefined") {
+      //if we have a window then store the blog
+      localStorage.setItem("process", JSON.stringify(e));
+    }
   };
 
   const handleToggle = (tId) => {
@@ -170,11 +199,17 @@ const CreateServices = ({ router }) => {
           ...values,
           serviceName: "",
           duration: "",
-          process: "",
           summary: "",
           error: "",
           success: `A new service :"${data.serviceName}" is created `,
         });
+
+        setProcess("");
+        setTools([]);
+
+        setDiscountedPrice([]);
+        setCheckedTool([]);
+        setCheckedPrice([]);
       }
     });
   };
@@ -246,7 +281,7 @@ const CreateServices = ({ router }) => {
           <label className="text-muted">
             <h3>Process</h3>
           </label>
-
+          {/* 
           <input
             type="text"
             className="form-control"
@@ -255,6 +290,17 @@ const CreateServices = ({ router }) => {
             onChange={onChange("process")}
             required
           />
+        </div> */}
+
+          <div className="form-group">
+            <ReactQuill
+              value={process}
+              placeholder="Write Somthing Amazing Here"
+              modules={CreateServices.modules}
+              formats={CreateServices.formats}
+              onChange={(e) => onHandleChange(e)}
+            />
+          </div>
         </div>
 
         <div>
@@ -320,5 +366,34 @@ const CreateServices = ({ router }) => {
     </React.Fragment>
   );
 };
+
+CreateServices.modules = {
+  toolbar: [
+    [{ header: "1" }, { header: "2" }, { header: [3, 4, 5, 6] }, { font: [] }],
+    [{ size: [] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["link", "image", "video"],
+    ["clean"],
+    ["code-block"],
+  ],
+};
+
+CreateServices.formats = [
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "link",
+  "image",
+  "video",
+  "code-block",
+];
 
 export default withRouter(CreateServices);

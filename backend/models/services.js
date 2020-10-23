@@ -29,6 +29,11 @@ const servicesSchema = new mongoose.Schema(
       { type: ObjectId, ref: "Price", required: true },
     ],
 
+    choosenPriceFrontEnd: {
+      type: Number,
+      default: 0,
+    },
+
     imageCover: {
       data: Buffer,
       contentType: String,

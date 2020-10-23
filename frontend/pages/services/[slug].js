@@ -16,7 +16,6 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { isAuth } from "../../actions/setAuthToken";
 import { bookService } from "../../actions/stripe";
 import { getCookie } from "../../actions/setAuthToken";
-import { withRouter } from "next/router";
 import renderHTML from "react-render-html";
 import moment from "moment";
 
@@ -52,12 +51,19 @@ const SingleService = ({ service, query }) => {
             className="btn btn-outline-danger mx-auto font-weight-bold "
             style={{ width: "700px" }}
           >
-            <h5>{price.discountedServiceCharges}</h5>
+            <h5>
+              {price.discountedServiceCharges} + {total}
+            </h5>
+            <h5>
+              {price.discountedServiceCharges} + {subtotal}
+            </h5>
           </div>
         </div>
       </div>
     ));
   };
+
+  //add these price and send to the backend as update and store as update
 
   const showPortFolio = (service) => {
     return service.the_portfolios.map((portfolio, i) => (
@@ -297,16 +303,6 @@ const SingleService = ({ service, query }) => {
                         >
                           Book Now
                         </button>
-                        {/* <Link href={`/checkout-session/${service._id}`}>
-                          <a
-                            className="mt-4 btn-lg btn-block btn btn-success"
-                            style={{ width: "235px" }}
-                            data-serv-id={`${service._id}`}
-                            onClick={handleClick}
-                          >
-                            Book Now
-                          </a>
-                        </Link> */}
                       </>
                     )}
                   </div>

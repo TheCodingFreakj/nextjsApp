@@ -191,6 +191,7 @@ export const removeService = async (slug, token) => {
 
 //gives the blog based on slug
 export const singleService = async (slug) => {
+  console.log("Slug fr single servcie", slug);
   try {
     const config = {
       method: "GET",

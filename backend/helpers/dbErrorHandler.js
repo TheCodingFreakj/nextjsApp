@@ -25,7 +25,7 @@ const uniqueMessage = (error) => {
  * Get the error message from error object
  */
 exports.errorHandler = (error) => {
-  console.log("The error info from dbErrorHandler file", error);
+  console.log("The error info from dbErrorHandler file", error); //sometimes error object aint coming
   let message = "";
 
   if (error.code) {

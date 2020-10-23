@@ -5,7 +5,7 @@ import moment from "moment";
 import { API } from "../../config";
 
 const SmallCard = ({ service }) => {
-  //   console.log(service);
+  console.log(service);
   const showPriceList = () => {
     return service.discountedServiceCharges.map((price, i) => (
       <p className="card-text" key={i}>
