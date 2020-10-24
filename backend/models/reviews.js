@@ -49,7 +49,7 @@ const reviewsSchema = new mongoose.Schema(
 //This id is for current service to which the review belongs to
 //this => current model
 reviewsSchema.statics.calAverageRatings = async function (serviceId) {
-  console.log("Step 3: This is service on which the review is made", serviceId);
+  //console.log("Step 3: This is service on which the review is made", serviceId);
 
   //this.aggregate on the model
   const stats = await this.aggregate([
@@ -57,25 +57,25 @@ reviewsSchema.statics.calAverageRatings = async function (serviceId) {
     //matches the service iD
     //select all the reviews that belonmg to the particular service that is passed in as argument
     //This id is the id we are getting
-    // {
-    //   $group: {
-    //     _id: "$checkedService", //group based on services checked when sending the review from frontend. This checked service the service we click and send as array
-    //     nRating: { $sum: 1 },
-    //     avgRating: { $avg: "$rating" },
-    //   },
-    // },
+    {
+      $group: {
+        _id: "$checkedService", //group based on services checked when sending the review from frontend. This checked service the service we click and send as array
+        nRating: { $sum: 1 },
+        avgRating: { $avg: "$rating" },
+      },
+    },
   ]);
-  // console.log("The stats are", stats);
+  //console.log("The stats are", stats);
 
-  // await Service.findByIdAndUpdate(serviceId, {
-  //   ratingsQuantity: stats[0].nRating,
-  //   ratingsAverage: stats[0].avgRating,
-  // });
+  await Service.findByIdAndUpdate(serviceId, {
+    ratingsQuantity: stats[0].nRating,
+    ratingsAverage: stats[0].avgRating,
+  });
 };
 
 //runs everytime I create a new review or update
 reviewsSchema.post("save", function (next) {
-  console.log(" Step 2: Checking the checked service", this.checkedService); //works if the person leave a comment from the service page
+  //console.log(" Step 2: Checking the checked service", this.checkedService); //works if the person leave a comment from the service page
   // console.log("Checking the checked service", this.checkedService[0]._id);
   // //calling the function on the model directly
   this.constructor.calAverageRatings(this.checkedService); //this is the cuurent review and we pass the id

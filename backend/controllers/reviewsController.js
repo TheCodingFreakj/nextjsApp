@@ -63,7 +63,7 @@ exports.CreateReviews = async (req, res) => {
 };
 
 exports.Reviews = async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   //const reviewData = req.body;
   try {
     const { review, rating, user, serviceId } = req.body;
@@ -81,8 +81,6 @@ exports.Reviews = async (req, res) => {
           error: errorHandler(err),
         });
       }
-
-      // [CastError]
 
       return res.json(result);
     });

@@ -8,8 +8,8 @@ import { isAuth } from "../../actions/setAuthToken";
 //bring components
 
 const ReviewForm = ({ serviceId }) => {
-  //console.log(serviceId);
-  console.log(isAuth()); // works only for logged in user // dont load the slug
+  //console.log("This is serviceid", serviceId);
+  //console.log("This is details of authorized user", isAuth()); // works only for logged in user // dont load the slug
   const [reviews, setReviews] = useState({
     review: "",
     rating: "",
@@ -30,11 +30,11 @@ const ReviewForm = ({ serviceId }) => {
   const loadLoggedInuser = () => {
     if (isAuth()) {
       getCurrentLoggedUser(isAuth().username).then((data) => {
-        console.log("The price logged in user is", data);
+        //console.log("The current logged in user info", data);
         if (data.error) {
           setReviews({ ...reviews, error: data.error });
         } else {
-          setUser(data.username);
+          setUser(data);
         }
       });
     }
@@ -85,6 +85,7 @@ const ReviewForm = ({ serviceId }) => {
           <input
             type="text"
             className="form-control"
+            placeholder="Give the review here"
             name="review"
             value={review}
             onChange={onChange("review")}
@@ -96,6 +97,7 @@ const ReviewForm = ({ serviceId }) => {
           <input
             type="number"
             className="form-control"
+            placeholder="Give the ratings here"
             name="rating"
             value={rating} // This value should be coming from the state
             onChange={onChange("rating")} //setFormData
@@ -114,8 +116,8 @@ const ReviewForm = ({ serviceId }) => {
     <React.Fragment>
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-6 pt-5 pb-5">{createRatings()}</div>
-          {JSON.stringify(user)}
+          <div className="col-md-6 bg-warning pt-5 pb-5">{createRatings()}</div>
+          {/* {JSON.stringify(user)} */}
         </div>
       </div>
     </React.Fragment>

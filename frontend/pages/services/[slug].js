@@ -27,7 +27,7 @@ const stripePromise = loadStripe(
 );
 const SingleService = ({ service, query }) => {
   //console.log(query);
-  // console.log(service);
+  console.log(service);
 
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
@@ -100,7 +100,7 @@ const SingleService = ({ service, query }) => {
         <div className="card-body p-3 mb-2 bg-success text-white">
           <p className="card-text">{review.review}</p>
           <p className="card-text">Average Rating : {review.rating}</p>
-          <p className="card-text">Given By : {review.client}</p>
+          <p className="card-text">Given By : {review.reviewedBy}</p>
           <p className="card-text"> {moment(review.createdAt).fromNow()}</p>
         </div>
       </div>
