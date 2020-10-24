@@ -18,7 +18,6 @@ import { bookService } from "../../actions/stripe";
 import { getCookie } from "../../actions/setAuthToken";
 import renderHTML from "react-render-html";
 import moment from "moment";
-
 import SmallCard from "../../components/portfolio/serviceCard";
 import ReviewForm from "../../components/reviews/submitReview";
 
@@ -28,7 +27,7 @@ const stripePromise = loadStripe(
 );
 const SingleService = ({ service, query }) => {
   //console.log(query);
-  console.log(service);
+  // console.log(service);
 
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
@@ -41,6 +40,7 @@ const SingleService = ({ service, query }) => {
   //     <script src="https://js.stripe.com/v3/"></script>
   //   </Head>
   // );
+
   const token = getCookie("token");
   const showServiceCharges = (service) => {
     return service.discountedServiceCharges.map((price, i) => (
@@ -51,12 +51,23 @@ const SingleService = ({ service, query }) => {
             className="btn btn-outline-danger mx-auto font-weight-bold "
             style={{ width: "700px" }}
           >
-            <h5>
-              {price.discountedServiceCharges} + {total}
-            </h5>
-            <h5>
-              {price.discountedServiceCharges} + {subtotal}
-            </h5>
+            <p>
+              Choose the tools to see total price:{" "}
+              {addTotalServices(price.discountedServiceCharges, total)}
+            </p>
+          </div>
+          <br />
+        </div>
+        <div className="row">
+          <h4>Price Range :</h4>
+          <div
+            className="btn btn-outline-danger mx-auto font-weight-bold "
+            style={{ width: "700px" }}
+          >
+            <p>
+              Choose the tools to see total price:
+              {subTotalServices(price.discountedServiceCharges, subtotal)}
+            </p>
           </div>
         </div>
       </div>
@@ -64,7 +75,15 @@ const SingleService = ({ service, query }) => {
   };
 
   //add these price and send to the backend as update and store as update
+  const addTotalServices = (price, total) => {
+    const addPrice = price + total;
+    return addPrice;
+  };
 
+  const subTotalServices = (price, subtotal) => {
+    const subPrice = price + subtotal;
+    return subPrice;
+  };
   const showPortFolio = (service) => {
     return service.the_portfolios.map((portfolio, i) => (
       <div key={i} className="col-md-4">
