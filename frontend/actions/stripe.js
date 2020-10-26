@@ -4,7 +4,10 @@
 import axios from "axios";
 import { API } from "../config";
 
-export const bookService = async (servId, token) => {
+export const bookService = async (servId, checkedTool, priceAmount, token) => {
+  const price = Math.round(priceAmount.choosenPriceFrontEnd);
+  console.log(price);
+  console.log(checkedTool);
   try {
     const config = {
       method: "GET",
@@ -16,9 +19,10 @@ export const bookService = async (servId, token) => {
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       },
     };
-
+    ///serviceid/304
+    //${servId}/?price=${totalPrice}
     const response = await axios.get(
-      `${API}/api/checkout-session/${servId}`,
+      `${API}/api/checkout-session/${servId}?priceAmount=${price}&checkedTool=${checkedTool}`,
       config
     ); //handing the backedn register user
     return response.data;

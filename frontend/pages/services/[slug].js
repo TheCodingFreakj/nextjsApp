@@ -27,12 +27,14 @@ const stripePromise = loadStripe(
 );
 const SingleService = ({ service, query }) => {
   //console.log(query);
-  console.log(service);
+  //console.log(service);
 
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
   const [total, setTotal] = useState([]);
   const [subtotal, setSubTotal] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(""); //send this totalPrice in to the backend as ?price={totalPrice}
+
   const [session, setSession] = useState();
 
   // const head = () => (
@@ -42,48 +44,87 @@ const SingleService = ({ service, query }) => {
   // );
 
   const token = getCookie("token");
+
   const showServiceCharges = (service) => {
+    //add these price and send to the backend as update and store as update
+
+    //price is constant
+    //total and subtotal changes as per selection
+    const addTotalServices = (price, total) => {
+      addPrice = price + total;
+      return addPrice;
+    };
+
+    let subPrice = "";
+
+    const subTotalServices = (price, subtotal) => {
+      subPrice = price + subtotal;
+      return subPrice;
+    };
+    const increment = (name) => (e) => {
+      console.log("name", name);
+
+      //console.log(e.target);
+      console.log("value", e.target.value);
+
+      setTotalPrice({
+        ...totalPrice,
+        [name]: e.target.value,
+      });
+    };
+
+    const decrement = (name) => (e) => {
+      console.log(name);
+      console.log(e.target.value);
+
+      setTotalPrice({
+        ...totalPrice,
+        [name]: e.target.value,
+      });
+    };
+
     return service.discountedServiceCharges.map((price, i) => (
       <div key={i} className="container">
         <div className="row">
-          <h4>Price Range :</h4>
-          <div
+          <h4>Click Once After you Decide :Price Add</h4>
+
+          <button
             className="btn btn-outline-danger mx-auto font-weight-bold "
             style={{ width: "700px" }}
+            role="link"
+            name="choosenPriceFrontEnd"
+            type="submit"
+            value={addTotalServices(price.discountedServiceCharges, total)}
+            onClick={increment("choosenPriceFrontEnd")}
           >
-            <p>
-              Choose the tools to see total price:{" "}
-              {addTotalServices(price.discountedServiceCharges, total)}
-            </p>
-          </div>
+            {addTotalServices(price.discountedServiceCharges, total)} $
+          </button>
+          {/* //addTotalServices(price.discountedServiceCharges, total) */}
           <br />
         </div>
         <div className="row">
-          <h4>Price Range :</h4>
-          <div
+          <h4>Click Once After you Decide : Price Cut</h4>
+
+          <button
             className="btn btn-outline-danger mx-auto font-weight-bold "
             style={{ width: "700px" }}
+            role="link"
+            name="choosenPriceFrontEnd"
+            type="submit"
+            value={subTotalServices(price.discountedServiceCharges, subtotal)}
+            onClick={decrement(
+              subTotalServices(price.discountedServiceCharges, subtotal)
+            )}
           >
-            <p>
-              Choose the tools to see total price:
-              {subTotalServices(price.discountedServiceCharges, subtotal)}
-            </p>
-          </div>
+            {subPrice} $
+          </button>
         </div>
       </div>
     ));
   };
+  //https://www.toptal.com/react/react-context-api
+  let addPrice = "";
 
-  //add these price and send to the backend as update and store as update
-  const addTotalServices = (price, total) => {
-    const addPrice = price + total;
-    return addPrice;
-  };
-
-  const subTotalServices = (price, subtotal) => {
-    const subPrice = price + subtotal;
-    return subPrice;
-  };
   const showPortFolio = (service) => {
     return service.the_portfolios.map((portfolio, i) => (
       <div key={i} className="col-md-4">
@@ -169,13 +210,15 @@ const SingleService = ({ service, query }) => {
     ));
   };
 
-  const handleClick = async (event) => {
+  const handleClick = async (event, checkedTool, price) => {
     console.log(event);
+    console.log(price);
+    console.log(checkedTool);
     // Get Stripe.js instance
     const stripe = await stripePromise;
 
     // Call your backend to create the Checkout Session
-    bookService(event, token).then(async (data) => {
+    bookService(event, checkedTool, price, token).then(async (data) => {
       console.log(data);
       if (data.error) {
         console.log(data.error);
@@ -218,6 +261,7 @@ const SingleService = ({ service, query }) => {
   return (
     <React.Fragment>
       {/* {head()} */}
+
       <Layout>
         <main>
           <article>
@@ -295,7 +339,8 @@ const SingleService = ({ service, query }) => {
                   <h2>Summary</h2>
                   {renderHTML(service.process)}
                 </div>
-
+                {JSON.stringify(totalPrice)}
+                {JSON.stringify(total)}
                 <div className="col-md-4 ml-6">
                   <h2>Ratings</h2>
                   Average Ratings{service.ratingsAverage}
@@ -313,12 +358,18 @@ const SingleService = ({ service, query }) => {
                   <div className="col-md-6 lead">
                     {isAuth() && isAuth().customerRole === "consumer" && (
                       //Admin
+
                       <>
                         <button
                           className="mt-4 btn-lg btn-block btn btn-success"
                           style={{ width: "235px" }}
                           role="link"
-                          onClick={() => handleClick(service._id)}
+                          name="choosenPriceFrontEnd"
+                          type="submit"
+                          value={totalPrice}
+                          onClick={() =>
+                            handleClick(service._id, checkedTool, totalPrice)
+                          }
                         >
                           Book Now
                         </button>
@@ -342,6 +393,7 @@ const SingleService = ({ service, query }) => {
 
             <div className="container pb-5">
               <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
+
               <hr />
               <div className="row">{showPortFolio(service)}</div>
             </div>

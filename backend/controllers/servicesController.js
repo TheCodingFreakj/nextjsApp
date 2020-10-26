@@ -200,6 +200,10 @@ exports.updateService = async (req, res) => {
           oldService.discountedPrice = discountedPrice.split(",");
         }
 
+        if (choosenPriceFrontEnd) {
+          oldService.choosenPriceFrontEnd = choosenPriceFrontEnd;
+        }
+
         if (files.photo) {
           if (files.photo.size > 10000000) {
             return res.status(400).json({

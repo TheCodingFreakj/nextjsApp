@@ -17,6 +17,14 @@ const bookingSchema = new mongoose.Schema(
       index: true,
     },
 
+    // toolPrice: [
+    //   {
+    //     type: ObjectId,
+    //     ref: "Tools",
+    //     required: [true, "Tools must be mentioned"],
+    //   },
+    // ],
+
     productPrice: [
       {
         type: ObjectId,

@@ -64,6 +64,9 @@ const ReadPrices = ({ slug }) => {
       return (
         <div key={i} className="pb-5">
           <h3>{pri.serviceName}</h3>
+          <p>
+            <em>price: {pri.discountedServiceCharges}</em>
+          </p>
 
           <button
             className="btn btn-small btn-danger"
