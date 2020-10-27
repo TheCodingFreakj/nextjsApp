@@ -168,7 +168,7 @@ exports.createCustomers = async (req, res) => {
 //https://stripe.com/docs/api/checkout/sessions/create
 exports.getCheckoutSession = async (req, res) => {
   // console.log("From frontend", req.params);
-  console.log("From frontend", req.query);
+  //console.log("From frontend", req.query);
   // console.log("From frontend", req.query.checkedTool);
 
   const checkedTool = req.query.checkedTool.split(",");
@@ -263,7 +263,7 @@ exports.getCheckoutSession = async (req, res) => {
               price: product.priceUnit1Id,
               quantity: orderNumber,
             },
-            //No such price: 'price_1HgP4jGERwFTkr9GflQEbPpk'
+
             {
               price: product.priceUnit1Id,
               quantity: orderNumber,

@@ -218,19 +218,12 @@ const SingleService = ({ service, query }) => {
   };
 
   const handleClick = async (event, checkedTool, price) => {
-    // console.log(event);
-    // console.log(price);
-    // console.log(checkedTool);
     // Get Stripe.js instance
     const stripe = await stripePromise;
 
     // Call your backend to create the Checkout Session
     bookService(event, checkedTool, price, shoppingCart, token).then(
       async (data) => {
-        // console.log(event);
-        // console.log(checkedTool);
-        // console.log(price);
-
         console.log(data);
         if (data.error) {
           console.log(data.error);
@@ -243,33 +236,12 @@ const SingleService = ({ service, query }) => {
       }
     );
 
-    // const session = await response.json();
-
-    // // When the customer clicks on the button, redirect them to Checkout.
-    // const result = await stripe.redirectToCheckout({
-    //   sessionId: session.id,
-    // });
-
     // if (result.error) {
     //   // If `redirectToCheckout` fails due to a browser or network
     //   // error, display the localized error message to your customer
     //   // using `result.error.message`.
     // }
   };
-
-  //  const checkOutSession = (id) => {
-
-  //   bookService().then((data) => {
-  //     console.log(data);
-  //     // if (data.error) {
-  //     //   console.log(data.error);
-  //     // } else {
-  //     //   setRelated(data);
-  //     // }
-  //   });
-  // };
-
-  // }
 
   const handleRemoveFromCart = () => {
     setCart({
