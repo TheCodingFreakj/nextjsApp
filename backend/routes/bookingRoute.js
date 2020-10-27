@@ -28,7 +28,7 @@ router.post(
   createProducts
 );
 //Route for creating the check out prices of the product
-router.get("/create-prices/:servId", tokenAuth, adminMiddleware, createPrices);
+router.post("/create-prices/:servId", tokenAuth, adminMiddleware, createPrices);
 
 //Route for creating customer
 router.post(

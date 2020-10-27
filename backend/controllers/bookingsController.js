@@ -63,26 +63,17 @@ exports.createPrices = async (req, res) => {
     let product = await Product.findOneAndUpdate({
       prodName: req.body.prodName,
     });
-    // console.log(product);
+    console.log(product);
 
     //supply service id
     const bookedservice = await Service.findById(req.params.servId)
       .populate("tools", "_id tool clientPrice slug")
       .populate("discountedServiceCharges", " discountedServiceCharges ");
     // console.log(bookedservice);
-    // console.log(
-    //   "serviceprices",
-    //   bookedservice.discountedServiceCharges[0].discountedServiceCharges
-    // );
-
-    //we have to match what comes from frontend
-    // let durationRange = parseInt(service.duration, 10).valueOf();
-    // console.log(durationRange);
-    // console.log(typeof "durationRange");
 
     let duration = parseInt(bookedservice.duration, 10) - 1;
 
-    // console.log("The Duration", duration);
+    console.log("The Duration", duration);
 
     // console.log(typeof "duration");
 
@@ -102,45 +93,34 @@ exports.createPrices = async (req, res) => {
 
     console.log("The initial Payment", dueInitial);
     // console.log(typeof "dueInitial");
+    const recurringDue = discountCharge;
 
-    // const toolPrice = totalPrice - dueInitial;
-    // console.log("the tool price", toolPrice);
-
-    // const priceunit1 = toolPrice + dueInitial;
-    const recurringDue = discountCharge - dueInitial;
-
-    // const recurringDue =
-    //   (service.discountedServiceCharges[0].discountedServiceCharges -
-    //     dueInitial) /
-    //   (parseInt(service.duration) - 1);
-
-    //console.log("The recurrent amount", recurringDue);
-    // console.log(typeof "recurringDue");
+    console.log("The recurrent amount", recurringDue);
+    console.log(typeof recurringDue);
 
     //client pays starter amount
-
+    //Math.round(dueInitial)
     const priceUnit1 = await stripe.prices.create({
       product: product.prodId,
-      unit_amount: Math.round(dueInitial), //This is toolprice + discountedserviceCharges
-      //toolPrice will depend on what client chooses from frontend. toolPrice is dynamic
+      unit_amount: dueInitial * 100,
       currency: "usd",
     });
-
+    //Math.round(recurringDue)
     //client pays this per month
     const priceUnit2 = await stripe.prices.create({
       product: product.prodId,
-      unit_amount: Math.round(recurringDue), //This is toolprice + discountedserviceCharges
+      unit_amount: recurringDue * 100, //This is toolprice + discountedserviceCharges
       currency: "usd",
       recurring: {
         interval: "month",
       },
     });
 
-    // console.log(priceUnit1);
-    // console.log(priceUnit2);
+    // console.log(priceUnit1.unit_amount);
+    // console.log(priceUnit2.unit_amount);
 
-    product.priceUnit1 = priceUnit1.unit_amount;
-    product.priceUnit2 = priceUnit2.unit_amount;
+    product.priceUnit1 = dueInitial;
+    product.priceUnit2 = recurringDue;
     product.priceUnit1Id = priceUnit1.id;
     product.priceUnit2Id = priceUnit2.id;
 
@@ -188,120 +168,120 @@ exports.createCustomers = async (req, res) => {
 //https://stripe.com/docs/api/checkout/sessions/create
 exports.getCheckoutSession = async (req, res) => {
   // console.log("From frontend", req.params);
-  // console.log("From frontend", req.query);
+  console.log("From frontend", req.query);
   // console.log("From frontend", req.query.checkedTool);
 
   const checkedTool = req.query.checkedTool.split(",");
   // console.log(checkedTool);
-  //get the sessionid
-  //get the price to be paid
-  //serviceId?234
-  //get tools price
-  //get service price
-
+  const orderNumber = req.query.shoppingCart;
+  console.log(typeof orderNumber);
   //priceAmount = serviceCharges + toolPrice
 
-  console.log(req.protocol);
-  console.log(req.get("host"));
+  // console.log(req.protocol);
+  // console.log(req.get("host"));
   try {
     //get the currently booked service
     const bookedservice = await Service.findById(req.params.servId)
       .populate("tools", "_id tool clientPrice slug")
       .populate("discountedServiceCharges", " discountedServiceCharges ");
-    //console.log(bookedservice);
-    // console.log(
-    //   bookedservice.discountedServiceCharges[0].discountedServiceCharges
-    // );
-
-    //console.log(bookedservice.tools);
-
-    // console.log(toolBooked);
+    console.log(bookedservice);
 
     let toolchecked = [];
 
     checkedTool.map((tool) => toolchecked.push({ tool_id: tool }));
 
-    console.log("Checked", toolchecked);
-
     let checkedArray = [];
     bookedservice.tools.forEach((price, index) => {
-      // console.log(price);
-      console.log("price", price._id);
-      console.log(typeof String(price._id)); //object
       toolchecked.map((o) => {
-        console.log("price inside toolchecked", price._id);
-        console.log(typeof String(price._id));
-        // console.log(o);
-        // console.log(typeof o);
-        console.log("tool", o.tool_id); //string
-        console.log(typeof o.tool_id);
         if (o.tool_id === String(price._id)) {
-          console.log(price);
           checkedArray.push(price);
         } else {
           console.log("It is not matching");
         }
       });
-
-      console.log(checkedArray);
     });
 
+    console.log("checked tool from frontend", checkedArray);
+
+    let totaltoolPrice = [];
+    checkedArray.forEach((element, index) => {
+      totaltoolPrice.push(element.clientPrice);
+    });
+
+    console.log(
+      "The array of price of checked tools from client",
+      totaltoolPrice
+    );
+
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+
+    const toolTotal = totaltoolPrice.reduce(reducer);
+    console.log("The summation of the price of tools selected", toolTotal);
+
     //create checkout session
-    // const serviceSelected = await Service.findById(req.params.servId).exec(
-    //   async (err, service) => {
-    //     if (err) {
-    //       return res.status(400).json({ errors: errorHandler(err) });
-    //     }
-    //     console.log(service.title);
-    //     const title = service.title;
+    const serviceSelected = await Service.findById(req.params.servId).exec(
+      async (err, service) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+        console.log(service.title);
+        const title = service.title;
 
-    //     const totalPrice = req.query.priceAmount;
-    //     console.log("The entire price", totalPrice);
+        const totalPrice = req.query.priceAmount;
+        console.log("The entire price", totalPrice);
+        console.log(typeof parseInt(totalPrice));
 
-    //     //extract the tool price
+        //extract the tool price
 
-    //     const serviceCharges =
-    //       bookedservice.discountedServiceCharges[0].discountedServiceCharges;
+        const serviceCharges =
+          bookedservice.discountedServiceCharges[0].discountedServiceCharges;
 
-    //     const toolPrice = toolBooked.clientPrice;
-    //     console.log("the tool price", toolPrice);
+        const toolTotal = Math.round(parseInt(totalPrice));
+        console.log("the tool price", toolTotal);
+        console.log(typeof toolTotal);
 
-    //     const payPrice1 = toolPrice + priceUnit1; (from product collectipn)
-    //     const payPrice2= priceUnit2
-    //     console.log(priceunit1);
-    //     console.log(priceUnit2);
-    //     // const priceUnits = await Product.findOne({ prodName: title });
-    //     // console.log(priceUnits);
-    //     //return res.json(blog);
-    //     const session = await stripe.checkout.sessions.create({
-    //       customer_email: req.user.email,
-    //       payment_method_types: ["card"],
-    //       client_reference_id: req.params.servId,
-    //       mode: "subscription",
-    //       billing_address_collection: "required",
-    //       line_items: [
-    //         {
-    //           price: payPrice1,
-    //           quantity: 1,
-    //         },
-    //         {
-    //           price: parseInt(payPrice2),
-    //           quantity: 1,
-    //         },
-    //       ],
-    //       success_url: `${req.protocol}://${req.get("host")}`, // This is the url called when the credit card is successfully charged
-    //       cancel_url: `${req.protocol}://${req.get("host")}/service/${
-    //         service.slug
-    //       }`,
-    //     });
-    //     ///success?session_id=${session.id}
-    //     res.status(200).json({
-    //       status: "success",
-    //       id: session.id, //need the session id at the client for the checkout process
-    //       session,
-    //     });
-    //   }
-    //);
+        let product = await Product.findOneAndUpdate({
+          prodName: service.title,
+        });
+        console.log(product);
+
+        const payPrice1 = toolTotal + product.priceUnit1 * orderNumber; //from product collectipn //issue with conversion
+        const payPrice2 = toolTotal + product.priceUnit2 * orderNumber;
+        console.log(payPrice1);
+        console.log(payPrice2);
+        // const priceUnits = await Product.findOne({ prodName: title });
+        // console.log(priceUnits);
+        //return res.json(blog);
+        const session = await stripe.checkout.sessions.create({
+          customer_email: req.user.email,
+          payment_method_types: ["card"],
+          client_reference_id: req.params.servId,
+          mode: "subscription",
+          billing_address_collection: "required",
+          line_items: [
+            {
+              price: product.priceUnit1Id,
+              quantity: orderNumber,
+            },
+            //No such price: 'price_1HgP4jGERwFTkr9GflQEbPpk'
+            {
+              price: product.priceUnit1Id,
+              quantity: orderNumber,
+            },
+          ],
+          success_url: `${req.protocol}://${req.get("host")}`, // This is the url called when the credit card is successfully charged
+          cancel_url: `${req.protocol}://${req.get("host")}/service/${
+            service.slug
+          }`,
+        });
+        ///success?session_id=${session.id}
+        res.status(200).json({
+          status: "success",
+          id: session.id, //need the session id at the client for the checkout process
+          session,
+        });
+      }
+    );
     //send the session to client
     // A Checkout Session controls what your customer sees in the Stripe-hosted payment page such as line items,
     // the order amount and currency, and acceptable payment methods.

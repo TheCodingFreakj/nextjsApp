@@ -4,10 +4,16 @@
 import axios from "axios";
 import { API } from "../config";
 
-export const bookService = async (servId, checkedTool, priceAmount, token) => {
+export const bookService = async (
+  servId,
+  checkedTool,
+  priceAmount,
+  shoppingCart,
+  token
+) => {
   const price = Math.round(priceAmount.choosenPriceFrontEnd);
-  console.log(price);
-  console.log(checkedTool);
+  // console.log(price);
+  // console.log(checkedTool);
   try {
     const config = {
       method: "GET",
@@ -21,8 +27,9 @@ export const bookService = async (servId, checkedTool, priceAmount, token) => {
     };
     ///serviceid/304
     //${servId}/?price=${totalPrice}
+
     const response = await axios.get(
-      `${API}/api/checkout-session/${servId}?priceAmount=${price}&checkedTool=${checkedTool}`,
+      `${API}/api/checkout-session/${servId}?priceAmount=${price}&shoppingCart=${shoppingCart}&checkedTool=${checkedTool}`,
       config
     ); //handing the backedn register user
     return response.data;

@@ -34,8 +34,14 @@ const SingleService = ({ service, query }) => {
   const [total, setTotal] = useState([]);
   const [subtotal, setSubTotal] = useState([]);
   const [totalPrice, setTotalPrice] = useState(""); //send this totalPrice in to the backend as ?price={totalPrice}
-
   const [session, setSession] = useState();
+  const [cart, setCart] = useState({
+    availableProductspermonth: 4,
+    shoppingCart: 0,
+    cartContainer: [],
+  });
+
+  const { availableProductspermonth, shoppingCart, cartContainer } = cart;
 
   // const head = () => (
   //   <Head>
@@ -122,6 +128,7 @@ const SingleService = ({ service, query }) => {
       </div>
     ));
   };
+
   //https://www.toptal.com/react/react-context-api
   let addPrice = "";
 
@@ -211,24 +218,30 @@ const SingleService = ({ service, query }) => {
   };
 
   const handleClick = async (event, checkedTool, price) => {
-    console.log(event);
-    console.log(price);
-    console.log(checkedTool);
+    // console.log(event);
+    // console.log(price);
+    // console.log(checkedTool);
     // Get Stripe.js instance
     const stripe = await stripePromise;
 
     // Call your backend to create the Checkout Session
-    bookService(event, checkedTool, price, token).then(async (data) => {
-      console.log(data);
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        const result = await stripe.redirectToCheckout({
-          sessionId: data.id,
-        });
-        setSession(data);
+    bookService(event, checkedTool, price, shoppingCart, token).then(
+      async (data) => {
+        // console.log(event);
+        // console.log(checkedTool);
+        // console.log(price);
+
+        console.log(data);
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          const result = await stripe.redirectToCheckout({
+            sessionId: data.id,
+          });
+          setSession(data);
+        }
       }
-    });
+    );
 
     // const session = await response.json();
 
@@ -257,6 +270,89 @@ const SingleService = ({ service, query }) => {
   // };
 
   // }
+
+  const handleRemoveFromCart = () => {
+    setCart({
+      shoppingCart: shoppingCart - 1,
+    });
+  };
+
+  const handleAddToCart = () => {
+    setCart({
+      shoppingCart: shoppingCart + 1,
+    });
+  };
+
+  const handleAddProductsToCart = (props) => {
+    console.log("clicked", shoppingCart);
+
+    // let found = false;
+    // const updateCart = cartContainer.map(cartItem => {
+    //   if (cartContainer.name === service.name) {
+    //     found = true;
+    //     cartItem.productsNumber = shoppingCart;
+    //     return cartItem;
+    //   } else {
+    //     return cartItem;
+    //   }
+    // });
+    // if (!found) {
+    //   updateCart.push({
+    //     name: this.props.name,
+    //     productsNumber: this.state.shoppingCart,
+    //     key: this.props.name
+    //   });
+    // }
+    // this.setCart({
+    //   cart: updateCart
+    // });
+    // // return <ShoppingCart cart={updateCart} />;
+    // // console.log(updateCart);
+  };
+
+  const createCard = (cartitem) => {
+    console.log(" the cart item", cartitem);
+  };
+
+  const showCartInfo = (service) => {
+    console.log(service);
+
+    return (
+      <>
+        <button
+          className="mt-4 btn-lg btn-block btn btn-success"
+          disabled={shoppingCart === 0 ? true : false}
+          onClick={handleRemoveFromCart}
+        >
+          -
+        </button>
+        <span> {shoppingCart} </span>
+        <button
+          className="mt-4 btn-lg btn-block btn btn-success"
+          disabled={shoppingCart === availableProductspermonth ? true : false}
+          onClick={handleAddToCart}
+        >
+          +
+        </button>
+        <button
+          className="mt-4 btn-lg btn-block btn btn-success"
+          disabled={shoppingCart <= 0 ? true : false}
+          onClick={handleAddProductsToCart}
+        >
+          Add to cart
+        </button>
+
+        <div>
+          {cart != null
+            ? createCard(
+                service.discountedServiceCharges.map((name) => name.serviceName)
+              )
+            : "Cart is Full"}
+          {/* {cart != null ? <ShoppingCart name = {service.name} price={totalPrice} productsNumber = {shoppingCart}/> : ""} */}
+        </div>
+      </>
+    );
+  };
 
   return (
     <React.Fragment>
@@ -360,6 +456,9 @@ const SingleService = ({ service, query }) => {
                       //Admin
 
                       <>
+                        <div className="col-md-6 lead">
+                          {showCartInfo(service)}
+                        </div>
                         <button
                           className="mt-4 btn-lg btn-block btn btn-success"
                           style={{ width: "235px" }}

@@ -300,7 +300,7 @@ exports.SingleService = async (req, res) => {
       )
       .populate("tools", "_id tool clientPrice slug")
       .select(
-        "_id slug the_reviews the_portfolios discountedServiceCharges serviceName duration summary process"
+        "_id serviceName slug the_reviews the_portfolios discountedServiceCharges duration summary process"
       )
       .exec((err, service) => {
         console.log(err);
