@@ -8,7 +8,6 @@
 //This page chnahes based on router and slug
 
 import React, { useState, useEffect } from "react";
-import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
 import { singleService } from "../../actions/services";
@@ -42,12 +41,16 @@ const SingleService = ({ service, query }) => {
   });
 
   const { availableProductspermonth, shoppingCart, cartContainer } = cart;
-
+  const [toolclick, settoolclick] = useState([]);
   // const head = () => (
   //   <Head>
   //     <script src="https://js.stripe.com/v3/"></script>
   //   </Head>
   // );
+
+  // useEffect(() => {
+  //   grabToolsForCartDetails(service.tools);
+  // });
 
   const token = getCookie("token");
 
@@ -165,6 +168,7 @@ const SingleService = ({ service, query }) => {
     if (clickedId === -1) {
       allTools.push(tool._id);
       checkedPrice.push(tool.clientPrice);
+
       const choosenPrice = [...checkedPrice];
 
       for (let i = 0; i < choosenPrice.length; i++) {
@@ -235,12 +239,6 @@ const SingleService = ({ service, query }) => {
         }
       }
     );
-
-    // if (result.error) {
-    //   // If `redirectToCheckout` fails due to a browser or network
-    //   // error, display the localized error message to your customer
-    //   // using `result.error.message`.
-    // }
   };
 
   const handleRemoveFromCart = () => {
@@ -259,7 +257,7 @@ const SingleService = ({ service, query }) => {
     console.log("clicked", shoppingCart);
 
     // let found = false;
-    // const updateCart = cartContainer.map(cartItem => {
+    // const updateCart = cartContainer.map((cartItem) => {
     //   if (cartContainer.name === service.name) {
     //     found = true;
     //     cartItem.productsNumber = shoppingCart;
@@ -272,22 +270,18 @@ const SingleService = ({ service, query }) => {
     //   updateCart.push({
     //     name: this.props.name,
     //     productsNumber: this.state.shoppingCart,
-    //     key: this.props.name
+    //     key: this.props.name,
     //   });
     // }
     // this.setCart({
-    //   cart: updateCart
+    //   cart: updateCart,
     // });
-    // // return <ShoppingCart cart={updateCart} />;
-    // // console.log(updateCart);
-  };
-
-  const createCard = (cartitem) => {
-    console.log(" the cart item", cartitem);
+    // return <ShoppingCart cart={updateCart} />;
+    // console.log(updateCart);
   };
 
   const showCartInfo = (service) => {
-    console.log(service);
+    //console.log(service);
 
     return (
       <>
@@ -313,15 +307,6 @@ const SingleService = ({ service, query }) => {
         >
           Add to cart
         </button>
-
-        <div>
-          {cart != null
-            ? createCard(
-                service.discountedServiceCharges.map((name) => name.serviceName)
-              )
-            : "Cart is Full"}
-          {/* {cart != null ? <ShoppingCart name = {service.name} price={totalPrice} productsNumber = {shoppingCart}/> : ""} */}
-        </div>
       </>
     );
   };

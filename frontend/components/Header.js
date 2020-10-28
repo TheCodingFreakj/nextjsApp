@@ -48,6 +48,14 @@ const Header = () => {
             </NavItem>
 
             <NavItem className="ml-5 text-light  font-weight-bold  h5">
+              <Link href="/tools">
+                <a className="text-light  font-weight-bold  h5">
+                  Purchase Tools
+                </a>
+              </Link>
+            </NavItem>
+
+            <NavItem className="ml-5 text-light  font-weight-bold  h5">
               <Link href="/cart">
                 <a className="text-light  font-weight-bold  h5">
                   View Your Cart
@@ -167,14 +175,6 @@ const Header = () => {
             </React.Fragment>
 
             {renderHeader(userRole())}
-            {/* {console.log(userRole())}
-            {console.log(isAuth())} */}
-
-            {/* <NavItem className="ml-5 text-light font-weight-bold  h5">
-              <Link href="/user/blogs">
-                <a className="text-light font-weight-bold  h5">Write a Blog</a>
-              </Link>
-            </NavItem> */}
           </Nav>
         </Collapse>
       </Navbar>

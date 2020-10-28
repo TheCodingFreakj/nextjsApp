@@ -93,7 +93,7 @@ exports.createPrices = async (req, res) => {
 
     console.log("The initial Payment", dueInitial);
     // console.log(typeof "dueInitial");
-    const recurringDue = discountCharge;
+    const recurringDue = (discountCharge * 60) / 100;
 
     console.log("The recurrent amount", recurringDue);
     console.log(typeof recurringDue);
@@ -163,27 +163,23 @@ exports.createCustomers = async (req, res) => {
   }
 };
 
-//billing the customers using checkout
-//ref: session object: https://stripe.com/docs/api/checkout/sessions/object
-//https://stripe.com/docs/api/checkout/sessions/create
-exports.getCheckoutSession = async (req, res) => {
-  // console.log("From frontend", req.params);
-  //console.log("From frontend", req.query);
-  // console.log("From frontend", req.query.checkedTool);
+exports.getCheckoutSessionTools = async (req, res) => {
+  console.log("From frontend", req.query);
 
+  const totalPrice = req.query.priceAmount;
+  console.log("The entire price", totalPrice);
+  console.log(typeof parseInt(totalPrice));
+
+  //extract the tool price
+  //got the checkedtool from params
   const checkedTool = req.query.checkedTool.split(",");
-  // console.log(checkedTool);
-  const orderNumber = req.query.shoppingCart;
-  console.log(typeof orderNumber);
-  //priceAmount = serviceCharges + toolPrice
-
-  // console.log(req.protocol);
-  // console.log(req.get("host"));
   try {
-    //get the currently booked service
-    const bookedservice = await Service.findById(req.params.servId)
-      .populate("tools", "_id tool clientPrice slug")
-      .populate("discountedServiceCharges", " discountedServiceCharges ");
+    //get the tools purchased by the customer
+    const bookedservice = await Service.findById(req.params.userId).populate(
+      "tools",
+      "_id tool clientPrice slug"
+    );
+
     console.log(bookedservice);
 
     let toolchecked = [];
@@ -218,6 +214,25 @@ exports.getCheckoutSession = async (req, res) => {
     const toolTotal = totaltoolPrice.reduce(reducer);
     console.log("The summation of the price of tools selected", toolTotal);
 
+    console.log("the tool price", Math.round(parseInt(totalPrice)));
+    console.log(typeof totalPrice);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+};
+
+//billing the customers using checkout
+//ref: session object: https://stripe.com/docs/api/checkout/sessions/object
+//https://stripe.com/docs/api/checkout/sessions/create
+exports.getCheckoutSession = async (req, res) => {
+  const orderNumber = req.query.shoppingCart;
+
+  // console.log(req.protocol);
+  // console.log(req.get("host"));
+  try {
+    //get the currently booked service
+
     //create checkout session
     const serviceSelected = await Service.findById(req.params.servId).exec(
       async (err, service) => {
@@ -227,26 +242,17 @@ exports.getCheckoutSession = async (req, res) => {
         console.log(service.title);
         const title = service.title;
 
-        const totalPrice = req.query.priceAmount;
-        console.log("The entire price", totalPrice);
-        console.log(typeof parseInt(totalPrice));
-
-        //extract the tool price
-
         const serviceCharges =
           bookedservice.discountedServiceCharges[0].discountedServiceCharges;
-
-        const toolTotal = Math.round(parseInt(totalPrice));
-        console.log("the tool price", toolTotal);
-        console.log(typeof toolTotal);
 
         let product = await Product.findOneAndUpdate({
           prodName: service.title,
         });
         console.log(product);
 
-        const payPrice1 = toolTotal + product.priceUnit1 * orderNumber; //from product collectipn //issue with conversion
-        const payPrice2 = toolTotal + product.priceUnit2 * orderNumber;
+        const payPrice1 = product.priceUnit1 * orderNumber; //from product collectipn //issue with conversion
+        const payPrice2 = product.priceUnit2 * orderNumber; //recurring
+
         console.log(payPrice1);
         console.log(payPrice2);
         // const priceUnits = await Product.findOne({ prodName: title });
@@ -260,12 +266,20 @@ exports.getCheckoutSession = async (req, res) => {
           billing_address_collection: "required",
           line_items: [
             {
-              price: product.priceUnit1Id,
+              //price: product.priceUnit1Id,
+              price_data: {
+                currency: "usd",
+                unit_amount: payPrice1,
+              },
               quantity: orderNumber,
             },
-
+            //https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-line_items
             {
-              price: product.priceUnit1Id,
+              //price: product.priceUnit1Id,
+              price_data: {
+                currency: "usd",
+                unit_amount: payPrice2,
+              },
               quantity: orderNumber,
             },
           ],

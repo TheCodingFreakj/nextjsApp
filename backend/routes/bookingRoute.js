@@ -9,6 +9,7 @@ const tokenAuth = require("../middlewares/tokenAuth");
 
 const {
   getCheckoutSession,
+  getCheckoutSessionTools,
   createProducts,
   createPrices,
   createCustomers,
@@ -43,6 +44,13 @@ router.get(
   tokenAuth,
   authMiddleware,
   getCheckoutSession
+);
+
+router.get(
+  "/checkout-session/:userId",
+  tokenAuth,
+  authMiddleware,
+  getCheckoutSessionTools
 );
 
 router.get(

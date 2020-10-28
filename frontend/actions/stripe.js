@@ -27,9 +27,9 @@ export const bookService = async (
     };
     ///serviceid/304
     //${servId}/?price=${totalPrice}
-
+    //?priceAmount=${price}&shoppingCart=${shoppingCart}&checkedTool=${checkedTool}
     const response = await axios.get(
-      `${API}/api/checkout-session/${servId}?priceAmount=${price}&shoppingCart=${shoppingCart}&checkedTool=${checkedTool}`,
+      `${API}/api/checkout-session/${servId}?shoppingCart=${shoppingCart}`,
       config
     ); //handing the backedn register user
     return response.data;
