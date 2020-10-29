@@ -48,10 +48,8 @@ const Header = () => {
             </NavItem>
 
             <NavItem className="ml-5 text-light  font-weight-bold  h5">
-              <Link href="/tools">
-                <a className="text-light  font-weight-bold  h5">
-                  Purchase Tools
-                </a>
+              <Link href="">
+                <a className="text-light  font-weight-bold  h5">Shop</a>
               </Link>
             </NavItem>
 

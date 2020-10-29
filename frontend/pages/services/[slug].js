@@ -19,6 +19,7 @@ import renderHTML from "react-render-html";
 import moment from "moment";
 import SmallCard from "../../components/portfolio/serviceCard";
 import ReviewForm from "../../components/reviews/submitReview";
+import ShoppingTools from "../../components/shopping/shoppingTools";
 
 import { loadStripe } from "@stripe/stripe-js";
 const stripePromise = loadStripe(
@@ -448,10 +449,20 @@ const SingleService = ({ service, query }) => {
             </div>
 
             <div className="container pb-5">
-              <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
+              <h4 className="text-center pt-5 pb-5 h2 ">
+                Have A Look At Our Work
+              </h4>
 
               <hr />
               <div className="row">{showPortFolio(service)}</div>
+            </div>
+
+            <div className="container pb-5">
+              <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
+              <hr />
+              <div className="row">
+                <ShoppingTools service={service} />
+              </div>
             </div>
 
             <div className="container pb-5">

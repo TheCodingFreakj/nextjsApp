@@ -17,6 +17,11 @@ const Layout = ({ children }) => {
           rel="stylesheet"
         />
 
+        <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+          rel="stylesheet"
+        />
+
         <link href="/static/styles.css" rel="stylesheet" />
         <title>My Next Website App </title>
       </Head>
