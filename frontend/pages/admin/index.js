@@ -210,6 +210,30 @@ const AdminIndex = () => {
                 </li>
               </ul>
             </div>
+
+            <div className="col-md-6">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/products">
+                    <a className=" btn btn-small btn-success">
+                      Create Shopping Product
+                    </a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            {/* 
+            <div className="col-md-6">
+              <ul className="list-group">
+                <li className="list-group-item">
+                  <Link href="/admin/crud">
+                    <a className=" btn btn-small btn-success">
+                      Update Shopping Product
+                    </a>
+                  </Link>
+                </li>
+              </ul>
+            </div> */}
           </div>
         </div>
       </Admin>
