@@ -11,3 +11,7 @@
   max-height: 500px;
   object-fit: cover;
 }
+
+.custom-card-style {
+  padding: 9% 5%;
+}

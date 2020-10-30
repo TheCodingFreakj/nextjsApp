@@ -298,7 +298,7 @@ exports.SingleService = async (req, res) => {
         "discountedServiceCharges",
         "_id serviceName discountedServiceCharges slug"
       )
-      .populate("tools", "_id tool clientPrice slug")
+      .populate("tools", "_id tool summary process clientPrice slug")
       .select(
         "_id serviceName slug the_reviews the_portfolios discountedServiceCharges duration summary process"
       )

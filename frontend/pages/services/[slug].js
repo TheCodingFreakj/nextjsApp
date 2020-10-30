@@ -306,7 +306,7 @@ const SingleService = ({ service, query }) => {
           disabled={shoppingCart <= 0 ? true : false}
           onClick={handleAddProductsToCart}
         >
-          Add to cart
+          Order Quantity
         </button>
       </>
     );
@@ -428,7 +428,7 @@ const SingleService = ({ service, query }) => {
                             handleClick(service._id, checkedTool, totalPrice)
                           }
                         >
-                          Book Now
+                          Add to Cart
                         </button>
                       </>
                     )}
@@ -457,13 +457,10 @@ const SingleService = ({ service, query }) => {
               <div className="row">{showPortFolio(service)}</div>
             </div>
 
-            <div className="container pb-5">
-              <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
-              <hr />
-              <div className="row">
-                <ShoppingTools service={service} />
-              </div>
-            </div>
+            <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
+            <hr />
+
+            <ShoppingTools service={service} />
 
             <div className="container pb-5">
               <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
