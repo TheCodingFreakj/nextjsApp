@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Card, Icon, Button, Message } from "semantic-ui-react";
-import { getCookie } from "../../actions/setAuthToken";
+import { Card, Icon, Button } from "semantic-ui-react";
+import { getCookie, isAuth } from "../../actions/setAuthToken";
 import "../../static/styles.css";
+import PopOver from "../utils/popover";
 
 const ToolShoppingCard = ({ service }) => {
   let product = service.tools;
@@ -19,16 +20,21 @@ const ToolShoppingCard = ({ service }) => {
   //call the amount to display in frontend of cart..
 
   //from there book the service with the total amount as subscription
+  const [open, setOpen] = React.useState(false);
 
   const extra = (
-    <Button animated="vertical" color="green" attached="bottom">
-      <Button.Content hidden color="red">
-        Shop
-      </Button.Content>
-      <Button.Content visible>
-        <Icon name="shop" color="red" />
-      </Button.Content>
-    </Button>
+    <>
+      <Button animated="vertical" color="green" attached="bottom">
+        <Button.Content hidden color="red">
+          Shop
+        </Button.Content>
+        <Button.Content visible>
+          <Icon name="shop" color="red" />
+        </Button.Content>
+      </Button>
+
+      <hr />
+    </>
   );
 
   const showTools = (products) => {
@@ -40,6 +46,7 @@ const ToolShoppingCard = ({ service }) => {
       meta: `${product.clientPrice} $`,
       description: product.summary,
       extra: extra,
+
       //the onclick accept an anonymous func and this function accepts the result of addtocart function
       onClick: () => addToCart(product._id, product.clientPrice),
     }));
@@ -52,22 +59,23 @@ const ToolShoppingCard = ({ service }) => {
       productid: id,
     }));
 
-    const data = productcart(products, token);
-    data.error ? (
-      <Message negative>
-        <Message.Header>Oops! There is some issue happening!</Message.Header>
-        <p>You need to try again</p>
-      </Message>
-    ) : (
-      <Message positive>
-        <Message.Header>Product SuccessFully added To Cart</Message.Header>
-        <p>
-          Go to your <b>cart page</b> page to see now.
-        </p>
-      </Message>
-    );
+    // const data = productcart(products, token);
+    // data.error ? (
+    //   <Message negative>
+    //     <Message.Header>Oops! There is some issue happening!</Message.Header>
+    //     <p>You need to try again</p>
+    //   </Message>
+    // ) : (
+    //   <Message positive>
+    //     <Message.Header>Product SuccessFully added To Cart</Message.Header>
+    //     <p>
+    //       Go to your <b>cart page</b> page to see now.
+    //     </p>
+    //   </Message>
+    // );
   };
   console.log(producttotal);
+
   return (
     <>
       {/* {JSON.stringify(products)} */}
@@ -77,6 +85,10 @@ const ToolShoppingCard = ({ service }) => {
         centered
         items={showTools(products)}
       />
+      <div>
+        <PopOver loggedinUser={isAuth()} />
+      </div>
+      ;
     </>
   );
 };

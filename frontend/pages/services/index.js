@@ -8,10 +8,14 @@ import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { withRouter } from "next/router";
 import Card from "../../components/services/ServiceCards/serviceCards";
 import SmallCard from "../../components/services/indvservices";
+import { isAuth, userRole } from "../../actions/setAuthToken";
+//import PopOver from "../../components/utils/popover";
 
 const ServicesPage = ({ data }) => {
   //console.log("The Page Props Are", data);
   const [services, setServices] = useState([]);
+  const loggedInUser = isAuth();
+
   const showAllServicePackages = () => {
     return data.map((comboPackage, i) => (
       <div key={i} className="col-md-3 d-flex align-items-start">
@@ -24,7 +28,6 @@ const ServicesPage = ({ data }) => {
                   className="mt-4 btn-lg btn-block btn btn-success"
                   style={{ width: "235px" }}
                   role="link"
-                  // onClick={() => handleClick(comboPackage._id)}
                 >
                   Subscribe Now
                 </button>
@@ -92,7 +95,7 @@ const ServicesPage = ({ data }) => {
               </div>
             </div>
           </header>
-          {/* <div className="bg-primary text-white d-flex justify-content-around"> */}
+
           <div className="container-fluid">
             <div className="col-md-12 pt-3">
               <h1 className="display-4 font-weight-bold text-center pb-9 ">
@@ -103,6 +106,9 @@ const ServicesPage = ({ data }) => {
               {showAllServicePackages()}
             </div>
           </div>
+
+          <div>{/* <PopOver loggedInUser={loggedInUser} /> */}</div>
+
           <div className="col-md-12 pt-3">
             <h1 className="display-4 font-weight-bold text-center">
               Individual Services
