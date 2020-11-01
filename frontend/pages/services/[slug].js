@@ -20,8 +20,10 @@ import moment from "moment";
 import SmallCard from "../../components/portfolio/serviceCard";
 import ReviewForm from "../../components/reviews/submitReview";
 import ShoppingTools from "../../components/shopping/shoppingTools";
-
+import ShowModal from "../../components/utils/showmodal";
+import { useWindowPosition } from "../../components/utils/scroller";
 import { loadStripe } from "@stripe/stripe-js";
+
 const stripePromise = loadStripe(
   "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
 );
@@ -43,15 +45,14 @@ const SingleService = ({ service, query }) => {
 
   const { availableProductspermonth, shoppingCart, cartContainer } = cart;
   const [toolclick, settoolclick] = useState([]);
+  const [hideOnScroll, setHideOnScroll] = useState(true);
   // const head = () => (
   //   <Head>
   //     <script src="https://js.stripe.com/v3/"></script>
   //   </Head>
   // );
 
-  // useEffect(() => {
-  //   grabToolsForCartDetails(service.tools);
-  // });
+  //this funxtion sewnd a req to backend to get the tool details
 
   const token = getCookie("token");
 
@@ -386,7 +387,6 @@ const SingleService = ({ service, query }) => {
                 </div>
               </section>
             </div>
-
             <div className="container">
               <div className="row">
                 <div className="col-md-4 lead">
@@ -447,7 +447,6 @@ const SingleService = ({ service, query }) => {
                 </div>
               </div>
             </div>
-
             <div className="container pb-5">
               <h4 className="text-center pt-5 pb-5 h2 ">
                 Have A Look At Our Work
@@ -456,12 +455,12 @@ const SingleService = ({ service, query }) => {
               <hr />
               <div className="row">{showPortFolio(service)}</div>
             </div>
-
             <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
             <hr />
 
-            <ShoppingTools service={service} />
+            <ShowModal scroller={useWindowPosition()} />
 
+            <ShoppingTools service={service} />
             <div className="container pb-5">
               <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
               <hr />

@@ -78,7 +78,6 @@ const ToolShoppingCard = ({ service }) => {
 
   return (
     <>
-      {/* {JSON.stringify(products)} */}
       <Card.Group
         className="custom-card-style"
         itemsPerRow="3"
@@ -88,7 +87,6 @@ const ToolShoppingCard = ({ service }) => {
       <div>
         <PopOver loggedinUser={isAuth()} />
       </div>
-      ;
     </>
   );
 };

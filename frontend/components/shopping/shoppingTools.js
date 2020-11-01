@@ -4,11 +4,12 @@ import ToolShoppingCard from "../shopping/shoppingcard";
 
 //bring components
 
-const ShoppingTools = ({ service }) => {
+const ShoppingTools = (props) => {
   //reate a slider of tools to be choosen
 
-  // console.log(service);
-  return <ToolShoppingCard service={service} />;
+  //console.log(props);
+
+  return <ToolShoppingCard service={props.service} />;
 };
 
 export default ShoppingTools;
