@@ -171,7 +171,7 @@ const Popup = ({ closePopup, loggedinUser }) => {
     <div className="popup">
       <div className="popup_inner">
         {showRegistrationForm()}
-        <Button onClick={closePopup}>X</Button>
+        {loggedinUser ? <Button onClick={closePopup}>X</Button> : null}
       </div>
     </div>
   );

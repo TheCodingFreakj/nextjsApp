@@ -1,20 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-
+import "../../static/styles.css";
+import Popup from "../../components/utils/popup";
+import { getBusinessDetails } from "../../actions/user";
 //bring components
 
-const ShowModal = (props) => {
+const ShowModal = ({ scroller }) => {
   //reate a slider of tools to be choosen
 
-  console.log(props.scroller);
+  const [popUpPosition, setPopupPosition] = useState(0);
 
-  const ShowModal = () => {
-    {
-      console.log("show me the modal");
-    }
-  };
+  scroller.then(function (result) {
+    setPopupPosition(result);
+  });
 
-  return <React.Fragment>{ShowModal()} </React.Fragment>;
+  return (
+    <React.Fragment>
+      {popUpPosition.Yposition > 1000 ? <Popup /> : null}
+    </React.Fragment>
+  );
 };
 
 export default ShowModal;
