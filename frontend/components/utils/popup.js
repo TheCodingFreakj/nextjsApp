@@ -71,105 +71,111 @@ const Popup = ({ closePopup, loggedinUser }) => {
 
   const showRegistrationForm = () => {
     return (
-      <form className="text-center" onSubmit={(e) => onEdit(e)}>
-        <div className="form-group">
-          <textarea
-            type="text"
-            className="form-control"
-            placeholder="Tell us Who are you ?"
-            name="description"
-            value={description || ""}
-            onChange={(e) => onChange(e)}
-            required
-          />
-        </div>
+      <>
+        <form
+          className="text-center form-custom-class"
+          onSubmit={(e) => onEdit(e)}
+        >
+          <div className="form-group">
+            <textarea
+              type="text"
+              className="form-control"
+              placeholder="Tell us Who are you ?"
+              name="description"
+              value={description || ""}
+              onChange={(e) => onChange(e)}
+              required
+            />
+          </div>
 
-        <div className="form-group">
-          <button
-            onClick={() => toggledisplayAddressInputs(!displayAddressInputs)}
-            type="button"
-            className="btn btn-success"
-          >
-            Update Address Information
-          </button>
-        </div>
+          <div className="form-group">
+            <button
+              onClick={() => toggledisplayAddressInputs(!displayAddressInputs)}
+              type="button"
+              className="btn btn-success"
+            >
+              Update Address Information
+            </button>
+          </div>
 
-        {displayAddressInputs && (
-          <React.Fragment>
-            <div className="form-group ">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Your Location Please"
-                name="location"
-                value={location || ""}
-                onChange={(e) => onChange(e)}
-                required
-              />
-            </div>
+          {displayAddressInputs && (
+            <React.Fragment>
+              <div className="form-group ">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Your Location Please"
+                  name="location"
+                  value={location || ""}
+                  onChange={(e) => onChange(e)}
+                  required
+                />
+              </div>
 
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Your City Name Please"
-                name="city"
-                value={city || ""}
-                onChange={(e) => onChange(e)}
-                //onChange={onChange("city")}
-                required
-              />
-            </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Your City Name Please"
+                  name="city"
+                  value={city || ""}
+                  onChange={(e) => onChange(e)}
+                  //onChange={onChange("city")}
+                  required
+                />
+              </div>
 
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Your Region Please"
-                name="region"
-                value={region || ""}
-                onChange={(e) => onChange(e)}
-                required
-              />
-            </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Your Region Please"
+                  name="region"
+                  value={region || ""}
+                  onChange={(e) => onChange(e)}
+                  required
+                />
+              </div>
 
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Give us the exact pincode"
-                name="pinCode"
-                value={pinCode || ""}
-                onChange={(e) => onChange(e)}
-                // onChange={onChange("pinCode")}
-                required
-              />
-            </div>
-          </React.Fragment>
-        )}
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Give us the exact pincode"
+                  name="pinCode"
+                  value={pinCode || ""}
+                  onChange={(e) => onChange(e)}
+                  // onChange={onChange("pinCode")}
+                  required
+                />
+              </div>
+            </React.Fragment>
+          )}
 
-        <div className="form-group">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Your Phone Number Please"
-            name="phone"
-            value={phone || ""}
-            onChange={(e) => onChange(e)}
-            //onChange={onChange("phone")}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Your Phone Number Please"
+              name="phone"
+              value={phone || ""}
+              onChange={(e) => onChange(e)}
+              //onChange={onChange("phone")}
+              required
+            />
+          </div>
 
-        <div>
-          <input type="submit" className="btn btn-success" value="Done" />
-        </div>
-      </form>
+          <div>
+            <input type="submit" className="btn btn-success" value="Done" />
+          </div>
+        </form>
+      </>
     );
   };
   return (
     <div className="popup">
       <div className="popup_inner">
+        <h2 className="heading-h2">We encourage you to update this form </h2>
         {showRegistrationForm()}
         {loggedinUser ? <Button onClick={closePopup}>X</Button> : null}
       </div>

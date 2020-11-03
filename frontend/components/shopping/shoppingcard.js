@@ -92,3 +92,7 @@ const ToolShoppingCard = ({ service }) => {
 };
 
 export default ToolShoppingCard;
+
+//For stylinging
+
+//https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
