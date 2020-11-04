@@ -1,182 +1,186 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "semantic-ui-react";
+import Router from "next/router";
+import {
+  Form,
+  Input,
+  TextArea,
+  Button,
+  Image,
+  Message,
+  Icon,
+  Header,
+} from "semantic-ui-react";
 import { getBusinessDetails } from "../../actions/user";
-const Popup = ({ closePopup, loggedinUser }) => {
-  //console.log(loggedinUser);
-
+const Popup = ({ loggedinUser }) => {
   const [values, setValues] = useState({
+    description: "",
+    phone: "",
     location: "",
-    place: "",
+    region: "",
     city: "",
     pinCode: "",
-    phone: "",
-    description: "",
-    error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
-    success: false, //Shows up as a display message when we submit somthing
-    loading: false,
-    reload: false,
   });
 
-  const {
-    location,
-    region,
-    city,
-    description,
-    pinCode,
-    phone,
-    error,
-    loading,
-    reload,
-  } = values;
-
   const [displayAddressInputs, toggledisplayAddressInputs] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  const onChange = (e) => {
-    console.log(e.target.value);
-    setValues({ ...values, [e.target.name]: e.target.value });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setValues((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const onEdit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    //send the data to backend
 
-    const formData = {
-      location,
-      region,
-      city,
-      description,
-      pinCode,
-      phone,
-    };
-    getBusinessDetails(formData, token).then((data) => {
-      console.log("This is getting from backend", data);
-
-      if (data.error) {
-        setValues({ ...values, error: data.error });
-      } else {
-        setValues({
-          ...values,
-          location: "",
-          description: "",
-          region: "",
-          city: "",
-          formData: "",
-          pinCode: "",
-          phone: "",
-          error: "false",
-          success: `A new service :"${data.serviceName}" is created `,
-        });
-      }
+    setValues({
+      description: "",
+      phone: "",
+      location: "",
+      region: "",
+      city: "",
+      pinCode: "",
     });
+
+    setSuccess(true);
+
+    //get off the pop up windwo
+
+    // getBusinessDetails(formData, token).then((data) => {
+    //   console.log("This is getting from backend", data);
+
+    //   if (data.error) {
+    //     setValues({ ...values, error: data.error });
+    //   } else {
+    //     setValues({
+    //       ...values,
+    //       location: "",
+    //       description: "",
+    //       region: "",
+    //       city: "",
+    //       formData: "",
+    //       pinCode: "",
+    //       phone: "",
+    //       error: "false",
+    //       success: `A new service :"${data.serviceName}" is created `,
+    //     });
+    //   }
+    // });
+  };
+
+  const closeModal = (e) => {
+    Router.push(`/`);
   };
 
   const showRegistrationForm = () => {
     return (
-      <>
-        <form
-          className="text-center form-custom-class"
-          onSubmit={(e) => onEdit(e)}
-        >
-          <div className="form-group">
-            <textarea
-              type="text"
-              className="form-control"
-              placeholder="Tell us Who are you ?"
+      <React.Fragment>
+        <Header as="h3" block>
+          <Icon name="address book" color="red" />
+          We encourage You To Update This Form
+        </Header>
+
+        <Form success={success} onSubmit={handleSubmit}>
+          <Form.Field>
+            <Form.Field
+              control={TextArea}
               name="description"
-              value={description || ""}
-              onChange={(e) => onChange(e)}
-              required
+              label="description"
+              type="textArea"
+              placeholder="description"
+              value={values.description || ""}
+              onChange={handleChange}
             />
-          </div>
 
-          <div className="form-group">
-            <button
-              onClick={() => toggledisplayAddressInputs(!displayAddressInputs)}
-              type="button"
-              className="btn btn-success"
-            >
-              Update Address Information
-            </button>
-          </div>
-
-          {displayAddressInputs && (
-            <React.Fragment>
-              <div className="form-group ">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Your Location Please"
-                  name="location"
-                  value={location || ""}
-                  onChange={(e) => onChange(e)}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Your City Name Please"
-                  name="city"
-                  value={city || ""}
-                  onChange={(e) => onChange(e)}
-                  //onChange={onChange("city")}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Your Region Please"
-                  name="region"
-                  value={region || ""}
-                  onChange={(e) => onChange(e)}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Give us the exact pincode"
-                  name="pinCode"
-                  value={pinCode || ""}
-                  onChange={(e) => onChange(e)}
-                  // onChange={onChange("pinCode")}
-                  required
-                />
-              </div>
-            </React.Fragment>
-          )}
-
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Your Phone Number Please"
+            <Form.Field
+              control={Input}
               name="phone"
-              value={phone || ""}
-              onChange={(e) => onChange(e)}
-              //onChange={onChange("phone")}
-              required
+              label="phone"
+              placeholder="phone"
+              value={values.phone || ""}
+              onChange={handleChange}
             />
-          </div>
 
-          <div>
-            <input type="submit" className="btn btn-success" value="Done" />
-          </div>
-        </form>
-      </>
+            <Form.Field
+              control={Button}
+              color="green"
+              icon="pencil alternate"
+              content="Update Address"
+              type="button"
+              onClick={() => toggledisplayAddressInputs(!displayAddressInputs)}
+            />
+            {displayAddressInputs && (
+              <>
+                <Form.Field
+                  control={Input}
+                  name="location"
+                  label="location"
+                  placeholder="location"
+                  value={values.location || ""}
+                  onChange={handleChange}
+                />
+                <Form.Field
+                  control={Input}
+                  name="region"
+                  label="region"
+                  placeholder="region"
+                  value={values.region || ""}
+                  onChange={handleChange}
+                />
+                <Form.Field
+                  control={Input}
+                  name="city"
+                  label="city"
+                  placeholder="city"
+                  value={values.city || ""}
+                  onChange={handleChange}
+                />
+
+                <Form.Field
+                  control={Input}
+                  name="pinCode"
+                  label="pinCode"
+                  placeholder="pinCode"
+                  value={values.pinCode || ""}
+                  onChange={handleChange}
+                />
+              </>
+            )}
+
+            <Form.Field
+              control={Button}
+              color="green"
+              icon="pencil alternate"
+              content="Submit"
+              type="submit"
+            />
+
+            {success && (
+              <>
+                <Message
+                  success
+                  icon="check"
+                  header="Success"
+                  content="We got it Thank You.. Please Shop If You may?"
+                  size="small"
+                />
+                <Button icon labelPosition="right" onClick={closeModal}>
+                  Continue Shopping
+                  <Icon name="right arrow" />
+                </Button>
+              </>
+            )}
+          </Form.Field>
+        </Form>
+      </React.Fragment>
     );
   };
+
   return (
     <div className="popup">
       <div className="popup_inner">
-        <h2 className="heading-h2">We encourage you to update this form </h2>
         {showRegistrationForm()}
+
         {loggedinUser ? <Button onClick={closePopup}>X</Button> : null}
       </div>
     </div>

@@ -9,14 +9,20 @@ const ShowModal = ({ scroller }) => {
   //reate a slider of tools to be choosen
 
   const [popUpPosition, setPopupPosition] = useState(0);
-
+  const [showPopUp, setshowPop] = useState(false);
   scroller.then(function (result) {
     setPopupPosition(result);
   });
 
+  const togglePopup = () => {
+    setshowPop(!showPopUp);
+  };
+
   return (
     <React.Fragment>
-      {popUpPosition.Yposition > 1000 ? <Popup /> : null}
+      {popUpPosition.Yposition > 1000 ? (
+        <Popup closePopup={() => togglePopup(showPopUp)} />
+      ) : null}
     </React.Fragment>
   );
 };

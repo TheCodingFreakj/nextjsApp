@@ -74,7 +74,7 @@ const ToolShoppingCard = ({ service }) => {
     //   </Message>
     // );
   };
-  console.log(producttotal);
+  // console.log(producttotal);
 
   return (
     <>

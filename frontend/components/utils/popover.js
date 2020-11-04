@@ -11,16 +11,13 @@ const PopOver = ({ loggedinUser }) => {
     setshowPop(!showPopUp);
   };
 
+  // closePopup={() => togglePopup(showPopUp)}
+
   return (
     <React.Fragment>
       <Button onClick={togglePopup}>Click Here</Button>
 
-      {showPopUp ? (
-        <Popup
-          loggedinUser={loggedinUser}
-          closePopup={() => togglePopup(showPopUp)}
-        />
-      ) : null}
+      {showPopUp ? <Popup loggedinUser={loggedinUser} /> : null}
     </React.Fragment>
   );
 };

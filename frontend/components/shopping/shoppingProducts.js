@@ -81,6 +81,7 @@ const CreateShoppingProducts = () => {
           header="Success"
           content="Your Product is created"
         />
+
         <Form.Field>
           <Form.Group widths="equal">
             <Form.Field
