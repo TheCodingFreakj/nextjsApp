@@ -9,23 +9,26 @@ const ShowModal = ({ serviceSlug, scroller }) => {
   //reate a slider of tools to be choosen
 
   const [popUpPosition, setPopupPosition] = useState(0);
+  const [showModal, setShowModal] = useState("");
 
   scroller.then(function (result) {
     setPopupPosition(result);
   });
 
   //closePopup={() => togglePopup(showPopUp)}
-  const custData = (data) => {
-    console.log(data);
+  const custData = (localstoreData) => {
+    setShowModal(localstoreData);
   };
+
+  //get the user data from backend
+  //e\if exists then put that condition that dont trigger the modal
+
   return (
     <React.Fragment>
-      {popUpPosition.Yposition > 1000 && popUpPosition.Yposition < 4000 ? (
-        <Popup
-          serviceSlug={serviceSlug}
-          showPopUp={true}
-          custData={() => custData()}
-        />
+      {!showModal &&
+      popUpPosition.Yposition > 1000 &&
+      popUpPosition.Yposition < 4000 ? (
+        <Popup serviceSlug={serviceSlug} showPopUp={true} custData={custData} />
       ) : null}
     </React.Fragment>
   );

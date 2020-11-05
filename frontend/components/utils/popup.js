@@ -73,19 +73,18 @@ const Popup = ({ showPopUp, serviceSlug, loggedinUser, ...props }) => {
     // Router.push(`/services/${serviceSlug}`);
 
     let custDatamain = JSON.parse(localStorage.getItem("customerData"));
-    let custData = localStorage.getItem("customerData");
+
     // props.custData(custData);
     //https://towardsdatascience.com/passing-data-between-react-components-parent-children-siblings-a64f89e24ecf
-    console.log(props.custData);
 
-    props.custData("pallavi");
+    props.custData(custDatamain);
     setshow(!show);
     // window.location = `/services/${serviceSlug}`;
   };
 
   // localStorage.clear();
 
-  console.log(show);
+  // console.log(show);
 
   const showRegistrationForm = () => {
     return (
