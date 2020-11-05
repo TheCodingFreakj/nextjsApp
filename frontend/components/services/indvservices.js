@@ -44,7 +44,7 @@ const SmallCard = ({ service }) => {
 
       <div className="card-body p-3 mb-2 bg-success text-white">
         <div className="p-3 mb-2 bg-warning text-dark">
-          <p className="card-text"> Price| {showPriceList()}</p>
+          <div className="card-text"> Price| {showPriceList()}</div>
           <p className="card-text">
             Duration:
             {service.duration}

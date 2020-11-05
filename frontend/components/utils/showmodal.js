@@ -5,23 +5,27 @@ import Popup from "../../components/utils/popup";
 import { getBusinessDetails } from "../../actions/user";
 //bring components
 
-const ShowModal = ({ scroller }) => {
+const ShowModal = ({ serviceSlug, scroller }) => {
   //reate a slider of tools to be choosen
 
   const [popUpPosition, setPopupPosition] = useState(0);
-  const [showPopUp, setshowPop] = useState(false);
+
   scroller.then(function (result) {
     setPopupPosition(result);
   });
 
-  const togglePopup = () => {
-    setshowPop(!showPopUp);
+  //closePopup={() => togglePopup(showPopUp)}
+  const custData = (data) => {
+    console.log(data);
   };
-
   return (
     <React.Fragment>
-      {popUpPosition.Yposition > 1000 ? (
-        <Popup closePopup={() => togglePopup(showPopUp)} />
+      {popUpPosition.Yposition > 1000 && popUpPosition.Yposition < 4000 ? (
+        <Popup
+          serviceSlug={serviceSlug}
+          showPopUp={true}
+          custData={() => custData()}
+        />
       ) : null}
     </React.Fragment>
   );

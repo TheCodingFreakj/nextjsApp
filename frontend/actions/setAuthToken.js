@@ -22,6 +22,7 @@ export const getCookie = (key) => {
   }
 };
 
+//key is the name of the storage
 export const setLocatStorage = (key, value) => {
   if (typeof window !== "undefined") {
     localStorage.setItem(key, JSON.stringify(value));

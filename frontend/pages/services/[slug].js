@@ -393,8 +393,8 @@ const SingleService = ({ service, query }) => {
                   <h2>Summary</h2>
                   {renderHTML(service.process)}
                 </div>
-                {JSON.stringify(totalPrice)}
-                {JSON.stringify(total)}
+                {/* {JSON.stringify(totalPrice)}
+                {JSON.stringify(total)} */}
                 <div className="col-md-4 ml-6">
                   <h2>Ratings</h2>
                   Average Ratings{service.ratingsAverage}
@@ -458,7 +458,10 @@ const SingleService = ({ service, query }) => {
             <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
             <hr />
 
-            <ShowModal scroller={useWindowPosition()} />
+            <ShowModal
+              serviceSlug={service.slug}
+              scroller={useWindowPosition()}
+            />
 
             <ShoppingTools service={service} />
             <div className="container pb-5">

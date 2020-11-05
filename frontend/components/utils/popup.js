@@ -11,7 +11,8 @@ import {
   Header,
 } from "semantic-ui-react";
 import { getBusinessDetails } from "../../actions/user";
-const Popup = ({ loggedinUser }) => {
+const Popup = ({ showPopUp, serviceSlug, loggedinUser, ...props }) => {
+  //console.log(serviceSlug);
   const [values, setValues] = useState({
     description: "",
     phone: "",
@@ -23,7 +24,7 @@ const Popup = ({ loggedinUser }) => {
 
   const [displayAddressInputs, toggledisplayAddressInputs] = useState(false);
   const [success, setSuccess] = useState(false);
-
+  const [show, setshow] = useState(showPopUp);
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues((prevState) => ({ ...prevState, [name]: value }));
@@ -32,7 +33,7 @@ const Popup = ({ loggedinUser }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     //send the data to backend
-
+    localStorage.setItem("customerData", JSON.stringify(values));
     setValues({
       description: "",
       phone: "",
@@ -69,8 +70,22 @@ const Popup = ({ loggedinUser }) => {
   };
 
   const closeModal = (e) => {
-    Router.push(`/`);
+    // Router.push(`/services/${serviceSlug}`);
+
+    let custDatamain = JSON.parse(localStorage.getItem("customerData"));
+    let custData = localStorage.getItem("customerData");
+    // props.custData(custData);
+    //https://towardsdatascience.com/passing-data-between-react-components-parent-children-siblings-a64f89e24ecf
+    console.log(props.custData);
+
+    props.custData("pallavi");
+    setshow(!show);
+    // window.location = `/services/${serviceSlug}`;
   };
+
+  // localStorage.clear();
+
+  console.log(show);
 
   const showRegistrationForm = () => {
     return (
