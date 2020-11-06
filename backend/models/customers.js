@@ -56,8 +56,8 @@ const customerSchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
-    servicessTaken: [{ type: ObjectId, ref: "Services", required: true }],
-    toolPurchased: [{ type: ObjectId, ref: "Tools", required: true }],
+    // servicessTaken: [{ type: ObjectId, ref: "Services", required: true }],
+    // toolPurchased: [{ type: ObjectId, ref: "Tools", required: true }],
 
     phone: {
       type: String,

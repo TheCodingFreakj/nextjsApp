@@ -211,7 +211,6 @@ exports.getBusinessDetails = async (req, res) => {
 
     if (customer) {
       //update
-
       customer = await Customer.findOneAndUpdate(
         { customerName: req.user.name },
         { $set: customerDetails }
@@ -223,6 +222,7 @@ exports.getBusinessDetails = async (req, res) => {
       customer.customerName = req.user.name;
       customer.email = req.user.email;
       customer.username = username;
+      customer.custId = req.user.id;
       await customer.save();
       return res.json(customer);
     }

@@ -10,8 +10,15 @@ import {
   Icon,
   Header,
 } from "semantic-ui-react";
-import { getBusinessDetails } from "../../actions/user";
-const Popup = ({ showPopUp, serviceSlug, loggedinUser, ...props }) => {
+import { getBusinessDetails, getCurrentCustomer } from "../../actions/user";
+import {
+  getCookie,
+  isAuth,
+  removeLocatStorage,
+} from "../../actions/setAuthToken";
+import { withRouter } from "next/router";
+
+const Popup = ({ router, showPopUp, serviceSlug, loggedinUser, ...props }) => {
   //console.log(serviceSlug);
   const [values, setValues] = useState({
     description: "",
@@ -25,6 +32,12 @@ const Popup = ({ showPopUp, serviceSlug, loggedinUser, ...props }) => {
   const [displayAddressInputs, toggledisplayAddressInputs] = useState(false);
   const [success, setSuccess] = useState(false);
   const [show, setshow] = useState(showPopUp);
+  const [customer, setCustomer] = useState("");
+  const token = getCookie("token");
+  useEffect(() => {
+    getCustomer();
+  }, [router]);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues((prevState) => ({ ...prevState, [name]: value }));
@@ -33,7 +46,9 @@ const Popup = ({ showPopUp, serviceSlug, loggedinUser, ...props }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     //send the data to backend
-    localStorage.setItem("customerData", JSON.stringify(values));
+    let formData = values;
+    const customerdata = getBusinessDetails(formData, token);
+    sendCustomer();
     setValues({
       description: "",
       phone: "",
@@ -44,41 +59,30 @@ const Popup = ({ showPopUp, serviceSlug, loggedinUser, ...props }) => {
     });
 
     setSuccess(true);
+  };
 
-    //get off the pop up windwo
+  const sendCustomer = () => {
+    const customer = isAuth();
+    localStorage.setItem("loggedincustomer", JSON.stringify(customer));
+    setCustomer(JSON.parse(localStorage.getItem("loggedincustomer")));
+  };
 
-    // getBusinessDetails(formData, token).then((data) => {
-    //   console.log("This is getting from backend", data);
-
-    //   if (data.error) {
-    //     setValues({ ...values, error: data.error });
-    //   } else {
-    //     setValues({
-    //       ...values,
-    //       location: "",
-    //       description: "",
-    //       region: "",
-    //       city: "",
-    //       formData: "",
-    //       pinCode: "",
-    //       phone: "",
-    //       error: "false",
-    //       success: `A new service :"${data.serviceName}" is created `,
-    //     });
-    //   }
-    // });
+  const getCustomer = () => {
+    const customer = getCurrentCustomer(isAuth().username, token).then(
+      (data) => {
+        data.phone ? props.custData(customer) : null;
+      }
+    );
+    // JSON.parse(localStorage.getItem("loggedincustomer"))
+    // setCustomer(JSON.parse(localStorage.getItem("loggedincustomer")));
   };
 
   const closeModal = (e) => {
     // Router.push(`/services/${serviceSlug}`);
-
-    let custDatamain = JSON.parse(localStorage.getItem("customerData"));
-
-    // props.custData(custData);
-    //https://towardsdatascience.com/passing-data-between-react-components-parent-children-siblings-a64f89e24ecf
-
-    props.custData(custDatamain);
+    props.custData(customer);
     setshow(!show);
+    removeLocatStorage("loggedincustomer");
+
     // window.location = `/services/${serviceSlug}`;
   };
 
@@ -201,4 +205,4 @@ const Popup = ({ showPopUp, serviceSlug, loggedinUser, ...props }) => {
   );
 };
 
-export default Popup;
+export default withRouter(Popup);
