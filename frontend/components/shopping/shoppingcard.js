@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Card, Icon, Button } from "semantic-ui-react";
 import { getCookie, isAuth } from "../../actions/setAuthToken";
+import { createCartItems } from "../../actions/shoppingcart";
 import "../../static/styles.css";
-import PopOver from "../utils/popover";
+import AddToCart from "../../components/shopping/addToCart";
 
 const ToolShoppingCard = ({ service }) => {
   let product = service.tools;
   //console.log(product);
 
   const [products, setproducts] = useState(product);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [producttotal, setproducttotal] = useState({
     price: "",
     productid: "",
@@ -46,35 +49,38 @@ const ToolShoppingCard = ({ service }) => {
       meta: `${product.clientPrice} $`,
       description: product.summary,
       extra: extra,
-
-      //the onclick accept an anonymous func and this function accepts the result of addtocart function
-      onClick: () => addToCart(product._id, product.clientPrice),
+      onClick: () => addToCart(product._id, product.tool, product.clientPrice),
     }));
   };
   const token = getCookie("token");
-  const addToCart = (id, price) => {
+  const addToCart = (id, name, price) => {
     setproducttotal((prevState) => ({
       ...prevState,
       price: price,
       productid: id,
+      productname: name,
     }));
 
-    // const data = productcart(products, token);
-    // data.error ? (
-    //   <Message negative>
-    //     <Message.Header>Oops! There is some issue happening!</Message.Header>
-    //     <p>You need to try again</p>
-    //   </Message>
-    // ) : (
-    //   <Message positive>
-    //     <Message.Header>Product SuccessFully added To Cart</Message.Header>
-    //     <p>
-    //       Go to your <b>cart page</b> page to see now.
-    //     </p>
-    //   </Message>
-    // );
+    createCartItems(producttotal, token).then((data) => {
+      console.log(data); //send a message of true or false
+      if (data.error) {
+        setError({ error: data.error });
+      } else {
+        setError("");
+        setSuccess("Item Added To the Cart");
+      }
+    });
   };
-  // console.log(producttotal);
+
+  console.log(producttotal);
+
+  const cartItemsTotal = (e) => {
+    console.log(e.target);
+  };
+
+  //display error
+
+  //display success
 
   return (
     <>
@@ -83,16 +89,14 @@ const ToolShoppingCard = ({ service }) => {
         itemsPerRow="3"
         centered
         items={showTools(products)}
+        onClick={cartItemsTotal}
       />
-      <div>
+      <AddToCart products={producttotal} />;
+      {/* <div>
         <PopOver loggedinUser={isAuth()} />
-      </div>
+      </div> */}
     </>
   );
 };
 
 export default ToolShoppingCard;
-
-//For stylinging
-
-//https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/

@@ -5,7 +5,6 @@ import {
   Input,
   TextArea,
   Button,
-  Image,
   Message,
   Icon,
   Header,
@@ -19,7 +18,6 @@ import {
 import { withRouter } from "next/router";
 
 const Popup = ({ router, showPopUp, serviceSlug, loggedinUser, ...props }) => {
-  //console.log(serviceSlug);
   const [values, setValues] = useState({
     description: "",
     phone: "",
@@ -45,7 +43,6 @@ const Popup = ({ router, showPopUp, serviceSlug, loggedinUser, ...props }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //send the data to backend
     let formData = values;
     const customerdata = getBusinessDetails(formData, token);
     sendCustomer();
@@ -73,22 +70,13 @@ const Popup = ({ router, showPopUp, serviceSlug, loggedinUser, ...props }) => {
         data.phone ? props.custData(customer) : null;
       }
     );
-    // JSON.parse(localStorage.getItem("loggedincustomer"))
-    // setCustomer(JSON.parse(localStorage.getItem("loggedincustomer")));
   };
 
   const closeModal = (e) => {
-    // Router.push(`/services/${serviceSlug}`);
     props.custData(customer);
     setshow(!show);
     removeLocatStorage("loggedincustomer");
-
-    // window.location = `/services/${serviceSlug}`;
   };
-
-  // localStorage.clear();
-
-  // console.log(show);
 
   const showRegistrationForm = () => {
     return (
@@ -198,7 +186,6 @@ const Popup = ({ router, showPopUp, serviceSlug, loggedinUser, ...props }) => {
     <div className="popup">
       <div className="popup_inner">
         {showRegistrationForm()}
-
         {loggedinUser ? <Button onClick={closePopup}>X</Button> : null}
       </div>
     </div>

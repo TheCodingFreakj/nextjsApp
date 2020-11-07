@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Layout from "../../components/Layout";
+import AddToCart from "../../components/shopping/addToCart";
 
 //bring components
 
@@ -10,7 +11,7 @@ const Cart = () => {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-12 pt-5 pb-5">
-            <h2>Your Cart </h2>
+            <AddToCart />
           </div>
         </div>
       </div>

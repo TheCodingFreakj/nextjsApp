@@ -52,32 +52,21 @@ const SingleService = ({ service, query }) => {
   //   </Head>
   // );
 
-  //this funxtion sewnd a req to backend to get the tool details
-
   const token = getCookie("token");
 
   const showServiceCharges = (service) => {
-    //add these price and send to the backend as update and store as update
-
-    //price is constant
-    //total and subtotal changes as per selection
+    let addPrice = "";
     const addTotalServices = (price, total) => {
       addPrice = price + total;
       return addPrice;
     };
 
     let subPrice = "";
-
     const subTotalServices = (price, subtotal) => {
       subPrice = price + subtotal;
       return subPrice;
     };
     const increment = (name) => (e) => {
-      console.log("name", name);
-
-      //console.log(e.target);
-      console.log("value", e.target.value);
-
       setTotalPrice({
         ...totalPrice,
         [name]: e.target.value,
@@ -85,9 +74,6 @@ const SingleService = ({ service, query }) => {
     };
 
     const decrement = (name) => (e) => {
-      console.log(name);
-      console.log(e.target.value);
-
       setTotalPrice({
         ...totalPrice,
         [name]: e.target.value,
@@ -110,7 +96,7 @@ const SingleService = ({ service, query }) => {
           >
             {addTotalServices(price.discountedServiceCharges, total)} $
           </button>
-          {/* //addTotalServices(price.discountedServiceCharges, total) */}
+
           <br />
         </div>
         <div className="row">
@@ -133,9 +119,6 @@ const SingleService = ({ service, query }) => {
       </div>
     ));
   };
-
-  //https://www.toptal.com/react/react-context-api
-  let addPrice = "";
 
   const showPortFolio = (service) => {
     return service.the_portfolios.map((portfolio, i) => (
@@ -162,17 +145,12 @@ const SingleService = ({ service, query }) => {
 
   const handlePriceToggle = (tool) => {
     const clickedId = checkedTool.indexOf(tool._id);
-    // console.log("This is clickedid", clickedId);
     const allTools = [...checkedTool];
-
     let total = 0;
-
     if (clickedId === -1) {
       allTools.push(tool._id);
       checkedPrice.push(tool.clientPrice);
-
       const choosenPrice = [...checkedPrice];
-
       for (let i = 0; i < choosenPrice.length; i++) {
         if (choosenPrice[i]) {
           total = choosenPrice[i] + total;
@@ -180,28 +158,16 @@ const SingleService = ({ service, query }) => {
       }
     } else {
       allTools.splice(clickedId, 1);
-
       const reducedPrice = [...checkedPrice];
-      // console.log(reducedPrice);
-
       reducedPrice.splice(clickedId, 1);
-      // subtotal = reducedPrice[i] + subtotal;
-      // console.log(reducedPrice);
       setCheckedPrice(reducedPrice);
-
       let subtotal = reducedPrice.reduce(function (accumulator, currentValue) {
         return accumulator + currentValue;
       }, 0);
-
-      // console.log(subtotal);
       setSubTotal(subtotal);
     }
     setCheckedTool(allTools);
-    // console.log("This is updated tools", allTools);
     setTotal(total);
-
-    // console.log("The total is", total);
-    // console.log("The subtotal is", subtotal);
   };
 
   const showTools = (service) => {
@@ -477,17 +443,10 @@ const SingleService = ({ service, query }) => {
     </React.Fragment>
   );
 };
-
+//pyadav@gmail.com
 export const getServerSideProps = async ({ query }) => {
-  //now all the returns are avaialble as props
   const querybuilder = query.slug;
   const data = await singleService(query.slug);
-
-  // console.log(data);
-  // console.log(query.slug);
-
-  //console.log("getServerProps", data, context.params, context.query);
-
   if (data.error) {
     console.log(data.error);
   } else {

@@ -144,3 +144,7 @@ export const getServerSideProps = async (context) => {
 };
 
 export default withRouter(ServicesPage);
+
+//For stylinging:- Put one quiz pop up here on load quiz
+
+//https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API } from "../config";
 
-export const productcart = async (products, token) => {
+export const createCartItems = async (products, token) => {
   console.log("products", products);
 
   try {
@@ -17,7 +17,7 @@ export const productcart = async (products, token) => {
 
     const body = products; //we are sending the formData to get posted on the backend
 
-    const response = await axios.post(`${API}/api/services`, body, config); //handing the backedn register user
+    const response = await axios.post(`${API}/api/cartitems`, body, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);
@@ -42,13 +42,15 @@ export const productcart = async (products, token) => {
   }
 };
 
-export const getDiscountedPrice = async () => {
+//for cart page
+//https://medium.com/javascript-in-plain-english/build-a-shopping-cart-in-nodejs-and-react-c7b488d46e79
+export const fetchCart = async () => {
   try {
     const config = {
       method: "GET",
     };
 
-    const response = await axios.get(`${API}/api/services`, config); //handing the backedn register user
+    const response = await axios.get(`${API}/api/cartitems`, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);

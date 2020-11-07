@@ -6,22 +6,15 @@ import Popup from "../../components/utils/popup";
 //bring components
 
 const ShowModal = ({ serviceSlug, scroller }) => {
-  //reate a slider of tools to be choosen
-
   const [popUpPosition, setPopupPosition] = useState(0);
   const [closeModal, setcloseModal] = useState("");
-
   scroller.then(function (result) {
     setPopupPosition(result);
   });
 
-  //closePopup={() => togglePopup(showPopUp)}
   const custData = (loggedincustomer) => {
     setcloseModal(loggedincustomer);
   };
-
-  //get the user data from backend
-  //e\if exists then put that condition that dont trigger the modal
 
   return (
     <React.Fragment>
