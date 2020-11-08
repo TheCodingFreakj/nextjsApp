@@ -17,6 +17,7 @@ export const createCartItems = async (products, token) => {
 
     const body = products; //we are sending the formData to get posted on the backend
 
+    console.log(body);
     const response = await axios.post(`${API}/api/cartitems`, body, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
@@ -31,7 +32,7 @@ export const createCartItems = async (products, token) => {
       // that falls out of the range of 2xx
 
       return error.response.data;
-      console.log(error.response.data);
+      console.log(error.response.data); //show this data in frontend
       console.log(error.response.status);
       console.log(error.response.headers);
     } else {

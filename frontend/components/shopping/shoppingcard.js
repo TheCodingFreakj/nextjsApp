@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Card, Icon, Button } from "semantic-ui-react";
+import { Card, Icon, Button, Message } from "semantic-ui-react";
 import { getCookie, isAuth } from "../../actions/setAuthToken";
 import { createCartItems } from "../../actions/shoppingcart";
 import "../../static/styles.css";
@@ -8,28 +8,30 @@ import AddToCart from "../../components/shopping/addToCart";
 
 const ToolShoppingCard = ({ service }) => {
   let product = service.tools;
-  //console.log(product);
-
+  // console.log(product);
   const [products, setproducts] = useState(product);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [producttotal, setproducttotal] = useState({
-    price: "",
-    productid: "",
-  });
+
+  const [producttotal, setproducttotal] = useState([]);
+  const [choices, setChoices] = useState();
+  // const [producttotal, setproducttotal] = useState({
+  //   productname: "",
+  //   productid: "",
+  //   price: "",
+  // });
   //get the id password to the backend for total calulation based on product id
   //get the service charges in the same route based on service id
   //in the backend all the amount
   //call the amount to display in frontend of cart..
 
   //from there book the service with the total amount as subscription
-  const [open, setOpen] = React.useState(false);
 
   const extra = (
     <>
       <Button animated="vertical" color="green" attached="bottom">
         <Button.Content hidden color="red">
-          Shop
+          Add To Cart
         </Button.Content>
         <Button.Content visible>
           <Icon name="shop" color="red" />
@@ -40,6 +42,33 @@ const ToolShoppingCard = ({ service }) => {
     </>
   );
 
+  const token = getCookie("token");
+  const sendproducts = (id, tool, price) => {
+    setChoices((previousState) => ({
+      ...previousState,
+      productinfo: {
+        productname: tool,
+        productid: id,
+        price: price,
+      },
+    }));
+
+    //https://stackoverflow.com/questions/54807454/what-is-prevstate-in-reactjs
+    //https://www.rockyourcode.com/react-set-state-with-prev-state-and-object-spread-operator/
+
+    // createCartItems(producttotal, token).then((data) => {
+    //   console.log(data); //send a message of true or false
+    //   if (data.error) {
+    //     setError({ error: data });
+    //     console.log(error);
+    //   } else {
+    //     setError("");
+    //     setSuccess("Item Added To the Cart");
+    //   }
+    // });
+  };
+  console.log("My choices", choices);
+
   const showTools = (products) => {
     return products.map((product) => ({
       header: product.tool,
@@ -49,33 +78,13 @@ const ToolShoppingCard = ({ service }) => {
       meta: `${product.clientPrice} $`,
       description: product.summary,
       extra: extra,
-      onClick: () => addToCart(product._id, product.tool, product.clientPrice),
+      onClick: () =>
+        sendproducts(product._id, product.tool, product.clientPrice),
     }));
   };
-  const token = getCookie("token");
-  const addToCart = (id, name, price) => {
-    setproducttotal((prevState) => ({
-      ...prevState,
-      price: price,
-      productid: id,
-      productname: name,
-    }));
 
-    createCartItems(producttotal, token).then((data) => {
-      console.log(data); //send a message of true or false
-      if (data.error) {
-        setError({ error: data.error });
-      } else {
-        setError("");
-        setSuccess("Item Added To the Cart");
-      }
-    });
-  };
-
-  console.log(producttotal);
-
-  const cartItemsTotal = (e) => {
-    console.log(e.target);
+  const showCart = () => {
+    choices.map((choice) => <div className="lead pb-4 ">{choice}</div>);
   };
 
   //display error
@@ -84,17 +93,13 @@ const ToolShoppingCard = ({ service }) => {
 
   return (
     <>
+      {showCart()}
       <Card.Group
         className="custom-card-style"
         itemsPerRow="3"
         centered
         items={showTools(products)}
-        onClick={cartItemsTotal}
       />
-      <AddToCart products={producttotal} />;
-      {/* <div>
-        <PopOver loggedinUser={isAuth()} />
-      </div> */}
     </>
   );
 };

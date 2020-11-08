@@ -241,7 +241,6 @@ const BlogComponent = ({ router }) => {
   const showCategories = () => {
     return categories.map((cat, i) => (
       <li key={i} className="list-unstyled">
-        {/* {console.log(cat)} */}
         <input
           onChange={handleToggle(cat._id)}
           type="checkbox"

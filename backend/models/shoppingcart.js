@@ -3,17 +3,24 @@ const { ObjectId } = mongoose.Schema;
 
 const shoppingCartSchema = new mongoose.Schema(
   {
-    product: {
-      type: String,
+    products: [
+      {
+        productid: String,
+        quantity: {
+          type: Number,
+          default: 0,
+        },
+        productname: String,
+        price: Number,
+      },
+    ],
+    active: {
+      type: Boolean,
+      default: true,
     },
-
-    id: {
-      type: String,
-    },
-
-    price: {
-      type: Number,
-      default: 0,
+    modifiedOn: {
+      type: Date,
+      default: Date.now,
     },
 
     customer: [{ type: ObjectId, ref: "Customer", required: true }],
