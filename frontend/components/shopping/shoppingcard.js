@@ -83,17 +83,12 @@ const ToolShoppingCard = ({ service }) => {
     }));
   };
 
-  const showCart = () => {
-    choices.map((choice) => <div className="lead pb-4 ">{choice}</div>);
-  };
-
   //display error
 
   //display success
 
   return (
     <>
-      {showCart()}
       <Card.Group
         className="custom-card-style"
         itemsPerRow="3"
