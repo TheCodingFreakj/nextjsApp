@@ -28,8 +28,8 @@ const stripePromise = loadStripe(
   "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
 );
 const SingleService = ({ service, query }) => {
-  //console.log(query);
-  //console.log(service);
+  // console.log(query);
+  // console.log(service);
 
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
@@ -189,96 +189,6 @@ const SingleService = ({ service, query }) => {
     ));
   };
 
-  const handleClick = async (event, checkedTool, price) => {
-    // Get Stripe.js instance
-    const stripe = await stripePromise;
-
-    // Call your backend to create the Checkout Session
-    bookService(event, checkedTool, price, shoppingCart, token).then(
-      async (data) => {
-        console.log(data);
-        if (data.error) {
-          console.log(data.error);
-        } else {
-          const result = await stripe.redirectToCheckout({
-            sessionId: data.id,
-          });
-          setSession(data);
-        }
-      }
-    );
-  };
-
-  const handleRemoveFromCart = () => {
-    setCart({
-      shoppingCart: shoppingCart - 1,
-    });
-  };
-
-  const handleAddToCart = () => {
-    setCart({
-      shoppingCart: shoppingCart + 1,
-    });
-  };
-
-  const handleAddProductsToCart = (props) => {
-    console.log("clicked", shoppingCart);
-
-    // let found = false;
-    // const updateCart = cartContainer.map((cartItem) => {
-    //   if (cartContainer.name === service.name) {
-    //     found = true;
-    //     cartItem.productsNumber = shoppingCart;
-    //     return cartItem;
-    //   } else {
-    //     return cartItem;
-    //   }
-    // });
-    // if (!found) {
-    //   updateCart.push({
-    //     name: this.props.name,
-    //     productsNumber: this.state.shoppingCart,
-    //     key: this.props.name,
-    //   });
-    // }
-    // this.setCart({
-    //   cart: updateCart,
-    // });
-    // return <ShoppingCart cart={updateCart} />;
-    // console.log(updateCart);
-  };
-
-  const showCartInfo = (service) => {
-    //console.log(service);
-
-    return (
-      <>
-        <button
-          className="mt-4 btn-lg btn-block btn btn-success"
-          disabled={shoppingCart === 0 ? true : false}
-          onClick={handleRemoveFromCart}
-        >
-          -
-        </button>
-        <span> {shoppingCart} </span>
-        <button
-          className="mt-4 btn-lg btn-block btn btn-success"
-          disabled={shoppingCart === availableProductspermonth ? true : false}
-          onClick={handleAddToCart}
-        >
-          +
-        </button>
-        <button
-          className="mt-4 btn-lg btn-block btn btn-success"
-          disabled={shoppingCart <= 0 ? true : false}
-          onClick={handleAddProductsToCart}
-        >
-          Order Quantity
-        </button>
-      </>
-    );
-  };
-
   return (
     <React.Fragment>
       {/* {head()} */}
@@ -380,22 +290,18 @@ const SingleService = ({ service, query }) => {
                       //Admin
 
                       <>
-                        <div className="col-md-6 lead">
-                          {showCartInfo(service)}
+                        <div className="col-md-6  text-center  lead">
+                          <Link
+                            href={`/services/service?productId=${service._id}`}
+                          >
+                            <a
+                              className="mt-4 btn-lg btn-block btn btn-success"
+                              style={{ width: "235px" }}
+                            >
+                              Shop Now
+                            </a>
+                          </Link>
                         </div>
-                        <button
-                          className="mt-4 btn-lg btn-block btn btn-success"
-                          style={{ width: "235px" }}
-                          role="link"
-                          name="choosenPriceFrontEnd"
-                          type="submit"
-                          value={totalPrice}
-                          onClick={() =>
-                            handleClick(service._id, checkedTool, totalPrice)
-                          }
-                        >
-                          Add to Cart
-                        </button>
                       </>
                     )}
                   </div>

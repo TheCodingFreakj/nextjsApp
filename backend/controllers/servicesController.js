@@ -315,6 +315,28 @@ exports.SingleService = async (req, res) => {
   }
 };
 
+exports.Product = async (req, res) => {
+  console.log(req.query);
+  const { productId } = req.query;
+  try {
+    await Service.findOne({ _id: productId })
+      .populate(
+        "discountedServiceCharges",
+        "_id serviceName discountedServiceCharges slug"
+      )
+      .exec((err, service) => {
+        if (err) {
+          return res.status(400).json({ errors: errorHandler(err) });
+        }
+
+        res.json(service);
+      });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 exports.removeServices = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   try {

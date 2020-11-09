@@ -18,6 +18,7 @@ const {
   CreatePortfolio,
   PortfolioList,
   Portfoliophoto,
+  Product,
 } = require("../controllers/servicesController");
 
 router.post("/services", tokenAuth, adminMiddleware, Services);
@@ -25,6 +26,7 @@ router.delete("/services/:slug", tokenAuth, adminMiddleware, removeServices);
 router.post("/all-services", ServicesList);
 router.put("/services/:slug", updateService);
 router.get("/service/:slug", SingleService);
+router.get("/service", Product);
 router.get("/services/photo/:slug", photo);
 
 //Portfolio

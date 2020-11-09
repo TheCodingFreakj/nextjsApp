@@ -1,20 +1,18 @@
 import React from "react";
-import Link from "next/link";
+import { Segment } from "semantic-ui-react";
 import Layout from "../../components/Layout";
-import AddToCart from "../../components/shopping/addToCart";
+import CartItemList from "../../components/cart/cartitemlist";
+import CartSummary from "../../components/cart/cartsummary";
 
 //bring components
 
 const Cart = () => {
   return (
     <Layout>
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-12 pt-5 pb-5">
-            <AddToCart />
-          </div>
-        </div>
-      </div>
+      <Segment>
+        <CartItemList />
+        <CartSummary />
+      </Segment>
     </Layout>
   );
 };

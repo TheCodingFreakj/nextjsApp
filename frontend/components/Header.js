@@ -53,14 +53,6 @@ const Header = () => {
               </Link>
             </NavItem>
 
-            <NavItem className="ml-5 text-light  font-weight-bold  h5">
-              <Link href="/cart">
-                <a className="text-light  font-weight-bold  h5">
-                  View Your Cart
-                </a>
-              </Link>
-            </NavItem>
-
             <NavItem className="ml-5 text-light font-weight-bold  h5">
               <Link href="/customer">
                 <a className="text-light font-weight-bold  h5">
@@ -155,6 +147,12 @@ const Header = () => {
               <NavItem className="ml-5 text-light  font-weight-bold  h5">
                 <Link href="/services">
                   <a className="text-light  font-weight-bold  h5">Services</a>
+                </Link>
+              </NavItem>
+
+              <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                <Link href="/cart">
+                  <a className="text-light  font-weight-bold  h5">Cart</a>
                 </Link>
               </NavItem>
               <NavItem className="ml-5 text-light  font-weight-bold  h5">
