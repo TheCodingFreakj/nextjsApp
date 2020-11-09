@@ -45,6 +45,10 @@ const ServicesPage = ({ data }) => {
     ));
   };
 
+  useEffect(() => {
+    loadIndvServices();
+  }, []);
+
   const loadIndvServices = () => {
     getAllServices().then((data) => {
       //console.log(data);
@@ -55,10 +59,6 @@ const ServicesPage = ({ data }) => {
       }
     });
   };
-
-  useEffect(() => {
-    loadIndvServices();
-  }, []);
 
   const showIndvServices = () => {
     return services.map((service, i) => (

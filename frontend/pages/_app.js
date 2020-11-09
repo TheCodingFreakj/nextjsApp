@@ -1,12 +1,29 @@
 import App from "next/app";
 
-const MyApp = ({ Component, pageProps }) => {
-  //console.log(pageProps); //This one coming for the blogs page
-  return (
-    <div className="overflow-hidden">
-      <Component {...pageProps} />
-    </div>
-  );
-};
+// const MyApp = ({ Component, pageProps }) => {
+
+//   return (
+//     <div className="overflow-hidden">
+//       <Component {...pageProps} />
+//     </div>
+//   );
+// };
+
+class MyApp extends App {
+  static async getInitialProps({ Component, ctx }) {
+    let pageProps = {};
+
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx);
+    }
+
+    return { pageProps };
+  }
+
+  render() {
+    const { Component, pageProps } = this.props;
+    return <Component {...pageProps} />;
+  }
+}
 
 export default MyApp;

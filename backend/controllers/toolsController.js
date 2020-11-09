@@ -83,7 +83,22 @@ exports.SingleTool = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+exports.Product = async (req, res) => {
+  console.log(req.query);
+  const { productId } = req.query;
+  try {
+    await Tools.findOne({ _id: productId }).exec((err, product) => {
+      if (err) {
+        return res.status(400).json({ errors: errorHandler(err) });
+      }
 
+      res.json(product);
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
 //get all tools
 exports.updateTool = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
