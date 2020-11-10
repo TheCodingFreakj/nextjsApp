@@ -19,11 +19,8 @@ const Product = ({ service }) => {
   );
 };
 Product.getInitialProps = async ({ query: { productId } }) => {
-  //get the product from collecruon based on id
-
   const url = `${API}/api/service`;
   const payload = { params: { productId } };
-
   const response = await axios.get(url, payload);
   return { service: response.data };
 };

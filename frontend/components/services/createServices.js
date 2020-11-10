@@ -12,20 +12,16 @@ import "../../node_modules/react-quill/dist/quill.snow.css";
 
 const CreateServices = ({ router }) => {
   const processFromLS = () => {
-    //dont have window avaliable
     if (typeof window === "undefined") {
       return false;
     }
-
-    //if we have a item called blog in local storage and then we want that
     if (localStorage.getItem("process")) {
-      // we are storing the value as json object we need to convert that as js object which is showed ion the editor
       return JSON.parse(localStorage.getItem("process"));
     } else {
       return false;
     }
   };
-  //getting all values from form inputs
+
   const [process, setProcess] = useState(processFromLS());
 
   const [values, setValues] = useState({
@@ -33,8 +29,8 @@ const CreateServices = ({ router }) => {
     duration: "",
     summary: "",
     formData: "",
-    error: false, //Shows up as a display message when there's any issues// turn it on only when you get issues in getting data from backend
-    success: false, //Shows up as a display message when we submit somthing
+    error: false,
+    success: false,
     loading: false,
     reload: false,
   });
@@ -48,18 +44,12 @@ const CreateServices = ({ router }) => {
     loading,
     reload,
   } = values;
-
-  //state to get the tools from backend
   const [tools, setTools] = useState([]);
   const [discountedPrice, setDiscountedPrice] = useState([]);
-
-  //state to get the checkedTool value in the state at the frontend
   const [checkedTool, setCheckedTool] = useState([]);
-  // console.log("This is the state where I store the checkedTool", checkedTool);
   const [checkedPrice, setCheckedPrice] = useState([]);
 
   useEffect(() => {
-    // const checkedData = new FormData();
     setValues({ ...values, formData: new FormData() });
     showToolSideBar();
     showPriceSideBar();
@@ -69,7 +59,6 @@ const CreateServices = ({ router }) => {
 
   const showToolSideBar = () => {
     getAllTools().then((data) => {
-      // console.log("This are all the tools I m getting from the backend", data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -80,7 +69,6 @@ const CreateServices = ({ router }) => {
 
   const showPriceSideBar = () => {
     getAllServicePriceOptions().then((data) => {
-      //console.log("The price tag is", data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -92,39 +80,22 @@ const CreateServices = ({ router }) => {
   //This is a function returning another function
 
   const onChange = (name) => (e) => {
-    // console.log("The current input is", e.target.value);
-    // console.log("The name is ", name);
-
-    // const value = e.target.value;
-
     const value = name === "photo" ? e.target.files[0] : e.target.value;
-
-    // console.log(value);
-
     formData.set(name, value);
-
-    //after populating we have to update the state
     setValues({ ...values, [name]: value, formData: formData, error: "" });
   };
 
   const onHandleChange = (e) => {
-    //console.log(e);
-    setProcess(e); //pass whole event
+    setProcess(e);
     formData.set("process", e);
-
-    //populate this body in local storage so that in refersh its not lost
     if (typeof window !== "undefined") {
-      //if we have a window then store the blog
       localStorage.setItem("process", JSON.stringify(e));
     }
   };
 
   const handleToggle = (tId) => {
-    //clear the state incase of any error
     setValues({ ...values, error: "" });
     const clickedTool = checkedTool.indexOf(tId);
-
-    //storing all the checked Values in allTools
     const allTools = [...checkedTool];
 
     if (clickedTool === -1) {
@@ -132,8 +103,7 @@ const CreateServices = ({ router }) => {
     } else {
       allTools.splice(clickedTool, 1);
     }
-    // console.log("Storing all the check Items in a variable", allTools);
-    setCheckedTool(allTools); // storing all checked value in the state
+    setCheckedTool(allTools);
 
     formData.set("tools", allTools);
   };
@@ -152,20 +122,16 @@ const CreateServices = ({ router }) => {
   };
 
   const handlePriceToggle = (pId) => {
-    //clear the state incase of any error
     setValues({ ...values, error: "" });
     const clickedPrice = checkedPrice.indexOf(pId);
-
-    //storing all the checked Values in allTools
     const choosenPrices = [...checkedPrice];
-
     if (clickedPrice === -1) {
       choosenPrices.push(pId);
     } else {
       choosenPrices.splice(checkedPrice, 1);
     }
     console.log("Storing all the check Items in a variable", choosenPrices);
-    setCheckedPrice(choosenPrices); // storing all checked value in the state
+    setCheckedPrice(choosenPrices);
 
     formData.set("discountedPrice", choosenPrices);
   };
@@ -190,8 +156,6 @@ const CreateServices = ({ router }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     createServices(formData, token).then((data) => {
-      //console.log("This is getting from backend", data);
-
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -206,7 +170,6 @@ const CreateServices = ({ router }) => {
 
         setProcess("");
         setTools([]);
-
         setDiscountedPrice([]);
         setCheckedTool([]);
         setCheckedPrice([]);
@@ -281,16 +244,6 @@ const CreateServices = ({ router }) => {
           <label className="text-muted">
             <h3>Process</h3>
           </label>
-          {/* 
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Input the Process Here"
-            value={process}
-            onChange={onChange("process")}
-            required
-          />
-        </div> */}
 
           <div className="form-group">
             <ReactQuill
@@ -314,8 +267,6 @@ const CreateServices = ({ router }) => {
       <div className="container-fluid pb-5 ">
         <div className="row">
           <div className="col-md-8 pb-5">
-            {/* {showSuccess()}
-            {showError()} */}
             <div className="col-md-8 pb-5">
               <div>
                 <h5>Select Service and Discounted Price</h5>
@@ -332,8 +283,6 @@ const CreateServices = ({ router }) => {
               </div>
             </div>
             {createServiceForm()}
-            {/* {JSON.stringify(discountedPrice)} */}
-            {/* {JSON.stringify(allTools)} */}
           </div>
 
           <div className="col-md-2 pb-5">

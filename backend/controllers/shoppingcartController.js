@@ -1,49 +1,66 @@
-const ShoppingCart = require("../models/shoppingcart");
+const ToolsCart = require("../models/toolsCart");
+const ServiceCart = require("../models/serviceCart");
 const Customer = require("../models/customers");
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Types;
 const { errorHandler } = require("../helpers/dbErrorHandler");
+
 //https://stackoverflow.com/questions/59174763/how-to-add-product-to-shopping-cart-with-nodejs-express-and-mongoose
-exports.createCartItems = async (req, res) => {
-  const { price, productid, productname } = req.body;
+exports.updateToolCart = async (req, res) => {
+  console.log(req.body);
+  const { quantity, productId } = req.body;
   const customer = req.user;
   const customerid = customer._id;
 
   try {
-    let cart = await ShoppingCart.findOne({ customerid });
-    if (cart) {
-      //cart exists for user
-      let itemIndex = cart.products.findIndex((p) => p.productid === productid);
-      if (itemIndex > -1) {
-        //product exists in the cart, update the quantity
-        let productItem = cart.products[itemIndex];
-        productItem.price = price;
-        cart.products[itemIndex] = productItem;
-      } else {
-        //product does not exists in cart, add new item
-        cart.products.push({ productid, productname, price });
-      }
-      cart = await cart.save();
-      return res.status(201).send(cart);
+    const toolsCart = await ToolsCart.findOne({ customer });
+    //iterate over array and check if any meet a give condition
+    const productExists = toolsCart.products.some((doc) =>
+      ObjectId(productId).equals(doc.product)
+    );
+    if (productExists) {
+      await ToolsCart.findOneAndUpdate(
+        {
+          _id: toolsCart._id,
+          "products.product": productId,
+        },
+        { $inc: { "products.$.quantity": quantity } }
+      );
     } else {
-      //no cart for user, create new cart
-      const newCart = await ShoppingCart.create({
-        customerid,
-        products: [{ productid, productname, price }],
-      });
-      return res.status(201).send(newCart);
+      const newProduct = { quantity, product: productId };
+      await ToolsCart.findOneAndUpdate(
+        {
+          _id: toolsCart._id,
+        },
+        { $addToSet: { products: newProduct } }
+      );
     }
+
+    res.status(200).send("Cart Updated");
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
   }
 };
-exports.fetchCart = async (req, res) => {
+
+exports.fetchToolsCart = async (req, res) => {
+  const user = req.user._id;
   try {
-    // await Price.find({}).exec((err, pricePackages) => {
-    //     if (err) {
-    //       return res.status(400).json({ error: errorHandler(err) });
-    //     }
-    //     res.json(pricePackages);
-    //   });
+    const toolsCart = await ToolsCart.findOne({ customer: user }).populate({
+      path: "products.product",
+      model: "Tools", // This is ref value
+    });
+
+    res.status(200).json(toolsCart.products);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Please Login Again");
+  }
+};
+
+exports.fetchServicesCart = async (req, res) => {
+  try {
+    await ServiceCart.findOne({ customer: req.user.id });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

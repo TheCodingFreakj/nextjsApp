@@ -5,11 +5,13 @@ const tokenAuth = require("../middlewares/tokenAuth");
 //bring Controller
 
 const {
-  createCartItems,
-  fetchCart,
+  updateToolCart,
+  fetchToolsCart,
+  fetchServicesCart,
 } = require("../controllers/shoppingcartController");
 
-router.post("/cartitems", tokenAuth, authMiddleware, createCartItems);
+router.put("/tools-cart", tokenAuth, authMiddleware, updateToolCart);
 
-router.get("/cartitems", tokenAuth, authMiddleware, fetchCart);
+router.get("/tools-cart", tokenAuth, authMiddleware, fetchToolsCart);
+router.get("/services-cart", tokenAuth, authMiddleware, fetchServicesCart);
 module.exports = router;

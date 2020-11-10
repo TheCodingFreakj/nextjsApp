@@ -31,12 +31,6 @@ const ServicesPage = ({ data }) => {
                 >
                   Subscribe Now
                 </button>
-                {/* <button
-                  className="mt-4 btn-lg btn-block btn btn-success"
-                  style={{ width: "235px" }}
-                >
-                  Book Now
-                </button> */}
               </a>
             </Link>
           </div>
@@ -118,7 +112,6 @@ const ServicesPage = ({ data }) => {
 
         <div className="container-fluid">
           <div className="row justify-content-md-center">
-            {/* {JSON.stringify(services)} */}
             {showIndvServices()}
           </div>
         </div>
@@ -128,12 +121,7 @@ const ServicesPage = ({ data }) => {
 };
 
 export const getServerSideProps = async (context) => {
-  //data required here//getComboPackages
-
   const data = await getComboPackages();
-
-  //console.log(data);
-
   if (data.error) {
     console.log(data.error);
   } else {

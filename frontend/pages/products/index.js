@@ -6,7 +6,7 @@ import { Container } from "semantic-ui-react";
 import ProductAttribute from "../../components/productPageComponents/productattribute";
 import ProductSummary from "../../components/productPageComponents/productsummary";
 const Product = ({ product }) => {
-  console.log(product);
+  //console.log(product);
   return (
     <Layout>
       <React.Fragment>

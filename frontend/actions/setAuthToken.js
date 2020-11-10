@@ -75,8 +75,6 @@ export const isAuth = () => {
 export const userRole = () => {
   if (typeof window !== "undefined") {
     const cookiesChecked = getCookie("token");
-
-    // console.log(cookiesChecked);
     if (cookiesChecked) {
       if (localStorage.getItem("user")) {
         try {

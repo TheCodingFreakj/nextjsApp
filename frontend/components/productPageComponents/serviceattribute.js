@@ -6,7 +6,9 @@ const ServiceAttribute = ({ summary }) => {
 
   return (
     <>
-      <Header as="h3">About This Product</Header>
+      <Header verticalalign="middle" as="h3">
+        About This Product
+      </Header>
       <p>{summary}</p>
       <Button
         icon="trash alternate outline"

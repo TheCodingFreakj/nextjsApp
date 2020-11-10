@@ -12,7 +12,7 @@ import { getAllServicePriceOptions } from "../../actions/price";
 import { getAllTools } from "../../actions/tools";
 import { updateService, singleService } from "../../actions/services";
 const UpdateServices = ({ router }) => {
-  console.log("This is router object", router.query.slug);
+  // console.log("This is router object", router.query.slug);
   //console.log("This is router object", router);
   //getting all values from form inputs
 

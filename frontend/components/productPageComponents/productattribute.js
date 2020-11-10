@@ -6,7 +6,7 @@ const ProductAttribute = ({ summary }) => {
 
   return (
     <>
-      <Header verticalAlign="middle" as="h3">
+      <Header verticalalign="middle" as="h3">
         About This Product
       </Header>
       <p>{summary}</p>

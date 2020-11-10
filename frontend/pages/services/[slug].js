@@ -36,16 +36,7 @@ const SingleService = ({ service, query }) => {
   const [total, setTotal] = useState([]);
   const [subtotal, setSubTotal] = useState([]);
   const [totalPrice, setTotalPrice] = useState(""); //send this totalPrice in to the backend as ?price={totalPrice}
-  const [session, setSession] = useState();
-  const [cart, setCart] = useState({
-    availableProductspermonth: 4,
-    shoppingCart: 0,
-    cartContainer: [],
-  });
 
-  const { availableProductspermonth, shoppingCart, cartContainer } = cart;
-  const [toolclick, settoolclick] = useState([]);
-  const [hideOnScroll, setHideOnScroll] = useState(true);
   // const head = () => (
   //   <Head>
   //     <script src="https://js.stripe.com/v3/"></script>
@@ -238,7 +229,6 @@ const SingleService = ({ service, query }) => {
                                   >
                                     {total}
                                   </button>
-                                  {/* <h2>{total}</h2> */}
                                 </div>
                                 <div className="col-md-3  pb-5">
                                   <p>Deduct to see the totalPrice</p>
@@ -269,8 +259,7 @@ const SingleService = ({ service, query }) => {
                   <h2>Summary</h2>
                   {renderHTML(service.process)}
                 </div>
-                {/* {JSON.stringify(totalPrice)}
-                {JSON.stringify(total)} */}
+
                 <div className="col-md-4 ml-6">
                   <h2>Ratings</h2>
                   Average Ratings{service.ratingsAverage}

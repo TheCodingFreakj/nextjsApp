@@ -15,14 +15,10 @@ import {
 } from "reactstrap";
 import Link from "next/link";
 import Router from "next/router";
-
 import NProgress from "nprogress";
-
 import { APP_NAME } from "../config";
 import { signout } from "../actions/auth";
-
 import { isAuth, userRole } from "../actions/setAuthToken";
-
 import "../node_modules/nprogress/nprogress.css";
 import Search from "../components/blogs/search";
 
@@ -101,6 +97,11 @@ const Header = () => {
                 </a>
               </Link>
             </NavItem>
+            <NavItem className="ml-5 text-light  font-weight-bold  h5">
+              <Link href="/cart">
+                <a className="text-light  font-weight-bold  h5">Cart</a>
+              </Link>
+            </NavItem>
 
             <NavItem className="ml-5 text-light font-weight-bold  h5">
               <a
@@ -171,6 +172,8 @@ const Header = () => {
             </React.Fragment>
 
             {renderHeader(userRole())}
+            {/* {console.log(isAuth())}
+            {console.log(userRole())} */}
           </Nav>
         </Collapse>
       </Navbar>

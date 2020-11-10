@@ -1,9 +1,7 @@
 import axios from "axios";
 import { API } from "../config";
 
-export const createCartItems = async (products, token) => {
-  console.log("products", products);
-
+export const updateToolCart = async (quantity, productId, token) => {
   try {
     const config = {
       method: "POST",
@@ -14,11 +12,10 @@ export const createCartItems = async (products, token) => {
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       },
     };
+    const payload = { quantity, productId }; //we are sending the formData to get posted on the backend
 
-    const body = products; //we are sending the formData to get posted on the backend
-
-    console.log(body);
-    const response = await axios.post(`${API}/api/cartitems`, body, config); //handing the backedn register user
+    console.log(payload);
+    const response = await axios.put(`${API}/api/tools-cart`, payload, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);
@@ -43,15 +40,18 @@ export const createCartItems = async (products, token) => {
   }
 };
 
-//for cart page
-//https://medium.com/javascript-in-plain-english/build-a-shopping-cart-in-nodejs-and-react-c7b488d46e79
-export const fetchCart = async () => {
+// //for cart page
+// //https://medium.com/javascript-in-plain-english/build-a-shopping-cart-in-nodejs-and-react-c7b488d46e79
+export const fetchToolsCart = async (token) => {
   try {
     const config = {
       method: "GET",
+      headers: {
+        Authorization: ` Bearer ${token}`,
+      },
     };
 
-    const response = await axios.get(`${API}/api/cartitems`, config); //handing the backedn register user
+    const response = await axios.get(`${API}/api/tools-cart`, config); //handing the backedn register user
     return response.data;
     console.log(response.data); // this is the token from backend
     console.log(response.status);
