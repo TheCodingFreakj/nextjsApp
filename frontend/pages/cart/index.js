@@ -5,7 +5,7 @@ import Layout from "../../components/Layout";
 import CartItemList from "../../components/cart/cartitemlist";
 import CartSummary from "../../components/cart/cartsummary";
 import { getCookie } from "../../actions/setAuthToken";
-import { fetchToolsCart } from "../../actions/shoppingcart";
+import { fetchToolsCart, deleteToolsCart } from "../../actions/shoppingcart";
 
 //bring components
 
@@ -14,10 +14,11 @@ const Cart = ({ router }) => {
   const [products, setProducts] = useState([]);
   const token = getCookie("token");
 
-  //see if you can use fetchCart depending on whether the user is authenticated or not
+  // //see if you can use fetchCart depending on whether the user is authenticated or not
+  //see if you fetch only when user add products
   useEffect(() => {
     fetchThisUserCart();
-  }, [router]);
+  }, []);
 
   const fetchThisUserCart = async () => {
     await fetchToolsCart(token).then((data) => {
@@ -29,12 +30,26 @@ const Cart = ({ router }) => {
     });
   };
 
-  // console.log(products);
+  console.log(products);
+
+  const handleRemoveFromCart = async (productId) => {
+    await deleteToolsCart(productId, token).then((data) => {
+      console.log(data);
+      if (data.error) {
+        seterror({ ...error, error: data.error });
+      } else {
+        setProducts(data);
+      }
+    });
+  };
   return (
     <Layout>
       <Segment>
-        <CartItemList />
-        <CartSummary />
+        <CartItemList
+          handleRemoveFromCart={handleRemoveFromCart}
+          products={products}
+        />
+        <CartSummary products={products} />
       </Segment>
     </Layout>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "semantic-ui-react";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
@@ -11,9 +11,24 @@ const AddProductToCart = ({ productId }) => {
   const [success, setSuccess] = useState(false);
 
   const loggedinUser = isAuth();
-  console.log(loggedinUser);
+  //console.log(loggedinUser);
   const router = useRouter();
   const token = getCookie("token");
+
+  useEffect(() => {
+    let timeout;
+    if (success) {
+      //this use effect will fire off if the success is true to make it false
+      timeout = setTimeout(() => setSuccess(false), 3000);
+    }
+
+    //we need to cancel this setTimeOut
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [success]);
+
   const handleAddProductTocart = () => {
     setLoading(true);
     updateToolCart(quantity, productId, token).then((data) => {
