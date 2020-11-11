@@ -14,12 +14,7 @@ const {
 } = require("../controllers/shoppingcartController");
 router.get("/tools-cart", tokenAuth, authMiddleware, fetchToolsCart);
 router.put("/tools-cart", tokenAuth, authMiddleware, updateToolCart);
-router.delete(
-  "/tools-cart/:productId",
-  tokenAuth,
-  authMiddleware,
-  deleteToolsCart
-);
+router.delete("/tools-cart", tokenAuth, authMiddleware, deleteToolsCart);
 
 router.put("/services-cart", tokenAuth, authMiddleware, updateServiceCart);
 router.delete(

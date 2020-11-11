@@ -23,7 +23,6 @@ Product.getInitialProps = async ({ query: { productId } }) => {
 
   const url = `${API}/api/tool`;
   const payload = { params: { productId } };
-
   const response = await axios.get(url, payload);
   return { product: response.data };
 };

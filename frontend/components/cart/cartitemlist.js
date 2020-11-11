@@ -4,16 +4,14 @@ import { isAuth, getCookie } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
 const CartItemList = ({ products, handleRemoveFromCart }) => {
   //console.log(product);
-
   const router = useRouter();
-
   const user = isAuth();
   const mapCartProductsToItems = (products) => {
     return products.map((p) => ({
       header: (
         <Item.Header
           as="a"
-          onClick={() => router.push(`/products?id=${p.product[0]._id}`)}
+          onClick={() => router.push(`/products?productId=${p.product[0]._id}`)}
         >
           {p.product[0].tool}
         </Item.Header>

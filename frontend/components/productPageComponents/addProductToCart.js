@@ -21,9 +21,7 @@ const AddProductToCart = ({ productId }) => {
       //this use effect will fire off if the success is true to make it false
       timeout = setTimeout(() => setSuccess(false), 3000);
     }
-
     //we need to cancel this setTimeOut
-
     return () => {
       clearTimeout(timeout);
     };

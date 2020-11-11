@@ -4,6 +4,7 @@ const Customer = require("../models/customers");
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Types;
 const { errorHandler } = require("../helpers/dbErrorHandler");
+const { query } = require("express");
 
 //https://stackoverflow.com/questions/59174763/how-to-add-product-to-shopping-cart-with-nodejs-express-and-mongoose
 exports.updateToolCart = async (req, res) => {
@@ -45,13 +46,13 @@ exports.updateToolCart = async (req, res) => {
 
 exports.fetchToolsCart = async (req, res) => {
   const user = req.user._id;
+  console.log(req.user);
 
   try {
     const toolsCart = await ToolsCart.findOne({ customer: user }).populate({
       path: "products.product",
       model: "Tools", // This is ref value
     });
-
     res.status(200).json(toolsCart.products);
   } catch (error) {
     console.error(error.message);
@@ -60,9 +61,10 @@ exports.fetchToolsCart = async (req, res) => {
 };
 //http://localhost:3001/products?productId=5f8fdda74f5975190868cbbe
 exports.deleteToolsCart = async (req, res) => {
-  const productId = req.params.id;
-  console.log("pridtid", productId);
-  const userid = req.user._id;
+  const { productId } = req.query;
+
+  console.log(req.user);
+  const userid = req.user.id;
   console.log("userid", userid);
 
   try {

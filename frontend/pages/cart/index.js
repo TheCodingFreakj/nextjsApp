@@ -1,58 +1,71 @@
 import React, { useState, useEffect } from "react";
-import { Segment } from "semantic-ui-react";
+import { Button, Segment } from "semantic-ui-react";
 import { withRouter } from "next/router";
 import Layout from "../../components/Layout";
 import CartItemList from "../../components/cart/cartitemlist";
 import CartSummary from "../../components/cart/cartsummary";
 import { getCookie } from "../../actions/setAuthToken";
-import { fetchToolsCart, deleteToolsCart } from "../../actions/shoppingcart";
-
+import { deleteToolsCart } from "../../actions/shoppingcart";
+import { isAuth } from "../../actions/setAuthToken";
+import axios from "axios";
+import { API } from "../../config";
 //bring components
 
-const Cart = ({ router }) => {
+const Cart = ({ products, router }) => {
   const [error, seterror] = useState("");
-  const [products, setProducts] = useState([]);
-  const token = getCookie("token");
-
-  // //see if you can use fetchCart depending on whether the user is authenticated or not
-  //see if you fetch only when user add products
-  useEffect(() => {
-    fetchThisUserCart();
-  }, []);
-
-  const fetchThisUserCart = async () => {
-    await fetchToolsCart(token).then((data) => {
-      if (data.error) {
-        seterror({ ...error, error: data.error });
-      } else {
-        setProducts(data);
-      }
-    });
-  };
-
-  console.log(products);
+  const [cartproducts, setCartProducts] = useState(products);
 
   const handleRemoveFromCart = async (productId) => {
-    await deleteToolsCart(productId, token).then((data) => {
-      console.log(data);
-      if (data.error) {
-        seterror({ ...error, error: data.error });
-      } else {
-        setProducts(data);
-      }
-    });
+    const token = getCookie("token");
+    const url = `${API}/api/tools-cart`;
+    const payload = {
+      params: { productId },
+      headers: {
+        Authorization: ` Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.delete(url, payload);
+    setCartProducts(response.data);
   };
+
   return (
     <Layout>
-      <Segment>
-        <CartItemList
-          handleRemoveFromCart={handleRemoveFromCart}
-          products={products}
-        />
-        <CartSummary products={products} />
-      </Segment>
+      {isAuth() && (
+        <Segment>
+          <CartItemList
+            handleRemoveFromCart={handleRemoveFromCart}
+            products={cartproducts}
+          />
+          <CartSummary products={cartproducts} />
+        </Segment>
+      )}
+
+      {!isAuth() && (
+        <Segment>
+          <Button color="green" onClick={() => router.push("/customerSignup")}>
+            Login To Add Products
+          </Button>
+        </Segment>
+      )}
     </Layout>
   );
+};
+Cart.getInitialProps = async (context) => {
+  const token = getCookie("token");
+  if (!token) {
+    return { products: [] };
+  }
+  const url = `${API}/api/tools-cart`;
+  const payload = {
+    headers: {
+      Authorization: ` Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(url, payload);
+  console.log(response.data);
+  return { products: response.data };
 };
 
 export default withRouter(Cart);
