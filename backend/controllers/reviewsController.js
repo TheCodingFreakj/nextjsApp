@@ -112,6 +112,7 @@ exports.ReviewsList = async (req, res) => {
       //.populate({ path: "discountedServiceCharges", model: "Price" })
       .populate("reviewedBy", "_id name ")
       .populate("checkedService", "_id title slug duration")
+
       .select("_id review rating  reviewedBy  checkedService slug ")
       .exec((err, reviews) => {
         if (err) {

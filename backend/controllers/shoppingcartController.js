@@ -1,5 +1,6 @@
 const ToolsCart = require("../models/toolsCart");
 const ServiceCart = require("../models/serviceCart");
+const Price = require("../models/price");
 const Customer = require("../models/customers");
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Types;
@@ -83,19 +84,18 @@ exports.deleteToolsCart = async (req, res) => {
 };
 
 exports.fetchServicesCart = async (req, res) => {
+  const user = req.user._id;
   try {
-    const serviceCart = await ServiceCart.findOne({
-      customer: req.user.id,
-    })
-      .populate({
-        path: "products.product",
-        model: "Service",
-      })
-      .populate({
-        path: "products.product.discountedServiceCharges[0]",
-        model: "Service",
-        select: "_id serviceName discountedServiceCharges slug",
-      });
+    const serviceCart = await ServiceCart.findOne({ customer: user }).populate({
+      path: "products.product",
+      model: "Service",
+      populate: {
+        path: "discountedServiceCharges",
+        model: "Price",
+      },
+    });
+
+    console.log(serviceCart.products);
 
     res.status(200).json(serviceCart.products);
   } catch (error) {

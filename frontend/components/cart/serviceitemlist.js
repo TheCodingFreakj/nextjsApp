@@ -1,13 +1,12 @@
 import React from "react";
 import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
-import { isAuth, getCookie } from "../../actions/setAuthToken";
+import { isAuth } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
 const ServicetItemList = ({ products }) => {
   console.log(products);
   const router = useRouter();
   const user = isAuth();
   const mapCartProductsToItems = (products) => {
-    //services/service?serviceId=5f93db9bd09de51f98789a4f
     return products.map((p) => ({
       header: (
         <Item.Header
@@ -20,7 +19,7 @@ const ServicetItemList = ({ products }) => {
         </Item.Header>
       ),
       childKey: p.product[0]._id,
-      meta: `${p.quantity} x   $ ${p.product[0].discountedServiceCharges[0]}`,
+      meta: `${p.quantity} x   $ ${p.product[0].discountedServiceCharges[0].discountedServiceCharges}`,
       fluid: "true",
       extra: (
         <Button

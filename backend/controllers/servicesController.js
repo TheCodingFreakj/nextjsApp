@@ -285,7 +285,7 @@ exports.listRelatedPortfolio = async (req, res) => {
 
 exports.SingleService = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
-  // console.log(slug);
+
   try {
     await Service.findOne({ slug })
       .populate([

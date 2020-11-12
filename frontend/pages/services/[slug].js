@@ -29,7 +29,7 @@ const stripePromise = loadStripe(
 );
 const SingleService = ({ service, query }) => {
   // console.log(query);
-  // console.log(service);
+  //console.log(service);
 
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
