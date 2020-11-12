@@ -17,12 +17,7 @@ router.put("/tools-cart", tokenAuth, authMiddleware, updateToolCart);
 router.delete("/tools-cart", tokenAuth, authMiddleware, deleteToolsCart);
 
 router.put("/services-cart", tokenAuth, authMiddleware, updateServiceCart);
-router.delete(
-  "/services-cart/:productId",
-  tokenAuth,
-  authMiddleware,
-  deleteServiceCart
-);
+router.delete("/services-cart", tokenAuth, authMiddleware, deleteServiceCart);
 router.get("/services-cart", tokenAuth, authMiddleware, fetchServicesCart);
 
 module.exports = router;

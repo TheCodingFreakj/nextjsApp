@@ -5,7 +5,6 @@ import Layout from "../../components/Layout";
 import CartItemList from "../../components/cart/cartitemlist";
 import CartSummary from "../../components/cart/cartsummary";
 import { getCookie } from "../../actions/setAuthToken";
-import { deleteToolsCart } from "../../actions/shoppingcart";
 import { isAuth } from "../../actions/setAuthToken";
 import axios from "axios";
 import { API } from "../../config";
@@ -14,7 +13,7 @@ import { API } from "../../config";
 const Cart = ({ products, router }) => {
   const [error, seterror] = useState("");
   const [cartproducts, setCartProducts] = useState(products);
-
+  console.log(cartproducts);
   const handleRemoveFromCart = async (productId) => {
     const token = getCookie("token");
     const url = `${API}/api/tools-cart`;
@@ -24,10 +23,11 @@ const Cart = ({ products, router }) => {
         Authorization: ` Bearer ${token}`,
       },
     };
-
     const response = await axios.delete(url, payload);
     setCartProducts(response.data);
   };
+
+  const handleCheckOut = async () => {};
 
   return (
     <Layout>
@@ -37,7 +37,10 @@ const Cart = ({ products, router }) => {
             handleRemoveFromCart={handleRemoveFromCart}
             products={cartproducts}
           />
-          <CartSummary products={cartproducts} />
+          <CartSummary
+            products={cartproducts}
+            handleCheckOut={handleCheckOut}
+          />
         </Segment>
       )}
 
@@ -51,20 +54,20 @@ const Cart = ({ products, router }) => {
     </Layout>
   );
 };
+
 Cart.getInitialProps = async (context) => {
   const token = getCookie("token");
   if (!token) {
     return { products: [] };
   }
   const url = `${API}/api/tools-cart`;
+  // const url2 = `${API}/api/services-cart`
   const payload = {
     headers: {
       Authorization: ` Bearer ${token}`,
     },
   };
-
   const response = await axios.get(url, payload);
-  console.log(response.data);
   return { products: response.data };
 };
 

@@ -3,6 +3,7 @@ const { ObjectId } = mongoose.Schema;
 
 const toolsCartSchema = new mongoose.Schema(
   {
+    customer: [{ type: ObjectId, ref: "Customer", required: true }],
     products: [
       {
         quantity: {
@@ -19,8 +20,6 @@ const toolsCartSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-
-    customer: [{ type: ObjectId, ref: "Customer", required: true }],
   },
   { timestamps: true }
 );

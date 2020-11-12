@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Divider, Button, Segment, Icon } from "semantic-ui-react";
 import calculateProductTotal from "../utils/calcCartTotal";
 import StripeCheckout from "react-stripe-checkout";
-const CartSummary = ({ products, handleCheckOut }) => {
+const ServiceSummary = ({ products, handleCheckOut }) => {
   const [cartAmount, setcartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);
   const [isCartEmpty, setCartEmpty] = useState(false);
@@ -42,4 +42,4 @@ const CartSummary = ({ products, handleCheckOut }) => {
   );
 };
 
-export default CartSummary;
+export default ServiceSummary;

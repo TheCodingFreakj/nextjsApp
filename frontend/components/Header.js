@@ -43,12 +43,6 @@ const Header = () => {
               </a>
             </NavItem>
 
-            <NavItem className="ml-5 text-light  font-weight-bold  h5">
-              <Link href="">
-                <a className="text-light  font-weight-bold  h5">Shop</a>
-              </Link>
-            </NavItem>
-
             <NavItem className="ml-5 text-light font-weight-bold  h5">
               <Link href="/customer">
                 <a className="text-light font-weight-bold  h5">
@@ -95,11 +89,6 @@ const Header = () => {
                 <a className="text-light font-weight-bold  h5">
                   {`${isAuth().name}'s Dashboard`}
                 </a>
-              </Link>
-            </NavItem>
-            <NavItem className="ml-5 text-light  font-weight-bold  h5">
-              <Link href="/cart">
-                <a className="text-light  font-weight-bold  h5">Cart</a>
               </Link>
             </NavItem>
 
@@ -156,6 +145,7 @@ const Header = () => {
                   <a className="text-light  font-weight-bold  h5">Cart</a>
                 </Link>
               </NavItem>
+
               <NavItem className="ml-5 text-light  font-weight-bold  h5">
                 <Link href="/authSignin">
                   <a className="text-light  font-weight-bold  h5">Login</a>
@@ -172,8 +162,6 @@ const Header = () => {
             </React.Fragment>
 
             {renderHeader(userRole())}
-            {/* {console.log(isAuth())}
-            {console.log(userRole())} */}
           </Nav>
         </Collapse>
       </Navbar>
