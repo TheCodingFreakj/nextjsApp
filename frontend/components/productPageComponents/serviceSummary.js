@@ -17,7 +17,7 @@ const ServiceSummary = ({ duration, title, _id, discountedServiceCharges }) => {
             <p>{duration}Days</p>
           </Item.Description>
           <Item.Extra>
-            <AddProductToCart productId={_id} />
+            <AddProductToCart serviceId={_id} />
           </Item.Extra>
         </Item.Content>
       </Item>

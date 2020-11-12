@@ -316,10 +316,9 @@ exports.SingleService = async (req, res) => {
 };
 
 exports.Product = async (req, res) => {
-  console.log(req.query);
-  const { productId } = req.query;
+  const { serviceId } = req.query;
   try {
-    await Service.findOne({ _id: productId })
+    await Service.findOne({ _id: serviceId })
       .populate(
         "discountedServiceCharges",
         "_id serviceName discountedServiceCharges slug"

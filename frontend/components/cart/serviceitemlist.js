@@ -2,22 +2,25 @@ import React from "react";
 import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
-const ServicetItemList = ({ products, handleRemoveFromCart }) => {
-  //console.log(product);
+const ServicetItemList = ({ products }) => {
+  console.log(products);
   const router = useRouter();
   const user = isAuth();
   const mapCartProductsToItems = (products) => {
+    //services/service?serviceId=5f93db9bd09de51f98789a4f
     return products.map((p) => ({
       header: (
         <Item.Header
           as="a"
-          onClick={() => router.push(`/products?productId=${p.product[0]._id}`)}
+          onClick={() =>
+            router.push(`/services/service?serviceId=${p.product[0]._id}`)
+          }
         >
-          {p.product[0].tool}
+          {p.product[0].title}
         </Item.Header>
       ),
       childKey: p.product[0]._id,
-      meta: `${p.quantity} x   $ ${p.product[0].clientPrice}`,
+      meta: `${p.quantity} x   $ ${p.product[0].discountedServiceCharges[0]}`,
       fluid: "true",
       extra: (
         <Button

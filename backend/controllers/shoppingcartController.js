@@ -86,10 +86,16 @@ exports.fetchServicesCart = async (req, res) => {
   try {
     const serviceCart = await ServiceCart.findOne({
       customer: req.user.id,
-    }).populate({
-      path: "products.product",
-      model: "Services",
-    });
+    })
+      .populate({
+        path: "products.product",
+        model: "Service",
+      })
+      .populate({
+        path: "products.product.discountedServiceCharges[0]",
+        model: "Service",
+        select: "_id serviceName discountedServiceCharges slug",
+      });
 
     res.status(200).json(serviceCart.products);
   } catch (error) {
@@ -99,27 +105,25 @@ exports.fetchServicesCart = async (req, res) => {
 };
 
 exports.updateServiceCart = async (req, res) => {
-  console.log(req.body);
-  const { quantity, productId } = req.body;
+  const { quantity, serviceId } = req.body;
   const customer = req.user;
-  const customerid = customer._id;
 
   try {
     const serviceCart = await ServiceCart.findOne({ customer });
     //iterate over array and check if any meet a give condition
     const productExists = serviceCart.products.some((doc) =>
-      ObjectId(productId).equals(doc.product)
+      ObjectId(serviceId).equals(doc.product)
     );
     if (productExists) {
       await ServiceCart.findOneAndUpdate(
         {
           _id: serviceCart._id,
-          "products.product": productId,
+          "products.product": serviceId,
         },
         { $inc: { "products.$.quantity": quantity } }
       );
     } else {
-      const newProduct = { quantity, product: productId };
+      const newProduct = { quantity, product: serviceId };
       await ServiceCart.findOneAndUpdate(
         {
           _id: serviceCart._id,
@@ -136,7 +140,7 @@ exports.updateServiceCart = async (req, res) => {
 };
 
 exports.deleteServiceCart = async (req, res) => {
-  const { productId } = req.query;
+  const { serviceId } = req.query;
 
   console.log(req.user);
   const userid = req.user.id;
@@ -145,7 +149,7 @@ exports.deleteServiceCart = async (req, res) => {
   try {
     const updateddCart = await ServiceCart.findOneAndUpdate(
       { customer: userid },
-      { $pull: { products: { product: productId } } },
+      { $pull: { products: { product: serviceId } } },
       { new: true }
     ).populate({
       path: "products.product",

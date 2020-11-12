@@ -10,7 +10,13 @@ const servicesCartSchema = new mongoose.Schema(
           type: Number,
           default: 1,
         },
-        product: [{ type: ObjectId, ref: "Services", required: true }],
+        product: [
+          {
+            type: ObjectId,
+            ref: "Service",
+            required: true,
+          },
+        ],
       },
     ],
     active: {

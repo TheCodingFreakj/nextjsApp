@@ -6,7 +6,7 @@ import { Container } from "semantic-ui-react";
 import ServiceSummary from "../../../components/productPageComponents/serviceattribute";
 import ServiceAttribute from "../../../components/productPageComponents/servicesummary";
 const Product = ({ service }) => {
-  //console.log(service);
+  console.log(service);
   return (
     <Layout>
       <React.Fragment>
@@ -18,9 +18,9 @@ const Product = ({ service }) => {
     </Layout>
   );
 };
-Product.getInitialProps = async ({ query: { productId } }) => {
+Product.getInitialProps = async ({ query: { serviceId } }) => {
   const url = `${API}/api/service`;
-  const payload = { params: { productId } };
+  const payload = { params: { serviceId } };
   const response = await axios.get(url, payload);
   return { service: response.data };
 };

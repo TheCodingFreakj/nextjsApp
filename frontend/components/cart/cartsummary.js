@@ -8,6 +8,7 @@ const CartSummary = ({ products, handleCheckOut }) => {
   const [isCartEmpty, setCartEmpty] = useState(false);
   useEffect(() => {
     const { cartTotal, stripeTotal } = calculateProductTotal(products);
+    //const { servicecartTotal, servicestripeTotal } = calculateServicesTotal(services);
     setcartAmount(cartTotal);
     setStripeAmount(stripeTotal);
     setCartEmpty(products.length === 0);

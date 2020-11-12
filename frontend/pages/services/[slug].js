@@ -281,7 +281,7 @@ const SingleService = ({ service, query }) => {
                       <>
                         <div className="col-md-6  text-center  lead">
                           <Link
-                            href={`/services/service?productId=${service._id}`}
+                            href={`/services/service?serviceId=${service._id}`}
                           >
                             <a
                               className="mt-4 btn-lg btn-block btn btn-success"

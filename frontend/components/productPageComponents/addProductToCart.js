@@ -3,15 +3,13 @@ import { Input } from "semantic-ui-react";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
 
-import { updateToolCart } from "../../actions/shoppingcart";
-const AddProductToCart = ({ productId }) => {
-  //console.log(product);
+import { updateToolCart, updateServicesCart } from "../../actions/shoppingcart";
+const AddProductToCart = ({ serviceId, productId }) => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const loggedinUser = isAuth();
-  //console.log(loggedinUser);
   const router = useRouter();
   const token = getCookie("token");
 
@@ -29,15 +27,28 @@ const AddProductToCart = ({ productId }) => {
 
   const handleAddProductTocart = () => {
     setLoading(true);
-    updateToolCart(quantity, productId, token).then((data) => {
-      if (data.error) {
-        console.log(error);
-      } else {
-        console.log(data);
-        setLoading(false);
-        setSuccess(true);
-      }
-    });
+
+    if (router.query.productId) {
+      updateToolCart(quantity, productId, token).then((data) => {
+        if (data.error) {
+          console.log(error);
+        } else {
+          console.log(data);
+          setLoading(false);
+          setSuccess(true);
+        }
+      });
+    } else if (router.query.serviceId) {
+      updateServicesCart(quantity, serviceId, token).then((data) => {
+        if (data.error) {
+          console.log(error);
+        } else {
+          console.log(data);
+          setLoading(false);
+          setSuccess(true);
+        }
+      });
+    }
   };
   return (
     <>
