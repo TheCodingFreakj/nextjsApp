@@ -5,7 +5,6 @@ import Layout from "../../components/Layout";
 import CartItemList from "../../components/cart/cartitemlist";
 import CartSummary from "../../components/cart/cartsummary";
 import ServiceItemList from "../../components/cart/serviceitemlist";
-import ServiceSummary from "../../components/cart/servicesummary";
 import { getCookie } from "../../actions/setAuthToken";
 import { isAuth } from "../../actions/setAuthToken";
 import axios from "axios";
@@ -16,8 +15,6 @@ const Cart = ({ services, products, router }) => {
   const [error, seterror] = useState("");
   const [cartproducts, setCartProducts] = useState(products);
   const [cartservices, setCartServices] = useState(services);
-  console.log(cartproducts);
-  console.log(cartservices);
 
   const handleRemoveFromCart = async (productId) => {
     const token = getCookie("token");
@@ -32,6 +29,19 @@ const Cart = ({ services, products, router }) => {
     setCartProducts(response.data);
   };
 
+  const handleRemoveFromServiceCart = async (serviceId) => {
+    const token = getCookie("token");
+    const url3 = `${API}/api/services-cart`;
+    const payload3 = {
+      params: { serviceId },
+      headers: {
+        Authorization: ` Bearer ${token}`,
+      },
+    };
+    const responses3 = await axios.delete(url3, payload3);
+    setCartServices(responses3.data);
+  };
+
   const handleCheckOut = async () => {};
 
   return (
@@ -43,18 +53,14 @@ const Cart = ({ services, products, router }) => {
             products={cartproducts}
           />
           <ServiceItemList
-            // handleRemoveFromCart={handleRemoveFromCart}
-            products={cartservices}
+            handleRemoveFromServiceCart={handleRemoveFromServiceCart}
+            services={cartservices}
           />
           <CartSummary
             products={cartproducts}
+            services={cartservices}
             handleCheckOut={handleCheckOut}
           />
-
-          {/* <ServiceSummary
-            products={cartservices}
-            // handleCheckOut={handleCheckOut}
-          /> */}
         </Segment>
       )}
 

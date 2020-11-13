@@ -153,7 +153,7 @@ exports.deleteServiceCart = async (req, res) => {
       { new: true }
     ).populate({
       path: "products.product",
-      model: "Services", // This is ref value
+      model: "Service", // This is ref value
     });
 
     res.status(200).json(updateddCart.products);

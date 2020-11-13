@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Divider, Button, Segment, Icon } from "semantic-ui-react";
 import calculateProductTotal from "../utils/calcCartTotal";
+import calculateServiceTotal from "../utils/calcServiceCartTotal";
 import StripeCheckout from "react-stripe-checkout";
-const CartSummary = ({ products, handleCheckOut }) => {
+
+const CartSummary = ({ services, products, handleCheckOut }) => {
+  console.log(products);
+  console.log(services);
+
   const [cartAmount, setcartAmount] = useState(0);
+  //const [servicecartAmount, setservicecartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);
   const [isCartEmpty, setCartEmpty] = useState(false);
   useEffect(() => {
     const { cartTotal, stripeTotal } = calculateProductTotal(products);
-    //const { servicecartTotal, servicestripeTotal } = calculateServicesTotal(services);
-    setcartAmount(cartTotal);
+    const { servicecartTotal, servicestripeTotal } = calculateServiceTotal(
+      services
+    );
+    const cartPriceTotal = Math.round(cartTotal) + Math.round(servicecartTotal);
+    setcartAmount(cartPriceTotal);
     setStripeAmount(stripeTotal);
-    setCartEmpty(products.length === 0);
-  }, [products]);
+    setCartEmpty(products.length === 0 && services.length === 0);
+  }, [products, services]);
   return (
     <>
       <Divider />
@@ -25,19 +34,6 @@ const CartSummary = ({ products, handleCheckOut }) => {
           floated="right"
           content="checkout"
         />
-        {/* <StripeCheckout
-          name="Marketing Solution App"
-          amount={stripeAmount}
-          currency="USD"
-          shippingAddress={true}
-          billingAddress={true}
-          zipCode={true}
-          token={handleCheckOut}
-          triggerEvent="onClick"
-          stripeKey="pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
-        >
-          
-        </StripeCheckout> */}
       </Segment>
     </>
   );

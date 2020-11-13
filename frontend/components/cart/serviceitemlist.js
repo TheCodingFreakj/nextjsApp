@@ -2,12 +2,11 @@ import React from "react";
 import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
 import { isAuth } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
-const ServicetItemList = ({ products }) => {
-  console.log(products);
+const ServicetItemList = ({ services, handleRemoveFromServiceCart }) => {
   const router = useRouter();
   const user = isAuth();
-  const mapCartProductsToItems = (products) => {
-    return products.map((p) => ({
+  const mapCartProductsToItems = (services) => {
+    return services.map((p) => ({
       header: (
         <Item.Header
           as="a"
@@ -26,12 +25,12 @@ const ServicetItemList = ({ products }) => {
           basic
           icon="remove"
           floated="right"
-          onClick={() => handleRemoveFromCart(p.product[0]._id)}
+          onClick={() => handleRemoveFromServiceCart(p.product[0]._id)}
         />
       ),
     }));
   };
-  if (products.length === 0) {
+  if (services.length === 0) {
     return (
       <Segment secondary color="yellow" inverted textAlign="center" placeholder>
         <Header icon>
@@ -57,7 +56,7 @@ const ServicetItemList = ({ products }) => {
   }
 
   return (
-    <Item.Group divided items={mapCartProductsToItems(products)}></Item.Group>
+    <Item.Group divided items={mapCartProductsToItems(services)}></Item.Group>
   );
 };
 
