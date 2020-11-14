@@ -46,6 +46,7 @@ exports.updateToolCart = async (req, res) => {
 
 exports.fetchToolsCart = async (req, res) => {
   const user = req.user._id;
+
   try {
     const toolsCart = await ToolsCart.findOne({ customer: user }).populate({
       path: "products.product",
@@ -85,6 +86,7 @@ exports.deleteToolsCart = async (req, res) => {
 
 exports.fetchServicesCart = async (req, res) => {
   const user = req.user._id;
+
   try {
     const serviceCart = await ServiceCart.findOne({ customer: user }).populate({
       path: "products.product",

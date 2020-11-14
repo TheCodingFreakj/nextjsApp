@@ -121,3 +121,73 @@ export const updateServicesCart = async (quantity, serviceId, token) => {
     }
   }
 };
+
+export const getToolsCart = async (token) => {
+  try {
+    const config = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: ` Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.get(`${API}/api/tools-cart`, config); //handing the backedn register user
+    return response.data;
+    console.log(response.data); // this is the token from backend
+    console.log(response.status);
+    console.log(response.statusText);
+    console.log(response.headers);
+    console.log(response.config);
+    //we can use this token to access protected routes
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+
+      return error.response.data;
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      return error.message;
+      console.log("Error", error.message);
+    }
+  }
+};
+
+export const getServicesCart = async (token) => {
+  try {
+    const config = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: ` Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.get(`${API}/api/services-cart`, config); //handing the backedn register user
+    return response.data;
+    console.log(response.data); // this is the token from backend
+    console.log(response.status);
+    console.log(response.statusText);
+    console.log(response.headers);
+    console.log(response.config);
+    //we can use this token to access protected routes
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+
+      return error.response.data;
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      return error.message;
+      console.log("Error", error.message);
+    }
+  }
+};

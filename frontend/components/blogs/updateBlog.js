@@ -16,8 +16,6 @@ import "../../node_modules/react-quill/dist/quill.snow.css";
 import { API } from "../../config";
 
 const UpdateBlog = ({ router }) => {
-  // const [title, setTitle] = useState();
-
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [checked, setChecked] = useState([]); //categories
@@ -36,15 +34,12 @@ const UpdateBlog = ({ router }) => {
   useEffect(() => {
     setValues({ ...values, formData: new FormData() });
     initBlog();
-    //make  the formdata availabk\le
-
     initCategories();
     initTags();
   }, [router]);
 
   const initBlog = () => {
     //grab the slug from router props
-
     if (router.query.slug) {
       singleBlog(router.query.slug).then((data) => {
         if (data.error) {

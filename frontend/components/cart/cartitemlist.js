@@ -2,7 +2,7 @@ import React from "react";
 import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
 import { isAuth } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
-const CartItemList = ({ products, handleRemoveFromCart }) => {
+const CartItemList = ({ services, products, handleRemoveFromCart }) => {
   const router = useRouter();
   const user = isAuth();
   const mapCartProductsToItems = (products) => {
@@ -28,30 +28,30 @@ const CartItemList = ({ products, handleRemoveFromCart }) => {
       ),
     }));
   };
-  if (products.length === 0) {
-    return (
-      <Segment secondary color="yellow" inverted textAlign="center" placeholder>
-        <Header icon>
-          <Icon name="shopping basket" color="black" />
-          No Products In Your Cart Add Some
-        </Header>
-        <div>
-          {user ? (
-            <Button color="orange" onClick={() => router.push("/services")}>
-              View Products
-            </Button>
-          ) : (
-            <Button
-              color="green"
-              onClick={() => router.push("/customerSignup")}
-            >
-              Login To Add Products
-            </Button>
-          )}
-        </div>
-      </Segment>
-    );
-  }
+  // if (products.length === 0 && services.length === 0) {
+  //   return (
+  //     <Segment secondary color="yellow" inverted textAlign="center" placeholder>
+  //       <Header icon>
+  //         <Icon name="shopping basket" color="black" />
+  //         No Products In Your Cart Add Some
+  //       </Header>
+  //       <div>
+  //         {user ? (
+  //           <Button color="orange" onClick={() => router.push("/services")}>
+  //             View Products
+  //           </Button>
+  //         ) : (
+  //           <Button
+  //             color="green"
+  //             onClick={() => router.push("/customerSignup")}
+  //           >
+  //             Login To Add Products
+  //           </Button>
+  //         )}
+  //       </div>
+  //     </Segment>
+  //   );
+  // }
 
   return (
     <Item.Group divided items={mapCartProductsToItems(products)}></Item.Group>

@@ -3,15 +3,13 @@ import { Divider, Button, Segment, Icon } from "semantic-ui-react";
 import calculateProductTotal from "../utils/calcCartTotal";
 import calculateServiceTotal from "../utils/calcServiceCartTotal";
 import StripeCheckout from "react-stripe-checkout";
-
-const CartSummary = ({ services, products, handleCheckOut }) => {
-  console.log(products);
-  console.log(services);
-
+import { useRouter } from "next/router";
+const CartSummary = ({ services, products }) => {
   const [cartAmount, setcartAmount] = useState(0);
-  //const [servicecartAmount, setservicecartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);
   const [isCartEmpty, setCartEmpty] = useState(false);
+
+  const router = useRouter();
   useEffect(() => {
     const { cartTotal, stripeTotal } = calculateProductTotal(products);
     const { servicecartTotal, servicestripeTotal } = calculateServiceTotal(
@@ -25,7 +23,22 @@ const CartSummary = ({ services, products, handleCheckOut }) => {
   return (
     <>
       <Divider />
+
       <Segment clearing size="large">
+        <Button
+          icon="shop"
+          onClick={() => router.back()}
+          color="green"
+          floated="right"
+          content="Click To Add More"
+        />
+        <Button
+          icon="shop"
+          onClick={() => router.reload()}
+          color="yellow"
+          floated="left"
+          content="Reload"
+        />
         <strong>Sub-Total:</strong>${cartAmount}
         <Button
           icon="cart"

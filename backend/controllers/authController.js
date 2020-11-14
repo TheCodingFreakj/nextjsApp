@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const shortid = require("short-id");
 const bcrypt = require("bcryptjs");
-// const { BlogSearchLists } = require("./blogController");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 exports.Signup = async (req, res) => {
@@ -34,9 +33,6 @@ exports.Signup = async (req, res) => {
       customerRole,
       role,
     });
-
-    // console.log(user);
-
     const salt = await bcrypt.genSalt(10);
 
     user.hashed_password = await bcrypt.hash(password, salt);
@@ -74,8 +70,6 @@ exports.Signup = async (req, res) => {
           message: "Sign Up Done.. Please Sign In ",
           id: user._id,
         });
-        //we should take this send it in header and access protected routes
-        //create middleware for this
       }
     );
   } catch (err) {

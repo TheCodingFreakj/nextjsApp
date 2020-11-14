@@ -30,30 +30,6 @@ const ServicetItemList = ({ services, handleRemoveFromServiceCart }) => {
       ),
     }));
   };
-  if (services.length === 0) {
-    return (
-      <Segment secondary color="yellow" inverted textAlign="center" placeholder>
-        <Header icon>
-          <Icon name="shopping basket" color="black" />
-          No Products In Your Cart Add Some
-        </Header>
-        <div>
-          {user ? (
-            <Button color="orange" onClick={() => router.push("/services")}>
-              View Products
-            </Button>
-          ) : (
-            <Button
-              color="green"
-              onClick={() => router.push("/customerSignup")}
-            >
-              Login To Add Products
-            </Button>
-          )}
-        </div>
-      </Segment>
-    );
-  }
 
   return (
     <Item.Group divided items={mapCartProductsToItems(services)}></Item.Group>
