@@ -21,14 +21,34 @@ import { signout } from "../actions/auth";
 import { isAuth, userRole } from "../actions/setAuthToken";
 import "../node_modules/nprogress/nprogress.css";
 import Search from "../components/blogs/search";
+import { getCurrentCustomer } from "../actions/user";
+import { getCookie } from "../actions/setAuthToken";
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
 Router.onRouteChangeError = (url) => NProgress.done();
 
 const Header = () => {
+  console.log();
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
+  const [msg, setMsg] = useState();
+  React.useEffect(() => {
+    getCustomer();
+  }, []);
+
+  const getCustomer = () => {
+    //const customer = isAuth().username;
+    getCurrentCustomer(getCookie("token")).then((data) => {
+      if (data.error) {
+        console.log(error);
+      } else {
+        console.log(data.msg);
+        setMsg(data.msg);
+      }
+    });
+  };
+
   const renderHeader = (userRole) => {
     switch (userRole) {
       case "consumer":
@@ -140,11 +160,13 @@ const Header = () => {
                 </Link>
               </NavItem>
 
-              <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                <Link href="/cart">
-                  <a className="text-light  font-weight-bold  h5">Cart</a>
-                </Link>
-              </NavItem>
+              {msg !== "There is no customer" && !msg && (
+                <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                  <Link href="/cart">
+                    <a className="text-light  font-weight-bold  h5">Cart</a>
+                  </Link>
+                </NavItem>
+              )}
 
               <NavItem className="ml-5 text-light  font-weight-bold  h5">
                 <Link href="/authSignin">

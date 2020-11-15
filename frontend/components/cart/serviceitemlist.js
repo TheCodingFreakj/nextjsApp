@@ -3,8 +3,10 @@ import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
 import { isAuth } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
 const ServicetItemList = ({ services, handleRemoveFromServiceCart }) => {
+  console.log("services", services);
   const router = useRouter();
   const user = isAuth();
+
   const mapCartProductsToItems = (services) => {
     return services.map((p) => ({
       header: (

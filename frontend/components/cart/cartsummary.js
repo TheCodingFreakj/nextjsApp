@@ -4,6 +4,7 @@ import calculateProductTotal from "../utils/calcCartTotal";
 import calculateServiceTotal from "../utils/calcServiceCartTotal";
 import StripeCheckout from "react-stripe-checkout";
 import { useRouter } from "next/router";
+import { removeLocatStorage } from "../../actions/setAuthToken";
 const CartSummary = ({ services, products }) => {
   const [cartAmount, setcartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);

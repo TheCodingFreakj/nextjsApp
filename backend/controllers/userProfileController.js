@@ -241,7 +241,8 @@ exports.getBusinessDetails = async (req, res) => {
 exports.getCurrentCustomer = async (req, res) => {
   //I am a business person with a motive of building xyz stuff for yus community
 
-  //console.log(req.body);
+  console.log(req.body);
+  console.log(req.user);
   try {
     let customer = await Customer.findOne({ customerName: req.user.name });
     //console.log(customer);

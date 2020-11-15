@@ -2,9 +2,11 @@ import React from "react";
 import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
 import { isAuth } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
-const CartItemList = ({ services, products, handleRemoveFromCart }) => {
+const CartItemList = ({ products, handleRemoveFromCart }) => {
+  console.log("products", products);
   const router = useRouter();
   const user = isAuth();
+
   const mapCartProductsToItems = (products) => {
     return products.map((p) => ({
       header: (

@@ -1,36 +1,28 @@
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { Button, Segment } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import CartItemList from "../../components/cart/cartitemlist";
 import CartSummary from "../../components/cart/cartsummary";
 import ServiceItemList from "../../components/cart/serviceitemlist";
-import { getCookie } from "../../actions/setAuthToken";
-import { isAuth } from "../../actions/setAuthToken";
-//import { getToolsCart, getServicesCart } from "../../actions/shoppingcart";
+import { isAuth, getCookie } from "../../actions/setAuthToken";
+import { useRouter } from "next/router";
+
 import axios from "axios";
 import { API } from "../../config";
 
 //bring components
 
 const Cart = ({ products, services }) => {
-  console.log(products);
-  console.log(services);
+  // console.log(products);
+  // console.log(services);
 
   //there is some issue with data persistance
-  const [error, seterror] = useState("");
   const [cartproducts, setCartProducts] = useState(products);
   const [cartservices, setCartServices] = useState(services);
 
-  console.log(cartservices, "", cartproducts);
-  let cartCopy = [...cartservices, ...cartproducts];
-  console.log(cartCopy);
+  const router = useRouter();
 
-  let cartIdList = [];
-  cartCopy.map((cartItem) => cartIdList.push(cartItem._id));
-  console.log(cartIdList);
-  if (typeof window !== "undefined") {
-    localStorage.setItem("cart", JSON.stringify(cartIdList));
-  }
   //https://dev.to/dinhhuyams/introduction-to-useref-hook-3m7n
   //https://medium.com/javascript-in-plain-english/creating-a-persistent-cart-in-react-f287ed4b4df0
   const handleRemoveFromCart = async (productId) => {
@@ -66,7 +58,6 @@ const Cart = ({ products, services }) => {
           <CartItemList
             handleRemoveFromCart={handleRemoveFromCart}
             products={cartproducts}
-            services={cartservices}
           />
           <ServiceItemList
             handleRemoveFromServiceCart={handleRemoveFromServiceCart}
@@ -75,14 +66,13 @@ const Cart = ({ products, services }) => {
           <CartSummary products={cartproducts} services={cartservices} />
         </Segment>
       )}
-
-      {!isAuth() && (
+      {/* {!isAuth() && (
         <Segment>
           <Button color="green" onClick={() => router.push("/customerSignup")}>
             Login To Add Products
           </Button>
         </Segment>
-      )}
+      )} */}
 
       {cartproducts === [] && cartservices === [] && (
         <Segment
@@ -116,17 +106,25 @@ const Cart = ({ products, services }) => {
   );
 };
 
-//with products in  cart page reload dont fetch cart
-//with no products in cart, hitting the cart route gives error
+// with products in  cart page reload dont fetch cart
+// with no products in cart, hitting the cart route gives error
 Cart.getInitialProps = async (ctx) => {
-  //export const getStaticProps = async (ctx) => {
+  console.log("This is ctx", ctx);
+  const token = getCookie("token");
+  let products;
+  if (typeof window !== "undefined") {
+    if (localStorage.getItem("fetchedCart")) {
+      try {
+        products = JSON.parse(localStorage.getItem("fetchedCart"));
+      } catch (error) {
+        console.log(error);
+        console.error("NO products in cart");
+      }
+    }
+  }
 
-  //check if user is authenticated
-  //check if there are products or not
-
-  if (isAuth() && localStorage.getItem("cart") !== null) {
-    const token = getCookie("token");
-
+  console.log(products);
+  if (token || products) {
     const url = `${API}/api/services-cart`;
     const url2 = `${API}/api/tools-cart`;
 
@@ -138,6 +136,14 @@ Cart.getInitialProps = async (ctx) => {
     const response = await axios.get(url, payload);
     const response2 = await axios.get(url2, payload);
 
+    const totalProducts = [...response.data, ...response.data];
+    console.log(totalProducts);
+    let productLists = [];
+    totalProducts.map((cartItem) => productLists.push(cartItem._id));
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("fetchedCart", JSON.stringify(productLists));
+    }
     return { services: response.data, products: response2.data };
   } else {
     return {

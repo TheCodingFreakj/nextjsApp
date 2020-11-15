@@ -129,7 +129,7 @@ const UpdateBlog = ({ router }) => {
       all.splice(clickedTag, 1);
     }
 
-    console.log(all);
+    // console.log(all);
     setCheckedTag(all);
 
     formData.set("tags", all);
@@ -213,7 +213,7 @@ const UpdateBlog = ({ router }) => {
     //   localStorage.setItem("blog", JSON.stringify(e));
     // }
 
-    console.log("This is the updated formData", formData);
+    // console.log("This is the updated formData", formData);
   };
 
   const editBlog = (e) => {

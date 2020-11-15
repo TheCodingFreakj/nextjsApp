@@ -204,7 +204,7 @@ export const getBusinessDetails = async (formData, token) => {
   }
 };
 
-export const getCurrentCustomer = async (username, token) => {
+export const getCurrentCustomer = async (token) => {
   try {
     const config = {
       method: "GET",
@@ -216,7 +216,11 @@ export const getCurrentCustomer = async (username, token) => {
       },
     };
 
-    const response = await axios.get(`${API}/api/get-current-customer`, config); //handing the backedn register user
+    const response = await axios.get(
+      `${API}/api/get-current-customer`,
+
+      config
+    ); //handing the backedn register user
     return response.data;
     console.log(
       "I am expecing the return of the read method from this backend request plus photo",
