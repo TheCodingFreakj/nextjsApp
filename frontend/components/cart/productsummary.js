@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Divider, Button, Segment, Icon } from "semantic-ui-react";
 import calculateProductTotal from "../utils/calcCartTotal";
-import calculateServiceTotal from "../utils/calcServiceCartTotal";
-import StripeCheckout from "react-stripe-checkout";
 import { useRouter } from "next/router";
 import { removeLocatStorage } from "../../actions/setAuthToken";
-const CartSummary = ({ services, products, softReload }) => {
+const ProductSummary = ({ products }) => {
+  console.log(products);
   const [cartAmount, setcartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);
   const [isCartEmpty, setCartEmpty] = useState(false);
 
   const router = useRouter();
   useEffect(() => {
-    const { cartTotal, stripeTotal } = calculateProductTotal(products);
-    const { servicecartTotal, servicestripeTotal } = calculateServiceTotal(
-      services
-    );
-    const cartPriceTotal = Math.round(cartTotal) + Math.round(servicecartTotal);
+    //const { cartTotal, stripeTotal } = calculateProductTotal(products);
+    const cartPriceTotal = Math.round(cartTotal);
     setcartAmount(cartPriceTotal);
     setStripeAmount(stripeTotal);
-    setCartEmpty(products.length === 0 && services.length === 0);
-  }, [products, services]);
+    setCartEmpty(products.length === 0);
+  }, [products]);
   return (
     <>
       <Divider />
@@ -35,7 +31,7 @@ const CartSummary = ({ services, products, softReload }) => {
         />
         <Button
           icon="shop"
-          onClick={softReload}
+          onClick={() => router.reload()}
           color="yellow"
           floated="left"
           content="Reload"
@@ -53,4 +49,4 @@ const CartSummary = ({ services, products, softReload }) => {
   );
 };
 
-export default CartSummary;
+export default ProductSummary;

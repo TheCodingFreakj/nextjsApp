@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
 import { isAuth } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
@@ -61,3 +61,4 @@ const CartItemList = ({ products, handleRemoveFromCart }) => {
 };
 
 export default CartItemList;
+//https://nextjs.org/docs/api-reference/next/router#router-api

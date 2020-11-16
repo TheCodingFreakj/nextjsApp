@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
 import { isAuth } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
-const ServicetItemList = ({ services, handleRemoveFromServiceCart }) => {
-  console.log("services", services);
-  const router = useRouter();
-  const user = isAuth();
-
-  const mapCartProductsToItems = (services) => {
-    return services.map((p) => ({
+const ShowProducts = ({ products, handleRemoveFromCart }) => {
+  const mapCartProductsToItems = (products) => {
+    return products.map((p) => ({
       header: (
         <Item.Header
           as="a"
@@ -32,10 +28,9 @@ const ServicetItemList = ({ services, handleRemoveFromServiceCart }) => {
       ),
     }));
   };
-
   return (
-    <Item.Group divided items={mapCartProductsToItems(services)}></Item.Group>
+    <Item.Group divided items={mapCartProductsToItems(products)}></Item.Group>
   );
 };
 
-export default ServicetItemList;
+export default ShowProducts;

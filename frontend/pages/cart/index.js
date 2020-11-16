@@ -5,26 +5,26 @@ import Layout from "../../components/Layout";
 import CartItemList from "../../components/cart/cartitemlist";
 import CartSummary from "../../components/cart/cartsummary";
 import ServiceItemList from "../../components/cart/serviceitemlist";
+import ShowProducts from "../../components/cart/productlist";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
 import { useRouter } from "next/router";
-
 import axios from "axios";
 import { API } from "../../config";
+import withSoftReload from "../../components/hoc/cartreload";
 
 //bring components
 
-const Cart = ({ products, services }) => {
-  // console.log(products);
-  // console.log(services);
-
-  //there is some issue with data persistance
+const Cart = ({ products, services, softReload }) => {
   const [cartproducts, setCartProducts] = useState(products);
   const [cartservices, setCartServices] = useState(services);
 
-  const router = useRouter();
+  if (typeof window !== "undefined") {
+    const pageRefresh = () => {
+      //http://www.boduch.ca/2019/04/refreshing-nextjs-page-data.html
+    };
+    window.onload = pageRefresh;
+  }
 
-  //https://dev.to/dinhhuyams/introduction-to-useref-hook-3m7n
-  //https://medium.com/javascript-in-plain-english/creating-a-persistent-cart-in-react-f287ed4b4df0
   const handleRemoveFromCart = async (productId) => {
     const token = getCookie("token");
     const url = `${API}/api/tools-cart`;
@@ -63,18 +63,16 @@ const Cart = ({ products, services }) => {
             handleRemoveFromServiceCart={handleRemoveFromServiceCart}
             services={cartservices}
           />
-          <CartSummary products={cartproducts} services={cartservices} />
+
+          <CartSummary
+            services={cartservices}
+            products={cartproducts}
+            softReload={softReload}
+          />
         </Segment>
       )}
-      {/* {!isAuth() && (
-        <Segment>
-          <Button color="green" onClick={() => router.push("/customerSignup")}>
-            Login To Add Products
-          </Button>
-        </Segment>
-      )} */}
 
-      {cartproducts === [] && cartservices === [] && (
+      {cartservices === [] && cartproducts === [] && (
         <Segment
           secondary
           color="yellow"
@@ -136,7 +134,7 @@ Cart.getInitialProps = async (ctx) => {
     const response = await axios.get(url, payload);
     const response2 = await axios.get(url2, payload);
 
-    const totalProducts = [...response.data, ...response.data];
+    const totalProducts = [...response.data, ...response2.data];
     console.log(totalProducts);
     let productLists = [];
     totalProducts.map((cartItem) => productLists.push(cartItem._id));
@@ -144,6 +142,7 @@ Cart.getInitialProps = async (ctx) => {
     if (typeof window !== "undefined") {
       localStorage.setItem("fetchedCart", JSON.stringify(productLists));
     }
+    //return { products: totalProducts };
     return { services: response.data, products: response2.data };
   } else {
     return {
@@ -153,4 +152,26 @@ Cart.getInitialProps = async (ctx) => {
   }
 };
 
-export default Cart;
+export default withSoftReload(Cart);
+// Previous render            Next render
+// ------------------------------------------------------
+// 1. useState                   useState
+// 2. useState                   useState
+// 3. useContext                 useContext
+// 4. useContext                 useContext
+// 5. useRef                     useRef
+// 6. useLayoutEffect            useLayoutEffect
+// 7. useRef                     useRef
+// 8. useRef                     useRef
+// 9. useDebugValue              useDebugValue
+// 10. useState                  useState
+// 11. useCallback               useCallback
+// 12. useRef                    useRef
+// 13. useRef                    useRef
+// 14. useRef                    useRef
+// 15. useCallback               useCallback
+// 16. useCallback               useCallback
+// 17. useLayoutEffect           useLayoutEffect
+// 18. useLayoutEffect           useLayoutEffect
+// 19. useMemo                   useMemo
+// 20. undefined                 useContext
