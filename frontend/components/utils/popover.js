@@ -3,15 +3,12 @@ import { Button } from "semantic-ui-react";
 import Popup from "../../components/utils/popup";
 import "../../static/styles.css";
 const PopOver = ({ loggedinUser }) => {
-  //console.log(loggedinUser);
-
+  console.log("1>This is loggedinuser got from slug", loggedinUser);
   const [showPopUp, setshowPop] = useState(false);
-
+  console.log("showPop is false individually", showPopUp);
   const togglePopup = () => {
     setshowPop(!showPopUp);
   };
-
-  // closePopup={() => togglePopup(showPopUp)}
 
   return (
     <React.Fragment>

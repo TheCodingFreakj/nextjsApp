@@ -1,26 +1,20 @@
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
+import React, { useState } from "react";
+
 import "../../static/styles.css";
 import Popup from "../../components/utils/popup";
+const ShowModal = ({ serviceSlug, scrollPosition }) => {
+  const [showModal, setshowModal] = useState(true);
 
-//bring components
-
-const ShowModal = ({ serviceSlug, scroller }) => {
-  const [popUpPosition, setPopupPosition] = useState(0);
-  const [closeModal, setcloseModal] = useState("");
-  scroller.then(function (result) {
-    setPopupPosition(result);
-  });
-
+  //you can get the current loggedinUser here as well to check if its present to decide if you want to show popup
   const custData = (loggedincustomer) => {
-    setcloseModal(loggedincustomer);
+    loggedincustomer ? setshowModal(false) : setshowModal(true);
   };
 
   return (
     <React.Fragment>
-      {!closeModal &&
-      popUpPosition.Yposition > 1000 &&
-      popUpPosition.Yposition < 4000 ? (
+      {showModal &&
+      scrollPosition.Yposition > 1000 &&
+      scrollPosition.Yposition < 4000 ? (
         <Popup serviceSlug={serviceSlug} showPopUp={true} custData={custData} />
       ) : null}
     </React.Fragment>

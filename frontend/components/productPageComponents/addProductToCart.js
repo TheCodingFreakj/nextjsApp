@@ -13,13 +13,23 @@ const AddProductToCart = ({ serviceId, productId }) => {
   const router = useRouter();
   const token = getCookie("token");
 
+  // let products;
+  // if (typeof window !== "undefined") {
+  //   if (localStorage.getItem("fetchedCart")) {
+  //     try {
+  //       products = JSON.parse(localStorage.getItem("fetchedCart"));
+  //     } catch (error) {
+  //       console.log(error);
+  //       console.error("NO products in cart");
+  //     }
+  //   }
+  // }
+
   useEffect(() => {
     let timeout;
     if (success) {
-      //this use effect will fire off if the success is true to make it false
       timeout = setTimeout(() => setSuccess(false), 3000);
     }
-    //we need to cancel this setTimeOut
     return () => {
       clearTimeout(timeout);
     };

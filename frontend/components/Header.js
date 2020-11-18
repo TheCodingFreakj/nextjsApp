@@ -33,21 +33,22 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const [msg, setMsg] = useState();
-  React.useEffect(() => {
-    getCustomer();
-  }, []);
+  // React.useEffect(() => {
+  //   getCustomer();
+  // }, []);
 
-  const getCustomer = () => {
-    //const customer = isAuth().username;
-    getCurrentCustomer(getCookie("token")).then((data) => {
-      if (data.error) {
-        console.log(error);
-      } else {
-        console.log(data.msg);
-        setMsg(data.msg);
-      }
-    });
-  };
+  // const getCustomer = () => {
+  //   //const customer = isAuth().username;
+  //   getCurrentCustomer(getCookie("token")).then((data) => {
+  //     console.log(data);
+  //     if (data.error) {
+  //       console.log(error);
+  //     } else {
+  //       console.log(data.msg);
+  //       setMsg(data.msg);
+  //     }
+  //   });
+  // };
 
   const renderHeader = (userRole) => {
     switch (userRole) {
@@ -160,13 +161,19 @@ const Header = () => {
                 </Link>
               </NavItem>
 
-              {msg !== "There is no customer" && !msg && (
+              <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                <Link href="/cart">
+                  <a className="text-light  font-weight-bold  h5">Cart</a>
+                </Link>
+              </NavItem>
+
+              {/* {msg !== "There is no customer" && !msg && (
                 <NavItem className="ml-5 text-light  font-weight-bold  h5">
                   <Link href="/cart">
                     <a className="text-light  font-weight-bold  h5">Cart</a>
                   </Link>
                 </NavItem>
-              )}
+              )} */}
 
               <NavItem className="ml-5 text-light  font-weight-bold  h5">
                 <Link href="/authSignin">

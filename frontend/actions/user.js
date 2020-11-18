@@ -161,7 +161,6 @@ export const getAllUsers = async (token) => {
 };
 
 export const getBusinessDetails = async (formData, token) => {
-  console.log("data sending to backend", formData);
   try {
     const config = {
       method: "POST",
@@ -225,7 +224,7 @@ export const getCurrentCustomer = async (token) => {
     console.log(
       "I am expecing the return of the read method from this backend request plus photo",
       response.data
-    ); // this is the token from backend
+    );
     console.log(response.status);
     console.log(response.statusText);
     console.log(response.headers);

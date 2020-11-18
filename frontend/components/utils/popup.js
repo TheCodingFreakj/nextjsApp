@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import Router from "next/router";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Form,
   Input,
@@ -10,14 +9,9 @@ import {
   Header,
 } from "semantic-ui-react";
 import { getBusinessDetails, getCurrentCustomer } from "../../actions/user";
-import {
-  getCookie,
-  isAuth,
-  removeLocatStorage,
-} from "../../actions/setAuthToken";
-import { withRouter } from "next/router";
+import { getCookie, removeLocatStorage } from "../../actions/setAuthToken";
 
-const Popup = ({ router, showPopUp, serviceSlug, loggedinUser, ...props }) => {
+const Popup = ({ showPopUp, serviceSlug, ...props }) => {
   const [values, setValues] = useState({
     description: "",
     phone: "",
@@ -25,57 +19,63 @@ const Popup = ({ router, showPopUp, serviceSlug, loggedinUser, ...props }) => {
     region: "",
     city: "",
     pinCode: "",
+    error: false,
   });
 
   const [displayAddressInputs, toggledisplayAddressInputs] = useState(false);
   const [success, setSuccess] = useState(false);
   const [show, setshow] = useState(showPopUp);
   const [customer, setCustomer] = useState("");
+  const mounted = useRef(false);
   const token = getCookie("token");
+
   useEffect(() => {
+    mounted.current = true;
+    const getCustomer = async () => {
+      await getCurrentCustomer(token).then((data) => {
+        console.log(data);
+        data.phone ? props.custData(data) : null;
+      });
+    };
     getCustomer();
-  }, [router]);
+
+    return () => {
+      mounted.current = false;
+    };
+  }, [customer]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  //handle on submit of the pop up
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let formData = values;
-    const customerdata = getBusinessDetails(formData, token);
-    sendCustomer();
-    setValues({
-      description: "",
-      phone: "",
-      location: "",
-      region: "",
-      city: "",
-      pinCode: "",
-    });
-
-    setSuccess(true);
-  };
-
-  const sendCustomer = () => {
-    const customer = isAuth();
-    localStorage.setItem("loggedincustomer", JSON.stringify(customer));
-    setCustomer(JSON.parse(localStorage.getItem("loggedincustomer")));
-  };
-
-  const getCustomer = () => {
-    const customer = getCurrentCustomer(isAuth().username, token).then(
-      (data) => {
-        data.phone ? props.custData(customer) : null;
+    await getBusinessDetails(formData, token).then((data) => {
+      if (data.error) {
+        setValues({
+          ...values,
+          error: true,
+        });
+      } else {
+        setCustomer(data);
+        setValues({
+          description: "",
+          phone: "",
+          location: "",
+          region: "",
+          city: "",
+          pinCode: "",
+        });
+        setSuccess(true);
       }
-    );
+    });
   };
 
   const closeModal = (e) => {
-    props.custData(customer);
     setshow(!show);
-    removeLocatStorage("loggedincustomer");
   };
 
   const showRegistrationForm = () => {
@@ -184,12 +184,9 @@ const Popup = ({ router, showPopUp, serviceSlug, loggedinUser, ...props }) => {
 
   return (
     <div className="popup">
-      <div className="popup_inner">
-        {showRegistrationForm()}
-        {loggedinUser ? <Button onClick={closePopup}>X</Button> : null}
-      </div>
+      <div className="popup_inner">{showRegistrationForm()}</div>
     </div>
   );
 };
 
-export default withRouter(Popup);
+export default Popup;

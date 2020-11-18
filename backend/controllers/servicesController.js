@@ -303,15 +303,15 @@ exports.SingleService = async (req, res) => {
         "_id serviceName slug the_reviews the_portfolios discountedServiceCharges duration summary process"
       )
       .exec((err, service) => {
-        console.log(err);
         if (err) {
           return res.status(400).json({ errors: errorHandler(err) });
         }
+
         res.json(service);
       });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    res.status(500).send("Triggerd when error is from backend");
   }
 };
 

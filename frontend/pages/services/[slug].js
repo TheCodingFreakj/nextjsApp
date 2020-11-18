@@ -22,28 +22,21 @@ import ReviewForm from "../../components/reviews/submitReview";
 import ShoppingTools from "../../components/shopping/shoppingTools";
 import ShowModal from "../../components/utils/showmodal";
 import { useWindowPosition } from "../../components/utils/scroller";
-import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe(
-  "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
-);
 const SingleService = ({ service, query }) => {
   // console.log(query);
-  //console.log(service);
+  // console.log(service);
 
   const [checkedPrice, setCheckedPrice] = useState([]);
   const [checkedTool, setCheckedTool] = useState([]);
   const [total, setTotal] = useState([]);
   const [subtotal, setSubTotal] = useState([]);
   const [totalPrice, setTotalPrice] = useState(""); //send this totalPrice in to the backend as ?price={totalPrice}
-
-  // const head = () => (
-  //   <Head>
-  //     <script src="https://js.stripe.com/v3/"></script>
-  //   </Head>
-  // );
+  const [popUpPosition, setPopupPosition] = useState(0);
 
   const token = getCookie("token");
+
+  useWindowPosition().then((response) => setPopupPosition(response));
 
   const showServiceCharges = (service) => {
     let addPrice = "";
@@ -182,8 +175,6 @@ const SingleService = ({ service, query }) => {
 
   return (
     <React.Fragment>
-      {/* {head()} */}
-
       <Layout>
         <main>
           <article>
@@ -318,12 +309,10 @@ const SingleService = ({ service, query }) => {
             </div>
             <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
             <hr />
-
             <ShowModal
               serviceSlug={service.slug}
-              scroller={useWindowPosition()}
+              scrollPosition={popUpPosition}
             />
-
             <ShoppingTools service={service} />
             <div className="container pb-5">
               <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
@@ -342,6 +331,7 @@ const SingleService = ({ service, query }) => {
 export const getServerSideProps = async ({ query }) => {
   const querybuilder = query.slug;
   const data = await singleService(query.slug);
+
   if (data.error) {
     console.log(data.error);
   } else {

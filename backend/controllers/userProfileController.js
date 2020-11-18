@@ -182,12 +182,9 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+//create and update details
+//update link in profile
 exports.getBusinessDetails = async (req, res) => {
-  // console.log(
-  //   "This is the entire updated user info I got after update",
-  //   req.user
-  // );
-
   const { location, region, city, description, pinCode, phone } = req.body;
   console.log(req.body);
   console.log(req.params);
@@ -240,17 +237,13 @@ exports.getBusinessDetails = async (req, res) => {
 
 exports.getCurrentCustomer = async (req, res) => {
   //I am a business person with a motive of building xyz stuff for yus community
-
   console.log(req.body);
   console.log(req.user);
   try {
     let customer = await Customer.findOne({ customerName: req.user.name });
-    //console.log(customer);
-
     if (!customer) {
       return res.status(400).json({ msg: "There is no customer" });
     }
-    //or else send the profile
     res.json(customer);
   } catch (error) {
     console.error(error.message);
