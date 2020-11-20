@@ -48,10 +48,6 @@ const ProfileUpdate = () => {
 
   const init = async () => {
     await getProfile(token).then((data) => {
-      console.log(
-        "I am expecing the retirn of the read method from this backend request. This is the authenticated user profile data",
-        data
-      ); //data coming
       if (data.err) {
         //push the error in the state
         setValues({ ...values, error: data.error });
@@ -122,8 +118,6 @@ const ProfileUpdate = () => {
           loading: false,
           userId: data._id,
         });
-
-        console.log("This is the updated data at frontend", data);
         // });
         //either redirect or upa\date the state here
       }
@@ -241,9 +235,6 @@ const ProfileUpdate = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-4">
-            {/* Consider putting this in action files */}
-
-            {/* Getting this username from state */}
             <img
               src={`${API}/api/user/photo/${userId}`}
               className="img img-fluid img-thumbnail mb-3"
@@ -253,7 +244,6 @@ const ProfileUpdate = () => {
           </div>
 
           <div className="col-md-8 mb-5">
-            {/* {JSON.stringify({ username, email, name })} */}
             {profileUpdateForm()}
             {showSuccess()}
             {showError()}

@@ -71,25 +71,18 @@ const AddProductToCart = ({ serviceId, productId }) => {
         action={
           loggedinUser && success
             ? {
-                color: "blue",
+                color: "red",
                 content: "Item Added",
                 icon: "plus cart",
                 disabled: true,
               }
-            : loggedinUser
-            ? {
+            : {
                 color: "orange",
                 content: "Add To Cart",
                 icon: "plus cart",
                 loading,
                 disabled: loading,
                 onClick: handleAddProductTocart,
-              }
-            : {
-                color: "green",
-                content: "Sign Up To Purchase",
-                icon: "signup",
-                onClick: () => router.push("/customerSignin"),
               }
         }
       />
@@ -98,3 +91,9 @@ const AddProductToCart = ({ serviceId, productId }) => {
 };
 
 export default AddProductToCart;
+// : {
+//     color: "green",
+//     content: "Sign Up To Purchase",
+//     icon: "signup",
+//     onClick: () => router.push("/customerSignin"),
+//   }

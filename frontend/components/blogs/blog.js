@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import Router from "next/router";
 import dynamic from "next/dynamic"; //ReactQuill runs only on client side
-//nextjs runs both on client and server side
-//we need to make sure we are not using in server side rendering
 import { withRouter } from "next/router";
-
-//get the token , get xookie from local storage and send that when create the cat
-import { isAuth, getCookie } from "../../actions/setAuthToken";
+import { getCookie } from "../../actions/setAuthToken";
 import { getCategories } from "../../actions/category";
 import { getTags } from "../../actions/tags";
 import { createBlog } from "../../actions/blog";

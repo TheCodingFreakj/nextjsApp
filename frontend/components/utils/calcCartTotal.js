@@ -1,5 +1,5 @@
 const calculateProductTotal = (products) => {
-  const total = products.reduce((accumulator, element) => {
+  const total = products.toolcarts.reduce((accumulator, element) => {
     accumulator += element.product[0].clientPrice * element.quantity;
     return accumulator;
   }, 0);

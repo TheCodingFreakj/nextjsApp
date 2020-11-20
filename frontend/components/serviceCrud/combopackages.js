@@ -13,7 +13,6 @@ const ComboPackages = ({ router }) => {
     packagePrice: "",
     title: "",
     bundleDescription: "",
-    //formData: "",
     error: false,
     success: false,
     loading: false,
@@ -25,7 +24,6 @@ const ComboPackages = ({ router }) => {
     desc,
     title,
     bundleDescription,
-    //formData,
     error,
     success,
     loading,
@@ -33,7 +31,6 @@ const ComboPackages = ({ router }) => {
   } = values;
 
   const [packagePrice, setPackagePrice] = useState([]);
-  //const [discountedPrice, setDiscountedPrice] = useState({});
   const [checkedPrice, setCheckedPrice] = useState([]);
 
   useEffect(() => {
@@ -43,7 +40,6 @@ const ComboPackages = ({ router }) => {
   }, [router]);
   const showPriceBar = () => {
     getAllPackagePriceOptions().then((data) => {
-      // console.log("This are all the tools I m getting from the backend", data);
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -67,8 +63,6 @@ const ComboPackages = ({ router }) => {
     }
     console.log("Storing all the check Items in a variable", choosenPrices);
     setCheckedPrice(choosenPrices); // storing all checked value in the state
-    //setDiscountedPrice(checkedPrice);
-    //formData.set("discountedPrice", choosenPrices);
   };
   const showDiscountedPackagePrice = () => {
     return packagePrice.map((price, i) => (
@@ -201,7 +195,6 @@ const ComboPackages = ({ router }) => {
             <hr />
           </div>
           {comboPackagesForm()}
-          {/* {JSON.stringify(checkedPrice)} */}
         </div>
       </div>
     </React.Fragment>

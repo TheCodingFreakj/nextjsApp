@@ -29,7 +29,6 @@ exports.createPriceObject = async (req, res) => {
   if (servicedDiscountPrice)
     servicePriceFields.servicedDiscountPrice = servicedDiscountPrice;
 
-  //console.log(servicePriceFields);
   try {
     let price = await new Price(servicePriceFields);
     price.slug = slugify(price.serviceName.toString()).toLowerCase();

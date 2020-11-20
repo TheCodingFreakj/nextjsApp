@@ -295,7 +295,7 @@ const UpdateBlog = ({ router }) => {
       <div className="row">
         <div className="col-md-10 pb-5">
           <p>create blog form </p>
-          {/* {JSON.stringify(blog)} */}
+
           {updateBlogForm()}
 
           <div className="pb-5">
@@ -310,9 +310,6 @@ const UpdateBlog = ({ router }) => {
               style={{ width: "100%" }}
             />
           )}
-
-          {/* {JSON.stringify(categories)}
-          {JSON.stringify(tags)} */}
         </div>
         <div className="col-md-2">
           <div>

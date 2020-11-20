@@ -1,9 +1,6 @@
 const ToolsCart = require("../models/toolsCart");
 const ServiceCart = require("../models/serviceCart");
-const Price = require("../models/price");
-const Customer = require("../models/customers");
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Types;
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 //https://stackoverflow.com/questions/59174763/how-to-add-product-to-shopping-cart-with-nodejs-express-and-mongoose
@@ -16,8 +13,8 @@ exports.updateToolCart = async (req, res) => {
   try {
     const toolsCart = await ToolsCart.findOne({ customer });
     //iterate over array and check if any meet a give condition
-    const productExists = toolsCart.products.some((doc) =>
-      ObjectId(productId).equals(doc.product)
+    const productExists = toolsCart.products.some(
+      (doc) => productId === String(doc.product)
     );
     if (productExists) {
       await ToolsCart.findOneAndUpdate(
@@ -57,6 +54,38 @@ exports.fetchToolsCart = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Please Login Again");
+  }
+};
+
+exports.fetchCarts = async (req, res) => {
+  console.log(req.user);
+  const user = req.user._id;
+
+  let toolcarts;
+  let serviceCarts;
+  try {
+    const toolsCart = await ToolsCart.findOne({ customer: user }).populate({
+      path: "products.product",
+      model: "Tools",
+    });
+
+    toolcarts = toolsCart.products;
+
+    const serviceCart = await ServiceCart.findOne({ customer: user }).populate({
+      path: "products.product",
+      model: "Service",
+      populate: {
+        path: "discountedServiceCharges",
+        model: "Price",
+      },
+    });
+
+    serviceCarts = serviceCart.products;
+
+    res.status(200).json({ toolcarts, serviceCarts });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Cant fetch the server");
   }
 };
 //http://localhost:3001/products?productId=5f8fdda74f5975190868cbbe
@@ -108,14 +137,19 @@ exports.fetchServicesCart = async (req, res) => {
 
 exports.updateServiceCart = async (req, res) => {
   const { quantity, serviceId } = req.body;
+
   const customer = req.user;
 
   try {
-    const serviceCart = await ServiceCart.findOne({ customer });
+    const serviceCart = await ServiceCart.findOne({ customer }); //search the servicecart by customer id
+    console.log("This is servicecart", serviceCart.products);
     //iterate over array and check if any meet a give condition
-    const productExists = serviceCart.products.some((doc) =>
-      ObjectId(serviceId).equals(doc.product)
+
+    const productExists = serviceCart.products.some(
+      (doc) => serviceId === String(doc.product)
     );
+
+    console.log("productExists", productExists);
     if (productExists) {
       await ServiceCart.findOneAndUpdate(
         {
@@ -125,6 +159,7 @@ exports.updateServiceCart = async (req, res) => {
         { $inc: { "products.$.quantity": quantity } }
       );
     } else {
+      //update for new product
       const newProduct = { quantity, product: serviceId };
       await ServiceCart.findOneAndUpdate(
         {
@@ -134,10 +169,10 @@ exports.updateServiceCart = async (req, res) => {
       );
     }
 
-    res.status(200).send("Cart Updated");
+    res.status(200).send("Cart Added");
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    res.status(500).send("Cart Can't Be Updated");
   }
 };
 

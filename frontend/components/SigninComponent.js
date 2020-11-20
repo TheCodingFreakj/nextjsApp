@@ -45,8 +45,6 @@ const SigninComp = () => {
           error: [data.errors[0].msg],
         });
       } else {
-        //console.log(data.response);
-
         //save the user token either in cookie or local storage in front end
         //save the user info in local storage
 

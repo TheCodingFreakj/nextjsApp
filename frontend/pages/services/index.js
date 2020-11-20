@@ -9,6 +9,9 @@ import { withRouter } from "next/router";
 import Card from "../../components/services/ServiceCards/serviceCards";
 import SmallCard from "../../components/services/indvservices";
 
+//changes required
+
+//make services server rendered and combopackages at use effect
 const ServicesPage = ({ data }) => {
   //console.log("The Page Props Are", data);
   const [services, setServices] = useState([]);
@@ -42,6 +45,8 @@ const ServicesPage = ({ data }) => {
   }, []);
 
   const loadIndvServices = () => {
+    // let skip = 0;
+    // let limit = 2;
     getAllServices().then((data) => {
       //console.log(data);
       if (data.error) {

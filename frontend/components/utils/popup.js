@@ -9,7 +9,7 @@ import {
   Header,
 } from "semantic-ui-react";
 import { getBusinessDetails, getCurrentCustomer } from "../../actions/user";
-import { getCookie, removeLocatStorage } from "../../actions/setAuthToken";
+import { getCookie } from "../../actions/setAuthToken";
 
 const Popup = ({ showPopUp, serviceSlug, ...props }) => {
   const [values, setValues] = useState({
@@ -33,7 +33,7 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
     mounted.current = true;
     const getCustomer = async () => {
       await getCurrentCustomer(token).then((data) => {
-        console.log(data);
+        //console.log(data);
         data.phone ? props.custData(data) : null;
       });
     };

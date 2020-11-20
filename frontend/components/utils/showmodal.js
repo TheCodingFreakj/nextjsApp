@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import "../../static/styles.css";
 import Popup from "../../components/utils/popup";
 const ShowModal = ({ serviceSlug, scrollPosition }) => {

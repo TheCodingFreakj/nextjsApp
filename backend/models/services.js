@@ -56,8 +56,6 @@ const servicesSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
-
-    // reviews: [{ type: ObjectId, ref: "Review" }],
     createdAt: {
       type: Date,
       required: true,

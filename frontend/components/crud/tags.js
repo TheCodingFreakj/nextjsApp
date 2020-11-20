@@ -48,7 +48,6 @@ const Tags = () => {
 
   const deleteTag = (slug) => {
     removeSingleTag(slug, token).then((data) => {
-      console.log(data);
       if (data.error) {
         console.log(data.error);
       } else {

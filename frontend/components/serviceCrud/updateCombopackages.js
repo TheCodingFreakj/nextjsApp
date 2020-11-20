@@ -31,15 +31,9 @@ const UpdatePackages = ({ router }) => {
     success,
   } = values;
 
-  //   const [packages, setPackages] = useState([]); //to store all the combopackages
-  //   const [checkedPrice, setCheckedPrice] = useState([]); //to select the packages
-
   useEffect(() => {
     // const checkedData = new FormData();
     initPackage();
-    //make  the formdata availabk\le
-
-    // initPackagePrices();
   }, [router]);
 
   const token = getCookie("token");

@@ -3,6 +3,7 @@ const { ObjectId } = mongoose.Schema;
 
 const servicesCartSchema = new mongoose.Schema(
   {
+    //get the customer from the customer collection
     customer: [{ type: ObjectId, ref: "Customer", required: true }],
     products: [
       {
@@ -10,6 +11,8 @@ const servicesCartSchema = new mongoose.Schema(
           type: Number,
           default: 1,
         },
+
+        //the id of the service and need the name and price which is again derived from price collection
         product: [{ type: ObjectId, ref: "Service", required: true }],
       },
     ],

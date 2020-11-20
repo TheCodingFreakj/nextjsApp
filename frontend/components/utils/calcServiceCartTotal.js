@@ -1,5 +1,5 @@
 const calculateServiceTotal = (services) => {
-  const total = services.reduce((accumulator, element) => {
+  const total = services.serviceCarts.reduce((accumulator, element) => {
     accumulator +=
       element.product[0].discountedServiceCharges[0].discountedServiceCharges *
       element.quantity;

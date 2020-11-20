@@ -241,34 +241,7 @@ exports.adminMiddleware = async (req, res, next) => {
   }
 };
 
-exports.customerMiddleware = async (req, res, next) => {
-  //console.log(req.user.id);
-  //need the user id
-  try {
-    const customerUserID = req.user.id;
-
-    //console.log(adminUserID);
-    let customerUser = await User.findById({ _id: customerUserID });
-    //no user
-    if (!customerUser) {
-      return res.status(400).json({ errors: [{ msg: "There is no user" }] });
-    }
-
-    if (customerUser.customerRole != "consumer") {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "You dont have access to this page" }] });
-    }
-    req.user = customerUser;
-    next();
-  } catch (error) {
-    console.error("something wrong with customerMiddleware");
-    res.status(500).json({ msg: "Server Error" });
-  }
-};
-
 //This middleware checks if the blog posted by userId matched with the loggedin person
-
 //find the particular blog based on slug
 
 exports.canUpdateAndDeleteBlog = async (req, res, next) => {

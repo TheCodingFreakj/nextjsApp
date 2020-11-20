@@ -234,6 +234,10 @@ exports.updateService = async (req, res) => {
 
 exports.ServicesList = async (req, res) => {
   //find the discountServiceCharges for a service
+  //get the limit of blogs to be shown from the front end
+  //if user clicks load more then additional req will be sent and then the previous blogs are skipped then rest are send
+  // let limit = req.body.limit ? parseInt(req.body.limit) : 10; //by default is skip
+  // let skip = req.body.skip ? parseInt(req.body.skip) : 0;
   try {
     await Service.find({})
       //.populate({ path: "discountedServiceCharges", model: "Price" })
@@ -242,6 +246,9 @@ exports.ServicesList = async (req, res) => {
         "_id serviceName discountedServiceCharges slug"
       )
       .populate("tools", "_id tool clientPrice slug")
+      // .sort({ createdBy: -1 }) //To confirm that latest blogs are sent
+      // .skip(skip)
+      // .limit(limit)
       .select(
         "_id title slug discountedServiceCharges process summary duration ratingsAverage ratingsQuantity"
       )
@@ -250,6 +257,8 @@ exports.ServicesList = async (req, res) => {
           return res.status(400).json({ errors: errorHandler(err) });
         }
         res.json(serviceLists);
+
+        // size: serviceLists.length,
       });
   } catch (error) {
     console.error(error.message);
