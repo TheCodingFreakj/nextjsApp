@@ -48,8 +48,6 @@ exports.Signup = async (req, res) => {
         return res.status(400).json({
           error: err,
         });
-
-      console.log(user);
     });
 
     const payload = {

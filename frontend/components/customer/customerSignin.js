@@ -54,6 +54,7 @@ const CustomerSigninComp = () => {
 
         authenticate(data, () => {
           //sending routes based on role during login
+          // console.log(data);
           if (isAuth().customerRole === "consumer") {
             Router.push("/services");
           } else if (isAuth().role === 1) {

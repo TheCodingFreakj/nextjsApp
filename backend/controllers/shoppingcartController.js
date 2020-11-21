@@ -5,7 +5,6 @@ const { errorHandler } = require("../helpers/dbErrorHandler");
 
 //https://stackoverflow.com/questions/59174763/how-to-add-product-to-shopping-cart-with-nodejs-express-and-mongoose
 exports.updateToolCart = async (req, res) => {
-  console.log(req.body);
   const { quantity, productId } = req.body;
   const customer = req.user;
   const customerid = customer._id;
@@ -35,100 +34,6 @@ exports.updateToolCart = async (req, res) => {
     }
 
     res.status(200).send("Cart Updated");
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-};
-
-exports.fetchToolsCart = async (req, res) => {
-  const user = req.user._id;
-
-  try {
-    const toolsCart = await ToolsCart.findOne({ customer: user }).populate({
-      path: "products.product",
-      model: "Tools",
-    });
-
-    res.status(200).json(toolsCart.products);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Please Login Again");
-  }
-};
-
-exports.fetchCarts = async (req, res) => {
-  console.log(req.user);
-  const user = req.user._id;
-
-  let toolcarts;
-  let serviceCarts;
-  try {
-    const toolsCart = await ToolsCart.findOne({ customer: user }).populate({
-      path: "products.product",
-      model: "Tools",
-    });
-
-    toolcarts = toolsCart.products;
-
-    const serviceCart = await ServiceCart.findOne({ customer: user }).populate({
-      path: "products.product",
-      model: "Service",
-      populate: {
-        path: "discountedServiceCharges",
-        model: "Price",
-      },
-    });
-
-    serviceCarts = serviceCart.products;
-
-    res.status(200).json({ toolcarts, serviceCarts });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Cant fetch the server");
-  }
-};
-//http://localhost:3001/products?productId=5f8fdda74f5975190868cbbe
-exports.deleteToolsCart = async (req, res) => {
-  const { productId } = req.query;
-
-  console.log(req.user);
-  const userid = req.user.id;
-  console.log("userid", userid);
-
-  try {
-    const updatedCart = await ToolsCart.findOneAndUpdate(
-      { customer: userid },
-      { $pull: { products: { product: productId } } },
-      { new: true }
-    ).populate({
-      path: "products.product",
-      model: "Tools", // This is ref value
-    });
-
-    res.status(200).json(updatedCart.products);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Please Login Again");
-  }
-};
-
-exports.fetchServicesCart = async (req, res) => {
-  const user = req.user._id;
-
-  try {
-    const serviceCart = await ServiceCart.findOne({ customer: user }).populate({
-      path: "products.product",
-      model: "Service",
-      populate: {
-        path: "discountedServiceCharges",
-        model: "Price",
-      },
-    });
-
-    console.log(serviceCart.products);
-
-    res.status(200).json(serviceCart.products);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
@@ -176,24 +81,115 @@ exports.updateServiceCart = async (req, res) => {
   }
 };
 
-exports.deleteServiceCart = async (req, res) => {
-  const { serviceId } = req.query;
+exports.fetchCarts = async (req, res) => {
+  const user = req.user._id;
+  let toolcarts;
+  let serviceCarts;
+  try {
+    const toolsCart = await ToolsCart.findOne({ customer: user }).populate({
+      path: "products.product",
+      model: "Tools",
+    });
 
-  console.log(req.user);
+    toolcarts = toolsCart.products;
+
+    const serviceCart = await ServiceCart.findOne({ customer: user }).populate({
+      path: "products.product",
+      model: "Service",
+      populate: {
+        path: "discountedServiceCharges",
+        model: "Price",
+      },
+    });
+
+    serviceCarts = serviceCart.products;
+
+    res.status(200).json({ toolcarts, serviceCarts, msg: "Item Updated" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Cant fetch the server");
+  }
+};
+//http://localhost:3001/products?productId=5f8fdda74f5975190868cbbe
+exports.deleteToolsCart = async (req, res) => {
+  const { productId } = req.query;
   const userid = req.user.id;
-  console.log("userid", userid);
+  console.log("The query", req.query);
+  let toolcarts;
+  try {
+    const updatedCart = await ToolsCart.findOneAndUpdate(
+      { customer: userid },
+      { $pull: { products: { product: productId } } },
+      { new: true }
+    ).populate({
+      path: "products.product",
+      model: "Tools", // This is ref value
+    });
 
+    toolcarts = updatedCart.products;
+    res.status(200).json({ toolcarts });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Please Login Again");
+  }
+};
+
+exports.deleteServiceCart = async (req, res) => {
+  console.log("The user", req.user);
+  const { serviceId } = req.query;
+  const user = req.user.id;
+  console.log("The query", req.query);
+  let serviceCarts;
   try {
     const updateddCart = await ServiceCart.findOneAndUpdate(
-      { customer: userid },
+      { customer: user },
       { $pull: { products: { product: serviceId } } },
       { new: true }
     ).populate({
       path: "products.product",
       model: "Service", // This is ref value
     });
+    serviceCarts = updateddCart.products;
+    console.log(serviceCarts);
+    res.status(200).json({ serviceCarts });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Item Not Found");
+  }
+};
 
-    res.status(200).json(updateddCart.products);
+exports.deletecartitem = async (req, res) => {
+  const { productId, serviceId } = req.query;
+  const user = req.user.id;
+  console.log("The query", req.query);
+  let toolcarts;
+  let serviceCarts;
+  try {
+    if (productId) {
+      const updatedCart = await ToolsCart.findOneAndUpdate(
+        { customer: user },
+        { $pull: { products: { product: productId } } },
+        { new: true }
+      ).populate({
+        path: "products.product",
+        model: "Tools", // This is ref value
+      });
+      toolcarts = updatedCart.products;
+    } else if (serviceId) {
+      const updateddCart = await ServiceCart.findOneAndUpdate(
+        { customer: user },
+        { $pull: { products: { product: serviceId } } },
+        { new: true }
+      ).populate({
+        path: "products.product",
+        model: "Service", // This is ref value
+      });
+
+      serviceCarts = updateddCart.products;
+    }
+    console.log("toolcarts", toolcarts);
+    console.log("serviceCarts", serviceCarts);
+    res.status(200).json({ toolcarts, serviceCarts });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Please Login Again");

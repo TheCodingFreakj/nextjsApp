@@ -6,19 +6,17 @@ const tokenAuth = require("../middlewares/tokenAuth");
 
 const {
   updateToolCart,
-  fetchToolsCart,
   deleteToolsCart,
-  fetchServicesCart,
   updateServiceCart,
   deleteServiceCart,
   fetchCarts,
+  deletecartitem,
 } = require("../controllers/shoppingcartController");
-// router.get("/tools-cart", tokenAuth, authMiddleware, fetchToolsCart);
+
 router.put("/tools-cart", tokenAuth, authMiddleware, updateToolCart);
 router.delete("/tools-cart", tokenAuth, authMiddleware, deleteToolsCart);
-
 router.put("/services-cart", tokenAuth, authMiddleware, updateServiceCart);
 router.delete("/services-cart", tokenAuth, authMiddleware, deleteServiceCart);
-//router.get("/services-cart", tokenAuth, authMiddleware, fetchServicesCart);
 router.get("/fetch-cart", tokenAuth, authMiddleware, fetchCarts);
+router.delete("/delete-cart", tokenAuth, authMiddleware, deletecartitem);
 module.exports = router;

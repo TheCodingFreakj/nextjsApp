@@ -6,7 +6,6 @@ import StripeCheckout from "react-stripe-checkout";
 import { useRouter } from "next/router";
 
 const CartFooter = ({ carlist }) => {
-  console.log(carlist);
   const [cartAmount, setcartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);
   const [isCartEmpty, setCartEmpty] = useState(false);
@@ -29,7 +28,6 @@ const CartFooter = ({ carlist }) => {
   }, []);
   return (
     <React.Fragment>
-      {" "}
       <>
         <Divider />
 

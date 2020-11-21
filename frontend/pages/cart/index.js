@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Button, Segment, Dimmer, Loader } from "semantic-ui-react";
+import {
+  Header,
+  Icon,
+  Button,
+  Segment,
+  Dimmer,
+  Loader,
+} from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
 import withSoftReload from "../../components/hoc/cartreload";
@@ -8,13 +15,15 @@ import CartHeader from "../../components/cart/cartheader";
 import CartFooter from "../../components/cart/cartfooter";
 import { fetchCarts } from "../../actions/shoppingcart";
 import { withRouter } from "next/router";
-
+import { API } from "../../config";
+import axios from "axios";
 const Cart = ({ router }) => {
   //get both the carts
 
   const [cart, setCart] = useState();
   const [loading, setLoading] = useState(false);
-
+  const [message, setMessage] = useState();
+  const user = isAuth();
   useEffect(() => {
     const mounted = { current: true };
 
@@ -40,6 +49,36 @@ const Cart = ({ router }) => {
     });
   };
 
+  const handleRemoveToolFromCart = async (productId) => {
+    console.log(productId);
+    const token = getCookie("token");
+    const url = `${API}/api/delete-cart`;
+    const payload = {
+      params: { productId },
+      headers: {
+        Authorization: ` Bearer ${token}`,
+      },
+    };
+    const response = await axios.delete(url, payload);
+    setMessage(response.data.msg);
+    getProductsFromCarts();
+  };
+
+  const handleRemoveServiceFromCart = async (serviceId) => {
+    const token = getCookie("token");
+
+    const url3 = `${API}/api/delete-cart`;
+    const payload3 = {
+      params: { serviceId },
+      headers: {
+        Authorization: ` Bearer ${token}`,
+      },
+    };
+    const response = await axios.delete(url3, payload3);
+    setMessage(response.data.msg);
+    getProductsFromCarts();
+  };
+
   return (
     <Layout>
       <React.Fragment>
@@ -53,7 +92,12 @@ const Cart = ({ router }) => {
           <div>
             {cart ? (
               <Segment>
-                <CartHeader carlist={cart} />
+                <CartHeader
+                  carlist={cart}
+                  user={user}
+                  handleRemoveToolFromCart={handleRemoveToolFromCart}
+                  handleRemoveServiceFromCart={handleRemoveServiceFromCart}
+                />
                 <CartFooter carlist={cart} />
               </Segment>
             ) : (
@@ -72,15 +116,3 @@ const Cart = ({ router }) => {
 //https://stackoverflow.com/questions/60618844/react-hooks-useeffect-is-called-twice-even-if-an-empty-array-is-used-as-an-ar
 
 export default withRouter(Cart);
-// {loading ? (
-//   <Segment>...Data Loading.....</Segment>
-// ) : (
-//   <div>
-//     {cart ? (
-//       <Segment>
-//         <CartHeader carlist={cart} />
-//         {/* <CartFooter carlist={cart} /> */}
-//       </Segment>
-//     ) : null}
-//   </div>
-// )}

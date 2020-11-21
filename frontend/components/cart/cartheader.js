@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
 
-const CartHeader = ({ carlist }) => {
-  console.log("This is render1", carlist);
+const CartHeader = ({
+  carlist,
+  user,
+  handleRemoveToolFromCart,
+  handleRemoveServiceFromCart,
+}) => {
   //service.quantity
   //service.product[0].discountedServiceCharges[0].discountedServiceCharges
   //service.product[0].title
@@ -12,7 +16,6 @@ const CartHeader = ({ carlist }) => {
   //tool.quantity
 
   const showServiceCartList = (services) => {
-    console.log("This is render 2", services);
     return services.map((service) => ({
       header: (
         <Item.Header
@@ -30,12 +33,13 @@ const CartHeader = ({ carlist }) => {
           basic
           icon="remove"
           floated="right"
-          // onClick={() => handleRemoveFromCart(service.product[0]._id)}
+          color="green"
+          onClick={() => handleRemoveServiceFromCart(service.product[0]._id)}
         />
       ),
     }));
   };
-
+  //() => handleRemoveToolFromCart(service.product[0]._id)
   const showToolsList = (tools) => {
     return tools.map((tool) => ({
       header: (
@@ -54,11 +58,13 @@ const CartHeader = ({ carlist }) => {
           basic
           icon="remove"
           floated="right"
-          // onClick={() => handleRemoveFromCart(service.product[0]._id)}
+          color="green"
+          onClick={() => handleRemoveToolFromCart(tool.product[0]._id)}
         />
       ),
     }));
   };
+  //() => handleRemoveServiceFromCart(tool.product[0]._id)
 
   return (
     <React.Fragment>
