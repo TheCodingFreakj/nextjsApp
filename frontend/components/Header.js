@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Collapse,
   Navbar,
@@ -23,6 +23,7 @@ import "../node_modules/nprogress/nprogress.css";
 import Search from "../components/blogs/search";
 import { getCurrentCustomer } from "../actions/user";
 import { getCookie } from "../actions/setAuthToken";
+import { authencticateUser } from "../actions/auth";
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
@@ -32,22 +33,22 @@ const Header = () => {
   console.log();
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
-  const [msg, setMsg] = useState();
-  // React.useEffect(() => {
-  //   getCustomer();
-  // }, []);
+  const [show, setShow] = useState(userRole());
 
-  // const getCustomer = () => {
-  //   //const customer = isAuth().username;
-  //   getCurrentCustomer(getCookie("token")).then((data) => {
-  //     console.log(data);
-  //     if (data.error) {
-  //       console.log(error);
-  //     } else {
-  //       console.log(data.msg);
-  //       setMsg(data.msg);
-  //     }
-  //   });
+  // useEffect(() => {
+  //   const mounted = { current: true };
+
+  //   if (mounted.current) {
+  //     getauthenticateduser();
+  //   }
+
+  //   return () => {
+  //     mounted.current = false;
+  //   };
+  // }, []);
+  // const getauthenticateduser = async () => {
+  //   const loggedinuser = await authencticateUser(getCookie("token"));
+  //   console.log(loggedinuser);
   // };
 
   const renderHeader = (userRole) => {
@@ -161,19 +162,13 @@ const Header = () => {
                 </Link>
               </NavItem>
 
-              <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                <Link href="/cart">
-                  <a className="text-light  font-weight-bold  h5">Cart</a>
-                </Link>
-              </NavItem>
-
-              {/* {msg !== "There is no customer" && !msg && (
+              {show === "consumer" && (
                 <NavItem className="ml-5 text-light  font-weight-bold  h5">
                   <Link href="/cart">
                     <a className="text-light  font-weight-bold  h5">Cart</a>
                   </Link>
                 </NavItem>
-              )} */}
+              )}
 
               <NavItem className="ml-5 text-light  font-weight-bold  h5">
                 <Link href="/authSignin">

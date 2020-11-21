@@ -307,20 +307,25 @@ const SingleService = ({ service, query }) => {
               <hr />
               <div className="row">{showPortFolio(service)}</div>
             </div>
-            <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
-            <hr />
-            <ShowModal
-              serviceSlug={service.slug}
-              scrollPosition={popUpPosition}
-            />
-            <ShoppingTools service={service} />
-            <div className="container pb-5">
-              <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
-              <hr />
-              <div className="row">
-                <ReviewForm serviceId={service.id} />
+
+            {isAuth() && isAuth().customerRole === "consumer" && (
+              <div className="container pb-5">
+                <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
+                <hr />
+                <ShowModal
+                  serviceSlug={service.slug}
+                  scrollPosition={popUpPosition}
+                />
+                <ShoppingTools service={service} />
+                <div className="container pb-5">
+                  <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
+                  <hr />
+                  <div className="row">
+                    <ReviewForm serviceId={service.id} />
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </article>
         </main>
       </Layout>

@@ -104,12 +104,13 @@ export const signout = async (next) => {
 };
 
 export const authencticateUser = async (token) => {
+  console.log(token);
   const config = {
     method: "GET",
   };
 
   try {
-    await axios.get(`${API}/api/sign-in`, config, token);
+    await axios.get(`${API}/sign-in`, config, token);
     console.log("update successful");
 
     return response.data;
