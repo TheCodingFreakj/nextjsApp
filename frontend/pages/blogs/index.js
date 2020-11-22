@@ -157,11 +157,6 @@ export const getServerSideProps = async (context) => {
   let skip = 0;
   let limit = 2;
   const data = await listBlogsWithCategoriesNTags(skip, limit);
-
-  // console.log(data);
-
-  //console.log("getServerProps", data, context.params, context.query);
-
   if (data.error) {
     console.log(data.error);
   } else {

@@ -22,7 +22,6 @@ const ToolShoppingCard = ({ service }) => {
       childKey: product._id,
       meta: `${product.clientPrice} $`,
       description: product.summary,
-
       href: `/products?productId=${product._id}`,
     }));
   };

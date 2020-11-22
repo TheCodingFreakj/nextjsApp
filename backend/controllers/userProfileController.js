@@ -1,8 +1,6 @@
 const User = require("../models/user");
 const Blog = require("../models/blog");
 const Customer = require("../models/customers");
-const ServiceCart = require("../models/serviceCart");
-const ToolsCart = require("../models/toolsCart");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const _ = require("lodash");
 const formidable = require("formidable");
@@ -186,8 +184,8 @@ exports.getAllUsers = async (req, res) => {
 //update link in profile
 exports.getBusinessDetails = async (req, res) => {
   const { location, region, city, description, pinCode, phone } = req.body;
-  console.log(req.body);
-  console.log(req.params);
+  // console.log(req.body);
+  // console.log(req.params);
 
   const customerDetails = {};
 
@@ -224,9 +222,8 @@ exports.getBusinessDetails = async (req, res) => {
       customer.custId = req.user.id;
       await customer.save();
 
-      //creating a cart for the customer
-      await new ToolsCart({ customer: req.user._id }).save();
-      await new ServiceCart({ customer: req.user._id }).save();
+      //creating a cart for the customer// move this to the user sign
+
       return res.json(customer);
     }
   } catch (error) {

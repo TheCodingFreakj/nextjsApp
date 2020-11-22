@@ -9,7 +9,11 @@ import {
   Header,
 } from "semantic-ui-react";
 import { getBusinessDetails, getCurrentCustomer } from "../../actions/user";
-import { getCookie } from "../../actions/setAuthToken";
+import {
+  getCookie,
+  storebusinessdetails,
+  businessDetails,
+} from "../../actions/setAuthToken";
 
 const Popup = ({ showPopUp, serviceSlug, ...props }) => {
   const [values, setValues] = useState({
@@ -31,9 +35,9 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
 
   useEffect(() => {
     mounted.current = true;
+
     const getCustomer = async () => {
       await getCurrentCustomer(token).then((data) => {
-        //console.log(data);
         data.phone ? props.custData(data) : null;
       });
     };
@@ -61,6 +65,7 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
         });
       } else {
         setCustomer(data);
+
         setValues({
           description: "",
           phone: "",
@@ -75,6 +80,7 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
   };
 
   const closeModal = (e) => {
+    console.log("I am in action");
     setshow(!show);
   };
 
@@ -170,6 +176,7 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
                   content="We got it Thank You.. Please Shop If You may?"
                   size="small"
                 />
+
                 <Button icon labelPosition="right" onClick={closeModal}>
                   Continue Shopping
                   <Icon name="right arrow" />

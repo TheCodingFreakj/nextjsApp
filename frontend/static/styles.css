@@ -15,6 +15,14 @@
 .custom-card-style {
   padding: 9% 5%;
 }
+
+.card-dark {
+  background: black;
+}
+a.ui.red.card.indv-card {
+  background: turquoise;
+}
+
 .custom-card {
   position: relative;
   z-index: 99;
@@ -53,4 +61,12 @@
   padding-top: 5%;
   text-align: center;
   color: forestgreen;
+}
+
+.footer-design {
+  background: rgb(138, 43, 43);
+}
+
+.four.column.row.footer-design {
+  padding: 4%;
 }

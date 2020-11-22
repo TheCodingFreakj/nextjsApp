@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Collapse,
   Navbar,
@@ -22,8 +22,7 @@ import { isAuth, userRole } from "../actions/setAuthToken";
 import "../node_modules/nprogress/nprogress.css";
 import Search from "../components/blogs/search";
 import { getCurrentCustomer } from "../actions/user";
-import { getCookie } from "../actions/setAuthToken";
-import { authencticateUser } from "../actions/auth";
+import { getCookie, removeLocatStorage } from "../actions/setAuthToken";
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
@@ -34,22 +33,6 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const [show, setShow] = useState(userRole());
-
-  // useEffect(() => {
-  //   const mounted = { current: true };
-
-  //   if (mounted.current) {
-  //     getauthenticateduser();
-  //   }
-
-  //   return () => {
-  //     mounted.current = false;
-  //   };
-  // }, []);
-  // const getauthenticateduser = async () => {
-  //   const loggedinuser = await authencticateUser(getCookie("token"));
-  //   console.log(loggedinuser);
-  // };
 
   const renderHeader = (userRole) => {
     switch (userRole) {

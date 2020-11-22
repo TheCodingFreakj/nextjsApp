@@ -2,6 +2,8 @@
 
 const User = require("../models/user");
 const Blog = require("../models/blog");
+const ServiceCart = require("../models/serviceCart");
+const ToolsCart = require("../models/toolsCart");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const shortid = require("short-id");
@@ -43,11 +45,15 @@ exports.Signup = async (req, res) => {
       user.role = role;
     }
 
-    await user.save((err, user) => {
-      if (err)
+    await user.save(async (err, user) => {
+      if (err) {
         return res.status(400).json({
           error: err,
         });
+      }
+
+      await new ToolsCart({ customer: user._id }).save();
+      await new ServiceCart({ customer: user._id }).save();
     });
 
     const payload = {
@@ -65,7 +71,7 @@ exports.Signup = async (req, res) => {
         if (err) throw err;
         return res.json({
           token,
-          message: "Sign Up Done.. Please Sign In ",
+          message: "Sign Up Done.. Please Sign In And Shop ",
           id: user._id,
         });
       }
