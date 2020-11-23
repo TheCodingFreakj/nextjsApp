@@ -26,7 +26,7 @@ const CartHeader = ({
         </Item.Header>
       ),
       childKey: service.product[0]._id,
-      meta: `${service.quantity} x   $ ${service.product[0].discountedServiceCharges[0].discountedServiceCharges}`,
+      meta: `${service.quantity} unit productcount @ $ ${service.product[0].discountedServiceCharges[0].discountedServiceCharges} per ${service.product[0].duration}`,
       fluid: "true",
       extra: (
         <Button
@@ -51,7 +51,7 @@ const CartHeader = ({
         </Item.Header>
       ),
       childKey: tool.product[0]._id,
-      meta: `${tool.quantity} x   $ ${tool.product[0].clientPrice}`,
+      meta: `  ${tool.product[0].clientPrice} $ per 30 days for ${tool.quantity} months `,
       fluid: "true",
       extra: (
         <Button
@@ -69,6 +69,14 @@ const CartHeader = ({
   return (
     <React.Fragment>
       {console.log("This is render 3")}
+      <p>
+        We encourage to couple marketing services with tools as per subscription
+        policy
+      </p>
+      <p>
+        You can check out web development services separarely as per invoicing
+        policy
+      </p>
       <Item.Group
         divided
         items={showServiceCartList(carlist.serviceCarts)}

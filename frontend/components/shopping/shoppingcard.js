@@ -5,6 +5,7 @@ import "../../static/styles.css";
 
 const ToolShoppingCard = ({ service }) => {
   let product = service.tools;
+  //console.log(product);
   const [products, setproducts] = useState(product);
 
   //get the id password to the backend for total calulation based on product id
@@ -20,7 +21,7 @@ const ToolShoppingCard = ({ service }) => {
       image: "/static/images/marketingsolutions.jpg",
       color: "green",
       childKey: product._id,
-      meta: `${product.clientPrice} $`,
+      meta: `${product.clientPrice} $ per 30 days`,
       description: product.summary,
       href: `/products?productId=${product._id}`,
     }));

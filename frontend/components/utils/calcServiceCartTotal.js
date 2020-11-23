@@ -6,7 +6,7 @@ const calculateServiceTotal = (services) => {
     return accumulator;
   }, 0);
   const servicecartTotal = ((total * 100) / 100).toFixed(2);
-  const servicestripeTotal = Number((total * 100).toFixed(2));
+  const servicestripeTotal = Number(((total * 100) / 100).toFixed(2));
   return { servicecartTotal, servicestripeTotal };
 };
 

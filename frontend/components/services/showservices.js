@@ -49,7 +49,7 @@ const ShowServices = ({ limit, skip }) => {
       description: serv.summary,
       childKey: serv._id,
       image: `${API}/api/services/photo/${serv.slug}`,
-      meta: `${serv.discountedServiceCharges[0].discountedServiceCharges} $`,
+      meta: `${serv.discountedServiceCharges[0].discountedServiceCharges} $ per ${serv.duration}`,
       href: `/services/${serv.slug}`,
       color: "red",
       extra: serv.ratingsAverage,

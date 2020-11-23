@@ -21,7 +21,7 @@ const brandsRoute = require("./routes/brandsRoute");
 const reviewRoute = require("./routes/reviewRoute");
 const bookingRoute = require("./routes/bookingRoute");
 const shoppingcartRoute = require("./routes/shoppingcartRoute");
-
+const subscribeRoute = require("./routes/subscribeRoute");
 //app
 
 const app = express();
@@ -66,6 +66,7 @@ app.use("/api", brandsRoute);
 app.use("/api", reviewRoute);
 app.use("/api", bookingRoute);
 app.use("/api", shoppingcartRoute);
+app.use("/api", subscribeRoute);
 //this executes if any of the above routes fails
 app.all("*", (req, res, next) => {
   //creating instance of the class in AppError Class
