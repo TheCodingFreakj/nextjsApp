@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid, Divider, Header, List, Input } from "semantic-ui-react";
+import {
+  Button,
+  Grid,
+  Divider,
+  Header,
+  List,
+  Input,
+  Segment,
+} from "semantic-ui-react";
 const Footer = () => {
   const [subs, setSubs] = useState("");
   const [success, setSuccess] = useState(false);
@@ -71,6 +79,7 @@ const Footer = () => {
             </List>
           </Grid.Column>
           <Grid.Column width={4}>
+            {/* <Segment raised padded="very" compact> */}
             <Input
               type="email"
               placeholder="Subscribe"
@@ -94,6 +103,7 @@ const Footer = () => {
                     }
               }
             />
+            {/* </Segment> */}
           </Grid.Column>
         </Grid.Row>
       </Grid>

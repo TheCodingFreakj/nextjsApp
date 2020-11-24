@@ -4,15 +4,15 @@ import calculateProductTotal from "../utils/calcCartTotal";
 import calculateServiceTotal from "../utils/calcServiceCartTotal";
 import SubscribedProducts from "../../components/payment/subscribe";
 import InvoicedItems from "../../components/payment/invoice";
-import { Router, useRouter } from "next/router";
-
+import { useRouter } from "next/router";
+import { isAuth, getCookie } from "../../actions/setAuthToken";
 const CartFooter = ({ carlist }) => {
   //console.log(carlist);
   const [cartAmount, setcartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);
   const [isCartEmpty, setCartEmpty] = useState(false);
   const router = useRouter();
-
+  const user = isAuth();
   useEffect(() => {
     const { cartTotal, stripeTotal } = calculateProductTotal(carlist);
     const { servicecartTotal, servicestripeTotal } = calculateServiceTotal(
@@ -46,6 +46,7 @@ const CartFooter = ({ carlist }) => {
           <SubscribedProducts
             stripeAmount={stripeAmount}
             isCartEmpty={isCartEmpty}
+            loggedinUser={user}
           />
           {/* <InvoicedItems
             stripeAmount={stripeAmount}
