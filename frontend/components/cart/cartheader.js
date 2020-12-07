@@ -15,6 +15,8 @@ const CartHeader = ({
   //tool.product[0].tool
   //tool.quantity
 
+  // console.log("carlist", carlist);
+
   const showServiceCartList = (services) => {
     return services.map((service) => ({
       header: (
@@ -68,7 +70,7 @@ const CartHeader = ({
 
   return (
     <React.Fragment>
-      {console.log("This is render 3")}
+      {/* {console.log("This is render 3")} */}
       <p>
         We encourage to couple marketing services with tools as per subscription
         policy

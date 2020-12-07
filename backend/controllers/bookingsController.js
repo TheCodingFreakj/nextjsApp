@@ -9,30 +9,19 @@ const slugify = require("slugify");
 const fs = require("fs");
 
 exports.createProducts = async (req, res) => {
-  //console.log(req);
   try {
     const service = await Service.findById(req.params.servId);
 
     const product = await stripe.products.create({
       name: `${service.title} `,
     });
-
-    //extracting the product Id
-
-    //console.log(product);
-
     let productId = product.id;
     let prodName = product.name;
-    // console.log(prodName);
-    // console.log(productId);
-    // console.log(typeof productId);
 
     let productDB = new Product({
       prodId: productId,
       prodName: prodName,
     });
-
-    //console.log(productDB);
     await productDB.save();
 
     res.status(200).json({
@@ -40,8 +29,6 @@ exports.createProducts = async (req, res) => {
       product,
       productDB,
     });
-
-    //return res.json(product);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
@@ -49,39 +36,19 @@ exports.createProducts = async (req, res) => {
 };
 
 exports.createPrices = async (req, res) => {
-  //get the totalPrice from frontend= toolPrice + serviceCharges
-
-  //content-marketing: 50
-  //seo/funnelmarketing: 102.3
-  //email-marketing: facebook-marketing : 274.35
-  //corporate/personal blogs  //static: 19530
-  //author:26040
-  //ecommece:61600
-  //wordpress:35200
-  //somglepage:22785
   try {
     let product = await Product.findOneAndUpdate({
       prodName: req.body.prodName,
     });
     console.log(product);
-
-    //supply service id
     const bookedservice = await Service.findById(req.params.servId)
       .populate("tools", "_id tool clientPrice slug")
       .populate("discountedServiceCharges", " discountedServiceCharges ");
-    // console.log(bookedservice);
-
     let duration = parseInt(bookedservice.duration, 10) - 1;
 
     console.log("The Duration", duration);
-
-    // console.log(typeof "duration");
-
     let discountCharge =
       bookedservice.discountedServiceCharges[0].discountedServiceCharges;
-
-    // console.log(typeof "discountCharge");
-
     console.log("The service charge", discountCharge);
 
     // console.log(typeof "discountCharge");
@@ -275,12 +242,14 @@ exports.getCheckoutSession = async (req, res) => {
             },
             //https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-line_items
             {
-              //price: product.priceUnit1Id,
               price_data: {
                 currency: "usd",
                 unit_amount: payPrice2,
               },
               quantity: orderNumber,
+              recurring: {
+                interval: "month",
+              },
             },
           ],
           success_url: `${req.protocol}://${req.get("host")}`, // This is the url called when the credit card is successfully charged

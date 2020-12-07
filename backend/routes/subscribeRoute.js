@@ -7,7 +7,10 @@ const {
 
 const tokenAuth = require("../middlewares/tokenAuth");
 
-const { subscribeServices } = require("../controllers/subscriptionController");
+const {
+  subscribeServices,
+  getCheckoutSession,
+} = require("../controllers/subscriptionController");
 
 ////////////////////////////////////////Subscriptions/////////////////////////////////////////
 
@@ -19,4 +22,12 @@ router.post(
   authMiddleware,
   subscribeServices
 );
+
+router.get(
+  "/subscribe-session/:userId",
+  tokenAuth,
+  authMiddleware,
+  getCheckoutSession
+);
+
 module.exports = router;

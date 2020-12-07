@@ -8,14 +8,15 @@ import {
   Segment,
   Checkbox,
 } from "semantic-ui-react";
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
+import Head from "next/head";
 import { getCookie } from "../../actions/setAuthToken";
-import { createSubsription } from "../../actions/payment";
+import { createSubsription, subscribesession } from "../../actions/payment";
 import { useRouter } from "next/router";
 import parseMyUrl from "../../components/utils/parseUrl";
-const stripePromise = loadStripe(
-  "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
-);
+// const stripePromise = loadStripe(
+//   "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
+// );
 
 const CheckoutForm = () => {
   //customerId and PriceId
@@ -24,16 +25,25 @@ const CheckoutForm = () => {
     phone: "",
     billingAddress: "",
     amttt: "",
+    user: "",
   });
+
+  // const head = () => (
+  //   <Head>
+  //     <script src="https://js.stripe.com/v3/"></script>
+  //   </Head>
+  // );
   const router = useRouter();
   useEffect(() => {
     let urlParams = new URLSearchParams(window.location.search);
     const response = parseMyUrl(urlParams);
+    console.log(response.params.user);
     console.log(response.params.email, "", response.params.amttt);
     setpaymentData({
       ...paymentData,
       email: response.params.email,
       amttt: response.params.amttt,
+      user: response.params.user,
     });
   }, []);
 
@@ -50,7 +60,10 @@ const CheckoutForm = () => {
     const stripe = await stripePromise;
 
     // // Call your backend to create the subcriptiopon route Session
-    const response = await createSubsription(paymentData, getCookie("token"));
+    const response = await subscribesession(
+      paymentData.user,
+      getCookie("token")
+    );
     console.log(response);
     // const session = await response.json();
 
@@ -67,6 +80,7 @@ const CheckoutForm = () => {
   };
   return (
     <React.Fragment>
+      {/* {head()} */}
       <Segment
         raised
         padded="very"
@@ -80,7 +94,7 @@ const CheckoutForm = () => {
           We encourage You To Update This Form
         </Header>
         {/* success={success} onSubmit={handleSubmit} */}
-
+        {/* onSubmit={handleSubmit} */}
         <Form onSubmit={handleSubmit}>
           <Form.Field
             control={Input}
@@ -125,7 +139,6 @@ const CheckoutForm = () => {
           </Form.Field>
           <Button
             icon="shop"
-            // onClick={() => router.push(`/`)}
             color="green"
             floated="right"
             content="Confirm Data"
@@ -161,3 +174,4 @@ export default CheckoutForm;
 //https://stripe.com/docs/billing/prices-guide
 //https://stripe.com/docs/billing/prices-guide
 //https://stripe.com/docs/payments/accept-a-payment?integration=elements
+//https://stripe.com/docs/billing/subscriptions/checkout/fixed-price

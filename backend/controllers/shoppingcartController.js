@@ -104,7 +104,9 @@ exports.fetchCarts = async (req, res) => {
 
     serviceCarts = serviceCart.products;
 
-    res.status(200).json({ toolcarts, serviceCarts, msg: "Item Updated" });
+    res
+      .status(200)
+      .json({ toolcarts, serviceCarts, msg: "Item Updated", userId: user });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Cant fetch the server");

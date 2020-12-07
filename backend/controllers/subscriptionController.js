@@ -4,7 +4,6 @@ const ServiceCart = require("../models/serviceCart");
 exports.subscribeServices = async (req, res) => {
   console.log(req.body);
   let loggedinuser = req.user;
-  let emailFromDb = loggedinuser.email;
   let checkoutemail = req.body.email;
   try {
     //get the cart based on the customer loggedin
@@ -47,12 +46,6 @@ exports.subscribeServices = async (req, res) => {
     //push the product ids to an arrays
     let productIs = [];
 
-    //list all the price
-
-    const prices = await stripe.prices.list({
-      limit: 10,
-    });
-
     console.log(prices);
     //see ifi tsi linked to stripe customer
 
@@ -84,23 +77,39 @@ exports.subscribeServices = async (req, res) => {
     //get price items
     //create the subscription or
     console.log(customer);
-    // const subscription = await stripe.subscriptions.create({
-    //   customer: customer,
-    //   items: [
-    //     {
-    //       price: "{{RECURRING_PRICE_ID}}",
-    //     },
-    //   ],
-    //   // add_invoice_items: [
-    //   //   {
-    //   //     price: "{{PRICE_ID}}",
-    //   //   },
-    //   // ],
-    // });
+
     //add order to db
     //empty the cart at backend
     //send back order is to front end on the success url
-    res.json("done");
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.getCheckoutSession = async (req, res) => {
+  console.log(req.params);
+
+  try {
+    const session = await stripe.redirectToCheckout({
+      customer_email: req.user.email,
+      payment_method_types: ["card"],
+      client_reference_id: req.params.userId,
+      mode: "subscription",
+      billing_address_collection: "required",
+      line_items: [{ price: price_1Hr2dVGERwFTkr9GplP4g025, quantity: 1 }],
+      success_url: `${req.protocol}://${req.get("host")}/${req.params.userId}`, // This is the url called when the credit card is successfully charged
+      cancel_url: `${req.protocol}://${req.get("host")}/cart`,
+    });
+    ///success?session_id=${session.id}
+    res.status(200).json({
+      status: "success",
+      id: session.id, //need the session id at the client for the checkout process
+      session,
+    });
+    //add order to db
+    //empty the cart at backend
+    //send back order is to front end on the success url
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
@@ -108,15 +117,15 @@ exports.subscribeServices = async (req, res) => {
 };
 
 // const priceIds = [
-//   (seo = price_1HqjCbCmuENtzqJWo6LDtkqN),
-//   (contentmarketing = price_1HqjDzCmuENtzqJW1CvA2z59),
-//   (funnelmarketing = price_1HqjF3CmuENtzqJWZLe6ex2P),
-//   (emailmarketing = price_1HqjGzCmuENtzqJWFOUH78nQ),
-//   (facebookmarketing = price_1HqjG6CmuENtzqJWecTMt7AJ),
-//   (semrush = price_1HqjIWCmuENtzqJWXr0mL6oy),
-//   (ahref = price_1HqjHYCmuENtzqJWqvnzyk4y),
-//   (kwfinder = price_1HqjIvCmuENtzqJWRPe2cJsU),
-//   (buzzsumo = price_1HqjJbCmuENtzqJWOYWaTWkx),
-//   (grammerly = price_1HqjI8CmuENtzqJWmO2ATckE),
-//   (getresponse = price_1HqjKCCmuENtzqJWmkecFmOX),
+//   (seo = price_1Hr2c3GERwFTkr9GMZCvmZM6),
+//   (contentmarketing = price_1Hr2dVGERwFTkr9GplP4g025),
+//   (funnelmarketing = price_1Hr2e2GERwFTkr9G40kSSENb),
+//   (emailmarketing = price_1Hr2fdGERwFTkr9GQjPFfaGa),
+//   (facebookmarketing = price_1Hr2eZGERwFTkr9GtzSECbX9),
+//   (semrush = price_1Hr2aqGERwFTkr9GUN4rjyvs),
+//   (ahref = price_1Hr2aMGERwFTkr9GqX8c2ouu),
+//   (kwfinder = price_1Hr2ZBGERwFTkr9GYUaGXVZ1),
+//   (buzzsumo = price_1Hr2ZZGERwFTkr9G2QwpsOR7),
+//   (grammerly = price_1Hr2ZyGERwFTkr9G6grf5xaN),
+//   (getresponse = price_1Hr2YgGERwFTkr9GXlYB3HMY),
 // ];

@@ -39,6 +39,7 @@ const Cart = ({ router }) => {
   const getProductsFromCarts = async () => {
     setLoading(true);
     await fetchCarts(getCookie("token")).then((data) => {
+      // console.log(data);
       if (data.error) {
         console.log(data.error);
         setLoading(false);
@@ -79,6 +80,8 @@ const Cart = ({ router }) => {
     getProductsFromCarts();
   };
 
+  const handleCheckout = async () => {};
+
   return (
     <Layout>
       <React.Fragment>
@@ -98,7 +101,7 @@ const Cart = ({ router }) => {
                   handleRemoveToolFromCart={handleRemoveToolFromCart}
                   handleRemoveServiceFromCart={handleRemoveServiceFromCart}
                 />
-                <CartFooter carlist={cart} />
+                <CartFooter carlist={cart} handleCheckout={handleCheckout} />
               </Segment>
             ) : (
               <Segment>
@@ -115,3 +118,5 @@ const Cart = ({ router }) => {
 };
 
 export default withRouter(Cart);
+// The Stripe CLI is configured for MarketingApp with account id acct_1HaLO5GERwFTkr9G
+//https://laracasts.com/discuss/channels/laravel/using-stripe-cli-in-windows?page=0

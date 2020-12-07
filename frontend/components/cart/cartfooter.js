@@ -3,11 +3,13 @@ import { Divider, Button, Segment, Icon } from "semantic-ui-react";
 import calculateProductTotal from "../utils/calcCartTotal";
 import calculateServiceTotal from "../utils/calcServiceCartTotal";
 import SubscribedProducts from "../../components/payment/subscribe";
-import InvoicedItems from "../../components/payment/invoice";
+// import InvoicedItems from "../../components/payment/invoice";
+
 import { useRouter } from "next/router";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
-const CartFooter = ({ carlist }) => {
-  //console.log(carlist);
+
+const CartFooter = ({ carlist, handleCheckout }) => {
+  // console.log(carlist);
   const [cartAmount, setcartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);
   const [isCartEmpty, setCartEmpty] = useState(false);
@@ -42,11 +44,19 @@ const CartFooter = ({ carlist }) => {
             floated="right"
             content="Add More"
           />
-          <strong>Sub-Total:</strong>${cartAmount}
+          <p>
+            <strong>Sub-Total:</strong>${cartAmount}
+          </p>
+
+          <Divider />
+          <p>
+            <strong>Subscription Amt:</strong>${stripeAmount}
+          </p>
           <SubscribedProducts
             stripeAmount={stripeAmount}
             isCartEmpty={isCartEmpty}
             loggedinUser={user}
+            userId={carlist.userId}
           />
           {/* <InvoicedItems
             stripeAmount={stripeAmount}
@@ -60,3 +70,5 @@ const CartFooter = ({ carlist }) => {
 //checkout?
 export default CartFooter;
 //https://www.toptal.com/react/testing-react-hooks-tutorial
+//https://stripe.com/docs/stripe-js/react
+//https://blog.logrocket.com/integrating-stripe-react-stripe-js/

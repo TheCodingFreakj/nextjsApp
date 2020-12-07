@@ -10,7 +10,12 @@ import {
   Loader,
 } from "semantic-ui-react";
 
-const SubscribedProducts = ({ isCartEmpty, stripeAmount, loggedinUser }) => {
+const SubscribedProducts = ({
+  isCartEmpty,
+  stripeAmount,
+  loggedinUser,
+  userId,
+}) => {
   // console.log(stripeAmount, "", isCartEmpty, "", loggedinUser);
   const router = useRouter();
   return (
@@ -23,7 +28,7 @@ const SubscribedProducts = ({ isCartEmpty, stripeAmount, loggedinUser }) => {
         content="Subscribe|Services|Tools"
         onClick={() =>
           router.push(
-            `/payment/subscribe?amttt=${stripeAmount}&email=${loggedinUser.email}`
+            `/payment/subscribe?user=${userId}&amttt=${stripeAmount}&email=${loggedinUser.email}`
           )
         }
       />
