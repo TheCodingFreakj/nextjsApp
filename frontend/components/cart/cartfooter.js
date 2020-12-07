@@ -2,19 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Divider, Button, Segment, Icon } from "semantic-ui-react";
 import calculateProductTotal from "../utils/calcCartTotal";
 import calculateServiceTotal from "../utils/calcServiceCartTotal";
-import SubscribedProducts from "../../components/payment/subscribe";
-// import InvoicedItems from "../../components/payment/invoice";
 
 import { useRouter } from "next/router";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
 
 const CartFooter = ({ carlist, handleCheckout }) => {
-  // console.log(carlist);
+  console.log(carlist);
   const [cartAmount, setcartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);
   const [isCartEmpty, setCartEmpty] = useState(false);
   const router = useRouter();
   const user = isAuth();
+  console.log(user._id);
   useEffect(() => {
     const { cartTotal, stripeTotal } = calculateProductTotal(carlist);
     const { servicecartTotal, servicestripeTotal } = calculateServiceTotal(
@@ -49,25 +48,53 @@ const CartFooter = ({ carlist, handleCheckout }) => {
           </p>
 
           <Divider />
-          <p>
-            <strong>Subscription Amt:</strong>${stripeAmount}
-          </p>
-          <SubscribedProducts
-            stripeAmount={stripeAmount}
-            isCartEmpty={isCartEmpty}
-            loggedinUser={user}
-            userId={carlist.userId}
-          />
-          {/* <InvoicedItems
-            stripeAmount={stripeAmount}
-            isCartEmpty={isCartEmpty}
-          /> */}
+          <div style={{ background: "green", padding: "1%" }}>
+            <p style={{ color: "white" }}>
+              <strong>Subscription 1st emi:</strong>${stripeAmount}
+            </p>
+
+            <div style={{ position: "absolute", top: "35%", left: "70%" }}>
+              <Button
+                icon="cart"
+                disabled={isCartEmpty}
+                color="green"
+                floated="right"
+                content="Subscribe|Services|Tools"
+                onClick={() =>
+                  router.push(
+                    `/payment/subscribe?user=${user._id}&amttt=${stripeAmount}&email=${user.email}`
+                  )
+                }
+              />
+            </div>
+          </div>
+
+          <Divider />
+          <div style={{ background: "green", padding: "1%" }}>
+            <p style={{ color: "white" }}>
+              <strong>Subscription 2st emi:</strong>${stripeAmount}
+            </p>
+            <div style={{ position: "absolute", top: "68%", left: "70%" }}>
+              <Button
+                icon="cart"
+                disabled={isCartEmpty}
+                color="green"
+                floated="right"
+                content="Subscribe|Services|Tools"
+                onClick={() =>
+                  router.push(
+                    `/payment/subscribe?user=${user._id}&amttt=${stripeAmount}&email=${user.email}`
+                  )
+                }
+              />
+            </div>
+          </div>
         </Segment>
       </>
     </React.Fragment>
   );
 };
-//checkout?
+
 export default CartFooter;
 //https://www.toptal.com/react/testing-react-hooks-tutorial
 //https://stripe.com/docs/stripe-js/react

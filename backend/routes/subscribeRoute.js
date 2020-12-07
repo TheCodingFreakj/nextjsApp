@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {
-  adminMiddleware,
-  authMiddleware,
-} = require("../controllers/authController");
+const { authMiddleware } = require("../controllers/authController");
 
 const tokenAuth = require("../middlewares/tokenAuth");
 
@@ -23,8 +20,8 @@ router.post(
   subscribeServices
 );
 
-router.get(
-  "/subscribe-session/:userId",
+router.post(
+  "/subscribe-session",
   tokenAuth,
   authMiddleware,
   getCheckoutSession

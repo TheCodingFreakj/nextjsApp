@@ -1,6 +1,8 @@
 import axios from "axios";
 import { API } from "../config";
-
+// const stripe = Stripe(
+//   "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
+// );
 export const createSubsription = async (paymentData, token) => {
   console.log(paymentData);
   try {
@@ -44,7 +46,8 @@ export const createSubsription = async (paymentData, token) => {
   }
 };
 
-export const subscribesession = async (userId, token) => {
+export const subscribesession = async (paymentData, token) => {
+  console.log(paymentData, " ", token);
   try {
     const config = {
       method: "GET",
@@ -55,8 +58,11 @@ export const subscribesession = async (userId, token) => {
       },
     };
 
-    const response = await axios.get(
-      `${API}/api/subscribe-session/${userId}`,
+    const body = JSON.stringify(paymentData);
+
+    const response = await axios.post(
+      `${API}/api/subscribe-session`,
+      body,
       config
     ); //handing the backedn register user
     return response.data;

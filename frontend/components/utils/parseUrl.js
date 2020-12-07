@@ -1,6 +1,6 @@
 const parseMyUrl = (urlParams) => {
   let dataUrl = urlParams.toString();
-  // console.log(dataUrl);
+  console.log(dataUrl);
 
   let params = {};
   let vars = dataUrl.split("&");

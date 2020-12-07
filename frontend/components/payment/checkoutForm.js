@@ -8,15 +8,15 @@ import {
   Segment,
   Checkbox,
 } from "semantic-ui-react";
-// import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import Head from "next/head";
 import { getCookie } from "../../actions/setAuthToken";
 import { createSubsription, subscribesession } from "../../actions/payment";
 import { useRouter } from "next/router";
 import parseMyUrl from "../../components/utils/parseUrl";
-// const stripePromise = loadStripe(
-//   "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
-// );
+const stripePromise = loadStripe(
+  "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
+);
 
 const CheckoutForm = () => {
   //customerId and PriceId
@@ -28,17 +28,17 @@ const CheckoutForm = () => {
     user: "",
   });
 
-  // const head = () => (
-  //   <Head>
-  //     <script src="https://js.stripe.com/v3/"></script>
-  //   </Head>
-  // );
+  const head = () => (
+    <Head>
+      <script src="https://js.stripe.com/v3/"></script>
+    </Head>
+  );
   const router = useRouter();
   useEffect(() => {
     let urlParams = new URLSearchParams(window.location.search);
     const response = parseMyUrl(urlParams);
-    console.log(response.params.user);
-    console.log(response.params.email, "", response.params.amttt);
+    // console.log(response.params.user);
+    // console.log(response.params.email, "", response.params.amttt);
     setpaymentData({
       ...paymentData,
       email: response.params.email,
@@ -60,10 +60,7 @@ const CheckoutForm = () => {
     const stripe = await stripePromise;
 
     // // Call your backend to create the subcriptiopon route Session
-    const response = await subscribesession(
-      paymentData.user,
-      getCookie("token")
-    );
+    const response = await createSubsription(paymentData, getCookie("token"));
     console.log(response);
     // const session = await response.json();
 
@@ -80,7 +77,7 @@ const CheckoutForm = () => {
   };
   return (
     <React.Fragment>
-      {/* {head()} */}
+      {head()}
       <Segment
         raised
         padded="very"

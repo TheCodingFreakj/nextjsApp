@@ -5,48 +5,49 @@ exports.subscribeServices = async (req, res) => {
   console.log(req.body);
   let loggedinuser = req.user;
   let checkoutemail = req.body.email;
+
   try {
-    //get the cart based on the customer loggedin
-    const toolsCart = await ToolsCart.findOne({
-      customer: loggedinuser,
-    }).populate({ path: "products.product", model: "Tools" });
+    // //get the cart based on the customer loggedin
+    // const toolsCart = await ToolsCart.findOne({
+    //   customer: loggedinuser,
+    // }).populate({ path: "products.product", model: "Tools" });
 
-    const serviceCart = await ServiceCart.findOne({
-      customer: loggedinuser,
-    }).populate({
-      path: "products.product",
-      model: "Service",
-      populate: {
-        path: "discountedServiceCharges",
-        model: "Price",
-      },
-    });
+    // const serviceCart = await ServiceCart.findOne({
+    //   customer: loggedinuser,
+    // }).populate({
+    //   path: "products.product",
+    //   model: "Service",
+    //   populate: {
+    //     path: "discountedServiceCharges",
+    //     model: "Price",
+    //   },
+    // });
 
-    console.log(serviceCart.products);
-    console.log(toolsCart.products);
+    // console.log(serviceCart.products);
+    // console.log(toolsCart.products);
 
-    //filter products in carts
+    // //filter products in carts
 
-    let services;
-    let tools;
-    serviceCart.products.map((product) => {
-      if (product) {
-        services = product;
-      }
-    });
-    toolsCart.products.map((product) => {
-      if (product) {
-        tools = product;
-      }
-    });
+    // let services;
+    // let tools;
+    // serviceCart.products.map((product) => {
+    //   if (product) {
+    //     services = product;
+    //   }
+    // });
+    // toolsCart.products.map((product) => {
+    //   if (product) {
+    //     tools = product;
+    //   }
+    // });
 
-    console.log(services);
-    console.log(tools);
+    // console.log(services);
+    // console.log(tools);
 
-    //push the product ids to an arrays
-    let productIs = [];
+    // //push the product ids to an arrays
+    // let productIs = [];
 
-    console.log(prices);
+    // console.log(prices);
     //see ifi tsi linked to stripe customer
 
     const previousCustomer = await stripe.customers.list({
@@ -70,14 +71,25 @@ exports.subscribeServices = async (req, res) => {
         },
       });
     }
-
+    //https://stripe.com/docs/api/subscriptions/create
     const customer =
       (isExistingCustomer && previousCustomer.data[0].id) || newCustomer.id;
-
-    //get price items
-    //create the subscription or
     console.log(customer);
+    //get price items
+    //create the chrage or
 
+    const charge = await stripe.charges.create({
+      amount: req.body.amttt,
+      currency: "usd",
+      source: "tok_mastercard",
+      description: "Emi payment",
+    });
+    res.status(200).json({
+      status: "success",
+      id: charge.id, //need the session id at the client for the checkout process
+      charge,
+    });
+    //https://stripe.com/docs/api/charges/create
     //add order to db
     //empty the cart at backend
     //send back order is to front end on the success url
@@ -88,17 +100,17 @@ exports.subscribeServices = async (req, res) => {
 };
 
 exports.getCheckoutSession = async (req, res) => {
-  console.log(req.params);
+  console.log("body", req.body);
 
   try {
-    const session = await stripe.redirectToCheckout({
+    const session = await stripe.subscriptions.create({
       customer_email: req.user.email,
       payment_method_types: ["card"],
       client_reference_id: req.params.userId,
       mode: "subscription",
       billing_address_collection: "required",
-      line_items: [{ price: price_1Hr2dVGERwFTkr9GplP4g025, quantity: 1 }],
-      success_url: `${req.protocol}://${req.get("host")}/${req.params.userId}`, // This is the url called when the credit card is successfully charged
+      line_items: [{ price: req.body.amttt, quantity: 1 }],
+      success_url: `${req.protocol}://${req.get("host")}/${req.body.user}`, // This is the url called when the credit card is successfully charged
       cancel_url: `${req.protocol}://${req.get("host")}/cart`,
     });
     ///success?session_id=${session.id}
@@ -107,6 +119,9 @@ exports.getCheckoutSession = async (req, res) => {
       id: session.id, //need the session id at the client for the checkout process
       session,
     });
+
+    // try this
+    // https://stripe.com/docs/payments/accept-a-payment
     //add order to db
     //empty the cart at backend
     //send back order is to front end on the success url

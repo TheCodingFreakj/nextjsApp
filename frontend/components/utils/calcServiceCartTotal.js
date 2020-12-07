@@ -6,28 +6,23 @@ const calculateServiceTotal = (services) => {
 
   const stripeTotal = selectedservices
     .map((service) => {
-      let duration = service.product[0].duration;
+      let projectduration = Number(service.product[0].duration.match(/\d+/)[0]);
+      let emiAmtduration = projectduration / 2;
       let price =
         service.product[0].discountedServiceCharges[0].discountedServiceCharges;
       let quantity = service.quantity;
-      return { quantity, duration, price };
+      return { quantity, projectduration, emiAmtduration, price };
     })
-    .reduce((accumulator, element) => {
-      console.log("accumulator amount", accumulator);
-      let el3dur = (
-        (element.price * element.quantity) /
-        Number(element.duration.match(/\d+/)[0])
-      ).toFixed(2);
-      console.log("subcroption amount for each service selected", el3dur);
+    .reduce((sum, element) => {
+      console.log("element", element);
 
-      accumulator +=
-        (element.price * element.quantity) /
-        (
-          (element.price * element.quantity) /
-          Number(element.duration.match(/\d+/)[0])
-        ).toFixed(2);
+      sum =
+        sum +
+        ((element.price * element.quantity) / element.projectduration) *
+          element.emiAmtduration;
+      // console.log("sum", sum);
 
-      return accumulator;
+      return sum;
     }, 0);
 
   // console.log(stripeTotal);
@@ -39,8 +34,7 @@ const calculateServiceTotal = (services) => {
     return accumulator;
   }, 0);
   const servicecartTotal = ((total * 100) / 100).toFixed(2);
-  const servicestripeTotal = Number(((total * 100) / 100).toFixed(2));
-  // console.log(servicestripeTotal);
+  const servicestripeTotal = Number(((stripeTotal * 100) / 100).toFixed(2));
   return { servicecartTotal, servicestripeTotal };
 };
 
