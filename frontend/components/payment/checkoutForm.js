@@ -8,16 +8,13 @@ import {
   Segment,
   Checkbox,
 } from "semantic-ui-react";
-import { loadStripe } from "@stripe/stripe-js";
+
 import Head from "next/head";
 import { getCookie } from "../../actions/setAuthToken";
 import { createSubsription, subscribesession } from "../../actions/payment";
 import { useRouter } from "next/router";
 import parseMyUrl from "../../components/utils/parseUrl";
-const stripePromise = loadStripe(
-  "pk_test_51HaLO5GERwFTkr9G4zOzmAbJmqkiO51f25Nk3gpg8FIlkbFK3QCtc1GF1Kv75TBzVUROT7NVHoS3QHXUf5gUvQmg00SYpumSjq"
-);
-
+import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 const CheckoutForm = () => {
   //customerId and PriceId
   const [paymentData, setpaymentData] = useState({
@@ -28,11 +25,8 @@ const CheckoutForm = () => {
     user: "",
   });
 
-  const head = () => (
-    <Head>
-      <script src="https://js.stripe.com/v3/"></script>
-    </Head>
-  );
+  const [url, seturl] = useState("");
+  console.log(url);
   const router = useRouter();
   useEffect(() => {
     let urlParams = new URLSearchParams(window.location.search);
@@ -55,29 +49,41 @@ const CheckoutForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(paymentData);
+    let paymentdata;
+    paymentdata = {
+      ...paymentData,
+    };
+    //https://javascript.info/url
+    //https://www.geeksforgeeks.org/how-to-serialize-an-object-into-a-list-of-url-query-parameters-using-javascript/
 
-    // Get Stripe.js instance
-    const stripe = await stripePromise;
+    console.log(paymentdata);
 
-    // // Call your backend to create the subcriptiopon route Session
-    const response = await createSubsription(paymentData, getCookie("token"));
-    console.log(response);
-    // const session = await response.json();
+    const stringurl = JSON.stringify(paymentdata);
 
-    // // When the customer clicks on the button, redirect them to Checkout.
-    // const result = await stripe.redirectToCheckout({
-    //   sessionId: session.id,
-    // });
+    const urlquery = Object.keys(paymentdata)
+      .map((ig_key) => {
+        return ig_key + "=" + paymentdata[ig_key];
+      })
+      .join("&");
 
-    // if (result.error) {
-    //   // If `redirectToCheckout` fails due to a browser or network
-    //   // error, display the localized error message to your customer
-    //   // using `result.error.message`.
-    // }
+    console.log(urlquery);
+    // console.log(stringurl);
+
+    console.log(`${DOMAIN}`);
+
+    // let url = encodeURI(new URL(`${DOMAIN}`));
+    // console.log(url);
+    let query = encodeURIComponent(`${urlquery}`);
+    // url.searchParams.set("q", `${urlquery}!`);
+    console.log(query);
+    //url + "" +
+    const urlF = query;
+    console.log(urlF);
+    seturl(urlF);
   };
   return (
     <React.Fragment>
-      {head()}
       <Segment
         raised
         padded="very"
@@ -139,6 +145,7 @@ const CheckoutForm = () => {
             color="green"
             floated="right"
             content="Confirm Data"
+            onClick={() => router.push(`/payment/subscribe?pay=${url}`)}
           />
         </Form>
       </Segment>
@@ -172,3 +179,8 @@ export default CheckoutForm;
 //https://stripe.com/docs/billing/prices-guide
 //https://stripe.com/docs/payments/accept-a-payment?integration=elements
 //https://stripe.com/docs/billing/subscriptions/checkout/fixed-price
+
+//posts//////
+//https://blog.logrocket.com/building-payments-system-react-stripe/
+//https://davidwalsh.name/step-step-guide-stripe-payments-react
+//https://www.npmjs.com/package/react-script-loader

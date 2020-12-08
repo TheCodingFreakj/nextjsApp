@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
 
 const CartFooter = ({ carlist, handleCheckout }) => {
-  console.log(carlist);
+  // console.log(carlist);
   const [cartAmount, setcartAmount] = useState(0);
   const [stripeAmount, setStripeAmount] = useState(0);
   const [isCartEmpty, setCartEmpty] = useState(false);
@@ -99,3 +99,4 @@ export default CartFooter;
 //https://www.toptal.com/react/testing-react-hooks-tutorial
 //https://stripe.com/docs/stripe-js/react
 //https://blog.logrocket.com/integrating-stripe-react-stripe-js/
+//https://javascript.info/url

@@ -1,6 +1,6 @@
 const calculateServiceTotal = (services) => {
-  console.log(services);
-  console.log(services.serviceCarts);
+  // console.log(services);
+  // console.log(services.serviceCarts);
 
   let selectedservices = services.serviceCarts;
 
@@ -14,7 +14,7 @@ const calculateServiceTotal = (services) => {
       return { quantity, projectduration, emiAmtduration, price };
     })
     .reduce((sum, element) => {
-      console.log("element", element);
+      // console.log("element", element);
 
       sum =
         sum +
