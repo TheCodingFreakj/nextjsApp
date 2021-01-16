@@ -1,5 +1,6 @@
 const withCss = require("@zeit/next-css");
 
+//This is the file for env variables available for server and client
 module.exports = withCss({
   publicRuntimeConfig: {
     APP_NAME: "Marketing Solutions App",

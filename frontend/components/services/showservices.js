@@ -1,12 +1,7 @@
+// This componenet holds the logic of service cards
+
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  Segment,
-  Divider,
-  Icon,
-  Button,
-  Header,
-} from "semantic-ui-react";
+import { Card, Segment, Button, Header } from "semantic-ui-react";
 import "../../static/styles.css";
 import { listAllServices } from "../../actions/services";
 
@@ -19,7 +14,9 @@ const ShowServices = ({ limit, skip }) => {
   const [limitcount, setLimitCount] = useState(limit);
   const [skipNum, setSkipNum] = useState(skip);
   const [size, setSize] = useState();
-  // console.log("The is loadedservices", loadservices);
+  console.log("The is loadedservices", loadservices);
+
+  //getting the list of all services in useeffect
   useEffect(() => {
     const mounted = { current: true };
 
@@ -32,6 +29,7 @@ const ShowServices = ({ limit, skip }) => {
     };
   }, []);
 
+  //getting limited data from the backend using quaery params
   const loadServices = async () => {
     await listAllServices(limit, skip).then((data) => {
       if (data.error) {
@@ -43,11 +41,13 @@ const ShowServices = ({ limit, skip }) => {
       }
     });
   };
+
+  //display all services
   const showServices = (loadservices) => {
     return loadservices.map((serv) => ({
       header: serv.title,
       description: serv.summary,
-      childKey: serv._id,
+      childKey: serv.slug,
       image: `${API}/api/services/photo/${serv.slug}`,
       meta: `${serv.discountedServiceCharges[0].discountedServiceCharges} $ per ${serv.duration}`,
       href: `/services/${serv.slug}`,
@@ -57,6 +57,8 @@ const ShowServices = ({ limit, skip }) => {
     }));
   };
 
+  //function called on button click
+  //getting limited data from the backend using quaery params
   const handleLoadMore = async (e) => {
     // console.log("I am clicked");
     let toSkip = skipNum + limitcount;
@@ -87,6 +89,7 @@ const ShowServices = ({ limit, skip }) => {
         items={showServices(loadservices)}
       />
       <Segment>
+        {/* showing the condtion within with the load more button appears */}
         {size > 0 && size >= limitcount && (
           <Button
             fluid

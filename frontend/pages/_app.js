@@ -1,4 +1,5 @@
 import App from "next/app";
+import React from "react";
 
 // const MyApp = ({ Component, pageProps }) => {
 

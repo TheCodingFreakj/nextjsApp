@@ -6,17 +6,22 @@
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest",
+    "test:watch": "jest — watch",
+    "test:coverage": "jest --coverage"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-runtime": "^7.12.10",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.11.0",
     "@zeit/next-css": "^1.0.1",
     "axios": "^0.19.2",
-    "core-js": "^3.6.5",
+    "core-js": "^3.8.2",
     "isomorphic-fetch": "^3.0.0",
     "js-cookie": "^2.2.1",
     "moment": "^2.27.0",
@@ -29,12 +34,22 @@
     "react-render-html": "^0.6.0",
     "react-script-loader": "0.0.1",
     "reactstrap": "^8.5.1",
+    "regenerator-runtime": "^0.13.7",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.1",
     "stripe": "^8.126.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.11.0"
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-syntax-jsx": "^7.12.1",
+    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
+    "@babel/plugin-transform-react-jsx": "^7.12.12",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.12.10",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.4.1",
+    "babel-jest": "^26.6.3",
+    "enzyme": "^3.11.0",
+    "jest": "^26.6.3"
   },
   "proxy": "http://localhost:8080"
 }

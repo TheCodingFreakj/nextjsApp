@@ -36,7 +36,18 @@ const SigninComp = () => {
       password,
     };
 
+    // "_id": "5f3b9680e25dd70a085b7905",
+    // "role": 1,
+    // "name": "Pallavi Priyadarshini",
+    // "email": "pallavidapriya75@gmail.com",
+    // "profile": "http://localhost:3001/profile/e2a199",
+    // "username": "pallavi priyadarshini",
+    // "hashed_password": "$2a$10$e5e.HzEUjcv/Hx5rWWJazOUZAMlHSiYD6fZ5c5iNO.LK4G1oILE0O",
+    // "__v": 0,
+    // "about": "I am senior dev and founder of this company"
+
     signin(user).then((data) => {
+      console.log(data);
       if (data.errors) {
         // console.log(data.error);
         setFormData({
@@ -127,3 +138,22 @@ const SigninComp = () => {
 };
 
 export default SigninComp;
+// it('login check with right data',()=>{
+//   wrapper = shallow(<Login/>);
+//   wrapper.find('input[type="text"]').simulate('change', {target: {name: 'username', value: 'krishankantsinghal'}});
+//   wrapper.find('input[type="password"]').simulate('change', {target: {name: 'password', value: 'krishankant123'}});
+//   wrapper.find('button').simulate('click');
+//   expect(wrapper.state('isLogined')).toBe(true);
+//   })
+//   it('login check with wrong data',()=>{
+//   wrapper = shallow(<Login/>);
+//   wrapper.find('input[type="text"]').simulate('change', {target: {name: 'username', value: 'krishankantsinghal'}});
+//   wrapper.find('input[type="password"]').simulate('change', {target: {name: 'password', value: 'krishankant1234'}});
+//   wrapper.find('button').simulate('click');
+//   expect(wrapper.state('isLogined')).toBe(false);
+//   })
+// Child component is rendered with the right props.
+// Everything is rendered correctly on initial mount.
+// Changes to state or props results in the correct changes in what’s rendered, as applicable.
+// State changes as expected when there’s an event or a method call.
+// Functions external to the component (e.g, from props) are called with the right arguments when there’s an event (e.g., mouse click) or a method call.

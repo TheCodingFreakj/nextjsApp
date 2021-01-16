@@ -22,10 +22,12 @@ const ServicesPage = () => {
 
   const { limit, skip } = loader;
 
+  //Loading the compopackages on useEffect
   useEffect(() => {
     loadCombopackages();
   }, []);
 
+  //storing the compopackages in state
   const loadCombopackages = async () => {
     await getComboPackages().then((data) => {
       if (data.error) {
@@ -40,6 +42,7 @@ const ServicesPage = () => {
     <Layout>
       <main>
         <div className="container-fluid">
+          {/* header mark up for outbound link to aboutus page */}
           <header>
             <div className="col-md-12 pt-3">
               <h1 className="display-4 font-weight-bold text-center pb-9 ">
@@ -61,8 +64,10 @@ const ServicesPage = () => {
               </div>
             </div>
           </header>
-
+          {/* sending the compopackage data to its component */}
           <ShowComboPackages packages={packages} />
+
+          {/* sending the skip and limit value to the showservices component for second half */}
           <ShowServices limit={limit} skip={skip} />
         </div>
       </main>

@@ -28,6 +28,25 @@ a.ui.red.card.indv-card {
   z-index: 99;
 }
 
+.container-fluid.custome-class {
+  background: thistle;
+  padding: 8%;
+  color: seagreen;
+  text-decoration: solid;
+  font-size: larger;
+  font-weight: 600;
+}
+.tools-custom {
+  background: brown;
+  padding: 7%;
+  color: wheat;
+  text-align: -webkit-match-parent;
+  margin-top: 2%;
+  margin-bottom: 10%;
+  width: 100%;
+  text-size-adjust: 100px;
+}
+
 .popup {
   position: fixed;
   z-index: 100;

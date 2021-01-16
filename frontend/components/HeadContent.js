@@ -1,3 +1,4 @@
+import React from "react";
 const HeadContent = () => (
   <>
     <meta name="msapplication-TileColor" content="#00df94" />

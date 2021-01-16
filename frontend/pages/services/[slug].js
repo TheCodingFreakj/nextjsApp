@@ -22,87 +22,16 @@ import ReviewForm from "../../components/reviews/submitReview";
 import ShoppingTools from "../../components/shopping/shoppingTools";
 import ShowModal from "../../components/utils/showmodal";
 import { useWindowPosition } from "../../components/utils/scroller";
+import ShowToolsOptions from "../../components/utils/showOptionsForTools";
 
 const SingleService = ({ service, query }) => {
   // console.log(query);
   // console.log(service);
 
-  const [checkedPrice, setCheckedPrice] = useState([]);
-  const [checkedTool, setCheckedTool] = useState([]);
-  const [total, setTotal] = useState([]);
-  const [subtotal, setSubTotal] = useState([]);
   const [totalPrice, setTotalPrice] = useState(""); //send this totalPrice in to the backend as ?price={totalPrice}
   const [popUpPosition, setPopupPosition] = useState(0);
-
-  const token = getCookie("token");
-
   useWindowPosition().then((response) => setPopupPosition(response));
-
-  const showServiceCharges = (service) => {
-    let addPrice = "";
-    const addTotalServices = (price, total) => {
-      addPrice = price + total;
-      return addPrice;
-    };
-
-    let subPrice = "";
-    const subTotalServices = (price, subtotal) => {
-      subPrice = price + subtotal;
-      return subPrice;
-    };
-    const increment = (name) => (e) => {
-      setTotalPrice({
-        ...totalPrice,
-        [name]: e.target.value,
-      });
-    };
-
-    const decrement = (name) => (e) => {
-      setTotalPrice({
-        ...totalPrice,
-        [name]: e.target.value,
-      });
-    };
-
-    return service.discountedServiceCharges.map((price, i) => (
-      <div key={i} className="container">
-        <div className="row">
-          <h4>Click Once After you Decide :Price Add</h4>
-
-          <button
-            className="btn btn-outline-danger mx-auto font-weight-bold "
-            style={{ width: "700px" }}
-            role="link"
-            name="choosenPriceFrontEnd"
-            type="submit"
-            value={addTotalServices(price.discountedServiceCharges, total)}
-            onClick={increment("choosenPriceFrontEnd")}
-          >
-            {addTotalServices(price.discountedServiceCharges, total)} $
-          </button>
-
-          <br />
-        </div>
-        <div className="row">
-          <h4>Click Once After you Decide : Price Cut</h4>
-
-          <button
-            className="btn btn-outline-danger mx-auto font-weight-bold "
-            style={{ width: "700px" }}
-            role="link"
-            name="choosenPriceFrontEnd"
-            type="submit"
-            value={subTotalServices(price.discountedServiceCharges, subtotal)}
-            onClick={decrement(
-              subTotalServices(price.discountedServiceCharges, subtotal)
-            )}
-          >
-            {subPrice} $
-          </button>
-        </div>
-      </div>
-    ));
-  };
+  const token = getCookie("token");
 
   const showPortFolio = (service) => {
     return service.the_portfolios.map((portfolio, i) => (
@@ -127,51 +56,71 @@ const SingleService = ({ service, query }) => {
     ));
   };
 
-  const handlePriceToggle = (tool) => {
-    const clickedId = checkedTool.indexOf(tool._id);
-    const allTools = [...checkedTool];
-    let total = 0;
-    if (clickedId === -1) {
-      allTools.push(tool._id);
-      checkedPrice.push(tool.clientPrice);
-      const choosenPrice = [...checkedPrice];
-      for (let i = 0; i < choosenPrice.length; i++) {
-        if (choosenPrice[i]) {
-          total = choosenPrice[i] + total;
-        }
-      }
-    } else {
-      allTools.splice(clickedId, 1);
-      const reducedPrice = [...checkedPrice];
-      reducedPrice.splice(clickedId, 1);
-      setCheckedPrice(reducedPrice);
-      let subtotal = reducedPrice.reduce(function (accumulator, currentValue) {
-        return accumulator + currentValue;
-      }, 0);
-      setSubTotal(subtotal);
-    }
-    setCheckedTool(allTools);
-    setTotal(total);
-  };
+  // const showServiceCharges = (service) => {
+  //   let addPrice = "";
+  //   const addTotalServices = (price, total) => {
+  //     addPrice = price + total;
+  //     return addPrice;
+  //   };
 
-  const showTools = (service) => {
-    return service.tools.map((tool, i) => (
-      <li key={i} className="list-unstyled">
-        <input
-          onChange={() => handlePriceToggle(tool)}
-          type="checkbox"
-          name="checkbox"
-          className="mr-2"
-        />
+  //   let subPrice = "";
+  //   const subTotalServices = (price, subtotal) => {
+  //     subPrice = price + subtotal;
+  //     return subPrice;
+  //   };
+  //   const increment = (name) => (e) => {
+  //     setTotalPrice({
+  //       ...totalPrice,
+  //       [name]: e.target.value,
+  //     });
+  //   };
 
-        <label className="form-check-label">
-          <h5>
-            {tool.tool} : {tool.clientPrice} $
-          </h5>
-        </label>
-      </li>
-    ));
-  };
+  //   const decrement = (name) => (e) => {
+  //     setTotalPrice({
+  //       ...totalPrice,
+  //       [name]: e.target.value,
+  //     });
+  //   };
+
+  //   return service.discountedServiceCharges.map((price, i) => (
+  //     <div key={i} className="container">
+  //       <div className="row">
+  //         <h4>Click Once After you Decide :Price Add</h4>
+
+  //         <button
+  //           className="btn btn-outline-success mx-auto font-weight-bold "
+  //           style={{ width: "700px" }}
+  //           role="link"
+  //           name="choosenPriceFrontEnd"
+  //           type="submit"
+  //           value={addTotalServices(price.discountedServiceCharges, total)}
+  //           onClick={increment("choosenPriceFrontEnd")}
+  //         >
+  //           {addTotalServices(price.discountedServiceCharges, total)} $
+  //         </button>
+
+  //         <br />
+  //       </div>
+  //       <div className="row">
+  //         <h4>Click Once After you Decide : Price Cut</h4>
+
+  //         <button
+  //           className="btn btn-outline-success mx-auto font-weight-bold "
+  //           style={{ width: "700px" }}
+  //           role="link"
+  //           name="choosenPriceFrontEnd"
+  //           type="submit"
+  //           value={subTotalServices(price.discountedServiceCharges, subtotal)}
+  //           onClick={decrement(
+  //             subTotalServices(price.discountedServiceCharges, subtotal)
+  //           )}
+  //         >
+  //           {subPrice} $
+  //         </button>
+  //       </div>
+  //     </div>
+  //   ));
+  // };
 
   return (
     <React.Fragment>
@@ -179,6 +128,7 @@ const SingleService = ({ service, query }) => {
         <main>
           <article>
             <div className="container-fluid">
+              {/* displaying banner image from the passed service data */}
               <section>
                 <div style={{ marginTop: "-30px" }} className="row">
                   <img
@@ -191,53 +141,22 @@ const SingleService = ({ service, query }) => {
               <section>
                 <div className="container">
                   <h1 className="display-2 pb-3 pt-3 text-center font-weight-bold">
-                    {service.title}
+                    {service.slug}
                   </h1>
 
-                  <div className="container-fluid">
-                    {showServiceCharges(service)}
-
-                    <br />
-                    <br />
-                  </div>
-
+                  {/* showing the tools and the service charges */}
                   {isAuth() && isAuth().customerRole === "consumer" && (
-                    //Admin
+                    //customer can see this code display
                     <>
                       <div className="container-fluid">
                         <div className="row">
-                          <div className="col-md-4 pt-5 pb-5">
-                            {showTools(service)}
-                          </div>
-                          <div className="col-md-8 pt-5 pb-5">
-                            <div className="container-fluid">
-                              <div className="row">
-                                <div className="col-md-3  pb-5">
-                                  <p>Add to see the totalPrice</p>
-                                  <button
-                                    className="mt-4 btn-lg btn-block btn btn-success"
-                                    style={{ width: "100px" }}
-                                  >
-                                    {total}
-                                  </button>
-                                </div>
-                                <div className="col-md-3  pb-5">
-                                  <p>Deduct to see the totalPrice</p>
-
-                                  <button
-                                    className="mt-4 btn-lg btn-block btn btn-success"
-                                    style={{ width: "100px" }}
-                                  >
-                                    {subtotal}
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
+                          <div className="tools-custom">
+                            <ShowToolsOptions
+                              tools={service.tools}
+                              basePrice={service.discountedServiceCharges}
+                            />
                           </div>
                         </div>
-
-                        <br />
-                        <br />
                       </div>
                     </>
                   )}
@@ -332,7 +251,9 @@ const SingleService = ({ service, query }) => {
     </React.Fragment>
   );
 };
-//pyadav@gmail.com
+
+//getting the data for single service through server side rendering
+//using query params(Slug) to access service so slug page
 export const getServerSideProps = async ({ query }) => {
   const querybuilder = query.slug;
   const data = await singleService(query.slug);
