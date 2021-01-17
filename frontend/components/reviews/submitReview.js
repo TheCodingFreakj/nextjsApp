@@ -116,8 +116,9 @@ const ReviewForm = ({ serviceId }) => {
     <React.Fragment>
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-6 bg-warning pt-5 pb-5">{createRatings()}</div>
-          {/* {JSON.stringify(user)} */}
+          <div className="col-md-12 bg-warning pt-5 pb-5">
+            {createRatings()}
+          </div>
         </div>
       </div>
     </React.Fragment>

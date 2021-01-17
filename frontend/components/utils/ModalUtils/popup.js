@@ -9,11 +9,7 @@ import {
   Header,
 } from "semantic-ui-react";
 import { getBusinessDetails, getCurrentCustomer } from "../../../actions/user";
-import {
-  getCookie,
-  storebusinessdetails,
-  businessDetails,
-} from "../../../actions/setAuthToken";
+import { getCookie } from "../../../actions/setAuthToken";
 
 const Popup = ({ showPopUp, serviceSlug, ...props }) => {
   const [values, setValues] = useState({
@@ -39,8 +35,8 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
 
     const getCustomer = async () => {
       await getCurrentCustomer(token).then((data) => {
-        console.log("this confirms if the user is registered", data.msg);
-        data.phone ? props.custData(data) : setError(data.msg);
+        // console.log("this confirms if the user is registered", data.msg);
+        data.username ? props.custData(data) : setError(data.msg);
       });
     };
     getCustomer();
@@ -82,7 +78,6 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
   };
 
   const closeModal = (e) => {
-    console.log("I am in action");
     setshow(!show);
   };
 
@@ -93,7 +88,7 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
           <Icon name="address book" color="red" />
           We encourage You To Update This Form
         </Header>
-        <Message error header="Prompt to register first" content={error} />
+        <Message error header="Prompt To Register First" content={error} />
 
         <Form success={success} onSubmit={handleSubmit}>
           <Form.Field>

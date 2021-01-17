@@ -185,13 +185,9 @@ exports.getAllUsers = async (req, res) => {
 exports.getBusinessDetails = async (req, res) => {
   const { location, region, city, description, pinCode, phone } = req.body;
   // console.log(req.body);
-  // console.log(req.params);
-
   const customerDetails = {};
-
   if (description) customerDetails.description = description;
   if (phone) customerDetails.phone = phone;
-
   customerDetails.address = {};
   if (city) customerDetails.address.city = city;
   if (pinCode) customerDetails.address.pinCode = pinCode;
@@ -213,7 +209,10 @@ exports.getBusinessDetails = async (req, res) => {
         { $set: customerDetails }
       );
       await customer.save();
-      return res.json(customer);
+      return res.json({
+        msg: "your details is being updated",
+        existingcustomer: customer,
+      });
     } else if (!customer) {
       customer = new Customer(customerDetails);
       customer.customerName = req.user.name;
@@ -221,9 +220,6 @@ exports.getBusinessDetails = async (req, res) => {
       customer.username = username;
       customer.custId = req.user.id;
       await customer.save();
-
-      //creating a cart for the customer// move this to the user sign
-
       return res.json(customer);
     }
   } catch (error) {

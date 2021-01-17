@@ -30,7 +30,6 @@ const ToolShoppingCard = ({ service }) => {
     <>
       <Card.Group
         stackable
-        className="custom-card-style"
         itemsPerRow="3"
         centered
         items={showTools(products)}

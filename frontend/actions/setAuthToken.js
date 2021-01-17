@@ -61,29 +61,6 @@ export const isAuth = () => {
   }
 };
 
-export const storebusinessdetails = (data, next) => {
-  setLocatStorage("businessdetails", data);
-  next();
-};
-
-export const businessDetails = () => {
-  if (typeof window !== "undefined") {
-    const cookiesChecked = getCookie("token");
-    if (cookiesChecked) {
-      if (localStorage.getItem("businessdetails")) {
-        try {
-          return JSON.parse(localStorage.getItem("businessdetails"));
-        } catch (error) {
-          console.log(error);
-          console.error("No business Details yet");
-        }
-      } else {
-        return false;
-      }
-    }
-  }
-};
-
 export const userRole = () => {
   if (typeof window !== "undefined") {
     const cookiesChecked = getCookie("token");

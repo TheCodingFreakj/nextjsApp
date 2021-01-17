@@ -1,12 +1,3 @@
-//This is individual Page to show services
-
-//ratings
-//reviews by brands
-//Explanation of how we  can help
-//related work or portfolio
-
-//This page chnahes based on router and slug
-
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Layout from "../../components/Layout";
@@ -40,6 +31,7 @@ const SingleService = ({ service, query }) => {
   };
 
   const showReviews = (service) => {
+    console.log(service);
     return service.the_reviews.map((review, i) => (
       <div key={i} className="card">
         <div className="card-body p-3 mb-2 bg-success text-white">
@@ -70,9 +62,9 @@ const SingleService = ({ service, query }) => {
               </section>
               <section>
                 <div className="container">
-                  <h1 className="display-2 pb-3 pt-3 text-center font-weight-bold">
+                  <h3 className="display-2 pb-3 pt-3 text-center font-weight-bold">
                     {service.slug}
-                  </h1>
+                  </h3>
 
                   {/* showing the tools and the service charges */}
                   {isAuth() && isAuth().customerRole === "consumer" && (
@@ -136,16 +128,17 @@ const SingleService = ({ service, query }) => {
                       </div>
                     </>
                   )}
-
-                  <div className="col-md-6  text-center  lead">
-                    <Link href="">
-                      <a
-                        className="mt-4 btn-lg btn-block btn btn-success"
-                        style={{ width: "235px" }}
-                      >
-                        Enquiry Now
-                      </a>
-                    </Link>
+                  <div className="col-md-6 lead">
+                    <div className="col-md-6  text-center  lead">
+                      <Link href="">
+                        <a
+                          className="mt-4 btn-lg btn-block btn btn-success"
+                          style={{ width: "235px" }}
+                        >
+                          Enquiry Now
+                        </a>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -153,22 +146,29 @@ const SingleService = ({ service, query }) => {
 
             {/* modal section */}
             {isAuth() && isAuth().customerRole === "consumer" && (
-              <div className="container pb-5">
+              <>
                 <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
-                <hr />
-                <ShowModal
-                  serviceSlug={service.slug}
-                  scrollPosition={popUpPosition}
-                />
-                <ShoppingTools service={service} />
-                <div className="container pb-5">
-                  <h4 className="text-center pt-5 pb-5 h2 ">Related Service</h4>
-                  <hr />
+                <div className="container-fluid">
                   <div className="row">
-                    <ReviewForm serviceId={service.id} />
+                    <div className="col-md-12">
+                      <hr />
+                      <ShowModal
+                        serviceSlug={service.slug}
+                        scrollPosition={popUpPosition}
+                      />
+                    </div>
+
+                    <div className="col-md-12">
+                      <ShoppingTools service={service} />
+                    </div>
+                  </div>
+                  <div className="row ">
+                    <div className="col-md-12 mt-5">
+                      <ReviewForm serviceId={service.id} />
+                    </div>
                   </div>
                 </div>
-              </div>
+              </>
             )}
             {/* portfolio section */}
             <div className="container pb-5">

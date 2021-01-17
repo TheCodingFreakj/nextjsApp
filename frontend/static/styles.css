@@ -12,17 +12,20 @@
   object-fit: cover;
 }
 
-.custom-card-style {
-  padding: 9% 5%;
-}
-
 .card-dark {
   background: black;
 }
 a.ui.red.card.indv-card {
   background: turquoise;
 }
-
+h3.display-2.pb-3.pt-3.text-center.font-weight-bold {
+  font-size: 4em;
+}
+@media (min-width: 700px) {
+  h3.display-2.pb-3.pt-3.text-center.font-weight-bold {
+    font-size: 6em;
+  }
+}
 .custom-card {
   position: relative;
   z-index: 99;
@@ -87,8 +90,6 @@ a.ui.red.card.indv-card {
   right: 20%;
   top: auto;
   bottom: 550px;
-  /* top: 25%;
-  bottom: 25%; */
   margin: auto;
   background: yellowgreen;
 }
