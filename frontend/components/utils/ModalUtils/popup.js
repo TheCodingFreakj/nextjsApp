@@ -8,12 +8,12 @@ import {
   Icon,
   Header,
 } from "semantic-ui-react";
-import { getBusinessDetails, getCurrentCustomer } from "../../actions/user";
+import { getBusinessDetails, getCurrentCustomer } from "../../../actions/user";
 import {
   getCookie,
   storebusinessdetails,
   businessDetails,
-} from "../../actions/setAuthToken";
+} from "../../../actions/setAuthToken";
 
 const Popup = ({ showPopUp, serviceSlug, ...props }) => {
   const [values, setValues] = useState({
@@ -29,6 +29,7 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
   const [displayAddressInputs, toggledisplayAddressInputs] = useState(false);
   const [success, setSuccess] = useState(false);
   const [show, setshow] = useState(showPopUp);
+  const [error, setError] = useState("");
   const [customer, setCustomer] = useState("");
   const mounted = useRef(false);
   const token = getCookie("token");
@@ -38,7 +39,8 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
 
     const getCustomer = async () => {
       await getCurrentCustomer(token).then((data) => {
-        data.phone ? props.custData(data) : null;
+        console.log("this confirms if the user is registered", data.msg);
+        data.phone ? props.custData(data) : setError(data.msg);
       });
     };
     getCustomer();
@@ -91,6 +93,7 @@ const Popup = ({ showPopUp, serviceSlug, ...props }) => {
           <Icon name="address book" color="red" />
           We encourage You To Update This Form
         </Header>
+        <Message error header="Prompt to register first" content={error} />
 
         <Form success={success} onSubmit={handleSubmit}>
           <Form.Field>

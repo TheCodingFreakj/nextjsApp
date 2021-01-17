@@ -221,10 +221,7 @@ export const getCurrentCustomer = async (token) => {
       config
     ); //handing the backedn register user
     return response.data;
-    console.log(
-      "I am expecing the return of the read method from this backend request plus photo",
-      response.data
-    );
+
     console.log(response.status);
     console.log(response.statusText);
     console.log(response.headers);

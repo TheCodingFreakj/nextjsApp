@@ -14,7 +14,7 @@ const ShowServices = ({ limit, skip }) => {
   const [limitcount, setLimitCount] = useState(limit);
   const [skipNum, setSkipNum] = useState(skip);
   const [size, setSize] = useState();
-  console.log("The is loadedservices", loadservices);
+  // console.log("The is loadedservices", loadservices);
 
   //getting the list of all services in useeffect
   useEffect(() => {

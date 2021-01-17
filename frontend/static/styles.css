@@ -46,6 +46,25 @@ a.ui.red.card.indv-card {
   width: 100%;
   text-size-adjust: 100px;
 }
+.price-calc-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.price-calc-container p {
+  font-size: 3vw;
+  font-weight: 900;
+  color: rgb(37, 26, 190);
+  display: block;
+}
+.price-calc {
+  font-size: 2em;
+  font-weight: 900;
+  text-align: center;
+}
 
 .popup {
   position: fixed;
@@ -66,10 +85,27 @@ a.ui.red.card.indv-card {
   height: max-content;
   left: 10%;
   right: 20%;
-  top: 25%;
-  bottom: 25%;
+  top: auto;
+  bottom: 550px;
+  /* top: 25%;
+  bottom: 25%; */
   margin: auto;
   background: yellowgreen;
+}
+
+@media (min-width: 1200px) {
+  .popup_inner {
+    padding: 3% 4%;
+    z-index: 100;
+    position: absolute;
+    height: max-content;
+    left: 10%;
+    right: 20%;
+    top: 25%;
+    bottom: 25%;
+    margin: auto;
+    background: yellowgreen;
+  }
 }
 
 .form-custom-class {

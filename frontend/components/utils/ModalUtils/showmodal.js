@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import "../../static/styles.css";
-import Popup from "../../components/utils/popup";
+import "../../../static/styles.css";
+import Popup from "../../../components/utils/ModalUtils/popup";
 const ShowModal = ({ serviceSlug, scrollPosition }) => {
   const [showModal, setshowModal] = useState(true);
 
-  //you can get the current loggedinUser here as well to check if its present to decide if you want to show popup
   const custData = (loggedincustomer) => {
     loggedincustomer ? setshowModal(false) : setshowModal(true);
   };

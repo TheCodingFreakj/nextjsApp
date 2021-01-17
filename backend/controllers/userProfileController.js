@@ -235,11 +235,11 @@ exports.getBusinessDetails = async (req, res) => {
 exports.getCurrentCustomer = async (req, res) => {
   //I am a business person with a motive of building xyz stuff for yus community
   console.log(req.body);
-  console.log(req.user);
+  // console.log(req.user);
   try {
     let customer = await Customer.findOne({ customerName: req.user.name });
     if (!customer) {
-      return res.status(400).json({ msg: "There is no customer" });
+      return res.status(400).json({ msg: "You have not resgistered yet" });
     }
     res.json(customer);
   } catch (error) {

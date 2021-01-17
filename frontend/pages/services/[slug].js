@@ -13,25 +13,21 @@ import Layout from "../../components/Layout";
 import { singleService } from "../../actions/services";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { isAuth } from "../../actions/setAuthToken";
-import { bookService } from "../../actions/stripe";
-import { getCookie } from "../../actions/setAuthToken";
 import renderHTML from "react-render-html";
 import moment from "moment";
 import SmallCard from "../../components/portfolio/serviceCard";
 import ReviewForm from "../../components/reviews/submitReview";
 import ShoppingTools from "../../components/shopping/shoppingTools";
-import ShowModal from "../../components/utils/showmodal";
-import { useWindowPosition } from "../../components/utils/scroller";
+import ShowModal from "../../components/utils/ModalUtils/showmodal";
+import { useWindowPosition } from "../../components/utils/ModalUtils/scroller";
 import ShowToolsOptions from "../../components/utils/showOptionsForTools";
 
 const SingleService = ({ service, query }) => {
   // console.log(query);
   // console.log(service);
 
-  const [totalPrice, setTotalPrice] = useState(""); //send this totalPrice in to the backend as ?price={totalPrice}
   const [popUpPosition, setPopupPosition] = useState(0);
   useWindowPosition().then((response) => setPopupPosition(response));
-  const token = getCookie("token");
 
   const showPortFolio = (service) => {
     return service.the_portfolios.map((portfolio, i) => (
@@ -55,72 +51,6 @@ const SingleService = ({ service, query }) => {
       </div>
     ));
   };
-
-  // const showServiceCharges = (service) => {
-  //   let addPrice = "";
-  //   const addTotalServices = (price, total) => {
-  //     addPrice = price + total;
-  //     return addPrice;
-  //   };
-
-  //   let subPrice = "";
-  //   const subTotalServices = (price, subtotal) => {
-  //     subPrice = price + subtotal;
-  //     return subPrice;
-  //   };
-  //   const increment = (name) => (e) => {
-  //     setTotalPrice({
-  //       ...totalPrice,
-  //       [name]: e.target.value,
-  //     });
-  //   };
-
-  //   const decrement = (name) => (e) => {
-  //     setTotalPrice({
-  //       ...totalPrice,
-  //       [name]: e.target.value,
-  //     });
-  //   };
-
-  //   return service.discountedServiceCharges.map((price, i) => (
-  //     <div key={i} className="container">
-  //       <div className="row">
-  //         <h4>Click Once After you Decide :Price Add</h4>
-
-  //         <button
-  //           className="btn btn-outline-success mx-auto font-weight-bold "
-  //           style={{ width: "700px" }}
-  //           role="link"
-  //           name="choosenPriceFrontEnd"
-  //           type="submit"
-  //           value={addTotalServices(price.discountedServiceCharges, total)}
-  //           onClick={increment("choosenPriceFrontEnd")}
-  //         >
-  //           {addTotalServices(price.discountedServiceCharges, total)} $
-  //         </button>
-
-  //         <br />
-  //       </div>
-  //       <div className="row">
-  //         <h4>Click Once After you Decide : Price Cut</h4>
-
-  //         <button
-  //           className="btn btn-outline-success mx-auto font-weight-bold "
-  //           style={{ width: "700px" }}
-  //           role="link"
-  //           name="choosenPriceFrontEnd"
-  //           type="submit"
-  //           value={subTotalServices(price.discountedServiceCharges, subtotal)}
-  //           onClick={decrement(
-  //             subTotalServices(price.discountedServiceCharges, subtotal)
-  //           )}
-  //         >
-  //           {subPrice} $
-  //         </button>
-  //       </div>
-  //     </div>
-  //   ));
-  // };
 
   return (
     <React.Fragment>
@@ -163,6 +93,8 @@ const SingleService = ({ service, query }) => {
                 </div>
               </section>
             </div>
+
+            {/* the content section */}
             <div className="container">
               <div className="row">
                 <div className="col-md-4 lead">
@@ -184,11 +116,11 @@ const SingleService = ({ service, query }) => {
 
               <div className="container">
                 <div className="row">
-                  <div className="col-md-6 lead">
-                    {isAuth() && isAuth().customerRole === "consumer" && (
-                      //Admin
+                  {isAuth() && isAuth().customerRole === "consumer" && (
+                    //only customer can see
 
-                      <>
+                    <>
+                      <div className="col-md-6 lead">
                         <div className="col-md-6  text-center  lead">
                           <Link
                             href={`/services/service?serviceId=${service._id}`}
@@ -201,9 +133,9 @@ const SingleService = ({ service, query }) => {
                             </a>
                           </Link>
                         </div>
-                      </>
-                    )}
-                  </div>
+                      </div>
+                    </>
+                  )}
 
                   <div className="col-md-6  text-center  lead">
                     <Link href="">
@@ -218,15 +150,8 @@ const SingleService = ({ service, query }) => {
                 </div>
               </div>
             </div>
-            <div className="container pb-5">
-              <h4 className="text-center pt-5 pb-5 h2 ">
-                Have A Look At Our Work
-              </h4>
 
-              <hr />
-              <div className="row">{showPortFolio(service)}</div>
-            </div>
-
+            {/* modal section */}
             {isAuth() && isAuth().customerRole === "consumer" && (
               <div className="container pb-5">
                 <h4 className="text-center pt-5 pb-5 h2 ">Shop for Tools</h4>
@@ -245,6 +170,15 @@ const SingleService = ({ service, query }) => {
                 </div>
               </div>
             )}
+            {/* portfolio section */}
+            <div className="container pb-5">
+              <h4 className="text-center pt-5 pb-5 h2 ">
+                Have A Look At Our Work
+              </h4>
+
+              <hr />
+              <div className="row">{showPortFolio(service)}</div>
+            </div>
           </article>
         </main>
       </Layout>
