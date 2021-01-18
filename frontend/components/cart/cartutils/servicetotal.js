@@ -1,10 +1,5 @@
-const calculateServiceTotal = (services) => {
-  // console.log(services);
-  // console.log(services.serviceCarts);
-
-  let selectedservices = services.serviceCarts;
-
-  const stripeTotal = selectedservices
+const ServiceTotal = (services) => {
+  const stripeTotal = services
     .map((service) => {
       let projectduration = Number(service.product[0].duration.match(/\d+/)[0]);
       let emiAmtduration = projectduration / 2;
@@ -25,20 +20,14 @@ const calculateServiceTotal = (services) => {
       return sum;
     }, 0);
 
-  // console.log(stripeTotal);
-
-  const total = services.serviceCarts.reduce((accumulator, element) => {
-    accumulator +=
-      element.product[0].discountedServiceCharges[0].discountedServiceCharges *
-      element.quantity;
-    return accumulator;
-  }, 0);
-  const servicecartTotal = ((total * 100) / 100).toFixed(2);
-  const servicestripeTotal = Number(((stripeTotal * 100) / 100).toFixed(2));
-  return { servicecartTotal, servicestripeTotal };
+  console.log(stripeTotal);
+  //const servicetotal = ((total * 100) / 100).toFixed(2);
+  const servicetotal = Number(((stripeTotal * 100) / 100).toFixed(2));
+  console.log(servicetotal);
+  return { servicetotal };
 };
 
-export default calculateServiceTotal;
+export default ServiceTotal;
 //https://thecodebarbarian.com/javascript-reduce-in-5-examples.html
 
 //Logic//

@@ -10,9 +10,10 @@ import {
 } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import { isAuth, getCookie } from "../../actions/setAuthToken";
-import withSoftReload from "../../components/hoc/cartreload";
-import CartHeader from "../../components/cart/cartheader";
-import CartFooter from "../../components/cart/cartfooter";
+
+import ServiceCartHeader from "../../components/cart/servicecartheader";
+import Toolscartheader from "../../components/cart/toolscartheader";
+
 import { fetchCarts } from "../../actions/shoppingcart";
 import { withRouter } from "next/router";
 import { API } from "../../config";
@@ -20,10 +21,17 @@ import axios from "axios";
 const Cart = ({ router }) => {
   //get both the carts
 
-  const [cart, setCart] = useState();
+  const [cart, setCart] = useState({
+    tool: "",
+    services: "",
+  });
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState();
   const user = isAuth();
+
+  const { tool, services } = cart;
+
   useEffect(() => {
     const mounted = { current: true };
 
@@ -34,22 +42,28 @@ const Cart = ({ router }) => {
     return () => {
       mounted.current = false;
     };
-  }, [router]); //render only when the data changes that we will get from serverside
+  }, []); //render only when the data changes that we will get from serverside
 
   const getProductsFromCarts = async () => {
     setLoading(true);
     await fetchCarts(getCookie("token")).then((data) => {
-      // console.log(data);
       if (data.error) {
         console.log(data.error);
         setLoading(false);
       } else {
         setLoading(false);
-        setCart(data);
+        let newcart = {
+          ...cart,
+          tool: data.toolcarts,
+          services: data.serviceCarts,
+        };
+
+        setCart(newcart);
       }
     });
   };
-
+  // console.log("This is tool cart,render 2", tool);
+  // console.log("This is service cart,render 2", services);
   const handleRemoveToolFromCart = async (productId) => {
     console.log(productId);
     const token = getCookie("token");
@@ -80,7 +94,7 @@ const Cart = ({ router }) => {
     getProductsFromCarts();
   };
 
-  const handleCheckout = async () => {};
+  //const handleCheckout = async () => {};
 
   return (
     <Layout>
@@ -93,23 +107,28 @@ const Cart = ({ router }) => {
           </Segment>
         ) : (
           <div>
-            {cart ? (
+            {services ? (
               <Segment>
-                <CartHeader
-                  carlist={cart}
+                <ServiceCartHeader
+                  servicescartlist={services}
                   user={user}
-                  handleRemoveToolFromCart={handleRemoveToolFromCart}
                   handleRemoveServiceFromCart={handleRemoveServiceFromCart}
                 />
-                <CartFooter carlist={cart} handleCheckout={handleCheckout} />
+
+                {/* subscription plan */}
+
+                {tool ? (
+                  <Segment>
+                    <Toolscartheader
+                      toolcartlist={tool}
+                      user={user}
+                      handleRemoveToolFromCart={handleRemoveToolFromCart}
+                    />
+                    {/* one time payment */}
+                  </Segment>
+                ) : null}
               </Segment>
-            ) : (
-              <Segment>
-                <Button color="orange" onClick={() => router.push("/services")}>
-                  View Products
-                </Button>
-              </Segment>
-            )}
+            ) : null}
           </div>
         )}
       </React.Fragment>

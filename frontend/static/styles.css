@@ -108,6 +108,11 @@ h3.display-2.pb-3.pt-3.text-center.font-weight-bold {
     background: yellowgreen;
   }
 }
+.emi-plan-extend {
+  display: flex;
+  justify-content: space-around;
+  background-color: aqua;
+}
 
 .form-custom-class {
   padding: 10%;
