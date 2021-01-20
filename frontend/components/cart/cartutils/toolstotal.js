@@ -3,7 +3,7 @@ const Toolstotal = (products) => {
     accumulator += element.product[0].clientPrice * element.quantity;
     return accumulator;
   }, 0);
-  console.log(total);
+  // console.log(total);
   //const toolstotal = ((total * 100) / 100).toFixed(2);
   const toolstotal = Number(((total * 100) / 100).toFixed(2));
   return { toolstotal };

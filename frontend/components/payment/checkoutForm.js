@@ -96,8 +96,7 @@ const CheckoutForm = () => {
           <Icon name="address book" color="red" />
           We encourage You To Update This Form
         </Header>
-        {/* success={success} onSubmit={handleSubmit} */}
-        {/* onSubmit={handleSubmit} */}
+
         <Form onSubmit={handleSubmit}>
           <Form.Field
             control={Input}

@@ -31,7 +31,7 @@ const SingleService = ({ service, query }) => {
   };
 
   const showReviews = (service) => {
-    console.log(service);
+    // console.log(service);
     return service.the_reviews.map((review, i) => (
       <div key={i} className="card">
         <div className="card-body p-3 mb-2 bg-success text-white">

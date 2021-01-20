@@ -19,7 +19,6 @@ const EmiPlanPricing = ({ serviceAmount }) => {
         </p>
         <Button
           icon="cart"
-          //disabled={isCartEmpty}
           color="green"
           floated="right"
           content="Subscribe|Services|Tools"
@@ -36,7 +35,6 @@ const EmiPlanPricing = ({ serviceAmount }) => {
 
         <Button
           icon="cart"
-          //disabled={isCartEmpty}
           color="green"
           floated="right"
           content="Subscribe|Services|Tools"

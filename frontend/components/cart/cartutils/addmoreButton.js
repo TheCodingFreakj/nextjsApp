@@ -4,12 +4,18 @@ import Toolstotal from "../cartutils/toolstotal";
 import ServiceTotal from "../cartutils/servicetotal";
 import EmiPlanPricing from "../emiplanpricing";
 import { useRouter } from "next/router";
-
+import "../../../static/styles.css";
+import { API } from "../../../config";
+import { isAuth, getCookie } from "../../../actions/setAuthToken";
 const AddmoreButton = ({ toolscart, servicecart }) => {
+  // console.log(servicecart);
+  // console.log(toolscart);
+
   const [toolsAmount, setToolsAmount] = useState(0);
   const [serviceAmount, setServiceAmount] = useState(0);
 
   const router = useRouter();
+  //console.log(router);
 
   useEffect(() => {
     if (toolscart) {
@@ -17,10 +23,16 @@ const AddmoreButton = ({ toolscart, servicecart }) => {
       setToolsAmount(toolstotal);
     } else if (servicecart) {
       const { servicetotal } = ServiceTotal(servicecart);
-      console.log(servicetotal);
+      // console.log(servicetotal);
       setServiceAmount(servicetotal);
     }
+
+    //setisCartEmpty(toolscart.length === 0 && servicecart.length === 0);
   }, []);
+  const user = isAuth();
+  let queryparams = encodeURIComponent(
+    `${user._id}  & $${toolsAmount}  & ${user.email}`
+  );
 
   return (
     <React.Fragment>
@@ -37,9 +49,22 @@ const AddmoreButton = ({ toolscart, servicecart }) => {
           />
 
           {toolscart ? (
-            <p>
-              <strong>Sub-Total:</strong>${toolsAmount}
-            </p>
+            <>
+              <div className="emi-plan-extend">
+                <p>
+                  <strong>Sub-Total:</strong>${toolsAmount}
+                </p>
+                <Button
+                  icon="cart"
+                  color="green"
+                  floated="right"
+                  content="Subscribe|Services|Tools"
+                  onClick={() =>
+                    router.push(`/payment/orders?q=${queryparams}`)
+                  }
+                />
+              </div>
+            </>
           ) : null}
           {servicecart ? (
             <div className="emi-plan">

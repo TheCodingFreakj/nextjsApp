@@ -10,9 +10,9 @@ import {
 } from "semantic-ui-react";
 import AddmoreButton from "../../components/cart/cartutils/addmoreButton";
 
-const Toolscartheader = ({ toolcartlist, user, handleRemoveToolFromCart }) => {
+const Toolscartheader = ({ toolcartlist, handleRemoveToolFromCart }) => {
   // console.log("This is tool cart,render 3", toolcartlist);
-
+  // console.log(user);
   const showToolsList = (tools) => {
     return tools.map((tool) => ({
       header: (

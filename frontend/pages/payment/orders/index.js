@@ -11,19 +11,20 @@ import {
 import Layout from "../../../components/Layout";
 import { isAuth, getCookie } from "../../../actions/setAuthToken";
 import { withRouter } from "next/router";
-import CheckoutForm from "../../../components/payment/checkoutForm";
-
-const Subscribe = ({ router }) => {
+//import CheckoutForm from "../../../components/payment/checkoutForm";
+import OrderSummary from "../../../components/payment/orders/ordersummary";
+const Subscribe = () => {
   //get both the carts
   const user = isAuth();
 
   return (
     <Layout>
       <React.Fragment>
-        <CheckoutForm />
+        <OrderSummary />
+        {/* <CheckoutForm /> */}
       </React.Fragment>
     </Layout>
   );
 };
 
-export default withRouter(Subscribe);
+export default Subscribe;

@@ -5,10 +5,9 @@ import AddmoreButton from "../../components/cart/cartutils/addmoreButton";
 
 const ServiceCartHeader = ({
   servicescartlist,
-  user,
   handleRemoveServiceFromCart,
 }) => {
-  console.log("This is service cart,render 3", servicescartlist);
+  // console.log("This is service cart,render 3", servicescartlist);
 
   const showServiceCartList = (services) => {
     return services.map((service) => ({

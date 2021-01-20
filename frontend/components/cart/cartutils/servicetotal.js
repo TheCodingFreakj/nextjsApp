@@ -20,10 +20,10 @@ const ServiceTotal = (services) => {
       return sum;
     }, 0);
 
-  console.log(stripeTotal);
+  //console.log(stripeTotal);
   //const servicetotal = ((total * 100) / 100).toFixed(2);
   const servicetotal = Number(((stripeTotal * 100) / 100).toFixed(2));
-  console.log(servicetotal);
+  // console.log(servicetotal);
   return { servicetotal };
 };
 

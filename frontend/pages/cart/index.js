@@ -16,11 +16,13 @@ import Toolscartheader from "../../components/cart/toolscartheader";
 
 import { fetchCarts } from "../../actions/shoppingcart";
 import { withRouter } from "next/router";
+//import { useRouter } from "next/router";
 import { API } from "../../config";
 import axios from "axios";
 const Cart = ({ router }) => {
   //get both the carts
-
+  // console.log(router);
+  // console.log(API);
   const [cart, setCart] = useState({
     tool: "",
     services: "",
@@ -28,9 +30,10 @@ const Cart = ({ router }) => {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState();
-  const user = isAuth();
 
   const { tool, services } = cart;
+  // const router2 = useRouter();
+  // console.log(router2);
 
   useEffect(() => {
     const mounted = { current: true };
@@ -65,7 +68,7 @@ const Cart = ({ router }) => {
   // console.log("This is tool cart,render 2", tool);
   // console.log("This is service cart,render 2", services);
   const handleRemoveToolFromCart = async (productId) => {
-    console.log(productId);
+    // console.log(productId);
     const token = getCookie("token");
     const url = `${API}/api/delete-cart`;
     const payload = {
@@ -111,7 +114,6 @@ const Cart = ({ router }) => {
               <Segment>
                 <ServiceCartHeader
                   servicescartlist={services}
-                  user={user}
                   handleRemoveServiceFromCart={handleRemoveServiceFromCart}
                 />
 
@@ -121,7 +123,6 @@ const Cart = ({ router }) => {
                   <Segment>
                     <Toolscartheader
                       toolcartlist={tool}
-                      user={user}
                       handleRemoveToolFromCart={handleRemoveToolFromCart}
                     />
                     {/* one time payment */}
