@@ -45,11 +45,12 @@ const Cart = ({ router }) => {
     return () => {
       mounted.current = false;
     };
-  }, []); //render only when the data changes that we will get from serverside
+  }, []);
 
   const getProductsFromCarts = async () => {
     setLoading(true);
     await fetchCarts(getCookie("token")).then((data) => {
+      // console.log("The cart data render1 fetched from backend ", data);
       if (data.error) {
         console.log(data.error);
         setLoading(false);
@@ -65,6 +66,8 @@ const Cart = ({ router }) => {
       }
     });
   };
+  // console.log("The cart data render2 in state", cart, "this is render first");
+
   // console.log("This is tool cart,render 2", tool);
   // console.log("This is service cart,render 2", services);
   const handleRemoveToolFromCart = async (productId) => {
@@ -110,7 +113,7 @@ const Cart = ({ router }) => {
           </Segment>
         ) : (
           <div>
-            {services ? (
+            {services && tool ? (
               <Segment>
                 <ServiceCartHeader
                   servicescartlist={services}
@@ -119,15 +122,10 @@ const Cart = ({ router }) => {
 
                 {/* subscription plan */}
 
-                {tool ? (
-                  <Segment>
-                    <Toolscartheader
-                      toolcartlist={tool}
-                      handleRemoveToolFromCart={handleRemoveToolFromCart}
-                    />
-                    {/* one time payment */}
-                  </Segment>
-                ) : null}
+                <Toolscartheader
+                  toolcartlist={tool}
+                  handleRemoveToolFromCart={handleRemoveToolFromCart}
+                />
               </Segment>
             ) : null}
           </div>

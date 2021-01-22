@@ -31,3 +31,26 @@ export const parsedataUrl = (urlParams) => {
 
   return { params };
 };
+
+export const dataExtracter = (servicecart) => {
+  const productin =
+    servicecart &&
+    servicecart.map((p) => {
+      const productinfo = p.product.map((prod) => {
+        let productinfo = {
+          name: prod.slug,
+          duration: prod.duration,
+          discountrate: prod.discountedServiceCharges[0].servicedDiscountPrice,
+        };
+
+        return productinfo;
+      });
+      // console.log(productinfo);
+
+      let quant = p.quantity;
+      let prodId = p._id;
+      return { quant, productinfo, prodId };
+    });
+
+  return { productin };
+};

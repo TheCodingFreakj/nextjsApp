@@ -8,10 +8,10 @@ import {
   Item,
   Divider,
 } from "semantic-ui-react";
-import AddmoreButton from "../../components/cart/cartutils/addmoreButton";
+import AddToolButton from "./cartutils/addToolsButton";
 
 const Toolscartheader = ({ toolcartlist, handleRemoveToolFromCart }) => {
-  // console.log("This is tool cart,render 3", toolcartlist);
+  console.log("This is tool cart,render 4", toolcartlist);
   // console.log(user);
   const showToolsList = (tools) => {
     return tools.map((tool) => ({
@@ -47,10 +47,14 @@ const Toolscartheader = ({ toolcartlist, handleRemoveToolFromCart }) => {
 
       <Divider />
 
-      <Item.Group divided items={showToolsList(toolcartlist)}></Item.Group>
-      <Segment>
-        <AddmoreButton toolscart={toolcartlist} />
-      </Segment>
+      {toolcartlist ? (
+        <>
+          <Item.Group divided items={showToolsList(toolcartlist)}></Item.Group>
+          <Segment>
+            {toolcartlist ? <AddToolButton toolscart={toolcartlist} /> : null}
+          </Segment>
+        </>
+      ) : null}
     </React.Fragment>
   );
 };

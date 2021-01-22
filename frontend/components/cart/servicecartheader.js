@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
-import AddmoreButton from "../../components/cart/cartutils/addmoreButton";
+import AddServiceButton from "./cartutils/addServiceButton";
 
 const ServiceCartHeader = ({
   servicescartlist,
   handleRemoveServiceFromCart,
 }) => {
-  // console.log("This is service cart,render 3", servicescartlist);
-
+  console.log("This is service cart,render 3", servicescartlist);
+  const [isHidden, setisHidden] = useState(true);
   const showServiceCartList = (services) => {
     return services.map((service) => ({
       header: (
@@ -45,14 +45,20 @@ const ServiceCartHeader = ({
         You can check out web development services separarely as per invoicing
         policy
       </p>
-      <Item.Group
-        divided
-        items={showServiceCartList(servicescartlist)}
-      ></Item.Group>
 
-      <Segment>
-        <AddmoreButton servicecart={servicescartlist} />
-      </Segment>
+      {servicescartlist ? (
+        <>
+          <Item.Group
+            divided
+            items={showServiceCartList(servicescartlist)}
+          ></Item.Group>
+          <Segment>
+            {servicescartlist ? (
+              <AddServiceButton servicecart={servicescartlist} />
+            ) : null}
+          </Segment>
+        </>
+      ) : null}
     </React.Fragment>
   );
 };
