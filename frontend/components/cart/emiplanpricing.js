@@ -10,42 +10,15 @@ import {
 } from "semantic-ui-react";
 import "../../static/styles.css";
 import { useRouter } from "next/router";
-import { dataExtracter } from "../utils/parseUrl";
 
 const EmiPlanPricing = ({
   serviceAmount,
   serviceQueryparams,
+  serviceinfo,
   servicecart = [],
 }) => {
   const router = useRouter();
   console.log("the cart in service, render 7", servicecart);
-  //extract the quantity and slug or service name
-  //see how the undefined value need to be handle
-  const [data, setData] = useState();
-  const [formattedData, setformattedData] = useState();
-
-  useEffect(() => {
-    const mounted = { current: true };
-
-    if (mounted.current) {
-      setData(servicecart);
-      console.log(data);
-      const productinfo = dataExtracter(data);
-      console.log(productinfo);
-      const transformed = { ...productinfo.productin };
-
-      if (typeof transformed == "undefined") {
-        <p>...Loading</p>;
-      } else {
-        setformattedData(transformed);
-        console.log(transformed);
-      }
-    }
-
-    return () => {
-      mounted.current = false;
-    };
-  }, []);
 
   // console.log("formattedData", formattedData[0].quant);
   // console.log("formattedData", formattedData[0].productinfo[0].discountrate);
@@ -57,11 +30,10 @@ const EmiPlanPricing = ({
   // eminum
   // duration
 
-  // let serviceinfo = encodeURIComponent(
-  //   `${formattedData[0].quant}  & ${formattedData[0].productinfo[0].discountrate}  & ${formattedData[0].productinfo[0].name}& ${formattedData[0].productinfo[0].duration} `
-  // );
+  //checking if rthere is data or not in formattedData
 
   // console.log(serviceinfo);
+  // console.log(serviceQueryparams);
   return (
     <React.Fragment>
       <>
@@ -73,7 +45,11 @@ const EmiPlanPricing = ({
           color="green"
           floated="right"
           content="Subscribe|Services"
-          onClick={() => router.push(`/payment/orders?q=${serviceQueryparams}`)}
+          onClick={() =>
+            router.push(
+              `/payment/orders?q=${serviceQueryparams} & ${serviceinfo}`
+            )
+          }
         />
 
         <p>

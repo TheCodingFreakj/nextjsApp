@@ -17,25 +17,40 @@ import { parsedataUrl } from "../../../components/utils/parseUrl";
 //store tools and service data in state
 
 const OrderSummary = () => {
-  const [tools, setTools] = useState();
-  const [services, setServices] = useState();
+  const [paymentData, setpaymentData] = useState({});
   useEffect(() => {
+    console.log(window.location.search);
     const response = parsedataUrl(decodeURIComponent(window.location.search));
-    //console.log("This is params response", response.params);
-    // console.log(response.params.user);
-    // console.log(response.params.email, "", response.params.amttt);
-    // setpaymentData({
-    //   ...paymentData,
-    //   email: response.params.email,
-    //   amttt: response.params.amttt,
-    //   user: response.params.user,
-    // });
+    console.log("This is params object response", response.params);
+    let dataforbackend = Object.values(response.params).map((p, i) => {
+      return p;
+    });
+    console.log("This is the data array for backend", dataforbackend);
+
+    // think of adding data to state until the confirm button is hit
+    setpaymentData(response.params);
+    console.log(paymentData);
   }, []);
+
+  const showdata = (data) => {
+    return (
+      <>
+        {" "}
+        <div>{data[1]}</div>
+        <div>{data[2]}</div>
+        <div>{data[3]}</div>
+        <div>{data[4]}</div>
+        <div>{data[5]}</div>
+        <div>{data[6]}</div>{" "}
+      </>
+    );
+  };
   return (
     <div>
       Display Order Summary Show a button to tha payment form for confirmation
       of details
-      <p>
+      {showdata(paymentData)}
+      {/* <p>
         Confirm the tool name discountrate, amount and pricing model
         subscription for duration
       </p>
@@ -45,7 +60,7 @@ const OrderSummary = () => {
       <p>
         create a component that create charges as emi ask to set reminder for
         next emi
-      </p>
+      </p> */}
     </div>
   );
 };

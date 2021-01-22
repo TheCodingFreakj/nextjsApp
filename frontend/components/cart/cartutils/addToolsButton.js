@@ -26,10 +26,18 @@ const AddToolButton = ({ toolscart = [] }) => {
   let queryparams = encodeURIComponent(
     `${user._id}  & $${toolsAmount}  & ${user.email}`
   );
+  let toolsinfo = "";
+  if (toolscart) {
+    toolsinfo = encodeURIComponent(
+      `${toolscart[0].quantity}  & ${toolscart[0].product[0].tool}  & ${toolscart[0].product[0].serviceChargeRate} `
+    );
+    // console.log(toolscart[0].quantity);
+    // console.log(toolscart[0].product[0].tool);
+    // console.log(toolscart[0].product[0].serviceChargeRate);
+  }
 
   // let toolinfo = encodeURIComponent(
-  //   //quantity
-  //   //name
+
   //eminum
   //duration
   //   `${user._id}  & $${serviceAmount}  & ${user.email}`
@@ -68,7 +76,9 @@ const AddToolButton = ({ toolscart = [] }) => {
                 color="red"
                 floated="right"
                 content="Subscribe|Tools"
-                onClick={() => router.push(`/payment/orders?q=${queryparams}`)}
+                onClick={() =>
+                  router.push(`/payment/orders?q=${queryparams} & ${toolsinfo}`)
+                }
               />
             </div>
           ) : (

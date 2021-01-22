@@ -7,25 +7,45 @@ import { useRouter } from "next/router";
 import "../../../static/styles.css";
 import { API } from "../../../config";
 import { isAuth } from "../../../actions/setAuthToken";
+import { dataExtracter } from "../../utils/parseUrl";
 const AddServiceButton = ({ servicecart = [] }) => {
   console.log("the cart in service, render 5", servicecart);
 
   const [serviceAmount, setServiceAmount] = useState(0);
+  const [data, setData] = useState();
+  const [formattedData, setformattedData] = useState();
 
   const router = useRouter();
   //console.log(router);
   // console.log("toolscart essentials", toolscart);
   // console.log("servicecart essentials", servicecart);
+
   useEffect(() => {
-    if (servicecart) {
-      const { servicetotal } = ServiceTotal(servicecart);
-      //console.log("servicetotal", servicetotal);
-      console.log("is this running");
-      setServiceAmount(servicetotal);
+    const mounted = { current: true };
+
+    if (mounted.current) {
+      if (servicecart) {
+        const { servicetotal } = ServiceTotal(servicecart);
+        //console.log("servicetotal", servicetotal);
+        console.log("is this running");
+        setServiceAmount(servicetotal);
+        const productinfo = dataExtracter(servicecart);
+        console.log("productinfo", productinfo);
+        const transformed = { ...productinfo.productin };
+
+        if (typeof transformed == "undefined") {
+          <p>...Loading</p>;
+        } else {
+          transformed ? setformattedData(transformed) : <p>No data Yet</p>;
+        }
+      }
     }
 
-    //setisCartEmpty(toolscart.length === 0 && servicecart.length === 0);
+    return () => {
+      mounted.current = false;
+    };
   }, [servicecart]);
+
   const user = isAuth();
 
   // let toolinfo = encodeURIComponent(
@@ -38,6 +58,13 @@ const AddServiceButton = ({ servicecart = [] }) => {
   let serviceQueryparams = encodeURIComponent(
     `${user._id}  & $${serviceAmount}  & ${user.email}`
   );
+
+  let serviceinfo = "";
+  formattedData
+    ? (serviceinfo = encodeURIComponent(
+        `${formattedData[0].quant}  & ${formattedData[0].productinfo[0].discountrate}  & ${formattedData[0].productinfo[0].name}& ${formattedData[0].productinfo[0].duration} `
+      ))
+    : null;
 
   return (
     <React.Fragment>
@@ -56,11 +83,6 @@ const AddServiceButton = ({ servicecart = [] }) => {
 
         <Divider />
 
-        {/* you need to restrict this bl;ock uncessarily to run unless the context is that of service
-          you need to block this if you are done sending servicecart data to the backend */}
-        {/* this could stop creating undefined value for data already in backend */}
-        {/* here the toolcart and servicecart is always available so this condition not working */}
-
         <div className="emi-plan-extend">
           {servicecart == [] ? (
             <div>...Loading</div>
@@ -69,6 +91,7 @@ const AddServiceButton = ({ servicecart = [] }) => {
               serviceAmount={serviceAmount}
               serviceQueryparams={serviceQueryparams}
               servicecart={servicecart}
+              serviceinfo={serviceinfo}
             />
           )}
         </div>
@@ -78,3 +101,4 @@ const AddServiceButton = ({ servicecart = [] }) => {
 };
 
 export default AddServiceButton;
+//how to implement error handle in react js
