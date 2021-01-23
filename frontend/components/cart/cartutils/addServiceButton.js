@@ -7,9 +7,10 @@ import { useRouter } from "next/router";
 import "../../../static/styles.css";
 import { API } from "../../../config";
 import { isAuth } from "../../../actions/setAuthToken";
-import { dataExtracter } from "../../utils/parseUrl";
-const AddServiceButton = ({ servicecart = [] }) => {
+//import { dataExtracter, servicedatatranform } from "../../utils/parseUrl";
+const AddServiceButton = ({ servicecart = [], active, cat }) => {
   console.log("the cart in service, render 5", servicecart);
+  console.log(active, "", cat);
 
   const [serviceAmount, setServiceAmount] = useState(0);
   const [data, setData] = useState();
@@ -29,15 +30,24 @@ const AddServiceButton = ({ servicecart = [] }) => {
         //console.log("servicetotal", servicetotal);
         console.log("is this running");
         setServiceAmount(servicetotal);
-        const productinfo = dataExtracter(servicecart);
-        console.log("productinfo", productinfo);
-        const transformed = { ...productinfo.productin };
+        //const productinfo = dataExtracter(servicecart);
+        // const productinfo = servicedatatranform(servicecart);
 
-        if (typeof transformed == "undefined") {
-          <p>...Loading</p>;
-        } else {
-          transformed ? setformattedData(transformed) : <p>No data Yet</p>;
-        }
+        // const productinfo = (servicecart) => {
+        //   // console.log("servicecart", servicecart);
+        //   servicecart.map((serv, i) => {
+        //     return { serv };
+        //   });
+        // };
+
+        // console.log("productinfo", productinfo);
+        // const transformed = { ...productinfo.productin };
+
+        // if (typeof transformed == "undefined") {
+        //   <p>...Loading</p>;
+        // } else {
+        //   transformed ? setformattedData(transformed) : <p>No data Yet</p>;
+        // }
       }
     }
 
@@ -64,7 +74,7 @@ const AddServiceButton = ({ servicecart = [] }) => {
     ? (serviceinfo = encodeURIComponent(
         `${formattedData[0].quant}  & ${formattedData[0].productinfo[0].discountrate}  & ${formattedData[0].productinfo[0].name}& ${formattedData[0].productinfo[0].duration} `
       ))
-    : null;
+    : console.log("no data");
 
   return (
     <React.Fragment>

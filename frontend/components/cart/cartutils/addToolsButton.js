@@ -4,9 +4,9 @@ import Toolstotal from "./toolstotal";
 import { useRouter } from "next/router";
 import "../../../static/styles.css";
 import { isAuth } from "../../../actions/setAuthToken";
-const AddToolButton = ({ toolscart = [] }) => {
+const AddToolButton = ({ toolscart = [], active, cat }) => {
   console.log("the cart in tool, render 6", toolscart);
-
+  console.log(active, "", cat);
   const [toolsAmount, setToolsAmount] = useState(0);
 
   const router = useRouter();

@@ -47,11 +47,20 @@ const Toolscartheader = ({ toolcartlist, handleRemoveToolFromCart }) => {
 
       <Divider />
 
-      {toolcartlist ? (
+      {toolcartlist.products ? (
         <>
-          <Item.Group divided items={showToolsList(toolcartlist)}></Item.Group>
+          <Item.Group
+            divided
+            items={showToolsList(toolcartlist.products)}
+          ></Item.Group>
           <Segment>
-            {toolcartlist ? <AddToolButton toolscart={toolcartlist} /> : null}
+            {toolcartlist.products ? (
+              <AddToolButton
+                active={toolcartlist.active}
+                cat={toolcartlist.category}
+                toolscart={toolcartlist.products}
+              />
+            ) : null}
           </Segment>
         </>
       ) : null}

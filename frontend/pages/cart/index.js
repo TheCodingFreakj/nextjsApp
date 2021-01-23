@@ -13,7 +13,7 @@ import { isAuth, getCookie } from "../../actions/setAuthToken";
 
 import ServiceCartHeader from "../../components/cart/servicecartheader";
 import Toolscartheader from "../../components/cart/toolscartheader";
-
+import Router from "next/router";
 import { fetchCarts } from "../../actions/shoppingcart";
 import { withRouter } from "next/router";
 //import { useRouter } from "next/router";
@@ -50,7 +50,7 @@ const Cart = ({ router }) => {
   const getProductsFromCarts = async () => {
     setLoading(true);
     await fetchCarts(getCookie("token")).then((data) => {
-      // console.log("The cart data render1 fetched from backend ", data);
+      console.log("The cart data render1 fetched from backend ", data);
       if (data.error) {
         console.log(data.error);
         setLoading(false);
@@ -58,8 +58,9 @@ const Cart = ({ router }) => {
         setLoading(false);
         let newcart = {
           ...cart,
-          tool: data.toolcarts,
-          services: data.serviceCarts,
+          tool: data.toolsCart,
+          services: data.serviceCart,
+          message: data.msg,
         };
 
         setCart(newcart);
@@ -127,9 +128,16 @@ const Cart = ({ router }) => {
                   handleRemoveToolFromCart={handleRemoveToolFromCart}
                 />
               </Segment>
-            ) : null}
+            ) : (
+              <>
+                <p>No product</p>
+                console.log("Is this running when no products")
+              </>
+            )}
           </div>
         )}
+
+        {/* you have to deal to what happens when cart is empty no products */}
       </React.Fragment>
     </Layout>
   );

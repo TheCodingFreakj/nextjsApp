@@ -16,6 +16,10 @@ const toolsCartSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    category: {
+      type: String,
+      default: "tools",
+    },
     modifiedOn: {
       type: Date,
       default: Date.now,

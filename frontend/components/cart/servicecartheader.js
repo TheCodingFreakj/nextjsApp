@@ -8,7 +8,7 @@ const ServiceCartHeader = ({
   handleRemoveServiceFromCart,
 }) => {
   console.log("This is service cart,render 3", servicescartlist);
-  const [isHidden, setisHidden] = useState(true);
+
   const showServiceCartList = (services) => {
     return services.map((service) => ({
       header: (
@@ -46,15 +46,19 @@ const ServiceCartHeader = ({
         policy
       </p>
 
-      {servicescartlist ? (
+      {servicescartlist.products ? (
         <>
           <Item.Group
             divided
-            items={showServiceCartList(servicescartlist)}
+            items={showServiceCartList(servicescartlist.products)}
           ></Item.Group>
           <Segment>
-            {servicescartlist ? (
-              <AddServiceButton servicecart={servicescartlist} />
+            {servicescartlist.products ? (
+              <AddServiceButton
+                active={servicescartlist.active}
+                cat={servicescartlist.category}
+                servicecart={servicescartlist.products}
+              />
             ) : null}
           </Segment>
         </>

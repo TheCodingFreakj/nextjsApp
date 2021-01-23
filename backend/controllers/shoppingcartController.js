@@ -83,15 +83,14 @@ exports.updateServiceCart = async (req, res) => {
 
 exports.fetchCarts = async (req, res) => {
   const user = req.user._id;
-  let toolcarts;
-  let serviceCarts;
+
   try {
     const toolsCart = await ToolsCart.findOne({ customer: user }).populate({
       path: "products.product",
       model: "Tools",
     });
-
-    toolcarts = toolsCart.products;
+    console.log(toolsCart);
+    // toolcarts = toolsCart.products;
 
     const serviceCart = await ServiceCart.findOne({ customer: user }).populate({
       path: "products.product",
@@ -101,12 +100,13 @@ exports.fetchCarts = async (req, res) => {
         model: "Price",
       },
     });
-
-    serviceCarts = serviceCart.products;
+    console.log(serviceCart);
+    // serviceCarts = serviceCart.products;
+    // console.log(serviceCarts);
 
     res
       .status(200)
-      .json({ toolcarts, serviceCarts, msg: "Item Updated", userId: user });
+      .json({ toolsCart, serviceCart, msg: "Item Updated", userId: user });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Cant fetch the server");

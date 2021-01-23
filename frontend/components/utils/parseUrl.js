@@ -54,3 +54,24 @@ export const dataExtracter = (servicecart) => {
 
   return { productin };
 };
+
+export const servicedatatranform = (servicecart) => {
+  // console.log("servicecart", servicecart);
+  servicecart.map((serv, i) => {
+    return { serv };
+  });
+};
+
+// const map = (collection, fn) => {
+//   return collection.reduce((acc, item) => {
+//     return acc.concat(fn(item));
+//   }, []);
+// };
+
+// const servicedatatranform = (servicecart, keyField) =>
+//    array.reduce((obj, item) => {
+//      obj[item[keyField]] = item
+//      return obj
+//    }, {})
+// const peopleObject = arrayToObject(peopleArray, "id")
+// console.log(peopleObject[idToSelect])

@@ -20,6 +20,10 @@ const servicesCartSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    category: {
+      type: String,
+      default: "services",
+    },
     modifiedOn: {
       type: Date,
       default: Date.now,
