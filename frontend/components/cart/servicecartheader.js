@@ -7,7 +7,7 @@ const ServiceCartHeader = ({
   servicescartlist,
   handleRemoveServiceFromCart,
 }) => {
-  console.log("This is service cart,render 3", servicescartlist);
+  // console.log("This is service cart,render 3", servicescartlist);
 
   const showServiceCartList = (services) => {
     return services.map((service) => ({

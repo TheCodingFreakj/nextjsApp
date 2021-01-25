@@ -17,20 +17,25 @@ import { parsedataUrl } from "../../../components/utils/parseUrl";
 //store tools and service data in state
 
 const OrderSummary = () => {
-  const [paymentData, setpaymentData] = useState({});
-  // useEffect(() => {
-  //   console.log(window.location.search);
-  //   const response = parsedataUrl(decodeURIComponent(window.location.search));
-  //   console.log("This is params object response", response.params);
-  //   let dataforbackend = Object.values(response.params).map((p, i) => {
-  //     return p;
-  //   });
-  //   console.log("This is the data array for backend", dataforbackend);
+  const [paymentservData, setpaymentservsData] = useState({});
+  const [paymenttoolsData, setpaymenttoolsData] = useState({});
+  useEffect(() => {
+    //console.log(window.location.search);
+    const response = parsedataUrl(decodeURIComponent(window.location.search));
+    // console.log("This is params object response", response.params.general);
+    // console.log("This is params object response", response.params.products);
+    // let dataforbackend = Object.values(response.params).map((p, i) => {
+    //   // return p.tools === "tools"
+    //   //   ? setpaymentservsData(p)
+    //   //   : console.log("error");
 
-  //   // think of adding data to state until the confirm button is hit
-  //   setpaymentData(response.params);
-  //   console.log(paymentData);
-  // }, []);
+    //   console.log(p[i]);
+    // });
+    // console.log("This is the data array for backend", dataforbackend);
+
+    //   setpaymentData(response.params);
+    //   console.log(paymentData);
+  }, []);
 
   // const showdata = (data) => {
   //   return (

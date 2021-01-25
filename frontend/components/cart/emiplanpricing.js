@@ -15,25 +15,13 @@ const EmiPlanPricing = ({
   serviceAmount,
   serviceQueryparams,
   serviceinfo,
-  servicecart = [],
+  active,
+  cat,
 }) => {
   const router = useRouter();
-  console.log("the cart in service, render 7", servicecart);
-
-  // console.log("formattedData", formattedData[0].quant);
-  // console.log("formattedData", formattedData[0].productinfo[0].discountrate);
-  // console.log("formattedData", formattedData[0].productinfo[0].name);
-  // console.log("formattedData", formattedData[0].productinfo[0].duration);
-
-  //   //quantity
-  //   //name
-  // eminum
-  // duration
-
-  //checking if rthere is data or not in formattedData
-
+  // console.log("the cart in service, render 7", servicecart);
   // console.log(serviceinfo);
-  // console.log(serviceQueryparams);
+
   return (
     <React.Fragment>
       <>
@@ -47,7 +35,7 @@ const EmiPlanPricing = ({
           content="Subscribe|Services"
           onClick={() =>
             router.push(
-              `/payment/orders?q=${serviceQueryparams} & ${serviceinfo}`
+              `/payment/orders?q=${serviceQueryparams} & ${serviceinfo} `
             )
           }
         />
@@ -61,7 +49,11 @@ const EmiPlanPricing = ({
           color="green"
           floated="right"
           content="Subscribe|Services"
-          onClick={() => router.push(`/payment/orders?q=${serviceQueryparams}`)}
+          onClick={() =>
+            router.push(
+              `/payment/orders?q=${serviceQueryparams} & ${serviceinfo} &${active}& ${cat} `
+            )
+          }
         />
       </>
     </React.Fragment>

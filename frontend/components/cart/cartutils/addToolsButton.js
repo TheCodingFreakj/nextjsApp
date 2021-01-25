@@ -5,10 +5,10 @@ import { useRouter } from "next/router";
 import "../../../static/styles.css";
 import { isAuth } from "../../../actions/setAuthToken";
 const AddToolButton = ({ toolscart = [], active, cat }) => {
-  console.log("the cart in tool, render 6", toolscart);
-  console.log(active, "", cat);
+  // console.log("the cart in tool, render 6", toolscart);
+  // console.log(active, "", cat);
   const [toolsAmount, setToolsAmount] = useState(0);
-
+  const [formattedData, setformattedData] = useState();
   const router = useRouter();
   //console.log(router);
   // console.log("toolscart essentials", toolscart);
@@ -19,29 +19,59 @@ const AddToolButton = ({ toolscart = [], active, cat }) => {
       //console.log("toolstotal", toolstotal);
       setToolsAmount(toolstotal);
     }
+    //console.log(toolscart);
+    const arrayToObject = (toolscart, key) =>
+      toolscart.reduce((obj, item) => {
+        return {
+          ...obj,
+          [item[key]]: item,
+        };
+      }, {});
+    const transformedtoolscart = arrayToObject(toolscart, "_id");
+    //console.log(transformedtoolscart);
 
-    //setisCartEmpty(toolscart.length === 0 && servicecart.length === 0);
+    let choosetools = Object.keys(transformedtoolscart)
+      .map((product) => {
+        return transformedtoolscart[product];
+      })
+      .map((prod) => {
+        //console.log(prod);
+        const quantity = prod.quantity;
+        const title = prod.product[0].tool;
+        const duration = "30 days";
+
+        return {
+          quantity,
+          title,
+          duration,
+        };
+      });
+
+    let productquery = choosetools.map((p) => {
+      let query = new URLSearchParams(p);
+
+      return decodeURIComponent(query.toString());
+    });
+
+    if (typeof choosetools == "undefined") {
+      <p>...Loading</p>;
+    } else {
+      choosetools ? setformattedData(productquery) : <p>No data Yet</p>;
+    }
   }, [toolscart]);
+
   const user = isAuth();
   let queryparams = encodeURIComponent(
     `${user._id}  & $${toolsAmount}  & ${user.email}`
   );
+
   let toolsinfo = "";
-  if (toolscart) {
-    toolsinfo = encodeURIComponent(
-      `${toolscart[0].quantity}  & ${toolscart[0].product[0].tool}  & ${toolscart[0].product[0].serviceChargeRate} `
-    );
-    // console.log(toolscart[0].quantity);
-    // console.log(toolscart[0].product[0].tool);
-    // console.log(toolscart[0].product[0].serviceChargeRate);
-  }
-
-  // let toolinfo = encodeURIComponent(
-
-  //eminum
-  //duration
-  //   `${user._id}  & $${serviceAmount}  & ${user.email}`
-  // );
+  formattedData
+    ? (toolsinfo = encodeURIComponent(
+        `${formattedData[0]}  & ${formattedData[1]}  `
+      ))
+    : console.log("no data");
+  //console.log("This is service data", toolsinfo);
 
   return (
     <React.Fragment>
@@ -60,11 +90,6 @@ const AddToolButton = ({ toolscart = [], active, cat }) => {
 
         <Divider />
 
-        {/* you need to restrict this bl;ock uncessarily to run unless the context is that of service
-          you need to block this if you are done sending servicecart data to the backend */}
-        {/* this could stop creating undefined value for data already in backend */}
-        {/* here the toolcart and servicecart is always available so this condition not working */}
-
         <div className="emi-plan-extend">
           {toolscart !== [] ? (
             <div>
@@ -77,7 +102,9 @@ const AddToolButton = ({ toolscart = [], active, cat }) => {
                 floated="right"
                 content="Subscribe|Tools"
                 onClick={() =>
-                  router.push(`/payment/orders?q=${queryparams} & ${toolsinfo}`)
+                  router.push(
+                    `/payment/orders?q=${queryparams} & ${toolsinfo} &${active}& ${cat}`
+                  )
                 }
               />
             </div>
