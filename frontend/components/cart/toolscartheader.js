@@ -11,7 +11,7 @@ import {
 import AddToolButton from "./cartutils/addToolsButton";
 
 const Toolscartheader = ({ toolcartlist, handleRemoveToolFromCart }) => {
-  console.log("This is tool cart,render 4", toolcartlist);
+  //console.log("This is tool cart,render 4", toolcartlist);
   // console.log(user);
   const showToolsList = (tools) => {
     return tools.map((tool) => ({

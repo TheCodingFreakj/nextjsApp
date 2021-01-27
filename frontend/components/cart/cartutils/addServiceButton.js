@@ -66,22 +66,40 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
 
         let productquery = chooseproducts.map((p) => {
           let query = new URLSearchParams(p);
-
           return decodeURIComponent(query.toString());
         });
-        // console.log(typeof productquery);
-
+        //console.log(productquery);
+        let form_values = {};
         productquery.forEach((productquery, i) => {
           let splitdata = productquery.split("&");
-
-          let keys = Object.keys(splitdata).map((pro) => {
-            return splitdata[pro].split("=");
+          //console.log(splitdata);
+          splitdata.forEach(function (value) {
+            let this_item = value.split("=");
+            form_values[this_item[0]] = unescape(this_item[1]);
           });
-          if (typeof chooseproducts == "undefined") {
-            <p>...Loading</p>;
-          } else {
-            chooseproducts ? setformattedData(keys) : <p>No data Yet</p>;
-          }
+
+          //Method 1
+
+          // let keys = Object.keys(form_values).map((pro) => {
+          //   return form_values[pro];
+          // });
+
+          // let queryString = ""; // console.log(keys);
+          // // //console.log(keys.join("&"));
+
+          // queryString = Object.keys(form_values)
+          //   .map((key) => key + "=" + form_values[key])
+          //   .join("&");
+
+          // console.log(queryString);
+
+          // let parms = encodeURIComponent(`${keys} `.join(&));
+
+          // if (typeof chooseproducts == "undefined") {
+          //   <p>...Loading</p>;
+          // } else {
+          //   chooseproducts ? setformattedData(queryString) : <p>No data Yet</p>;
+          // }
         });
       }
     }
@@ -93,12 +111,10 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
 
   const user = isAuth();
   // console.log(typeof formattedData);
-  console.log("all the data about product in the carts", formattedData); //this is in array format
+  //console.log("all the data about product in the carts", formattedData); //this is in array format
 
   //how to pass array to url
-
   // let splitdata = "";
-
   // console.log(splitdata);
   let serviceQueryparams = encodeURIComponent(
     `${user._id}  & $${serviceAmount}  & ${user.email}`

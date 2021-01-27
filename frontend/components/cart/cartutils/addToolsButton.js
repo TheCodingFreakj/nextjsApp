@@ -65,13 +65,13 @@ const AddToolButton = ({ toolscart = [], active, cat }) => {
     `${user._id}  & $${toolsAmount}  & ${user.email}`
   );
 
-  let toolsinfo = "";
-  formattedData
-    ? (toolsinfo = encodeURIComponent(
-        `${formattedData[0]}  & ${formattedData[1]}  `
-      ))
-    : console.log("no data");
-  //console.log("This is service data", toolsinfo);
+  // let toolsinfo = "";
+  // formattedData
+  //   ? (toolsinfo = encodeURIComponent(
+  //       `${formattedData[0]}  & ${formattedData[1]}  `
+  //     ))
+  //   : console.log("no data");
+  // //console.log("This is service data", toolsinfo);
 
   return (
     <React.Fragment>
@@ -101,11 +101,7 @@ const AddToolButton = ({ toolscart = [], active, cat }) => {
                 color="red"
                 floated="right"
                 content="Subscribe|Tools"
-                onClick={() =>
-                  router.push(
-                    `/payment/orders?q=${queryparams} & ${toolsinfo} &${active}& ${cat}`
-                  )
-                }
+                onClick={() => router.push(`/payment/orders?q=${queryparams} `)}
               />
             </div>
           ) : (

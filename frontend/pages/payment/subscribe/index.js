@@ -9,21 +9,20 @@ import {
   Loader,
 } from "semantic-ui-react";
 import Layout from "../../../components/Layout";
-import { isAuth, getCookie } from "../../../actions/setAuthToken";
-import { withRouter } from "next/router";
+import { isAuth } from "../../../actions/setAuthToken";
 
-import OrderSummary from "../../../components/payment/orders/ordersummary";
-const Orders = () => {
+import Subscribe from "../../../components/payment/subscribe";
+const Subscriptions = () => {
   //get both the carts
   const user = isAuth();
 
   return (
     <Layout>
       <React.Fragment>
-        <OrderSummary />
+        <Subscribe />
       </React.Fragment>
     </Layout>
   );
 };
 
-export default Orders;
+export default Subscriptions;

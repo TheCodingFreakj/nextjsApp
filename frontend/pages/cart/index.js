@@ -50,7 +50,7 @@ const Cart = ({ router }) => {
   const getProductsFromCarts = async () => {
     setLoading(true);
     await fetchCarts(getCookie("token")).then((data) => {
-      console.log("The cart data render1 fetched from backend ", data);
+      //console.log("The cart data render1 fetched from backend ", data);
       if (data.error) {
         console.log(data.error);
         setLoading(false);
@@ -129,10 +129,18 @@ const Cart = ({ router }) => {
                 />
               </Segment>
             ) : (
-              <>
-                <p>No product</p>
-                console.log("Is this running when no products")
-              </>
+              <Segment>
+                <>
+                  <p>You got No Product Now! Would You want to Buyt</p>
+                  <Button
+                    icon="cart"
+                    color="yellow"
+                    floated="right"
+                    content="Buy Services"
+                    onClick={() => router.push(`/services `)}
+                  />
+                </>
+              </Segment>
             )}
           </div>
         )}
@@ -146,3 +154,7 @@ const Cart = ({ router }) => {
 export default withRouter(Cart);
 // The Stripe CLI is configured for MarketingApp with account id acct_1HaLO5GERwFTkr9G
 //https://laracasts.com/discuss/channels/laravel/using-stripe-cli-in-windows?page=0
+// problem:
+// react_devtools_backend.js:2430 Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+//     in Cart (created by withRouter(Cart))
+//     in withRouter(Cart) (created by MyApp)

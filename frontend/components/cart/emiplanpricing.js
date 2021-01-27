@@ -11,13 +11,7 @@ import {
 import "../../static/styles.css";
 import { useRouter } from "next/router";
 
-const EmiPlanPricing = ({
-  serviceAmount,
-  serviceQueryparams,
-  serviceinfo,
-  active,
-  cat,
-}) => {
+const EmiPlanPricing = ({ serviceAmount, serviceQueryparams }) => {
   const router = useRouter();
   // console.log("the cart in service, render 7", servicecart);
   // console.log(serviceinfo);
@@ -34,9 +28,7 @@ const EmiPlanPricing = ({
           floated="right"
           content="Subscribe|Services"
           onClick={() =>
-            router.push(
-              `/payment/orders?q=${serviceQueryparams} & ${serviceinfo} `
-            )
+            router.push(`/payment/orders?q=${serviceQueryparams}  `)
           }
         />
 
@@ -50,9 +42,7 @@ const EmiPlanPricing = ({
           floated="right"
           content="Subscribe|Services"
           onClick={() =>
-            router.push(
-              `/payment/orders?q=${serviceQueryparams} & ${serviceinfo} &${active}& ${cat} `
-            )
+            router.push(`/payment/orders?q=${serviceQueryparams}  `)
           }
         />
       </>
