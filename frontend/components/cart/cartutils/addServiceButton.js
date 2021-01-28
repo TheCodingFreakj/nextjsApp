@@ -26,8 +26,8 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
     if (mounted.current) {
       if (servicecart) {
         const { servicetotal } = ServiceTotal(servicecart);
-        //console.log("servicetotal", servicetotal);
-        console.log("is this running");
+        console.log("servicetotal", servicetotal);
+        // console.log("is this running");
         setServiceAmount(servicetotal);
         //const productinfo = dataExtracter(servicecart);
         // const productinfo = servicedatatranform(servicecart);
@@ -155,9 +155,6 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
               serviceAmount={serviceAmount}
               serviceQueryparams={serviceQueryparams}
               servicecart={servicecart}
-              // serviceinfo={serviceinfo}
-              // active={active}
-              // cat={cat}
             />
           )}
         </div>

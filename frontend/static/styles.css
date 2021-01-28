@@ -118,12 +118,45 @@ h3.display-2.pb-3.pt-3.text-center.font-weight-bold {
   padding: 10%;
 }
 
+.checkoutform {
+  background: green;
+  padding: 2%;
+  max-width: 80%;
+  position: relative;
+  left: 10%;
+}
+.product-info {
+  background: purple;
+  padding: 2% 3%;
+}
+
+h3.product-title {
+  text-align: center;
+  color: wheat;
+}
+
+h4.product-price {
+  text-align: center;
+  color: wheat;
+}
+form.form-custom {
+  margin-top: 10%;
+  padding: 2%;
+  height: 200px;
+}
 .heading-h2 {
   padding-top: 5%;
   text-align: center;
   color: forestgreen;
 }
-
+.click-pay {
+  position: absolute;
+  /* left: 40%; */
+  left: 43%;
+  bottom: 15%;
+  /* bottom: 50%; */
+  /* margin-bottom: -20%; */
+}
 .footer-design {
   background: rgb(138, 43, 43);
 }

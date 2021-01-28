@@ -1,24 +1,28 @@
 const ServiceTotal = (services) => {
   const stripeTotal = services
-    .map((service) => {
-      let projectduration = Number(service.product[0].duration.match(/\d+/)[0]);
-      let emiAmtduration = projectduration / 2;
-      let price =
-        service.product[0].discountedServiceCharges[0].discountedServiceCharges;
-      let quantity = service.quantity;
-      return { quantity, projectduration, emiAmtduration, price };
-    })
-    .reduce((sum, element) => {
-      // console.log("element", element);
+    ? services
+        .map((service) => {
+          let projectduration = Number(
+            service.product[0].duration.match(/\d+/)[0]
+          );
+          let emiAmtduration = projectduration / 2;
+          let price =
+            service.product[0].discountedServiceCharges[0]
+              .discountedServiceCharges;
+          // console.log(price);
+          let quantity = service.quantity;
+          return { quantity, projectduration, emiAmtduration, price };
+        })
+        .reduce((sum, element) => {
+          sum =
+            sum +
+            ((element.price * element.quantity) / element.projectduration) *
+              element.emiAmtduration;
+          // console.log("sum", sum);
 
-      sum =
-        sum +
-        ((element.price * element.quantity) / element.projectduration) *
-          element.emiAmtduration;
-      // console.log("sum", sum);
-
-      return sum;
-    }, 0);
+          return sum;
+        }, 0)
+    : null;
 
   //console.log(stripeTotal);
   //const servicetotal = ((total * 100) / 100).toFixed(2);

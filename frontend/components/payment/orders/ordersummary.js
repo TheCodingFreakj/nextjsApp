@@ -13,6 +13,8 @@ import { isAuth, getCookie } from "../../../actions/setAuthToken";
 import { useRouter } from "next/router";
 import { parsedataUrl } from "../../../components/utils/parseUrl";
 import { fetchCarts } from "../../../actions/shoppingcart";
+import ServiceTotal from "../../../components/cart/cartutils/servicetotal";
+import Toolstotal from "../../../components/cart/cartutils/toolstotal";
 
 const OrderSummary = () => {
   const [paymentData, setpaymentData] = useState({});
@@ -24,17 +26,22 @@ const OrderSummary = () => {
   const { tool, services } = cart;
   const router = useRouter();
   //runs only when url changes
-  useEffect(() => {
-    if (window.location.search) {
-      const response = parsedataUrl(decodeURIComponent(window.location.search));
 
-      setpaymentData(response.params.general);
-      console.log("This is running3333");
-    }
-  }, [window.location.search]);
+  if (typeof window !== "undefined") {
+    useEffect(() => {
+      if (window.location.search) {
+        const response = parsedataUrl(
+          decodeURIComponent(window.location.search)
+        );
+
+        setpaymentData(response.params.general);
+        // console.log("This is running3333");
+      }
+    }, [window.location.search]);
+  }
 
   useEffect(() => {
-    console.log("This is running");
+    // console.log("This is running");
 
     //we set state of mounted to true.
     const mounted = { current: true };
@@ -66,6 +73,13 @@ const OrderSummary = () => {
         };
 
         setCart(fetchedcart);
+        // const { servicetotal } =
+        //services ? ServiceTotal(services.products[0].product) : null;
+        // console.log("servicetotal", servicetotal);
+        // const { toolstotal } = tool
+        //   ? Toolstotal(tool.products[0].product)
+        //   : null;
+        // console.log("toolstotal", toolstotal);
       }
     });
   };
@@ -80,16 +94,16 @@ const OrderSummary = () => {
               <th>
                 ToolName: <br />
               </th>
-              <hr />
+              <br />
               <th>
                 Quantity:
                 <br />
               </th>
-              <hr />
+              <br />
               <th>
                 Duration :<br />
               </th>
-              <hr />
+              <br />
               <th>
                 TotalPrice:
                 <br />
@@ -98,21 +112,21 @@ const OrderSummary = () => {
 
             <tr>
               <td>
-                {t.product[0].tool} <hr />
+                {t.product[0].tool} <br />
               </td>
-              <hr />
+              <br />
               <td>
-                {t.quantity} <hr />
+                {t.quantity} <br />
               </td>
-              <hr />
+              <br />
               <td>
-                30 days <hr />
+                30 days <br />
               </td>
-              <hr />
+              <br />
               <td>
-                {t.product[0].totalPrice} <hr />
+                {t.product[0].totalPrice} <br />
               </td>
-              <hr />
+              <br />
             </tr>
           </table>
         </div>
@@ -130,16 +144,16 @@ const OrderSummary = () => {
               <th>
                 ServiceName: <br />
               </th>
-              <hr />
+              <br />
               <th>
                 Quantity:
                 <br />
               </th>
-              <hr />
+              <br />
               <th>
                 Duration :<br />
               </th>
-              <hr />
+              <br />
 
               <th>
                 Rate:
@@ -153,32 +167,32 @@ const OrderSummary = () => {
 
             <tr>
               <td>
-                {s.product[0].title} <hr />
+                {s.product[0].title} <br />
               </td>
-              <hr />
+              <br />
               <td>
                 {s.quantity} <hr />
               </td>
-              <hr />
+              <br />
               <td>
                 {s.product[0].duration}
-                <hr />
+                <br />
               </td>
-              <hr />
+              <br />
               <td>
                 {s.product[0].discountedServiceCharges[0].servicedDiscountPrice}{" "}
                 %
-                <hr />
+                <br />
               </td>
-              <hr />
+              <br />
               <td>
                 {
                   s.product[0].discountedServiceCharges[0]
                     .discountedServiceCharges
                 }{" "}
-                <hr />
+                <br />
               </td>
-              <hr />
+              <br />
             </tr>
           </table>
         </div>
@@ -200,13 +214,15 @@ const OrderSummary = () => {
     <p>no tools</p>
   );
 
-  let calcTotalServices = tool ? (
+  let calcTotalServices = services ? (
     services.products
       .map((t) => {
         let price =
           t.product[0].discountedServiceCharges[0].discountedServiceCharges;
-        return price;
+        return price; // nedd this to be tweak
       })
+
+      // element.price * element.quantity) / element.projectduration
       .reduce((acc, curr) => {
         acc += curr;
         return acc;
@@ -215,6 +231,17 @@ const OrderSummary = () => {
     <p>no tools</p>
   );
 
+  // console.log(tool.category);
+  // console.log(tool.products);
+  // console.log(tool.active);
+  //console.log(tool);
+  // console.log(services.category);
+  // console.log(services.products);
+  // console.log(services.active);
+  console.log("This is payment data from parseurl", paymentData);
+  // console.log("This is seevice total calculated on page", calcTotalServices);
+
+  // ?q=${serviceQueryparams}
   return (
     <div>
       {tool ? (
@@ -232,7 +259,7 @@ show the products in the orders section and remove when  the status as false bas
             color="yellow"
             floated="right"
             content="Subscribe"
-            onClick={() => router.push(`/payment/subscribe `)}
+            onClick={() => router.push(`/payment/subscribe`)}
           />
         </div>
       ) : (
@@ -243,6 +270,7 @@ show the products in the orders section and remove when  the status as false bas
           <p>Services Summary</p>
           <div>{showservices(services.products)}</div>
           <p>Total Services as First Emi{Math.round(calcTotalServices)}</p>
+          <p>1st emi: {paymentData[1]} </p>
 
           {/* send the status and emi amount also 
 break the second emi and set when to pay the next Emi

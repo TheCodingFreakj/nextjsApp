@@ -18,21 +18,23 @@ export const parseMyUrl = (urlParams) => {
 
 export const parsedataUrl = (urlParams) => {
   let dataUrl = urlParams.toString();
-  // console.log(dataUrl);
+  //console.log(dataUrl);
   let vars1 = dataUrl.split("?q=")[1];
   // console.log(vars1);
 
   let params = {};
 
   let vars = vars1.split("&");
-  console.log(vars);
+  //console.log(vars);
   let copyarray = [...vars];
   // console.log(copyarray);
   let subset = copyarray.splice(3, 8);
   // console.log(subset);
-
+  //console.log("This is subset", subset);
   params.general = Object.assign({}, copyarray);
   params.products = Object.assign({}, subset);
+
+  //console.log("This is params total generally", params.general);
   return { params };
 };
 

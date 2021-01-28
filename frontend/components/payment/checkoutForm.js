@@ -13,141 +13,36 @@ import Head from "next/head";
 import { getCookie } from "../../actions/setAuthToken";
 import { createSubsription, subscribesession } from "../../actions/payment";
 import { useRouter } from "next/router";
-import parseMyUrl from "../../components/utils/parseUrl";
+// import parseMyUrl from "../../components/utils/parseUrl";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
+import CardSection from "../../components/payment/cardsection";
 const CheckoutForm = () => {
-  //customerId and PriceId
-  const [paymentData, setpaymentData] = useState({
-    email: "",
-    phone: "",
-    billingAddress: "",
-    amttt: "",
-    user: "",
-  });
-
-  const [url, seturl] = useState("");
-  console.log(url);
-  const router = useRouter();
-  useEffect(() => {
-    let urlParams = new URLSearchParams(window.location.search);
-    const response = parseMyUrl(urlParams);
-    // console.log(response.params.user);
-    // console.log(response.params.email, "", response.params.amttt);
-    setpaymentData({
-      ...paymentData,
-      email: response.params.email,
-      amttt: response.params.amttt,
-      user: response.params.user,
-    });
-  }, []);
-
-  const handleChange = (event) => {
-    console.log(event.target.value);
-    const { name, value } = event.target;
-    setpaymentData((prevState) => ({ ...prevState, [name]: value }));
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(paymentData);
-    let paymentdata;
-    paymentdata = {
-      ...paymentData,
-    };
-    //https://javascript.info/url
-    //https://www.geeksforgeeks.org/how-to-serialize-an-object-into-a-list-of-url-query-parameters-using-javascript/
 
-    console.log(paymentdata);
-
-    const stringurl = JSON.stringify(paymentdata);
-
-    const urlquery = Object.keys(paymentdata)
-      .map((ig_key) => {
-        return ig_key + "=" + paymentdata[ig_key];
-      })
-      .join("&");
-
-    console.log(urlquery);
-    // console.log(stringurl);
-
-    console.log(`${DOMAIN}`);
-
-    // let url = encodeURI(new URL(`${DOMAIN}`));
-    // console.log(url);
-    let query = encodeURIComponent(`${urlquery}`);
-    // url.searchParams.set("q", `${urlquery}!`);
-    console.log(query);
-    //url + "" +
-    const urlF = query;
-    console.log(urlF);
-    seturl(urlF);
+    // handle payment request
   };
   return (
     <React.Fragment>
-      <Segment
-        raised
-        padded="very"
-        compact
-        inverted
-        color="orange"
-        size="large"
-      >
-        <Header as="h3" block color="green">
-          <Icon name="address book" color="red" />
-          We encourage You To Update This Form
-        </Header>
+      <div className="checkoutform">
+        <div className="product-info">
+          <h3 className="product-title">Apple MacBook Pro</h3>
+          <h4 className="product-price">$999</h4>
+        </div>
+        <form className="form-custom" onSubmit={handleSubmit}>
+          <CardSection />
 
-        <Form onSubmit={handleSubmit}>
-          <Form.Field
-            control={Input}
-            name="email"
-            label="Email Address"
-            placeholder="email"
-            value={paymentData.email || ""}
-            onChange={handleChange}
-          />
-
-          <Form.Field
-            control={Input}
-            name="phone"
-            label="Phone"
-            placeholder="phone"
-            value={paymentData.phone || ""}
-            onChange={handleChange}
-          />
-
-          <Form.Field
-            control={Input}
-            name="billingAddress"
-            label="BillingAddress"
-            placeholder="billingAddress"
-            value={paymentData.billingAddress || ""}
-            onChange={handleChange}
-          />
-
-          <Form.Field
-            control={Input}
-            name="amttt"
-            label="Amount"
-            placeholder="amttt"
-            value={paymentData.amttt || ""}
-            onChange={handleChange}
-          />
-          <Form.Field>
-            <Checkbox
-              label="I agree to the Terms and Conditions"
-              defaultIndeterminate
+          <div className="click-pay">
+            <Button
+              icon="cart"
+              color="yellow"
+              floated="right"
+              content="Pay"
+              // onClick={() => router.push(`/payment/subscribe `)}
             />
-          </Form.Field>
-          <Button
-            icon="shop"
-            color="green"
-            floated="right"
-            content="Confirm Data"
-            onClick={() => router.push(`/payment/subscribe?pay=${url}`)}
-          />
-        </Form>
-      </Segment>
+          </div>
+        </form>
+      </div>
     </React.Fragment>
   );
 };
