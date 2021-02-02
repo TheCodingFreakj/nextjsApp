@@ -54,7 +54,7 @@ exports.updateServiceCart = async (req, res) => {
       (doc) => serviceId === String(doc.product)
     );
 
-    console.log("productExists", productExists);
+    //console.log("productExists", productExists);
     if (productExists) {
       await ServiceCart.findOneAndUpdate(
         {
@@ -89,7 +89,7 @@ exports.fetchCarts = async (req, res) => {
       path: "products.product",
       model: "Tools",
     });
-    console.log(toolsCart);
+    //console.log(toolsCart);
     // toolcarts = toolsCart.products;
 
     const serviceCart = await ServiceCart.findOne({ customer: user }).populate({
@@ -100,7 +100,7 @@ exports.fetchCarts = async (req, res) => {
         model: "Price",
       },
     });
-    console.log(serviceCart);
+    // console.log(serviceCart);
     // serviceCarts = serviceCart.products;
     // console.log(serviceCarts);
 
@@ -116,7 +116,7 @@ exports.fetchCarts = async (req, res) => {
 exports.deleteToolsCart = async (req, res) => {
   const { productId } = req.query;
   const userid = req.user.id;
-  console.log("The query", req.query);
+  // console.log("The query", req.query);
   let toolcarts;
   try {
     const updatedCart = await ToolsCart.findOneAndUpdate(

@@ -9,16 +9,9 @@ import { API } from "../../../config";
 import { isAuth } from "../../../actions/setAuthToken";
 //import { dataExtracter, servicedatatranform } from "../../utils/parseUrl";
 const AddServiceButton = ({ servicecart = [], active, cat }) => {
-  // console.log("the cart in service, render 5", servicecart);
-  // console.log(active, "", cat);
-
   const [serviceAmount, setServiceAmount] = useState(0);
   const [formattedData, setformattedData] = useState();
-
   const router = useRouter();
-  //console.log(router);
-  // console.log("toolscart essentials", toolscart);
-  console.log("servicecart essentials", servicecart);
 
   useEffect(() => {
     const mounted = { current: true };
@@ -26,11 +19,8 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
     if (mounted.current) {
       if (servicecart) {
         const { servicetotal } = ServiceTotal(servicecart);
-        console.log("servicetotal", servicetotal);
-        // console.log("is this running");
         setServiceAmount(servicetotal);
-        //const productinfo = dataExtracter(servicecart);
-        // const productinfo = servicedatatranform(servicecart);
+
         const arrayToObject = (servicecart, key) =>
           servicecart.reduce((obj, item) => {
             return {
@@ -61,14 +51,13 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
               duration,
               tools,
             };
-          }); //got the objects separately
-        //console.log("all the data about product in the carts", chooseproducts);
+          });
 
         let productquery = chooseproducts.map((p) => {
           let query = new URLSearchParams(p);
           return decodeURIComponent(query.toString());
         });
-        //console.log(productquery);
+
         let form_values = {};
         productquery.forEach((productquery, i) => {
           let splitdata = productquery.split("&");
@@ -77,29 +66,6 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
             let this_item = value.split("=");
             form_values[this_item[0]] = unescape(this_item[1]);
           });
-
-          //Method 1
-
-          // let keys = Object.keys(form_values).map((pro) => {
-          //   return form_values[pro];
-          // });
-
-          // let queryString = ""; // console.log(keys);
-          // // //console.log(keys.join("&"));
-
-          // queryString = Object.keys(form_values)
-          //   .map((key) => key + "=" + form_values[key])
-          //   .join("&");
-
-          // console.log(queryString);
-
-          // let parms = encodeURIComponent(`${keys} `.join(&));
-
-          // if (typeof chooseproducts == "undefined") {
-          //   <p>...Loading</p>;
-          // } else {
-          //   chooseproducts ? setformattedData(queryString) : <p>No data Yet</p>;
-          // }
         });
       }
     }
@@ -110,26 +76,10 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
   }, [servicecart]);
 
   const user = isAuth();
-  // console.log(typeof formattedData);
-  //console.log("all the data about product in the carts", formattedData); //this is in array format
 
-  //how to pass array to url
-  // let splitdata = "";
-  // console.log(splitdata);
   let serviceQueryparams = encodeURIComponent(
     `${user._id}  & $${serviceAmount}  & ${user.email}`
   );
-
-  // pass these two as well : active, cat
-
-  //pass the array dynamically
-  // let serviceinfo = "";
-  // formattedData
-  //   ? (serviceinfo = encodeURIComponent(
-  //       `${formattedData[0]}  & ${formattedData[1]} &${active}& ${cat} `
-  //     ))
-  //   : console.log("no data");
-  // // console.log("This is service data", serviceinfo);
   return (
     <React.Fragment>
       <>
@@ -164,25 +114,6 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
 };
 
 export default AddServiceButton;
-//how to implement error handle in react js
-// var myArray = ['aaa', 'bbb', 'ccc', ];
-
-// var myArrayQry = myArray.map(function(el, idx) {
-//     return 'myArray[' + idx + ']=' + el;
-// }).join('&');
-
-// // myArray[0]=aaa&myArray[1]=bbb&myArray[2]=ccc
-
-// let params = {
-//   dog: {
-//     name: 'John',
-//     age: 12
-//   },
-//   user_ids: [1, 3]
-// };
-// let query = new URLSearchParams(params);
-// decodeURIComponent(query.toString());
-// // Gives you: "dog=[object+Object]&user_ids=1,3"
 
 //https://dev.to/shalvah/fun-stuff-representing-arrays-and-objects-in-query-strings-36bn
 // #programmerhumor

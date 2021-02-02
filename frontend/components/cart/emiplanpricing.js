@@ -13,9 +13,6 @@ import { useRouter } from "next/router";
 
 const EmiPlanPricing = ({ serviceAmount, serviceQueryparams }) => {
   const router = useRouter();
-  // console.log("the cart in service, render 7", servicecart);
-  // console.log(serviceinfo);
-
   return (
     <React.Fragment>
       <>

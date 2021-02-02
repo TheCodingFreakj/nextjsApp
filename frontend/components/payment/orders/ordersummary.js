@@ -215,33 +215,43 @@ const OrderSummary = () => {
   );
 
   let calcTotalServices = services ? (
-    services.products
-      .map((t) => {
-        let price =
-          t.product[0].discountedServiceCharges[0].discountedServiceCharges;
-        return price; // nedd this to be tweak
-      })
+    services.products.map((t) => {
+      const totalpriceProducts =
+        t.product[0].discountedServiceCharges[0].discountedServiceCharges;
+      const totalpricequantityorders = totalpriceProducts * t.quantity;
+      const totalduration = parseInt(t.product[0].duration);
+      // let totalprice
+      let pricetoshow = totalpricequantityorders;
 
-      // element.price * element.quantity) / element.projectduration
-      .reduce((acc, curr) => {
+      return { pricetoshow, totalduration };
+    })
+  ) : (
+    <p>no services</p>
+  );
+
+  let totalprice = [];
+  calcTotalServices
+    ? (totalprice = [calcTotalServices].map((serv) => {
+        let prices = [];
+        prices = serv.map((s) => {
+          return s.pricetoshow;
+        });
+
+        return prices;
+      }))
+    : null;
+
+  const summed = totalprice
+    ? totalprice[0].reduce((acc, curr) => {
         acc += curr;
         return acc;
       }, 0)
-  ) : (
-    <p>no tools</p>
-  );
+    : null;
 
-  // console.log(tool.category);
-  // console.log(tool.products);
-  // console.log(tool.active);
-  //console.log(tool);
-  // console.log(services.category);
-  // console.log(services.products);
-  // console.log(services.active);
   console.log("This is payment data from parseurl", paymentData);
-  // console.log("This is seevice total calculated on page", calcTotalServices);
-
-  // ?q=${serviceQueryparams}
+  let checkoutparamsinitial = encodeURIComponent(
+    `${paymentData[0]}  & ${paymentData[1]}  & ${paymentData[3]} &${calcTotalServices.totalduration} & ${services.active}`
+  );
   return (
     <div>
       {tool ? (
@@ -269,21 +279,43 @@ show the products in the orders section and remove when  the status as false bas
         <div>
           <p>Services Summary</p>
           <div>{showservices(services.products)}</div>
-          <p>Total Services as First Emi{Math.round(calcTotalServices)}</p>
-          <p>1st emi: {paymentData[1]} </p>
 
+          <h3>Pricing Summary</h3>
+          <div className="pricing-summary-1">
+            <p>Total Services as First Emi: $ {Math.round(summed)}</p>
+            <p>1st emi: ${paymentData[1]} </p>
+            <Button
+              icon="cart"
+              color="teal"
+              floated="right"
+              content="Checkout"
+              onClick={() =>
+                router.push(`/payment/checkout/?q=${checkoutparamsinitial} `)
+              }
+            />
+          </div>
+          <div className="pricing-summary-2">
+            <p>
+              Residual: ${Math.round(summed)} - {paymentData[1]}
+            </p>
+
+            <Button
+              icon="cart"
+              color="teal"
+              floated="right"
+              content="Checkout"
+            />
+          </div>
+
+          {/* status
+
+emi-number-
+ */}
           {/* send the status and emi amount also 
 break the second emi and set when to pay the next Emi
 last emi after work done
 empty the cart only once the payment 
 transform the details to order sections and empty order only when status is false after the duration */}
-          <Button
-            icon="cart"
-            color="yellow"
-            floated="right"
-            content="Subscribe"
-            onClick={() => router.push(`/payment/checkout `)}
-          />
         </div>
       ) : (
         <p>you got to wait while we fetch your data</p>

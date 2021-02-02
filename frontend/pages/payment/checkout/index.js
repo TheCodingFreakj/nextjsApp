@@ -13,7 +13,6 @@ import { isAuth } from "../../../actions/setAuthToken";
 
 import Checkout from "../../../components/payment/checkout";
 const CheckoutProd = () => {
-  //get both the carts
   const user = isAuth();
 
   return (

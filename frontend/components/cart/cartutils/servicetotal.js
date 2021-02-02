@@ -9,7 +9,7 @@ const ServiceTotal = (services) => {
           let price =
             service.product[0].discountedServiceCharges[0]
               .discountedServiceCharges;
-          // console.log(price);
+
           let quantity = service.quantity;
           return { quantity, projectduration, emiAmtduration, price };
         })
@@ -18,16 +18,10 @@ const ServiceTotal = (services) => {
             sum +
             ((element.price * element.quantity) / element.projectduration) *
               element.emiAmtduration;
-          // console.log("sum", sum);
-
           return sum;
         }, 0)
     : null;
-
-  //console.log(stripeTotal);
-  //const servicetotal = ((total * 100) / 100).toFixed(2);
   const servicetotal = Number(((stripeTotal * 100) / 100).toFixed(2));
-  // console.log(servicetotal);
   return { servicetotal };
 };
 

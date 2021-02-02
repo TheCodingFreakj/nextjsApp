@@ -118,16 +118,28 @@ h3.display-2.pb-3.pt-3.text-center.font-weight-bold {
   padding: 10%;
 }
 
+.checkout-comp {
+  background: tomato;
+  padding: 6% 1%;
+  position: relative;
+  z-index: -1;
+}
+
 .checkoutform {
   background: green;
   padding: 2%;
   max-width: 80%;
+  border-radius: 25%;
+  box-shadow: inset 5px 5px 10px #000000, inset -5px -5px 10px blue;
   position: relative;
   left: 10%;
+  margin-top: -4.9em;
+  z-index: 1;
 }
 .product-info {
   background: purple;
   padding: 2% 3%;
+  clip-path: circle(10em at center);
 }
 
 h3.product-title {

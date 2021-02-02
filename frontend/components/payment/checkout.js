@@ -36,7 +36,7 @@ const Checkout = () => {
   // }
 
   return (
-    <div>
+    <div className="checkout-comp">
       {/* Get the user details, products details, amount and create the stripe post
       here this is stripe form to collection all details''  */}
       <Elements stripe={stripePromise}>
