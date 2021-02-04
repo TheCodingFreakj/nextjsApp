@@ -27,7 +27,10 @@ const CheckoutForm = () => {
       <div className="checkoutform">
         <div className="product-info">
           <h3 className="product-title">Apple MacBook Pro</h3>
-          <h4 className="product-price">$999</h4>
+          <h3 className="product-title">Name: That's your email </h3>
+          <h3 className="product-title">Name: That's your number </h3>
+          <h3 className="product-title">Confirming business address</h3>
+          <h4 className="product-price">Price: $999</h4>
         </div>
         <form className="form-custom" onSubmit={handleSubmit}>
           <CardSection />
@@ -37,7 +40,7 @@ const CheckoutForm = () => {
               icon="cart"
               color="yellow"
               floated="right"
-              content="Pay"
+              content="Pay 999"
               // onClick={() => router.push(`/payment/subscribe `)}
             />
           </div>

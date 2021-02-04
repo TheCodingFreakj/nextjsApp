@@ -228,30 +228,47 @@ const OrderSummary = () => {
   ) : (
     <p>no services</p>
   );
+  // loop through all the duration match with the data fecthed and find relecant services
+  // create the array with service and days.. as keyvale pair and pass to url
 
-  let totalprice = [];
-  calcTotalServices
-    ? (totalprice = [calcTotalServices].map((serv) => {
-        let prices = [];
-        prices = serv.map((s) => {
-          return s.pricetoshow;
-        });
+  //////////////////////Services and Durations////////////////////////
+  let the_days = [];
+  services
+    ? (the_days = Object.keys(calcTotalServices).map((item, i) => {
+        return Math.round(calcTotalServices[item].totalduration);
+      }))
+    : null;
+  console.log(the_days);
 
-        return prices;
+  services
+    ? services.products.map((p, i) => {
+        let duration = p.product[0].duration;
+        let service = p.product[0].title;
+        console.log(service);
+        console.log(duration);
+
+        // How to Create Key Value Pair Array Using Javascript
+        //create the array and return
+      })
+    : null;
+
+  //////////////////////TOtal Price////////////////////////
+  let prices = [];
+  services
+    ? (prices = Object.keys(calcTotalServices).map((item, i) => {
+        return Math.round(calcTotalServices[item].pricetoshow);
       }))
     : null;
 
-  const summed = totalprice
-    ? totalprice[0].reduce((acc, curr) => {
-        acc += curr;
-        return acc;
-      }, 0)
-    : null;
+  let totalprice = [];
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
+  services ? (totalprice = prices.reduce(reducer)) : null;
 
-  console.log("This is payment data from parseurl", paymentData);
+  // console.log("This is payment data from parseurl", paymentData);
   let checkoutparamsinitial = encodeURIComponent(
-    `${paymentData[0]}  & ${paymentData[1]}  & ${paymentData[3]} &${calcTotalServices.totalduration} & ${services.active}`
+    `${paymentData[0]}  & ${paymentData[1]}  & ${paymentData[2]} &${calcTotalServices.totalduration} & ${services.active}`
   );
+
   return (
     <div>
       {tool ? (
@@ -279,10 +296,10 @@ show the products in the orders section and remove when  the status as false bas
         <div>
           <p>Services Summary</p>
           <div>{showservices(services.products)}</div>
-
+          {/* {Math.round(summed)} */}
           <h3>Pricing Summary</h3>
           <div className="pricing-summary-1">
-            <p>Total Services as First Emi: $ {Math.round(summed)}</p>
+            <p>Total Services as First Emi: $ {totalprice} </p>
             <p>1st emi: ${paymentData[1]} </p>
             <Button
               icon="cart"
@@ -295,9 +312,7 @@ show the products in the orders section and remove when  the status as false bas
             />
           </div>
           <div className="pricing-summary-2">
-            <p>
-              Residual: ${Math.round(summed)} - {paymentData[1]}
-            </p>
+            <p>Residual: {paymentData[1]}</p>
 
             <Button
               icon="cart"
@@ -327,3 +342,5 @@ transform the details to order sections and empty order only when status is fals
 export default OrderSummary;
 //use the error handling part
 //https://www.robinwieruch.de/react-hooks-fetch-data
+//https://dmitripavlutin.com/7-tips-to-handle-undefined-in-javascript/
+//https://freeplaymusic.com/#
