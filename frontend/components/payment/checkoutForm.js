@@ -17,6 +17,21 @@ import { useRouter } from "next/router";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import CardSection from "../../components/payment/cardsection";
 const CheckoutForm = () => {
+  useEffect(() => {
+    // console.log("This is running");
+
+    //we set state of mounted to true.
+    const mounted = { current: true };
+
+    if (mounted.current) {
+      //parse the url here and supply the values
+      console.log("This is to be done");
+    }
+
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const handleSubmit = async (event) => {
     event.preventDefault();
 

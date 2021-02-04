@@ -238,19 +238,25 @@ const OrderSummary = () => {
         return Math.round(calcTotalServices[item].totalduration);
       }))
     : null;
-  console.log(the_days);
+  // console.log(the_days);
 
+  let arraytot = [];
   services
-    ? services.products.map((p, i) => {
-        let duration = p.product[0].duration;
-        let service = p.product[0].title;
-        console.log(service);
-        console.log(duration);
-
-        // How to Create Key Value Pair Array Using Javascript
-        //create the array and return
-      })
+    ? (arraytot = services.products
+        .map((p, i) => {
+          let duration = p.product[0].duration;
+          let service = p.product[0].title;
+          let arr = [];
+          arr.push({ service: duration });
+          //console.log(arr);
+          return arr;
+        })
+        .map((arr) => {
+          return arr[0];
+        }))
     : null;
+
+  //console.log(arraytot);
 
   //////////////////////TOtal Price////////////////////////
   let prices = [];
@@ -266,7 +272,7 @@ const OrderSummary = () => {
 
   // console.log("This is payment data from parseurl", paymentData);
   let checkoutparamsinitial = encodeURIComponent(
-    `${paymentData[0]}  & ${paymentData[1]}  & ${paymentData[2]} &${calcTotalServices.totalduration} & ${services.active}`
+    `${paymentData[0]}  & ${paymentData[1]}  & ${paymentData[2]}  & ${services.active}`
   );
 
   return (
@@ -307,7 +313,9 @@ show the products in the orders section and remove when  the status as false bas
               floated="right"
               content="Checkout"
               onClick={() =>
-                router.push(`/payment/checkout/?q=${checkoutparamsinitial} `)
+                router.push(
+                  `/payment/checkout/?q=${checkoutparamsinitial}&durationlists=${the_days} `
+                )
               }
             />
           </div>
