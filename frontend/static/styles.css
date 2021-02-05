@@ -139,10 +139,11 @@ h3.display-2.pb-3.pt-3.text-center.font-weight-bold {
 .product-info {
   background: purple;
   padding: 2% 3%;
-  clip-path: circle(10em at center);
+  clip-path: circle(60%);
 }
 
-h3.product-title {
+h3.product-title,
+p.product-duration {
   text-align: center;
   color: wheat;
 }

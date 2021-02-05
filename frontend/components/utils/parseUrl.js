@@ -18,14 +18,15 @@ export const parseMyUrl = (urlParams) => {
 
 export const parsedataUrl = (urlParams) => {
   let dataUrl = urlParams.toString();
-  //console.log(dataUrl);
+  console.log(dataUrl);
   let vars1 = dataUrl.split("?q=")[1];
-  // console.log(vars1);
+  console.log(vars1);
 
   let params = {};
 
   let vars = vars1.split("&");
-  //console.log(vars);
+  console.log(vars);
+
   let copyarray = [...vars];
   // console.log(copyarray);
   let subset = copyarray.splice(3, 8);
@@ -68,16 +69,36 @@ export const servicedatatranform = (servicecart) => {
   });
 };
 
-// const map = (collection, fn) => {
-//   return collection.reduce((acc, item) => {
-//     return acc.concat(fn(item));
-//   }, []);
-// };
+export const checkoutdataparser = (urlParams) => {
+  let dataUrl = urlParams.toString();
+  //console.log(dataUrl);
+  let vars1 = dataUrl.split("?q=")[1];
+  //console.log(vars1);
 
-// const servicedatatranform = (servicecart, keyField) =>
-//    array.reduce((obj, item) => {
-//      obj[item[keyField]] = item
-//      return obj
-//    }, {})
-// const peopleObject = arrayToObject(peopleArray, "id")
-// console.log(peopleObject[idToSelect])
+  let params = {};
+
+  let vars = vars1.split("&");
+  //console.log(vars);
+
+  let copyarray = [...vars];
+  //console.log(copyarray);
+  //Array.splice(position,num);
+
+  //copyarray.map((el) => console.log(el));
+
+  // let subsetmain = copyarray.splice(3, 1);
+  let subsetdur = copyarray.slice(0, 4);
+  let subsetmain = copyarray[copyarray.length - 1];
+  //console.log("This is subsetdur", subsetdur);
+  //console.log("This is subsetmain", subsetmain);
+  let ar = subsetmain.split(", "); // split string on comma space
+  //console.log(ar[0]);
+  let arr = ar[0].split("durationlists=");
+
+  //console.log(arr);
+  params.productioninfo = Object.assign({}, subsetdur);
+  params.duration = Object.assign({}, arr);
+
+  //console.log("This is params total generally", params);
+  return { params };
+};

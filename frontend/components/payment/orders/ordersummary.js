@@ -41,9 +41,6 @@ const OrderSummary = () => {
   }
 
   useEffect(() => {
-    // console.log("This is running");
-
-    //we set state of mounted to true.
     const mounted = { current: true };
 
     if (mounted.current) {
@@ -56,15 +53,10 @@ const OrderSummary = () => {
   }, []);
 
   const getProductsFromCarts = async () => {
-    //setLoading(true);
     await fetchCarts(getCookie("token")).then((data) => {
-      //console.log("The cart data render1 fetched from backend ", data);
       if (data.error) {
         console.log(data.error);
-        //setLoading(false);
       } else {
-        //setLoading(false);
-
         let fetchedcart = {
           ...cart,
           tool: data.toolsCart,
@@ -73,19 +65,11 @@ const OrderSummary = () => {
         };
 
         setCart(fetchedcart);
-        // const { servicetotal } =
-        //services ? ServiceTotal(services.products[0].product) : null;
-        // console.log("servicetotal", servicetotal);
-        // const { toolstotal } = tool
-        //   ? Toolstotal(tool.products[0].product)
-        //   : null;
-        // console.log("toolstotal", toolstotal);
       }
     });
   };
 
   const showtools = (tools) => {
-    //console.log(tools.product);
     return tools.map((t, i) => {
       return (
         <div key={i}>
@@ -228,8 +212,6 @@ const OrderSummary = () => {
   ) : (
     <p>no services</p>
   );
-  // loop through all the duration match with the data fecthed and find relecant services
-  // create the array with service and days.. as keyvale pair and pass to url
 
   //////////////////////Services and Durations////////////////////////
   let the_days = [];
@@ -238,7 +220,6 @@ const OrderSummary = () => {
         return Math.round(calcTotalServices[item].totalduration);
       }))
     : null;
-  // console.log(the_days);
 
   let arraytot = [];
   services
@@ -248,7 +229,6 @@ const OrderSummary = () => {
           let service = p.product[0].title;
           let arr = [];
           arr.push({ service: duration });
-          //console.log(arr);
           return arr;
         })
         .map((arr) => {
@@ -314,14 +294,13 @@ show the products in the orders section and remove when  the status as false bas
               content="Checkout"
               onClick={() =>
                 router.push(
-                  `/payment/checkout/?q=${checkoutparamsinitial}&durationlists=${the_days} `
+                  `/payment/checkout/?q=${checkoutparamsinitial}&durationlists=${the_days}`
                 )
               }
             />
           </div>
           <div className="pricing-summary-2">
             <p>Residual: {paymentData[1]}</p>
-
             <Button
               icon="cart"
               color="teal"
