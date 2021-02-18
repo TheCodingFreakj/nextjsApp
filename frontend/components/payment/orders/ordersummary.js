@@ -13,9 +13,9 @@ import { isAuth, getCookie } from "../../../actions/setAuthToken";
 import { useRouter } from "next/router";
 import { parsedataUrl } from "../../../components/utils/parseUrl";
 import { fetchCarts } from "../../../actions/shoppingcart";
-import ServiceTotal from "../../../components/cart/cartutils/servicetotal";
-import Toolstotal from "../../../components/cart/cartutils/toolstotal";
-
+import Modal from "../../../components/utils/ModalUtils/addressModal";
+import AddressConfirmationSwitch from "../../utils/switches/addressswitch";
+import Wrapper from "../../hoc/wrapper";
 const OrderSummary = () => {
   const [paymentData, setpaymentData] = useState({});
   const [cart, setCart] = useState({
@@ -23,9 +23,11 @@ const OrderSummary = () => {
     services: "",
   });
   const [loading, setLoading] = useState(false);
+  const [displayAddressInputs, setdisplayAddressInputs] = useState(false);
+  const [showModal, setshowModal] = useState(false);
+  const [purchasing, setPurchasing] = useState(false);
   const { tool, services } = cart;
   const router = useRouter();
-  //runs only when url changes
 
   if (typeof window !== "undefined") {
     useEffect(() => {
@@ -173,7 +175,7 @@ const OrderSummary = () => {
                 {
                   s.product[0].discountedServiceCharges[0]
                     .discountedServiceCharges
-                }{" "}
+                }
                 <br />
               </td>
               <br />
@@ -250,6 +252,23 @@ const OrderSummary = () => {
   const reducer = (accumulator, currentValue) => accumulator + currentValue;
   services ? (totalprice = prices.reduce(reducer)) : null;
 
+  const styles = {
+    background: "turquoise",
+    padding: "2%",
+    borderRadius: "4rem",
+    position: "relative",
+    left: "40%",
+  };
+
+  const purchaseNow = () => {
+    setPurchasing(true);
+  };
+
+  const closeModal = () => {
+    setPurchasing(false);
+  };
+
+  console.log(purchasing);
   // console.log("This is payment data from parseurl", paymentData);
   let checkoutparamsinitial = encodeURIComponent(
     `${paymentData[0]}  & ${paymentData[1]}  & ${paymentData[2]}  & ${services.active}`
@@ -258,9 +277,14 @@ const OrderSummary = () => {
   return (
     <div>
       {tool ? (
-        <div>
+        <div className="order-container">
           <p>Tools Summary</p>
-          <div>{showtools(tool.products)}</div>
+          <div>
+            {showtools(tool.products)}
+            <button style={styles} onClick={purchaseNow}>
+              Confirm address
+            </button>
+          </div>
           <p>Total Tools per month {Math.round(calTotalTools)}</p>
 
           {/* pass the status monthly subscrtion upto how many months 
@@ -272,6 +296,7 @@ show the products in the orders section and remove when  the status as false bas
             color="yellow"
             floated="right"
             content="Subscribe"
+            className="btn"
             onClick={() => router.push(`/payment/subscribe`)}
           />
         </div>
@@ -279,9 +304,14 @@ show the products in the orders section and remove when  the status as false bas
         <p>you got to wait while we fetch your data</p>
       )}
       {services ? (
-        <div>
+        <div className="order-container">
           <p>Services Summary</p>
-          <div>{showservices(services.products)}</div>
+          <div>
+            {showservices(services.products)}
+            <button style={styles} onClick={purchaseNow}>
+              Confirm address
+            </button>
+          </div>
           {/* {Math.round(summed)} */}
           <h3>Pricing Summary</h3>
           <div className="pricing-summary-1">
@@ -304,8 +334,9 @@ show the products in the orders section and remove when  the status as false bas
             <Button
               icon="cart"
               color="teal"
-              floated="right"
+              floated="left"
               content="Checkout"
+              className="btn"
             />
           </div>
 
@@ -322,6 +353,14 @@ transform the details to order sections and empty order only when status is fals
       ) : (
         <p>you got to wait while we fetch your data</p>
       )}
+      {/* https://stackoverflow.com/questions/28405444/inline-css-styles-in-react-how-to-implement-media-queries */}
+      <Modal show={purchasing} closeModal={closeModal}>
+        <AddressConfirmationSwitch closeModal={closeModal} />
+      </Modal>
+
+      <button style={styles} onClick={purchaseNow}>
+        Confirm address
+      </button>
     </div>
   );
 };
@@ -331,3 +370,4 @@ export default OrderSummary;
 //https://www.robinwieruch.de/react-hooks-fetch-data
 //https://dmitripavlutin.com/7-tips-to-handle-undefined-in-javascript/
 //https://freeplaymusic.com/#
+//https://flaviocopes.com/file-upload-using-ajax/

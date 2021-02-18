@@ -45,18 +45,13 @@ const Checkout = () => {
   if (typeof window !== "undefined") {
     useEffect(() => {
       if (window.location.search) {
-        // console.log(window.location.search);
         const response = checkoutdataparser(
           decodeURIComponent(window.location.search)
         );
-        // // console.log(response);
-        // console.log(response.params.productioninfo);
-        // console.log(response.params.duration[1]);
 
         response ? (
           setpaymentData({
             email: response.params.productioninfo[2],
-            // phone: "",
             duration: [response.params.duration[1]],
             orderstat: response.params.productioninfo[3],
             amttt: response.params.productioninfo[1],
@@ -68,7 +63,7 @@ const Checkout = () => {
       }
     }, [window.location.search]);
   }
-  console.log(paymentData);
+  // console.log(paymentData);
   return (
     <div className="checkout-comp">
       {/* Get the  products details,  and create the stripe post

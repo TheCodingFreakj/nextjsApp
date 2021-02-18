@@ -15,30 +15,17 @@ import { createSubsription, subscribesession } from "../../actions/payment";
 import { useRouter } from "next/router";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import CardSection from "../../components/payment/cardsection";
-
+//import AddressConfirmationSwitch from "../../components/utils/switches/addressswitch";
+import Modal from "../../components/utils/ModalUtils/addressModal";
 const CheckoutForm = ({ paymentData }) => {
   //console.log(paymentData);
-  useEffect(() => {
-    // console.log("This is running");
 
-    //we set state of mounted to true.
-    const mounted = { current: true };
-
-    if (mounted.current) {
-      //parse the url here and supply the values
-      console.log("This is to be done");
-      //call the customer function get the address and number
-    }
-
-    return () => {
-      mounted.current = false;
-    };
-  }, []);
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     // handle payment request
   };
+
   return (
     <React.Fragment>
       <div className="checkoutform">
@@ -48,26 +35,7 @@ const CheckoutForm = ({ paymentData }) => {
             For Duration {paymentData.duration[0]} days respectively
           </p>
           <h3 className="product-title">Name: {paymentData.email} </h3>
-          <h3 className="product-title">
-            <input
-              type="text"
-              // className="form-control"
-              placeholder="Confirm address"
-              // value={password} // grab the init value from formData
-              // onChange={onChange("password")}
-              required
-            />
-          </h3>
-          <h3 className="product-title">
-            <input
-              type="text"
-              // className="form-control"
-              placeholder="Confirm  number"
-              // value={password} // grab the init value from formData
-              // onChange={onChange("password")}
-              required
-            />
-          </h3>
+
           <h4 className="product-price">Price: {paymentData.amttt}</h4>
         </div>
         <form className="form-custom" onSubmit={handleSubmit}>
