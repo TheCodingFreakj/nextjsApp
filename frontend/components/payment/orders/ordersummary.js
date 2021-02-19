@@ -77,42 +77,23 @@ const OrderSummary = () => {
         <div key={i}>
           <table>
             <tr>
-              <th>
-                ToolName: <br />
-              </th>
-              <br />
-              <th>
-                Quantity:
-                <br />
-              </th>
-              <br />
-              <th>
-                Duration :<br />
-              </th>
-              <br />
-              <th>
-                TotalPrice:
-                <br />
-              </th>
+              <th>ToolName</th>
+
+              <th>Quantity</th>
+
+              <th>Duration</th>
+
+              <th>TotalPrice</th>
             </tr>
 
             <tr>
-              <td>
-                {t.product[0].tool} <br />
-              </td>
-              <br />
-              <td>
-                {t.quantity} <br />
-              </td>
-              <br />
-              <td>
-                30 days <br />
-              </td>
-              <br />
-              <td>
-                {t.product[0].totalPrice} <br />
-              </td>
-              <br />
+              <td>{t.product[0].tool}</td>
+
+              <td>{t.quantity}</td>
+
+              <td>30 days</td>
+
+              <td>{t.product[0].totalPrice}</td>
             </tr>
           </table>
         </div>
@@ -124,61 +105,37 @@ const OrderSummary = () => {
     //console.log(services.product);
     return services.map((s, i) => {
       return (
-        <div key={i}>
+        <div className="table-container" key={i}>
           <table>
             <tr>
-              <th>
-                ServiceName: <br />
-              </th>
-              <br />
-              <th>
-                Quantity:
-                <br />
-              </th>
-              <br />
-              <th>
-                Duration :<br />
-              </th>
-              <br />
+              <th>ServiceName</th>
 
-              <th>
-                Rate:
-                <br />
-              </th>
-              <th>
-                TotalPrice:
-                <br />
-              </th>
+              <th>Quantity</th>
+
+              <th>Duration</th>
+
+              <th>Rate</th>
+              <th>TotalPrice</th>
             </tr>
 
             <tr>
-              <td>
-                {s.product[0].title} <br />
-              </td>
-              <br />
-              <td>
-                {s.quantity} <hr />
-              </td>
-              <br />
-              <td>
-                {s.product[0].duration}
-                <br />
-              </td>
-              <br />
+              <td>{s.product[0].title}</td>
+
+              <td>{s.quantity}</td>
+
+              <td>{s.product[0].duration}</td>
+
               <td>
                 {s.product[0].discountedServiceCharges[0].servicedDiscountPrice}{" "}
                 %
-                <br />
               </td>
-              <br />
+
               <td>
                 {
                   s.product[0].discountedServiceCharges[0]
                     .discountedServiceCharges
                 }
-                <br />
               </td>
-              <br />
             </tr>
           </table>
         </div>
@@ -258,6 +215,7 @@ const OrderSummary = () => {
     borderRadius: "4rem",
     position: "relative",
     left: "40%",
+    marginTop: "5%",
   };
 
   const purchaseNow = () => {
@@ -279,12 +237,7 @@ const OrderSummary = () => {
       {tool ? (
         <div className="order-container">
           <p>Tools Summary</p>
-          <div>
-            {showtools(tool.products)}
-            <button style={styles} onClick={purchaseNow}>
-              Confirm address
-            </button>
-          </div>
+          <div>{showtools(tool.products)}</div>
           <p>Total Tools per month {Math.round(calTotalTools)}</p>
 
           {/* pass the status monthly subscrtion upto how many months 
@@ -296,7 +249,6 @@ show the products in the orders section and remove when  the status as false bas
             color="yellow"
             floated="right"
             content="Subscribe"
-            className="btn"
             onClick={() => router.push(`/payment/subscribe`)}
           />
         </div>
@@ -312,7 +264,7 @@ show the products in the orders section and remove when  the status as false bas
               Confirm address
             </button>
           </div>
-          {/* {Math.round(summed)} */}
+
           <h3>Pricing Summary</h3>
           <div className="pricing-summary-1">
             <p>Total Services as First Emi: $ {totalprice} </p>
@@ -321,7 +273,7 @@ show the products in the orders section and remove when  the status as false bas
               icon="cart"
               color="teal"
               floated="right"
-              content="Checkout"
+              content="Checkout-EMI-1"
               onClick={() =>
                 router.push(
                   `/payment/checkout/?q=${checkoutparamsinitial}&durationlists=${the_days}`
@@ -335,7 +287,7 @@ show the products in the orders section and remove when  the status as false bas
               icon="cart"
               color="teal"
               floated="left"
-              content="Checkout"
+              content="Checkout-EMI-2"
               className="btn"
             />
           </div>
@@ -353,7 +305,7 @@ transform the details to order sections and empty order only when status is fals
       ) : (
         <p>you got to wait while we fetch your data</p>
       )}
-      {/* https://stackoverflow.com/questions/28405444/inline-css-styles-in-react-how-to-implement-media-queries */}
+
       <Modal show={purchasing} closeModal={closeModal}>
         <AddressConfirmationSwitch closeModal={closeModal} />
       </Modal>

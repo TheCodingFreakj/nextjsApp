@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
   //console.log(children);
 
   return (
-    <div>
+    <div className=" container-md-2">
       <Head>
         <HeadContent />
 
