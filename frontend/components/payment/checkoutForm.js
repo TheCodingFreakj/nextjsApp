@@ -22,7 +22,8 @@ const CheckoutForm = ({ paymentData }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    // gather all business details with duration and amount and then see Stripe
+    // documentation for one time checkout
     // handle payment request
   };
 

@@ -273,6 +273,12 @@ button.ui.teal.right.floated.button {
     margin: 0 auto;
     margin-left: 4rem;
   }
+
+  input[type="email"],
+  input[type="number"],
+  input[type="text"] {
+    font-size: 2rem;
+  }
   table,
   tr,
   th,

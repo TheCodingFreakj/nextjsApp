@@ -195,8 +195,6 @@ const OrderSummary = () => {
         }))
     : null;
 
-  //console.log(arraytot);
-
   //////////////////////TOtal Price////////////////////////
   let prices = [];
   services
@@ -226,8 +224,6 @@ const OrderSummary = () => {
     setPurchasing(false);
   };
 
-  console.log(purchasing);
-  // console.log("This is payment data from parseurl", paymentData);
   let checkoutparamsinitial = encodeURIComponent(
     `${paymentData[0]}  & ${paymentData[1]}  & ${paymentData[2]}  & ${services.active}`
   );
@@ -253,7 +249,7 @@ show the products in the orders section and remove when  the status as false bas
           />
         </div>
       ) : (
-        <p>you got to wait while we fetch your data</p>
+        <p>you got to wait while we fetch your tools shopping cart data</p>
       )}
       {services ? (
         <div className="order-container">
@@ -303,7 +299,7 @@ empty the cart only once the payment
 transform the details to order sections and empty order only when status is false after the duration */}
         </div>
       ) : (
-        <p>you got to wait while we fetch your data</p>
+        <p>you got to wait while we fetch your service shopping cart data</p>
       )}
 
       <Modal show={purchasing} closeModal={closeModal}>

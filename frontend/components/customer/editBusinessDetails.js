@@ -7,7 +7,7 @@ import { isAuth } from "../../actions/setAuthToken";
 import { getBusinessDetails, getCurrentCustomer } from "../../actions/user";
 
 const EditBusinessDetails = ({ router }) => {
-  console.log(isAuth());
+  // console.log(isAuth());
   //getting all values from form inputs
   const [values, setValues] = useState({
     location: "",
@@ -36,7 +36,7 @@ const EditBusinessDetails = ({ router }) => {
   } = values;
   useEffect(() => {
     getCurrentCustomer(isAuth().username, token).then((data) => {
-      console.log(data);
+      //console.log(data);
 
       if (data.error) {
         setValues({ ...values, error: data.error });
@@ -72,7 +72,7 @@ const EditBusinessDetails = ({ router }) => {
       phone,
     };
     getBusinessDetails(formData, token).then((data) => {
-      console.log("This is getting from backend", data);
+      //console.log("This is getting from backend", data);
 
       if (data.error) {
         setValues({ ...values, error: data.error });
