@@ -18,7 +18,7 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@stripe/react-stripe-js": "^1.2.0",
-    "@stripe/stripe-js": "^1.11.0",
+    "@stripe/stripe-js": "^1.12.1",
     "@zeit/next-css": "^1.0.1",
     "axios": "^0.21.1",
     "core-js": "^3.8.2",
@@ -37,7 +37,7 @@
     "regenerator-runtime": "^0.13.7",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.1",
-    "stripe": "^8.126.0"
+    "stripe": "^8.137.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

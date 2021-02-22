@@ -212,7 +212,6 @@ const OrderSummary = () => {
     padding: "2%",
     borderRadius: "4rem",
     position: "relative",
-    left: "40%",
     marginTop: "5%",
   };
 
