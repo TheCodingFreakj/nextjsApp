@@ -14,8 +14,9 @@ import { getCookie } from "../../actions/setAuthToken";
 import { createSubsription, subscribesession } from "../../actions/payment";
 import { useRouter } from "next/router";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
-
+import { createOrders } from "../../actions/shoppingcart";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+
 export default function CheckoutForm({ paymentData }) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
@@ -26,20 +27,20 @@ export default function CheckoutForm({ paymentData }) {
   const elements = useElements();
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    window
-      .fetch("/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
-      })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setClientSecret(data.clientSecret);
-      });
+    // window
+    //   .fetch("/create-payment-intent", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
+    //   })
+    //   .then((res) => {
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     setClientSecret(data.clientSecret);
+    //   });
   }, []);
   const cardStyle = {
     style: {
@@ -81,6 +82,22 @@ export default function CheckoutForm({ paymentData }) {
       setSucceeded(true);
     }
   };
+
+  const token = getCookie("token");
+
+  const confirmOrder = async (paymentData) => {
+    //call the set order function to the backend
+    // console.log(paymentData);
+
+    await createOrders(paymentData, token).then((data) => {
+      console.log(data);
+      // if (data.error) {
+      //   console.log(data.error);
+      // } else {
+
+      // }
+    });
+  };
   return (
     <>
       <div className="checkoutform">
@@ -92,6 +109,9 @@ export default function CheckoutForm({ paymentData }) {
           <h3 className="product-title">Name: {paymentData.email} </h3>
 
           <h4 className="product-price">Price: {paymentData.amttt}</h4>
+          <button onClick={() => confirmOrder(paymentData)}>
+            Confirm Order
+          </button>
         </div>
       </div>
       <form id="payment-form" onSubmit={handleSubmit}>
@@ -119,9 +139,8 @@ export default function CheckoutForm({ paymentData }) {
         <p className={succeeded ? "result-message" : "result-message hidden"}>
           Payment succeeded, see the result in your
           <a href={`https://dashboard.stripe.com/test/payments`}>
-            {" "}
             Stripe dashboard.
-          </a>{" "}
+          </a>
           Refresh the page to pay again.
         </p>
       </form>
@@ -158,3 +177,6 @@ export default function CheckoutForm({ paymentData }) {
 //https://blog.logrocket.com/building-payments-system-react-stripe/
 //https://davidwalsh.name/step-step-guide-stripe-payments-react
 //https://www.npmjs.com/package/react-script-loader
+//https://stackoverflow.com/questions/49500255/warning-this-synthetic-event-is-reused-for-performance-reasons-happening-with
+//https://reactjs.org/docs/legacy-event-pooling.html
+//https://medium.com/@brunogarciagonzalez/reactjs-events-exploration-a295505016f1

@@ -287,10 +287,6 @@ show the products in the orders section and remove when  the status as false bas
             />
           </div>
 
-          {/* status
-
-emi-number-
- */}
           {/* send the status and emi amount also 
 break the second emi and set when to pay the next Emi
 last emi after work done

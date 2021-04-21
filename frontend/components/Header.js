@@ -27,12 +27,15 @@ import { getCookie, removeLocatStorage } from "../actions/setAuthToken";
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
 Router.onRouteChangeError = (url) => NProgress.done();
-
+//https://medium.com/in-the-weeds/my-react-app-is-slow-what-should-i-do-e1fd020e69ec
+//https://medium.com/hackernoon/how-i-made-my-react-app-4-times-faster-7b929479cac4
+//https://www.infoq.com/articles/reduce-react-load-time/
+//https://web.dev/code-splitting-with-dynamic-imports-in-nextjs/
 const Header = () => {
-  console.log();
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const [show, setShow] = useState(userRole());
+  console.log(show);
 
   const renderHeader = (userRole) => {
     switch (userRole) {

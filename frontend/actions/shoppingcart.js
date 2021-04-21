@@ -264,3 +264,42 @@ export const fetchCarts = async (token) => {
     }
   }
 };
+
+export const createOrders = async (paymentData, token) => {
+  console.log(paymentData);
+  try {
+    const config = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: ` Bearer ${token}`,
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      },
+    };
+
+    const response = await axios.post(
+      `${API}/api/get-order-details`,
+      paymentData,
+      config
+    );
+    return response.data;
+    console.log(response.data); // this is the token from backend
+    console.log(response.status);
+    console.log(response.statusText);
+    console.log(response.headers);
+    console.log(response.config);
+    //we can use this token to access protected routes
+  } catch (error) {
+    if (error.response) {
+      return error.response.data;
+      console.log(error.response.data); //show this data in frontend
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      return error.message;
+      console.log("Error", error.message);
+    }
+  }
+};

@@ -1,7 +1,6 @@
 const ToolsCart = require("../models/toolsCart");
 const ServiceCart = require("../models/serviceCart");
 const mongoose = require("mongoose");
-const { errorHandler } = require("../helpers/dbErrorHandler");
 
 //https://stackoverflow.com/questions/59174763/how-to-add-product-to-shopping-cart-with-nodejs-express-and-mongoose
 exports.updateToolCart = async (req, res) => {
@@ -100,7 +99,7 @@ exports.fetchCarts = async (req, res) => {
         model: "Price",
       },
     });
-    // console.log(serviceCart);
+    console.log(serviceCart);
     // serviceCarts = serviceCart.products;
     // console.log(serviceCarts);
 
@@ -113,6 +112,40 @@ exports.fetchCarts = async (req, res) => {
   }
 };
 //http://localhost:3001/products?productId=5f8fdda74f5975190868cbbe
+
+exports.getOrderDetails = async (req, res) => {
+  //const { paymentData } = req.body;
+  console.log("this is order details", req.body);
+  // Create a PaymentIntent with the order amount and currency
+  irderDetailsByUser = req.body;
+  try {
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Cant fetch the server");
+  }
+};
+
+exports.createPaymentIntent = async (req, res) => {
+  const { items, currency } = req.body;
+  // Create a PaymentIntent with the order amount and currency
+
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: calculateOrderAmount(items),
+      currency: currency,
+    });
+
+    // Send publishable key and PaymentIntent details to client
+    res.send({
+      publishableKey: process.env.STRIPE_SECRET_KEY,
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Cant fetch the server");
+  }
+};
+
 exports.deleteToolsCart = async (req, res) => {
   const { productId } = req.query;
   const userid = req.user.id;
