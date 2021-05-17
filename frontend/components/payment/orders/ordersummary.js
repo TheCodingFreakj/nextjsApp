@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { Button } from "semantic-ui-react";
 import { getCookie } from "../../../actions/setAuthToken";
 import { useRouter } from "next/router";
@@ -26,6 +25,7 @@ const OrderSummary = () => {
         const response = parsedataUrl(
           decodeURIComponent(window.location.search)
         );
+
         setpaymentData(response.params.general);
       }
     }, [window.location.search]);
@@ -262,7 +262,7 @@ const OrderSummary = () => {
             />
           </div>
           <div className="pricing-summary-2">
-            <p>Residual: {paymentData[1]}</p>
+            <p>Residual: ${paymentData[1]}</p>
             <Button
               icon="cart"
               color="teal"

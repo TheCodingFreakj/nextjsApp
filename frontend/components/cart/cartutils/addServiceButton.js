@@ -66,7 +66,7 @@ const AddServiceButton = ({ servicecart = [], active, cat }) => {
   const user = isAuth();
 
   let serviceQueryparams = encodeURIComponent(
-    `${user._id}  & $${serviceAmount}  & ${user.email}`
+    `${user._id}  & ${serviceAmount}  & ${user.email}`
   );
 
   return (

@@ -11,7 +11,9 @@ export const parseMyUrl = (urlParams) => {
 
 export const parsedataUrl = (urlParams) => {
   let dataUrl = urlParams.toString();
+
   let vars1 = dataUrl.split("?q=")[1];
+  console.log(vars1);
   let params = {};
   let vars = vars1.split("&");
   let copyarray = [...vars];
@@ -57,7 +59,7 @@ export const checkoutdataparser = (urlParams) => {
   let copyarray = [...vars];
   let subsetdur = copyarray.slice(0, 4);
   let subsetmain = copyarray[copyarray.length - 1];
-  let ar = subsetmain.split(", ");
+  let ar = subsetmain.split(",");
   let arr = ar[0].split("durationlists=");
   params.productioninfo = Object.assign({}, subsetdur);
   params.duration = Object.assign({}, arr);

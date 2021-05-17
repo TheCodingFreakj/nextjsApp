@@ -1,47 +1,18 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Icon,
-  Header,
-  Segment,
-  Checkbox,
-} from "semantic-ui-react";
-
-import Head from "next/head";
 import { getCookie } from "../../actions/setAuthToken";
-import { createSubsription, subscribesession } from "../../actions/payment";
-import { useRouter } from "next/router";
-import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
 import { createOrders } from "../../actions/shoppingcart";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-
+import axios from "axios";
 export default function CheckoutForm({ paymentData }) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [clientSecret, setClientSecret] = useState("");
+  const [successMessage, setsuccessMesaage] = useState("");
   const stripe = useStripe();
   const elements = useElements();
-  useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    // window
-    //   .fetch("/create-payment-intent", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
-    //   })
-    //   .then((res) => {
-    //     return res.json();
-    //   })
-    //   .then((data) => {
-    //     setClientSecret(data.clientSecret);
-    //   });
-  }, []);
+
   const cardStyle = {
     style: {
       base: {
@@ -80,24 +51,25 @@ export default function CheckoutForm({ paymentData }) {
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+      setsuccessMesaage("Payment has been done");
     }
   };
 
   const token = getCookie("token");
 
   const confirmOrder = async (paymentData) => {
-    //call the set order function to the backend
-    // console.log(paymentData);
-
     await createOrders(paymentData, token).then((data) => {
-      console.log(data);
-      // if (data.error) {
-      //   console.log(data.error);
-      // } else {
-
-      // }
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setClientSecret(data.secret);
+        setsuccessMesaage(data.msg);
+        sessionStorage.setItem(clientSecret, clientSecret);
+        //https://stripe.com/docs/payments/accept-a-payment?platform=web&ui=elements#web-fulfillment
+      }
     });
   };
+
   return (
     <>
       <div className="checkoutform">
@@ -112,6 +84,9 @@ export default function CheckoutForm({ paymentData }) {
           <button onClick={() => confirmOrder(paymentData)}>
             Confirm Order
           </button>
+          {successMessage ? (
+            <h2 className="notification-note">{successMessage}</h2>
+          ) : null}
         </div>
       </div>
       <form id="payment-form" onSubmit={handleSubmit}>
@@ -147,36 +122,3 @@ export default function CheckoutForm({ paymentData }) {
     </>
   );
 }
-
-//fill up this form
-//go the check out pre build (Details of the object is stored)
-//pay and go to the success url
-//empty the cart on ce hit the success url and place an order with email and order id for the customer
-
-////////////////////backend/////////////////////
-
-//at create subscription
-//get the customer from req user
-//find the cart based on the customer or user
-//caclc the cart totals again
-//get the email from frontend
-//see ifi tsi linked to stripe customer
-//if not create the customer based on email
-//create the subscription or
-//add order to db
-//empty the cart at backend
-//send back order is to front end on the success url
-
-//At the Backend
-//https://stripe.com/docs/billing/prices-guide
-//https://stripe.com/docs/billing/prices-guide
-//https://stripe.com/docs/payments/accept-a-payment?integration=elements
-//https://stripe.com/docs/billing/subscriptions/checkout/fixed-price
-
-//posts//////
-//https://blog.logrocket.com/building-payments-system-react-stripe/
-//https://davidwalsh.name/step-step-guide-stripe-payments-react
-//https://www.npmjs.com/package/react-script-loader
-//https://stackoverflow.com/questions/49500255/warning-this-synthetic-event-is-reused-for-performance-reasons-happening-with
-//https://reactjs.org/docs/legacy-event-pooling.html
-//https://medium.com/@brunogarciagonzalez/reactjs-events-exploration-a295505016f1

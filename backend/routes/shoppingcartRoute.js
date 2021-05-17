@@ -22,12 +22,12 @@ router.delete("/services-cart", tokenAuth, authMiddleware, deleteServiceCart);
 router.get("/fetch-cart", tokenAuth, authMiddleware, fetchCarts);
 router.delete("/delete-cart", tokenAuth, authMiddleware, deletecartitem);
 
-router.get(
-  "/create-payment-intent",
+router.post(
+  "/",
   tokenAuth,
   authMiddleware,
   createPaymentIntent
 );
 
-router.post("/get-order-details", tokenAuth, authMiddleware, getOrderDetails);
+router.post("/v1/payment_intents", tokenAuth, authMiddleware, getOrderDetails);
 module.exports = router;

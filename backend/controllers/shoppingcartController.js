@@ -1,8 +1,10 @@
 const ToolsCart = require("../models/toolsCart");
 const ServiceCart = require("../models/serviceCart");
 const mongoose = require("mongoose");
+const stripe = require("stripe")(
+  "sk_test_51HaLO5GERwFTkr9GyJJgTIwZ7XtkR6rYuxXxZ1tN88QN4pUPrsLh2lAeUq96XGN8vUHacwTFZyfEYPyXb94EdyUJ007f02JxxE"
+);
 
-//https://stackoverflow.com/questions/59174763/how-to-add-product-to-shopping-cart-with-nodejs-express-and-mongoose
 exports.updateToolCart = async (req, res) => {
   const { quantity, productId } = req.body;
   const customer = req.user;
@@ -46,14 +48,12 @@ exports.updateServiceCart = async (req, res) => {
 
   try {
     const serviceCart = await ServiceCart.findOne({ customer }); //search the servicecart by customer id
-    console.log("This is servicecart", serviceCart.products);
+    // console.log("This is servicecart", serviceCart.products);
     //iterate over array and check if any meet a give condition
-
     const productExists = serviceCart.products.some(
       (doc) => serviceId === String(doc.product)
     );
 
-    //console.log("productExists", productExists);
     if (productExists) {
       await ServiceCart.findOneAndUpdate(
         {
@@ -62,6 +62,10 @@ exports.updateServiceCart = async (req, res) => {
         },
         { $inc: { "products.$.quantity": quantity } }
       );
+
+      if (active === true) {
+        console.log("The cart is ative");
+      }
     } else {
       //update for new product
       const newProduct = { quantity, product: serviceId };
@@ -111,13 +115,20 @@ exports.fetchCarts = async (req, res) => {
     res.status(500).send("Cant fetch the server");
   }
 };
-//http://localhost:3001/products?productId=5f8fdda74f5975190868cbbe
 
 exports.getOrderDetails = async (req, res) => {
-  //const { paymentData } = req.body;
-  console.log("this is order details", req.body);
   // Create a PaymentIntent with the order amount and currency
-  irderDetailsByUser = req.body;
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: Math.floor(req.body.amttt),
+    currency: "usd",
+    metadata: { integration_check: "accept_a_payment" },
+    setup_future_usage: "off_session",
+  });
+
+  res.status(200).send({
+    msg: "order confirmed",
+    secret: paymentIntent.client_secret,
+  });
   try {
   } catch (error) {
     console.error(error.message);

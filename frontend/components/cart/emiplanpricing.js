@@ -16,9 +16,7 @@ const EmiPlanPricing = ({ serviceAmount, serviceQueryparams }) => {
           color="green"
           floated="right"
           content="Subscribe|Services"
-          onClick={() =>
-            router.push(`/payment/orders?q=${serviceQueryparams}  `)
-          }
+          onClick={() => router.push(`/payment/orders?q=${serviceQueryparams}`)}
         />
 
         <div className="btn">
@@ -30,9 +28,7 @@ const EmiPlanPricing = ({ serviceAmount, serviceQueryparams }) => {
           color="green"
           floated="right"
           content="Subscribe|Services"
-          onClick={() =>
-            router.push(`/payment/orders?q=${serviceQueryparams}  `)
-          }
+          onClick={() => router.push(`/payment/orders?q=${serviceQueryparams}`)}
         />
       </>
     </React.Fragment>

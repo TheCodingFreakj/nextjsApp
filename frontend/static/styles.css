@@ -463,3 +463,11 @@ p.notifcation {
   position: relative;
   left: 50%;
 }
+
+h2.notification-note {
+  position: relative;
+  left: 37%;
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: #ffffff;
+}

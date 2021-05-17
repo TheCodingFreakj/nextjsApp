@@ -278,7 +278,7 @@ export const createOrders = async (paymentData, token) => {
     };
 
     const response = await axios.post(
-      `${API}/api/get-order-details`,
+      `${API}/api/v1/payment_intents`,
       paymentData,
       config
     );

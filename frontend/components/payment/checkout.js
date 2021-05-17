@@ -3,7 +3,6 @@ import { checkoutdataparser } from "../../components/utils/parseUrl";
 import CheckoutForm from "../../components/payment/checkoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { createOrders } from "../../actions/shoppingcart";
 import { getCookie } from "../../actions/setAuthToken";
 const Checkout = () => {
   const [paymentData, setpaymentData] = useState({
@@ -35,7 +34,7 @@ const Checkout = () => {
             user: response.params.productioninfo[0],
           })
         ) : (
-          <p>Please wait while we calculate your shopping summary</p>
+          <div>Please wait while we calculate your shopping summary</div>
         );
       }
     }, [window.location.search]);
