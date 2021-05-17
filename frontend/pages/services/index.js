@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Head from "next/head";
 import Link from "next/link";
 import Layout from "../../components/Layout";
-import { Card, Icon, Button, Message } from "semantic-ui-react";
 import { getComboPackages } from "../../actions/comboPackage";
-import { getAllServices } from "../../actions/services";
-import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
-import { withRouter } from "next/router";
 import ShowServices from "../../components/services/showservices";
 import ShowComboPackages from "../../components/serviceCrud/showCombopackages";
-//changes required
 
-//make services server rendered and combopackages at use effect
 const ServicesPage = () => {
-  //console.log("The Page Props Are", data);
   const [packages, setPackages] = useState([]);
   const [loader, setLoader] = useState({
     limit: 3,
@@ -22,12 +14,10 @@ const ServicesPage = () => {
 
   const { limit, skip } = loader;
 
-  //Loading the compopackages on useEffect
   useEffect(() => {
     loadCombopackages();
   }, []);
 
-  //storing the compopackages in state
   const loadCombopackages = async () => {
     await getComboPackages().then((data) => {
       if (data.error) {
@@ -42,7 +32,6 @@ const ServicesPage = () => {
     <Layout>
       <main>
         <div className="container-fluid">
-          {/* header mark up for outbound link to aboutus page */}
           <header>
             <div className="col-md-12 pt-3">
               <h1 className="display-4 font-weight-bold text-center pb-9 ">
@@ -64,10 +53,8 @@ const ServicesPage = () => {
               </div>
             </div>
           </header>
-          {/* sending the compopackage data to its component */}
-          <ShowComboPackages packages={packages} />
 
-          {/* sending the skip and limit value to the showservices component for second half */}
+          <ShowComboPackages packages={packages} />
           <ShowServices limit={limit} skip={skip} />
         </div>
       </main>
@@ -75,8 +62,4 @@ const ServicesPage = () => {
   );
 };
 
-export default withRouter(ServicesPage);
-
-//For stylinging:- Put one quiz pop up here on load quiz
-
-//https://css-tricks.com/prevent-page-scrolling-when-a-modal-is-open/
+export default ServicesPage;

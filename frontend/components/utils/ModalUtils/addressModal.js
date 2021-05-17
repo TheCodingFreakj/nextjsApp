@@ -3,8 +3,7 @@ import BackDrop from "../ModalUtils/backdrop";
 import "../../../static/styles.css";
 
 const Modal = (props) => {
-  console.log(props.show);
-  //show //modalClose
+  
   return (
     <React.Fragment>
       <BackDrop show={props.show} closeModal={props.closeModal} />

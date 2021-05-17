@@ -38,12 +38,8 @@ const Toolscartheader = ({ toolcartlist, handleRemoveToolFromCart }) => {
 
   return (
     <React.Fragment>
-      {/* {console.log("This is render 3")} */}
-
       <h2>Tools Picks</h2>
-
       <Divider />
-
       {toolcartlist.products ? (
         <>
           <Item.Group

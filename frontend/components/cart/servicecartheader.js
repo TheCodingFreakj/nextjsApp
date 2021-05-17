@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { Header, Button, Segment, Icon, Item } from "semantic-ui-react";
+import React from "react";
+import { Button, Segment, Item } from "semantic-ui-react";
 import AddServiceButton from "./cartutils/addServiceButton";
 
 const ServiceCartHeader = ({
   servicescartlist,
   handleRemoveServiceFromCart,
 }) => {
-  // console.log("This is service cart,render 3", servicescartlist);
-
   const showServiceCartList = (services) => {
     return services.map((service) => ({
       header: (
@@ -25,6 +22,7 @@ const ServiceCartHeader = ({
       extra: (
         <Button
           basic
+          className="button-cart"
           icon="remove"
           floated="right"
           color="green"
@@ -36,31 +34,31 @@ const ServiceCartHeader = ({
 
   return (
     <React.Fragment>
-      {/* {console.log("This is render 3")} */}
-      <p>
+      <h3>
         We encourage to couple marketing services with tools as per subscription
         policy
-      </p>
-      <p>
+      </h3>
+      <h3>
         You can check out web development services separarely as per invoicing
         policy
-      </p>
+      </h3>
 
       {servicescartlist.products ? (
         <>
-          <Item.Group
-            divided
-            items={showServiceCartList(servicescartlist.products)}
-          ></Item.Group>
-          <Segment>
-            {servicescartlist.products ? (
-              <AddServiceButton
-                active={servicescartlist.active}
-                cat={servicescartlist.category}
-                servicecart={servicescartlist.products}
-              />
-            ) : null}
-          </Segment>
+          <Segment.Group>
+            <Item.Group
+              items={showServiceCartList(servicescartlist.products)}
+            ></Item.Group>
+            <Segment>
+              {servicescartlist.products ? (
+                <AddServiceButton
+                  active={servicescartlist.active}
+                  cat={servicescartlist.category}
+                  servicecart={servicescartlist.products}
+                />
+              ) : null}
+            </Segment>
+          </Segment.Group>
         </>
       ) : null}
     </React.Fragment>

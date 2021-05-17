@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import {
-  Header,
-  Icon,
   Button,
   Segment,
   Dimmer,
   Loader,
 } from "semantic-ui-react";
 import Layout from "../../components/Layout";
-import { isAuth, getCookie } from "../../actions/setAuthToken";
-
-import ServiceCartHeader from "../../components/cart/servicecartheader";
-import Toolscartheader from "../../components/cart/toolscartheader";
-import Router from "next/router";
+import { getCookie } from "../../actions/setAuthToken";
+import ServiceCartHeader from "../../components/cart/servicecartheader"
+import Toolscartheader from "../../components/cart/toolscartheader"
 import { fetchCarts } from "../../actions/shoppingcart";
-import { withRouter } from "next/router";
-//import { useRouter } from "next/router";
 import { API } from "../../config";
 import axios from "axios";
 const Cart = ({ router }) => {
@@ -56,7 +49,6 @@ const Cart = ({ router }) => {
           services: data.serviceCart,
           message: data.msg,
         };
-
         setCart(newcart);
       }
     });
@@ -135,4 +127,4 @@ const Cart = ({ router }) => {
   );
 };
 
-export default withRouter(Cart);
+export default Cart;

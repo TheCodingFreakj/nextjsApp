@@ -1,18 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
-} from "reactstrap";
+import React, { useState, lazy, Suspense } from "react";
+import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from "reactstrap";
 import Link from "next/link";
 import Router from "next/router";
 import NProgress from "nprogress";
@@ -20,23 +7,29 @@ import { APP_NAME } from "../config";
 import { signout } from "../actions/auth";
 import { isAuth, userRole } from "../actions/setAuthToken";
 import "../node_modules/nprogress/nprogress.css";
-import Search from "../components/blogs/search";
-import { getCurrentCustomer } from "../actions/user";
-import { getCookie, removeLocatStorage } from "../actions/setAuthToken";
+const Search = lazy(() => import("../components/blogs/search"));
 
 Router.onRouteChangeStart = (url) => NProgress.start();
 Router.onRouteChangeComplete = (url) => NProgress.done();
 Router.onRouteChangeError = (url) => NProgress.done();
-//https://medium.com/in-the-weeds/my-react-app-is-slow-what-should-i-do-e1fd020e69ec
-//https://medium.com/hackernoon/how-i-made-my-react-app-4-times-faster-7b929479cac4
-//https://www.infoq.com/articles/reduce-react-load-time/
-//https://web.dev/code-splitting-with-dynamic-imports-in-nextjs/
+
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const [show, setShow] = useState(userRole());
-  console.log(show);
 
+
+  const [isFront, setIsFront] = useState(false);
+
+  React.useEffect(() => {
+    process.nextTick(() => {
+      if (globalThis.window ?? false) {
+        setIsFront(true);
+      }
+    });
+  }, []);
+
+  if (!isFront) return null;
   const renderHeader = (userRole) => {
     switch (userRole) {
       case "consumer":
@@ -117,66 +110,68 @@ const Header = () => {
   };
   return (
     <React.Fragment>
-      <Navbar
-        color="blue"
-        light
-        expand="md"
-        className="p-3 mb-2 bg-success text-white"
-      >
-        <Link href="/">
-          <a className="text-light font-weight-bold  h5">{APP_NAME}</a>
-        </Link>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            <React.Fragment>
-              <NavItem className="ml-5 text-light font-weight-bold  h5">
-                <Link href="/blogs">
-                  <a className="text-light font-weight-bold  h5">Blogs</a>
-                </Link>
-              </NavItem>
-
-              <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                <Link href="/contact">
-                  <a className="text-light  font-weight-bold  h5">Contact</a>
-                </Link>
-              </NavItem>
-
-              <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                <Link href="/services">
-                  <a className="text-light  font-weight-bold  h5">Services</a>
-                </Link>
-              </NavItem>
-
-              {show === "consumer" && (
-                <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                  <Link href="/cart">
-                    <a className="text-light  font-weight-bold  h5">Cart</a>
+      <Suspense fallback={() => "loading"}>
+        <Navbar
+          color="blue"
+          light
+          expand="md"
+          className="p-3 mb-2 bg-success text-white"
+        >
+          <Link href="/">
+            <a className="text-light font-weight-bold  h5">{APP_NAME}</a>
+          </Link>
+          <NavbarToggler onClick={toggle} />
+          <Collapse isOpen={isOpen} navbar>
+            <Nav className="ml-auto" navbar>
+              <React.Fragment>
+                <NavItem className="ml-5 text-light font-weight-bold  h5">
+                  <Link href="/blogs">
+                    <a className="text-light font-weight-bold  h5">Blogs</a>
                   </Link>
                 </NavItem>
-              )}
 
-              <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                <Link href="/authSignin">
-                  <a className="text-light  font-weight-bold  h5">Login</a>
-                </Link>
-              </NavItem>
+                <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                  <Link href="/contact">
+                    <a className="text-light  font-weight-bold  h5">Contact</a>
+                  </Link>
+                </NavItem>
 
-              <NavItem className="ml-5 text-light  font-weight-bold  h5">
-                <Link href="/customerSignup">
-                  <a className="text-light  font-weight-bold  h5">
-                    Create Account
-                  </a>
-                </Link>
-              </NavItem>
-            </React.Fragment>
+                <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                  <Link href="/services">
+                    <a className="text-light  font-weight-bold  h5">Services</a>
+                  </Link>
+                </NavItem>
 
-            {renderHeader(userRole())}
-          </Nav>
-        </Collapse>
-      </Navbar>
+                {show === "consumer" && (
+                  <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                    <Link href="/cart">
+                      <a className="text-light  font-weight-bold  h5">Cart</a>
+                    </Link>
+                  </NavItem>
+                )}
 
-      <Search />
+                <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                  <Link href="/authSignin">
+                    <a className="text-light  font-weight-bold  h5">Login</a>
+                  </Link>
+                </NavItem>
+
+                <NavItem className="ml-5 text-light  font-weight-bold  h5">
+                  <Link href="/customerSignup">
+                    <a className="text-light  font-weight-bold  h5">
+                      Create Account
+                    </a>
+                  </Link>
+                </NavItem>
+              </React.Fragment>
+
+              {renderHeader(userRole())}
+            </Nav>
+          </Collapse>
+        </Navbar>
+
+        <Search />
+      </Suspense>
     </React.Fragment>
   );
 };

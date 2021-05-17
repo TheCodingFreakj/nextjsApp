@@ -458,3 +458,8 @@ button:disabled {
 .four.column.row.footer-design {
   padding: 4%;
 }
+
+p.notifcation {
+  position: relative;
+  left: 50%;
+}

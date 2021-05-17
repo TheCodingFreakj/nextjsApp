@@ -1,20 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import {
-  Header,
-  Icon,
-  Button,
-  Segment,
-  Dimmer,
-  Loader,
-} from "semantic-ui-react";
+import React from "react";
 import Layout from "../../../components/Layout";
-import { isAuth, getCookie } from "../../../actions/setAuthToken";
-import { withRouter } from "next/router";
-
+import { isAuth } from "../../../actions/setAuthToken";
 import OrderSummary from "../../../components/payment/orders/ordersummary";
 const Orders = () => {
-  //get both the carts
   const user = isAuth();
 
   return (

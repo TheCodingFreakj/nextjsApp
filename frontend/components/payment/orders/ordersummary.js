@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import {
-  Header,
-  Icon,
-  Button,
-  Segment,
-  Dimmer,
-  Loader,
-} from "semantic-ui-react";
-import Layout from "../../../components/Layout";
-import { isAuth, getCookie } from "../../../actions/setAuthToken";
+import { Button } from "semantic-ui-react";
+import { getCookie } from "../../../actions/setAuthToken";
 import { useRouter } from "next/router";
 import { parsedataUrl } from "../../../components/utils/parseUrl";
 import { fetchCarts } from "../../../actions/shoppingcart";
 import Modal from "../../../components/utils/ModalUtils/addressModal";
 import AddressConfirmationSwitch from "../../utils/switches/addressswitch";
-import Wrapper from "../../hoc/wrapper";
 const OrderSummary = () => {
   const [paymentData, setpaymentData] = useState({});
   const [cart, setCart] = useState({
@@ -35,9 +26,7 @@ const OrderSummary = () => {
         const response = parsedataUrl(
           decodeURIComponent(window.location.search)
         );
-
         setpaymentData(response.params.general);
-        // console.log("This is running3333");
       }
     }, [window.location.search]);
   }
@@ -102,7 +91,6 @@ const OrderSummary = () => {
   };
 
   const showservices = (services) => {
-    //console.log(services.product);
     return services.map((s, i) => {
       return (
         <div className="table-container" key={i}>
@@ -234,11 +222,6 @@ const OrderSummary = () => {
           <p>Tools Summary</p>
           <div>{showtools(tool.products)}</div>
           <p>Total Tools per month {Math.round(calTotalTools)}</p>
-
-          {/* pass the status monthly subscrtion upto how many months 
-money value */}
-          {/* after total payment done empty the cart
-show the products in the orders section and remove when  the status as false based on duration*/}
           <Button
             icon="cart"
             color="yellow"
@@ -248,7 +231,9 @@ show the products in the orders section and remove when  the status as false bas
           />
         </div>
       ) : (
-        <p>you got to wait while we fetch your tools shopping cart data</p>
+        <h2 className="notifcation">
+          you got to wait while we fetch your tools shopping cart data
+        </h2>
       )}
       {services ? (
         <div className="order-container">
@@ -286,15 +271,11 @@ show the products in the orders section and remove when  the status as false bas
               className="btn"
             />
           </div>
-
-          {/* send the status and emi amount also 
-break the second emi and set when to pay the next Emi
-last emi after work done
-empty the cart only once the payment 
-transform the details to order sections and empty order only when status is false after the duration */}
         </div>
       ) : (
-        <p>you got to wait while we fetch your service shopping cart data</p>
+        <h2 className="notifcations">
+          you got to wait while we fetch your service shopping cart data
+        </h2>
       )}
 
       <Modal show={purchasing} closeModal={closeModal}>
@@ -309,8 +290,3 @@ transform the details to order sections and empty order only when status is fals
 };
 
 export default OrderSummary;
-//use the error handling part
-//https://www.robinwieruch.de/react-hooks-fetch-data
-//https://dmitripavlutin.com/7-tips-to-handle-undefined-in-javascript/
-//https://freeplaymusic.com/#
-//https://flaviocopes.com/file-upload-using-ajax/

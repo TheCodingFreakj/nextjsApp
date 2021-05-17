@@ -1,13 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import {
-  Header,
-  Button,
-  Segment,
-  Icon,
-  Item,
-  Divider,
-} from "semantic-ui-react";
+import React from "react";
+import { Button } from "semantic-ui-react";
 import "../../static/styles.css";
 import { useRouter } from "next/router";
 
@@ -16,9 +8,9 @@ const EmiPlanPricing = ({ serviceAmount, serviceQueryparams }) => {
   return (
     <React.Fragment>
       <>
-        <p>
+        <div className="btn">
           <strong>Subscription 1st emi:</strong>${serviceAmount}
-        </p>
+        </div>
         <Button
           icon="cart"
           color="green"
@@ -29,9 +21,9 @@ const EmiPlanPricing = ({ serviceAmount, serviceQueryparams }) => {
           }
         />
 
-        <p>
+        <div className="btn">
           <strong>Subscription 2st emi:</strong>${serviceAmount}
-        </p>
+        </div>
 
         <Button
           icon="cart"

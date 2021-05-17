@@ -266,7 +266,6 @@ export const fetchCarts = async (token) => {
 };
 
 export const createOrders = async (paymentData, token) => {
-  console.log(paymentData);
   try {
     const config = {
       method: "POST",

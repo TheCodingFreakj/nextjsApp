@@ -18,24 +18,12 @@ const SignupComp = () => {
     showForm: true,
   });
 
-  const {
-    name,
-    email,
-    password,
-    message,
-    role,
-    error,
-    loading,
-    showForm,
-  } = formData;
+  const { name, email, password, message, role, error, loading, showForm } =
+    formData;
 
   useEffect(() => {
-    //decide when you want to run this
-    //it runs depends on change in state
     isAuth() && Router.push("/");
   }, []);
-
-  //handing submit
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -51,15 +39,12 @@ const SignupComp = () => {
 
     signup(newUser).then((data) => {
       if (data.errors) {
-        // console.log(data.error);
         setFormData({
           ...formData,
           loading: false,
           error: [data.errors[0].msg],
         });
       } else {
-        // console.log(data.response);
-
         setFormData({
           ...formData,
           name: "",
@@ -110,8 +95,8 @@ const SignupComp = () => {
             type="email"
             className="form-control"
             placeholder="Your Email"
-            value={email} // grab the init value from formData
-            onChange={onChange("email")} //setFormData
+            value={email}
+            onChange={onChange("email")}
             required
           />
         </div>
@@ -121,7 +106,7 @@ const SignupComp = () => {
             type="password"
             className="form-control"
             placeholder="Your Password"
-            value={password} // grab the init value from formData
+            value={password}
             onChange={onChange("password")}
             required
           />
@@ -142,9 +127,6 @@ const SignupComp = () => {
       {showError()}
       {showLoading()}
       {showMessage()}
-
-      {/* show sign up form only if showForm is true//by default its true 
-  once user sign in it wont show the signup form */}
       {showForm && signupForm()}
     </React.Fragment>
   );
