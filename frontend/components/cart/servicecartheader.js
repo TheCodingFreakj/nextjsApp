@@ -3,35 +3,35 @@ import { Button, Segment, Item } from "semantic-ui-react";
 import AddServiceButton from "./cartutils/addServiceButton";
 
 const ServiceCartHeader = ({
-  servicescartlist,
   handleRemoveServiceFromCart,
+  products,
+  handleRemoveToolFromCart,
 }) => {
-  const showServiceCartList = (services) => {
-    return services.map((service) => ({
-      header: (
-        <Item.Header
-          as="a"
-          // onClick={() => router.push(`/products?productId=${p.product[0]._id}`)}
-        >
-          {service.product[0].title}
-        </Item.Header>
-      ),
-      childKey: service.product[0]._id,
-      meta: `${service.quantity} unit productcount @ $ ${service.product[0].discountedServiceCharges[0].discountedServiceCharges} per ${service.product[0].duration}`,
-      fluid: "true",
-      extra: (
-        <Button
-          basic
-          className="button-cart"
-          icon="remove"
-          floated="right"
-          color="green"
-          onClick={() => handleRemoveServiceFromCart(service.product[0]._id)}
-        />
-      ),
-    }));
+  const [error, seterror] = React.useState("");
+  const showservicecart = (services) => {
+    if (!services) {
+      function CustomException(message) {
+        const error = new Error(message);
+        seterror(error);
+      }
+    }
+
+    services.map((s) => {
+      return (
+        <div className="Cart_name">
+          <p>{s.product[0].slug}</p>
+        </div>
+      );
+    });
   };
 
+  const showtoolscart = (tools) => {
+    if (!tools) {
+      throw new Error("tools not avalable");
+    }
+
+    tools.map((s) => console.log(s));
+  };
   return (
     <React.Fragment>
       <h3>
@@ -42,25 +42,9 @@ const ServiceCartHeader = ({
         You can check out web development services separarely as per invoicing
         policy
       </h3>
-
-      {servicescartlist.products ? (
-        <>
-          <Segment.Group>
-            <Item.Group
-              items={showServiceCartList(servicescartlist.products)}
-            ></Item.Group>
-            <Segment>
-              {servicescartlist.products ? (
-                <AddServiceButton
-                  active={servicescartlist.active}
-                  cat={servicescartlist.category}
-                  servicecart={servicescartlist.products}
-                />
-              ) : null}
-            </Segment>
-          </Segment.Group>
-        </>
-      ) : null}
+      <div>{showservicecart(products.services.products)}</div>
+      <div>{error }</div>
+      <div>{showtoolscart(products.tool.products)}</div>
     </React.Fragment>
   );
 };

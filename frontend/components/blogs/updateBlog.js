@@ -39,7 +39,6 @@ const UpdateBlog = ({ router }) => {
   }, [router]);
 
   const initBlog = () => {
-    //grab the slug from router props
     if (router.query.slug) {
       singleBlog(router.query.slug).then((data) => {
         if (data.error) {
@@ -93,33 +92,27 @@ const UpdateBlog = ({ router }) => {
   };
 
   const handleToggle = (cId) => () => {
-    //clear the state incase of any error
+    
     setValues({ ...values, error: "" });
-    //return the first index or -1
-    //state.indexOf(cid)
-    const clickedCategory = checked.indexOf(cId); //index of is to find out if id is present already
-    //this is the array which stores what all is there in the checked state
-    const all = [...checked];
-
-    //-1 means id dont exist
+    const clickedCategory = checked.indexOf(cId); 
+  const all = [...checked];
     if (clickedCategory === -1) {
       all.push(cId);
     } else {
       all.splice(clickedCategory, 1);
     }
 
-    //update the state with the array
-    //console.log(all);
+   
     setChecked(all);
 
-    //put the selecetd categories and push them to the categories state and send to backend
+    
     formData.set("categories", all);
   };
 
   const handleTagsToggle = (tId) => () => {
     setValues({ ...values, error: "" });
 
-    //return the first index or -1
+   
 
     const clickedTag = checkedTag.indexOf(tId);
     const all = [...checkedTag];
@@ -129,7 +122,7 @@ const UpdateBlog = ({ router }) => {
       all.splice(clickedTag, 1);
     }
 
-    // console.log(all);
+  
     setCheckedTag(all);
 
     formData.set("tags", all);
@@ -182,42 +175,23 @@ const UpdateBlog = ({ router }) => {
   };
 
   const onChange = (name) => (e) => {
-    //For title and image upload like featured
-    //we grab the e.target.value to set the title
-    //For images we get e.target.files
-    //figure out what is the name to grab the concerned value to show up
-    //console.log(e.target.value);
-    //name can be title, photo or anything from forms
-    //For images we upload many file but for featuerd image we grab the first image
-
-    //if name is photo? :
+   
     const value = name === "photo" ? e.target.files[0] : e.target.value;
 
-    //Before using this browswr api we need to instanciate it in in useeffcet
-    //Here we are using a browswr api called formData
-    //first is the property name then value or e.target....
-    formData.set(name, value); //This is the data we will send to bacvkend
+    
+    formData.set(name, value); 
 
-    //after populating we have to update the state
+ 
     setValues({ ...values, [name]: value, formData: formData, error: "" });
   };
 
   const onHandleChange = (e) => {
-    //console.log(e);
-    setBody(e); //pass whole event
-    formData.set("body", e); //update the formData
-
-    // //populate this body in local storage so that in refersh its not lost
-    // if (typeof window !== "undefined") {
-    //   //if we have a window then store the blog
-    //   localStorage.setItem("blog", JSON.stringify(e));
-    // }
-
-    // console.log("This is the updated formData", formData);
+    setBody(e); 
+    formData.set("body", e); 
   };
 
   const editBlog = (e) => {
-    // console.log("update blog");
+    
     e.preventDefault();
     updateBlog(formData, getCookie("token"), router.query.slug).then((data) => {
       if (data.error) {
@@ -229,10 +203,10 @@ const UpdateBlog = ({ router }) => {
           success: `Blog titled "${data.title}" is successfully updated`,
         });
         if (isAuth() && isAuth().role === 1) {
-          // Router.replace(`/admin/crud/${router.query.slug}`);
+ 
           Router.replace(`/admin`);
         } else if (isAuth() && isAuth().role === 0) {
-          //Router.replace(`/user/crud/${router.query.slug}`);
+ 
           Router.replace(`/user`);
         }
       }
@@ -268,13 +242,13 @@ const UpdateBlog = ({ router }) => {
             type="text"
             className="form-control"
             name="title"
-            value={title} // This value should be coming from the state
-            onChange={onChange("title")} //setFormData
+            value={title} 
+            onChange={onChange("title")} 
             required
           />
         </div>
 
-        {/* This is the textArea */}
+     
         <div className="form-group">
           <ReactQuill
             value={body || ""}

@@ -13,8 +13,7 @@ const ReadBlogs = ({ username }) => {
   const [blogs, setBlogs] = useState([]);
   const [successDeleteMessage, setSuccessDeleteMessage] = useState("");
   const token = getCookie("token"); // need the token to update and delete the blog
-  //we can use useffect to load all blogs
-  //console.log(blogs);
+
 
   useEffect(() => {
     loadBlogs();
@@ -22,7 +21,6 @@ const ReadBlogs = ({ username }) => {
 
   const loadBlogs = () => {
     listAllBlogs(username).then((data) => {
-      //console.log(data);
       if (data.error) {
         console.log(data.error);
       } else {
@@ -37,7 +35,7 @@ const ReadBlogs = ({ username }) => {
         console.log(data.error);
       } else {
         setSuccessDeleteMessage(data.message);
-        loadBlogs(); //once we delete we need to load blog with page refresh
+        loadBlogs(); 
       }
     });
   };

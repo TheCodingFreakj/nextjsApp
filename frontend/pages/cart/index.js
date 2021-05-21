@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Segment,
-  Dimmer,
-  Loader,
-} from "semantic-ui-react";
+import { Button, Segment, Dimmer, Loader } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import { getCookie } from "../../actions/setAuthToken";
-import ServiceCartHeader from "../../components/cart/servicecartheader"
-import Toolscartheader from "../../components/cart/toolscartheader"
+import ServiceCartHeader from "../../components/cart/servicecartheader";
+import Toolscartheader from "../../components/cart/toolscartheader";
 import { fetchCarts } from "../../actions/shoppingcart";
 import { API } from "../../config";
 import axios from "axios";
@@ -16,10 +11,10 @@ const Cart = ({ router }) => {
   const [cart, setCart] = useState({
     tool: "",
     services: "",
+    message: "",
   });
 
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState();
 
   const { tool, services } = cart;
 
@@ -33,11 +28,12 @@ const Cart = ({ router }) => {
     return () => {
       mounted.current = false;
     };
-  }, []);
+  }, [tool, services]);
 
   const getProductsFromCarts = async () => {
     setLoading(true);
     await fetchCarts(getCookie("token")).then((data) => {
+      console.log(data);
       if (data.error) {
         console.log(data.error);
         setLoading(false);
@@ -88,23 +84,21 @@ const Cart = ({ router }) => {
       <React.Fragment>
         {loading ? (
           <Segment>
-            <Dimmer active size="medium">
-              <Loader>Loading</Loader>
+            <Dimmer active size="large">
+              <Loader>Data Loading</Loader>
             </Dimmer>
           </Segment>
         ) : (
           <div>
-            {services && tool ? (
+            {cart  ? (
               <Segment>
                 <ServiceCartHeader
-                  servicescartlist={services}
+                  products={cart}
                   handleRemoveServiceFromCart={handleRemoveServiceFromCart}
-                />
-
-                <Toolscartheader
-                  toolcartlist={tool}
                   handleRemoveToolFromCart={handleRemoveToolFromCart}
                 />
+
+  
               </Segment>
             ) : (
               <Segment>

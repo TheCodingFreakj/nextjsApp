@@ -1,0 +1,20 @@
+.main_container {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 3%;
+}
+
+.flex-item-upper {
+  width: 300px;
+}
+
+.flex-container {
+  display: flex;
+  width: 500px;
+  background: yellowgreen;
+  padding: 3%;
+}
+
+.flex-item {
+  width: 400px;
+}

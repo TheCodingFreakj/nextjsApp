@@ -5,7 +5,6 @@ import moment from "moment";
 import { API } from "../../config";
 
 const Card = ({ blog }) => {
-  //console.log(blog);
 
   const showBlogCategories = (blog) => {
     return blog.categories.map((cat, i) => (
@@ -16,7 +15,6 @@ const Card = ({ blog }) => {
   };
 
   const showBlogTags = (blog) => {
-    //console.log(blog);
     return blog.tags.map((tag, i) => (
       <Link key={i} href={`/tags/${tag.slug}`}>
         <a className="btn btn-danger mr-1 ml-1 mt-3">{tag.name}</a>
@@ -49,7 +47,6 @@ const Card = ({ blog }) => {
         {showBlogTags(blog)}
 
         <hr></hr>
-        {/* {JSON.stringify(blog.tags)} */}
       </section>
       <div className="row">
         <div className="col-md-4">

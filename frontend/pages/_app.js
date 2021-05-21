@@ -1,14 +1,6 @@
 import App from "next/app";
 import React from "react";
 
-// const MyApp = ({ Component, pageProps }) => {
-
-//   return (
-//     <div className="overflow-hidden">
-//       <Component {...pageProps} />
-//     </div>
-//   );
-// };
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -28,4 +20,4 @@ class MyApp extends App {
 }
 
 export default MyApp;
-// https://carbon.now.sh/
+

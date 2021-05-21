@@ -541,15 +541,3 @@ exports.Portfoliophoto = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
-
-// Create a meter that calculated price per words and then check out the process (For contentWriting)
-// For packages
-// Give them tools to choose and then calculate price
-// This price = Fixed Price (Tool Price + Margin) + (Changeable Price Price) Service Charges - (any seasonal discount)
-// Service Price = LabourCost + Margin
-
-//Fixed Price: You will use the result what you get from getToolClientPrice route calculation
-//Service Charges= Grab from Services route where you will store the price
-//include any seasonal discount
-//create another calculation route to calculate the service price per service
-//In the frontend  YOu will keep them platform to calculate total price as per service they add

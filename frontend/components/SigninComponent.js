@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Router from "next/router";
-// import { signin } from "../actions/auth";
+import { signin } from "../actions/auth";
 import { authenticate } from "../actions/setAuthToken";
 import { isAuth } from "../actions/setAuthToken";
 
@@ -32,7 +32,7 @@ const SigninComp = () => {
       password,
     };
 
-    import("../actions/auth", signin(user)).then((data) => {
+    signin(user).then((data) => {
       if (data.errors) {
         setFormData({
           ...formData,

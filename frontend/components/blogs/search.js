@@ -4,15 +4,11 @@ import renderHTML from "react-render-html";
 import { listSearch } from "../../actions/blog";
 
 const Search = () => {
-  //when we type that will be available in search (onmChange handler will take this state)
-  //we send this to backedn to fetch the results
-  //once we get we push them to results: []
-  //we will render the blogs based on the result
 
   const [values, setValues] = useState({
-    search: undefined, //this is the string we want to send to actions and then to backend
-    results: [], // here the result is stored which comes from backedn
-    searched: false, //determine if the user have the submited the form
+    search: undefined, 
+    results: [], 
+    searched: false, 
     message: "",
   });
 
@@ -20,9 +16,9 @@ const Search = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    //pass the search query
+
     listSearch({ search }).then((data) => {
-      //console.log(data);
+  
       setValues({
         ...values,
         results: data, //data we get from backedn
@@ -33,16 +29,14 @@ const Search = () => {
   };
 
   const onChange = (name) => (e) => {
-    //console.log(e.target.value);
-
+  
     setValues({
       ...values,
       search: e.target.value,
-      searched: false, //update search to false //when the user submits its is true but then after that we are setting it to false
-      results: [], //empty the results array
+      searched: false, 
+      results: [],
     });
 
-    //console.log(search);
   };
 
   const searchBlogs = (results = []) => {
