@@ -65,7 +65,7 @@ const ReadBlogs = ({ username }) => {
 
   const showAllBlogs = () => {
     return blogs.map((blog, i) => {
-      console.log(blog);
+
       return (
         <div key={i} className="pb-5">
           <h3>{blog.title}</h3>

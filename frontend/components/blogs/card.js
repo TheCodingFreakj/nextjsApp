@@ -5,6 +5,7 @@ import moment from "moment";
 import { API } from "../../config";
 
 const Card = ({ blog }) => {
+  console.log(blog);
 
   const showBlogCategories = (blog) => {
     return blog.categories.map((cat, i) => (

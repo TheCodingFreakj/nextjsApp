@@ -45,16 +45,8 @@ const CustomerSigninComp = () => {
           error: [data.errors[0].msg],
         });
       } else {
-        //console.log(data.response);
-
-        //save the user token either in cookie or local storage in front end
-        //save the user info in local storage
-
-        //authenticate the user
-
+  
         authenticate(data, () => {
-          //sending routes based on role during login
-          // console.log(data);
           if (isAuth().customerRole === "consumer") {
             Router.push("/services");
           } else if (isAuth().role === 1) {
@@ -67,7 +59,7 @@ const CustomerSigninComp = () => {
     });
   };
 
-  //handle change
+ 
   const onChange = (name) => (e) => {
     setFormData({
       ...formData,

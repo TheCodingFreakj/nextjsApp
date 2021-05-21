@@ -26,6 +26,61 @@ h3.display-2.pb-3.pt-3.text-center.font-weight-bold {
     font-size: 6em;
   }
 }
+
+@media (max-width: 700px) {
+  h2.pt-3.pb-3.font-weight-bold {
+    width: 20rem;
+    font-size: 1.5rem;
+    color: black;
+  }
+
+  .lead.pb-4 {
+    width: 20rem;
+    position: relative;
+    left: 2%;
+  }
+
+  .pb-5.text-center {
+    width: 25rem;
+  }
+
+  h1.display-4.font-weight-bold.text-center {
+    display: none;
+  }
+
+  .ui.action.input {
+    position: relative;
+    left: 7%;
+  }
+
+  .ui.centered.stackable.four.cards.custom-card-style.card-dark {
+    width: 20rem;
+    position: relative;
+    left: 5%;
+  }
+  .col-md-12.pt-3 {
+    width: 20rem;
+  }
+  .ui.centered.stackable.three.cards.custom-card-style {
+    width: 20rem;
+    position: relative;
+    left: 5%;
+  }
+
+  .ui.segment {
+    width: 20rem;
+  }
+}
+
+.ui.action.input {
+  width: 8rem;
+  position: relative;
+  right: 29%;
+}
+
+input[type="email"] {
+  width: 10rem;
+}
 .custom-card {
   position: relative;
   z-index: 99;

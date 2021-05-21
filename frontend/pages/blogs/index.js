@@ -9,9 +9,6 @@ import Card from "../../components/blogs/card";
 import { withRouter } from "next/router";
 
 const Blogs = (pageProps) => {
-  //console.log(pageProps); //nor coming
-  //console.log(pageProps.router.pathname); //nor coming
-
   const routerParam = pageProps.router.pathname;
   const blogsLimit = pageProps.blogLimit;
   const blogsSkip = pageProps.blogSkip;
@@ -58,16 +55,13 @@ const Blogs = (pageProps) => {
   const [size, setSize] = useState(blogSize);
   const [loadedBlogs, setLoadedBlogs] = useState([]);
 
-  //This handles if the user clicks loadMore
 
   const loadMore = () => {
     let toSkip = skip + limit;
-    //This is used if they click on load more
     listBlogsWithCategoriesNTags(toSkip, limit).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
-        //load the blogs as per request
         setLoadedBlogs([...loadedBlogs, ...data.blogsToBeSent]);
         setSize(data.size);
         setSkip(toSkip);
@@ -153,7 +147,6 @@ const Blogs = (pageProps) => {
 };
 
 export const getServerSideProps = async (context) => {
-  //now all the returns are avaialble as props
   let skip = 0;
   let limit = 2;
   const data = await listBlogsWithCategoriesNTags(skip, limit);
