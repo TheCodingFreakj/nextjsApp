@@ -146,9 +146,6 @@ exports.list = async (req, res) => {
 
 //We are using this fuction in blog index page
 exports.listAllBlogsByCatAndTags = async (req, res) => {
-  //console.log(req.body.limit);
-  //get the limit of blogs to be shown from the front end
-  //if user clicks load more then additional req will be sent and then the previous blogs are skipped then rest are send
   let limit = req.body.limit ? parseInt(req.body.limit) : 10; //by default is skip
   let skip = req.body.skip ? parseInt(req.body.skip) : 0;
   let blogsToBeSent;
@@ -204,6 +201,7 @@ exports.listAllBlogsByCatAndTags = async (req, res) => {
   }
 };
 
+//get the categories as request params and get all relevant blogs
 //use this for getting single blog
 exports.read = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
@@ -361,7 +359,7 @@ exports.listRelated = async (req, res) => {
 };
 
 exports.BlogSearchLists = async (req, res) => {
-  console.log(req.query); //this is the string you get from frontend
+  //this is the string you get from frontend
   const { search } = req.query; //we send the seatc object from frontend
 
   try {
@@ -393,10 +391,7 @@ exports.BlogSearchLists = async (req, res) => {
 //logged in userid must match with the person who created the blog then he can delete
 exports.listByUser = async (req, res) => {
   //console.log("This is netire body", req.params);
-  console.log(
-    "I am getting the username from the params. This is what I send from frontend from local storage which is current logged in user info",
-    req.params.username
-  );
+
   try {
     User.find({ username: req.params.username }).exec((err, user) => {
       if (err) {

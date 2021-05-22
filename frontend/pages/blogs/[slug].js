@@ -12,7 +12,7 @@ import moment from "moment";
 import SmallCard from "../../components/blogs/smallcard";
 
 const SingleBlog = ({ blog, query }) => {
-  //   console.log(query);
+  // console.log(query);
 
   const [related, setRelated] = useState([]);
   const loadRelated = () => {
@@ -59,12 +59,13 @@ const SingleBlog = ({ blog, query }) => {
   );
   const showBlogCategories = (blog) => {
     return blog.categories.map((cat, i) => (
-      <Link key={i} href={`/categories/${cat.slug}`}>
+      <Link key={i} href={`/categories/${encodeURIComponent(cat.slug)}`}>
         <a className="btn btn-outline-danger mr-1 ml-1 mt-3">{cat.name}</a>
       </Link>
     ));
   };
 
+  //these links are not working
   const showBlogTags = (blog) => {
     return blog.categories.map((tag, i) => (
       <Link key={i} href={`/tags/${tag.slug}`}>
@@ -116,9 +117,6 @@ const SingleBlog = ({ blog, query }) => {
                   <div className="pb-3">
                     {showBlogCategories(blog)}
                     {showBlogTags(blog)}
-
-                    <br />
-                    <br />
                   </div>
                 </div>
               </section>
@@ -149,14 +147,9 @@ const SingleBlog = ({ blog, query }) => {
 };
 
 export const getServerSideProps = async ({ query }) => {
-  //now all the returns are avaialble as props
+ 
   const querybuilder = query.slug;
   const data = await singleBlog(query.slug);
-
-  // console.log(data);
-  // console.log(query.slug);
-
-  //console.log("getServerProps", data, context.params, context.query);
 
   if (data.error) {
     console.log(data.error);

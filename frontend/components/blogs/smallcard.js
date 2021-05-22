@@ -22,10 +22,13 @@ const SmallCard = ({ blog }) => {
 
       <div className="card-body">
         <section>
-          <Link href={`/blogs/${blog.slug}`}>
-            <a>
-              <h5 className="card-title">{blog.title}</h5>
-            </a>
+          <Link
+            href={{
+              pathname: "/blogs/[slug]",
+              query: { slug: `${blog.slug}` },
+            }}
+          >
+            <a>{blog.title}</a>
           </Link>
 
           <div>

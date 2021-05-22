@@ -4,14 +4,15 @@ import Link from "next/link";
 import Layout from "../../components/Layout";
 import { listBlogsWithCategoriesNTags } from "../../actions/blog";
 import { API, DOMAIN, APP_NAME, FB_APP_ID } from "../../config";
+import pages from "../../static/pages.css";
 
-import Card from "../../components/blogs/card";
 import { withRouter } from "next/router";
 
 const Blogs = (pageProps) => {
+  console.log(pageProps);
   const routerParam = pageProps.router.pathname;
   const blogsLimit = pageProps.blogLimit;
-  const blogsSkip = pageProps.blogSkip;
+  const blogSkip = pageProps.blogSkip;
   const blogSize = pageProps.size;
 
   const head = () => (
@@ -55,92 +56,63 @@ const Blogs = (pageProps) => {
   const [size, setSize] = useState(blogSize);
   const [loadedBlogs, setLoadedBlogs] = useState([]);
 
+  const showAllblogs = (blogs) => {
+    return blogs.map((b) => {
+      console.log(b);
+      return (
+        <div className="blog-container">
+          <div className="blog-container">
+            <div className="related_cats">{showrelatedcats(b.categories)}</div>
+            <div className="card">
+              <div className="card-front"></div>
+              <div className="card-back">
+                <div>Posted By {b.postedBy.username}</div>
+                <div className="social-icons">
+                  <a
+                    className="#"
+                    className="fa fa-facebook"
+                    aria-hidden="true"
+                  ></a>
+                  <a className="#" class="fa fa-twitter" aria-hidden="true"></a>
+                  <a
+                    className="#"
+                    className="fa fa-linkedin"
+                    aria-hidden="true"
+                  ></a>
+                  <a
+                    className="#"
+                    className="fa fa-instagram"
+                    aria-hidden="true"
+                  ></a>
+                </div>
 
-  const loadMore = () => {
-    let toSkip = skip + limit;
-    listBlogsWithCategoriesNTags(toSkip, limit).then((data) => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        setLoadedBlogs([...loadedBlogs, ...data.blogsToBeSent]);
-        setSize(data.size);
-        setSkip(toSkip);
-      }
+                <h2 className="heading">
+                  <Link href={`/blogs/${b.slug}`}>{b.title}</Link>
+                </h2>
+                <p className="excerpt">{b.excerpt}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
     });
   };
-
-  const loadMoreButton = () => {
-    return (
-      size > 0 &&
-      size >= limit && (
-        <button onClick={loadMore} className="btn btn-danger btn-lg">
-          Load More
-        </button>
-      )
-    );
-  };
-
-  const showAllBlogs = () => {
-    return pageProps.blogsToBeSent.map((blog, i) => (
-      <article key={i}>
-        <Card blog={blog} />
-        <hr />
-      </article>
-    ));
-  };
-
-  const showAllCategories = () => {
-    return pageProps.categoriesToBeSent.map((cat, i) => (
-      <Link key={i} href={`/categories/${cat.slug}`}>
-        <a className="btn btn-success mr-1 ml-1 mt-3">{cat.name}</a>
-      </Link>
-    ));
-  };
-
-  const showAllTags = () => {
-    return pageProps.tagsToBeSent.map((tag, i) => (
-      <Link key={i} href={`/tags/${tag.slug}`}>
-        <a className="btn btn-success mr-1 ml-1 mt-3">{tag.name}</a>
-      </Link>
-    ));
-  };
-
-  const showLoadedBlogs = () => {
-    return loadedBlogs.map((blog, i) => (
-      <article key={i}>
-        <Card blog={blog} />
-      </article>
-    ));
+  const showrelatedcats = (cats) => {
+    return cats.map((d) => {
+      return (
+        <Link href={`/blogs/categories/${d.slug}`}>
+          <p>{d.slug}</p>
+        </Link>
+      );
+    });
   };
   return (
     <React.Fragment>
       {head()}
       <Layout>
-        <main>
-          <div className="container-fluid">
-            <header>
-              <div className="col-md-12 pt-3">
-                <h1 className="display-4 font-weight-bold text-center">
-                  You one place for marketing insights
-                </h1>
-              </div>
-
-              <section>
-                <div className="pb-5 text-center">
-                  {showAllCategories()}
-                  <br />
-                  {showAllTags()}
-                </div>
-              </section>
-            </header>
-          </div>
-
-          <div className="container-fluid">{showAllBlogs()}</div>
-
-          <div className="container-fluid">{showLoadedBlogs()}</div>
-
-          <div className="text-center pt-5 pb-5"> {loadMoreButton()}</div>
-        </main>
+        <div className="blog-wrapper">
+          {showAllblogs(pageProps.blogsToBeSent)}
+        </div>
       </Layout>
     </React.Fragment>
   );

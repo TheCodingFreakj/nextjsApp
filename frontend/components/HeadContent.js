@@ -8,6 +8,10 @@ const HeadContent = () => (
 
     <meta name="msapplication-TileColor" content="#00df94" />
     <meta name="theme-color" content="#00df94" />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    ></link>
   </>
 );
 

@@ -6,7 +6,7 @@ import { Container } from "semantic-ui-react";
 import ServiceSummary from "../../../components/productPageComponents/serviceattribute";
 import ServiceAttribute from "../../../components/productPageComponents/servicesummary";
 const Product = ({ service }) => {
-  console.log(service);
+
   return (
     <Layout>
       <React.Fragment>

@@ -1,0 +1,97 @@
+.blog-wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+.blog-container {
+  padding: 3%;
+  background: tan;
+}
+
+.card {
+  height: 30em;
+  width: 30rem;
+  background: #900c3f;
+  padding: 4% 3%;
+}
+
+.card-back h2 {
+  color: #ffff;
+  position: absolute;
+  left: 28%;
+  top: 29%;
+}
+
+.social-icons {
+  background: #ffc300;
+  padding: 2% 3%;
+}
+
+.card-front {
+  height: 100%;
+  width: 100%;
+  background-image: url(https://images.unsplash.com/photo-1546241183-0ed3f8a4a824?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80);
+  background-position: 50% 50%;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000000;
+  backface-visibility: hidden;
+  transform: rotateY(0deg);
+  transition: 0.5s;
+}
+
+.fa.fa-facebook,
+.fa.fa-twitter,
+.fa.fa-linkedin,
+.fa.fa-instagram {
+  color: #daf7a6;
+  font-size: 1.3em;
+  padding: 2% 5%;
+}
+
+.card:hover .card-front {
+  transform: rotateY(-90deg);
+}
+.card:hover .card-back {
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #c70039;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  transition: 0.5s;
+  color: #ffffff;
+  text-align: center;
+}
+
+.heading a {
+  color: wheat;
+  position: relative;
+  right: 6rem;
+  font-size: 1.9rem;
+}
+
+.excerpt {
+  position: relative;
+  top: 16rem;
+}
+.related_cats {
+  display: flex;
+  justify-content: center;
+}
+
+.related_cats p {
+  margin-right: 3%;
+  background: tomato;
+  padding: 3%;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 800;
+}

@@ -1,3 +1,24 @@
+body {
+  background: yellowgreen;
+  position: relative;
+  overflow-x: hidden;
+}
+.ui.grid {
+  position: absolute;
+  bottom: -30rem;
+  width: 116%;
+}
+
+.col-md-6.offset-md-2 {
+  background: tomato;
+  position: absolute;
+  left: 10%;
+}
+@media (max-width: 700px) {
+  .col-md-6.offset-md-2 {
+    left: -1%;
+  }
+}
 #nprogress .bar {
   height: 8px !important;
 }
@@ -71,6 +92,31 @@ h3.display-2.pb-3.pt-3.text-center.font-weight-bold {
     width: 20rem;
   }
 }
+.footer_content {
+  background: teal;
+  color: beige;
+  display: flex;
+  padding: 4%;
+  justify-content: space-evenly;
+}
+.footer_content ul {
+  list-style: none;
+}
+.footer_content ul li {
+  background: rgb(59, 32, 59);
+  padding: 8%;
+  margin-top: 3%;
+  width: 10rem;
+  color: lightskyblue;
+  border-radius: 10px;
+}
+.footer_content ul li a {
+  font-size: medium;
+  color: rgb(228, 207, 164);
+  font-weight: 800;
+  position: relative;
+  left: 3%;
+}
 
 .ui.action.input {
   width: 8rem;
@@ -78,9 +124,9 @@ h3.display-2.pb-3.pt-3.text-center.font-weight-bold {
   right: 29%;
 }
 
-input[type="email"] {
+/* input[type="email"] {
   width: 10rem;
-}
+} */
 .custom-card {
   position: relative;
   z-index: 99;
