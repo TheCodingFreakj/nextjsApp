@@ -1,7 +1,7 @@
 // This componenet holds the logic of service cards
 
 import React, { useState, useEffect } from "react";
-import { Card, Segment, Button, Header } from "semantic-ui-react";
+import Link from "next/link";
 import "../../static/styles.css";
 import { listAllServices } from "../../actions/services";
 
@@ -14,7 +14,6 @@ const ShowServices = ({ limit, skip }) => {
   const [limitcount, setLimitCount] = useState(limit);
   const [skipNum, setSkipNum] = useState(skip);
   const [size, setSize] = useState();
-  // console.log("The is loadedservices", loadservices);
 
   //getting the list of all services in useeffect
   useEffect(() => {
@@ -35,39 +34,45 @@ const ShowServices = ({ limit, skip }) => {
       if (data.error) {
         console.log(data.error);
       } else {
-        // console.log("The data got from backend", data);
         setLoadServices([...loadservices, ...data.servicesToBeSent]);
         setSize(data.size);
+        console.log("The is loadedservices", loadservices);
       }
     });
   };
 
-  //display all services
   const showServices = (loadservices) => {
-    return loadservices.map((serv) => ({
-      header: serv.title,
-      description: serv.summary,
-      childKey: serv.slug,
-      image: `${API}/api/services/photo/${serv.slug}`,
-      meta: `${serv.discountedServiceCharges[0].discountedServiceCharges} $ per ${serv.duration}`,
-      href: `/services/${serv.slug}`,
-      color: "red",
-      extra: serv.ratingsAverage,
-      //   content: pack.bundleDescription,
-    }));
+    return loadservices.map((l) => {
+      return (
+        <div key={l.slug} className="flex-container-service">
+          <img src={`${API}/api/services/photo/${l.slug}`} />
+          <h2>{l.title}</h2>
+          <div className="body_content">
+            <p>{l.summary}</p>
+            <p>
+              {l.discountedServiceCharges[0].discountedServiceCharges}$ per $
+              {l.duration}
+            </p>
+            <p>{l.ratingsAverage}</p>
+            <Link href={`/services/${l.slug}`}>
+              <a className=" btn btn-small btn-success">Subscribe</a>
+            </Link>
+          </div>
+        </div>
+      );
+    });
   };
 
-  //function called on button click
-  //getting limited data from the backend using quaery params
-  const handleLoadMore = async (e) => {
-    // console.log("I am clicked");
-    let toSkip = skipNum + limitcount;
+  // //function called on button click
+  // //getting limited data from the backend using quaery params
 
+  const handleLoadMore = async (e) => {
+    let toSkip = skipNum + limitcount;
     await listAllServices(limitcount, toSkip).then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
-        //console.log("The data got from backend", data);
+        console.log("The data got from backend", data);
         setLoadServices([...loadservices, ...data.servicesToBeSent]);
         setSize(data.size);
         setSkipNum(toSkip);
@@ -77,30 +82,18 @@ const ShowServices = ({ limit, skip }) => {
 
   return (
     <>
-      <Header as="h1" block>
-        Check Out Our Services
-      </Header>
-
-      <Card.Group
-        stackable
-        className="custom-card-style"
-        itemsPerRow="3"
-        centered
-        items={showServices(loadservices)}
-      />
-      <Segment>
-        {/* showing the condtion within with the load more button appears */}
+      <div className="services_wrapper">
+        {showServices(loadservices)}
         {size > 0 && size >= limitcount && (
-          <Button
-            fluid
-            color="green"
-            content="Load More"
-            icon="angle double down"
-            labelPosition="left"
+          <button
+            type="button"
+            className="load_more"
             onClick={() => handleLoadMore()}
-          />
+          >
+            Load More
+          </button>
         )}
-      </Segment>
+      </div>
     </>
   );
 };

@@ -3,37 +3,29 @@ import { Button, Segment, Dimmer, Loader } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import { getCookie } from "../../actions/setAuthToken";
 import ServiceCartHeader from "../../components/cart/servicecartheader";
-import Toolscartheader from "../../components/cart/toolscartheader";
 import { fetchCarts } from "../../actions/shoppingcart";
 import { API } from "../../config";
 import axios from "axios";
-const Cart = ({ router }) => {
-  const [cart, setCart] = useState({
-    tool: "",
-    services: "",
-    message: "",
-  });
-
+const Cart = () => {
+  const [cart, setCart] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const { tool, services } = cart;
-
   useEffect(() => {
-    const mounted = { current: true };
+    //const mounted = { current: true };
 
-    if (mounted.current) {
-      getProductsFromCarts();
-    }
+    // if (mounted.current) {
+    getProductsFromCarts();
+    //}
 
-    return () => {
-      mounted.current = false;
-    };
-  }, [tool, services]);
+    // return () => {
+    //   mounted.current = false;
+    // };
+  }, [cart]);
 
   const getProductsFromCarts = async () => {
     setLoading(true);
     await fetchCarts(getCookie("token")).then((data) => {
-      console.log(data);
+      //console.log("this is data fetched", data);
       if (data.error) {
         console.log(data.error);
         setLoading(false);
@@ -41,15 +33,13 @@ const Cart = ({ router }) => {
         setLoading(false);
         let newcart = {
           ...cart,
-          tool: data.toolsCart,
-          services: data.serviceCart,
-          message: data.msg,
+          data,
         };
         setCart(newcart);
       }
     });
   };
-
+  //console.log("thsi is cart contente", cart);
   const handleRemoveToolFromCart = async (productId) => {
     const token = getCookie("token");
     const url = `${API}/api/delete-cart`;
@@ -83,25 +73,21 @@ const Cart = ({ router }) => {
     <Layout>
       <React.Fragment>
         {loading ? (
-          <Segment>
-            <Dimmer active size="large">
-              <Loader>Data Loading</Loader>
-            </Dimmer>
-          </Segment>
+          <div className="loader">
+            <h2>...Loading</h2>
+          </div>
         ) : (
           <div>
-            {cart  ? (
-              <Segment>
+            {cart ? (
+              <div>
                 <ServiceCartHeader
                   products={cart}
                   handleRemoveServiceFromCart={handleRemoveServiceFromCart}
                   handleRemoveToolFromCart={handleRemoveToolFromCart}
                 />
-
-  
-              </Segment>
+              </div>
             ) : (
-              <Segment>
+              <div>
                 <>
                   <p>You got No Product Now! Would You want to Buyt</p>
                   <Button
@@ -112,7 +98,7 @@ const Cart = ({ router }) => {
                     onClick={() => router.push(`/services `)}
                   />
                 </>
-              </Segment>
+              </div>
             )}
           </div>
         )}
