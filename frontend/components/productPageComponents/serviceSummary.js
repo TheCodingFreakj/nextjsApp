@@ -1,27 +1,30 @@
 import React from "react";
-import { Item } from "semantic-ui-react";
 import AddProductToCart from "./addProductToCart";
-
-const ServiceSummary = ({ duration, title, _id, discountedServiceCharges }) => {
-  //console.log(product);
+import { API } from "../../config";
+import { useRouter } from "next/router";
+import Button from "../utils/button";
+const ServiceSummary = (props) => {
+  // console.log(props);
+  const router = useRouter();
+  //{ duration, title, _id, discountedServiceCharges }
   return (
-    <Item.Group>
-      <Item>
-        <Item.Content>
-          <Item.Header>{title}</Item.Header>
-          <Item.Description>
-            <p>
-              Discounted Price $
-              {discountedServiceCharges[0].discountedServiceCharges}
-            </p>
-            <p>{duration}Days</p>
-          </Item.Description>
-          <Item.Extra>
-            <AddProductToCart serviceId={_id} />
-          </Item.Extra>
-        </Item.Content>
-      </Item>
-    </Item.Group>
+    <div className="page_wrapper">
+      <div className="inner-3">
+        <h3>
+          You are ordering our <span>{props.title}</span> service
+        </h3>
+        <p>The service will be chargeable each {props.duration} days</p>
+        <p>
+          The charges per {props.duration} is
+          {props.discountedServiceCharges[0].discountedServiceCharges} $
+        </p>
+
+        <p>Choose you number of month to add the service to cart</p>
+      </div>
+      <div className="inner-4">
+        <AddProductToCart serviceId={props._id} />
+      </div>
+    </div>
   );
 };
 

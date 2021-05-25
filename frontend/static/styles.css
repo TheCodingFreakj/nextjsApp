@@ -128,6 +128,28 @@ img {
 .load_more {
   margin-top: 3%;
 }
+
+.tools_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2%;
+  position: relative;
+  right: 6%;
+}
+.header_img {
+  width: 26rem;
+}
+.card_wrapper {
+  margin: 4%;
+  width: 26rem;
+}
+
+.page_wrapper {
+  background: tomato;
+  padding: 3%;
+  color: #fff;
+  display: flex;
+}
 .footer_content {
   margin-top: 5%;
   background: teal;

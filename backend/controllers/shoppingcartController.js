@@ -1,6 +1,8 @@
 const ToolsCart = require("../models/toolsCart");
 const ServiceCart = require("../models/serviceCart");
 const mongoose = require("mongoose");
+
+const ObjectId = require("mongoose");
 const stripe = require("stripe")(
   "sk_test_51HaLO5GERwFTkr9GyJJgTIwZ7XtkR6rYuxXxZ1tN88QN4pUPrsLh2lAeUq96XGN8vUHacwTFZyfEYPyXb94EdyUJ007f02JxxE"
 );
@@ -40,44 +42,41 @@ exports.updateToolCart = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
-
 exports.updateServiceCart = async (req, res) => {
   const { quantity, serviceId } = req.body;
-
   const customer = req.user;
+  const serviceCart = await ServiceCart.findOne({ customer });
+  const productExists = serviceCart.products.some(
+    (doc) => serviceId === String(doc.product)
+  );
 
-  try {
-    const serviceCart = await ServiceCart.findOne({ customer }); //search the servicecart by customer id
-    // console.log("This is servicecart", serviceCart.products);
-    //iterate over array and check if any meet a give condition
-    const productExists = serviceCart.products.some(
-      (doc) => serviceId === String(doc.product)
+  //add the product in cart
+  if (productExists === false) {
+    const newProduct = { quantity, product: serviceId };
+    await ServiceCart.findOneAndUpdate(
+      {
+        _id: serviceCart._id,
+      },
+      { $addToSet: { products: newProduct } }
+    );
+    res
+      .status(200)
+      .send("Your service cart is updated with product and quanity");
+  }
+
+  ///update the quantity
+  if (productExists === true) {
+    await ServiceCart.findOneAndUpdate(
+      {
+        _id: serviceCart._id,
+        "products.product": serviceId,
+      },
+      { $inc: { "products.$.quantity": quantity } }
     );
 
-    if (productExists) {
-      await ServiceCart.findOneAndUpdate(
-        {
-          _id: serviceCart._id,
-          "products.product": serviceId,
-        },
-        { $inc: { "products.$.quantity": quantity } }
-      );
-
-      if (active === true) {
-        console.log("The cart is ative");
-      }
-    } else {
-      //update for new product
-      const newProduct = { quantity, product: serviceId };
-      await ServiceCart.findOneAndUpdate(
-        {
-          _id: serviceCart._id,
-        },
-        { $addToSet: { products: newProduct } }
-      );
-    }
-
-    res.status(200).send("Cart Added");
+    res.status(200).send("Your service cart is updated with the quantity");
+  }
+  try {
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Cart Can't Be Updated");

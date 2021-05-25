@@ -50,7 +50,6 @@ const SingleService = ({ service, query }) => {
         <main>
           <article>
             <div className="container-fluid">
-              {/* displaying banner image from the passed service data */}
               <section>
                 <div style={{ marginTop: "-30px" }} className="row">
                   <img
@@ -66,9 +65,8 @@ const SingleService = ({ service, query }) => {
                     {service.slug}
                   </h3>
 
-                  {/* showing the tools and the service charges */}
+                
                   {isAuth() && isAuth().customerRole === "consumer" && (
-                    //customer can see this code display
                     <>
                       <div className="container-fluid">
                         <div className="row">
@@ -86,7 +84,7 @@ const SingleService = ({ service, query }) => {
               </section>
             </div>
 
-            {/* the content section */}
+ 
             <div className="container">
               <div className="row">
                 <div className="col-md-4 lead">
@@ -109,8 +107,7 @@ const SingleService = ({ service, query }) => {
               <div className="container">
                 <div className="row">
                   {isAuth() && isAuth().customerRole === "consumer" && (
-                    //only customer can see
-
+              
                     <>
                       <div className="col-md-6 lead">
                         <div className="col-md-6  text-center  lead">
@@ -186,8 +183,7 @@ const SingleService = ({ service, query }) => {
   );
 };
 
-//getting the data for single service through server side rendering
-//using query params(Slug) to access service so slug page
+
 export const getServerSideProps = async ({ query }) => {
   const querybuilder = query.slug;
   const data = await singleService(query.slug);

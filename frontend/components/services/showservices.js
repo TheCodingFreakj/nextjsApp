@@ -28,7 +28,7 @@ const ShowServices = ({ limit, skip }) => {
     };
   }, []);
 
-  //getting limited data from the backend using quaery params
+
   const loadServices = async () => {
     await listAllServices(limit, skip).then((data) => {
       if (data.error) {
@@ -36,7 +36,6 @@ const ShowServices = ({ limit, skip }) => {
       } else {
         setLoadServices([...loadservices, ...data.servicesToBeSent]);
         setSize(data.size);
-        console.log("The is loadedservices", loadservices);
       }
     });
   };
@@ -55,7 +54,7 @@ const ShowServices = ({ limit, skip }) => {
             </p>
             <p>{l.ratingsAverage}</p>
             <Link href={`/services/${l.slug}`}>
-              <a className=" btn btn-small btn-success">Subscribe</a>
+              <a className=" btn btn-small btn-success">Enroll</a>
             </Link>
           </div>
         </div>
@@ -63,8 +62,6 @@ const ShowServices = ({ limit, skip }) => {
     });
   };
 
-  // //function called on button click
-  // //getting limited data from the backend using quaery params
 
   const handleLoadMore = async (e) => {
     let toSkip = skipNum + limitcount;
@@ -72,7 +69,6 @@ const ShowServices = ({ limit, skip }) => {
       if (data.error) {
         console.log(data.error);
       } else {
-        console.log("The data got from backend", data);
         setLoadServices([...loadservices, ...data.servicesToBeSent]);
         setSize(data.size);
         setSkipNum(toSkip);

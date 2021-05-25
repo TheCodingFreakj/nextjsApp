@@ -1,0 +1,31 @@
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.cart_item_wrapper-1 {
+  padding: 5%;
+}
+input.input {
+  width: 4rem;
+}
+label {
+  margin-right: 3%;
+}
+
+select.input {
+  padding: 2%;
+  background: yellowgreen;
+}

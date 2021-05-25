@@ -3,6 +3,8 @@ const { ObjectId } = mongoose.Schema;
 
 const servicesCartSchema = new mongoose.Schema(
   {
+
+    //saving the ID of the referenced document, mongoose.Schema.Types.ObjectId, not the object itself.
     //get the customer from the customer collection
     customer: [{ type: ObjectId, ref: "Customer", required: true }],
     products: [

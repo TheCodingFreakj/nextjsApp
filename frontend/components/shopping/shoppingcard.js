@@ -1,39 +1,36 @@
 import React, { useState } from "react";
-import { Card, Icon, Button, Message } from "semantic-ui-react";
 
 import "../../static/styles.css";
-
+import Link from "next/link";
 const ToolShoppingCard = ({ service }) => {
   let product = service.tools;
-  //console.log(product);
   const [products, setproducts] = useState(product);
 
-  //get the id password to the backend for total calulation based on product id
-  //get the service charges in the same route based on service id
-  //in the backend all the amount
-  //call the amount to display in frontend of cart..
-
-  //from there book the service with the total amount as subscription
-
   const showTools = (products) => {
-    return products.map((product) => ({
-      header: product.tool,
-      image: "/static/images/marketingsolutions.jpg",
-      color: "green",
-      childKey: product._id,
-      meta: `${product.clientPrice} $ per 30 days`,
-      description: product.summary,
-      href: `/products?productId=${product._id}`,
-    }));
+    return products.map((p) => {
+      return (
+        <div className="card_wrapper" key={p._id}>
+          <div className="header">
+            <img
+              className="header_img"
+              src="/static/images/marketingsolutions.jpg"
+            />
+            <h2>{p.tool}</h2>
+            <p>{p.summary}</p>
+            <div className="footer">
+              <p>{p.clientPrice} $ per 30 days </p>
+              <Link href={`/products?productId=${p._id}`}>
+                <a className="btn btn-small btn-success">User Update</a>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    });
   };
   return (
     <>
-      <Card.Group
-        stackable
-        itemsPerRow="3"
-        centered
-        items={showTools(products)}
-      />
+      <div className="tools_wrapper">{showTools(products)}</div>
     </>
   );
 };

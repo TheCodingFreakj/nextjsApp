@@ -5,17 +5,16 @@ const ProductAttribute = ({ summary }) => {
   //console.log(product);
 
   return (
-    <>
-      <Header verticalalign="middle" as="h3">
-        About This Product
-      </Header>
+    <p>
+      <h1> About This Product</h1>
+
       <p>{summary}</p>
       <Button
         icon="trash alternate outline"
         color="orange"
         content="Delete Product"
       />
-    </>
+    </p>
   );
 };
 

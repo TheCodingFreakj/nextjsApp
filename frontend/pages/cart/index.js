@@ -1,45 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { Button, Segment, Dimmer, Loader } from "semantic-ui-react";
 import Layout from "../../components/Layout";
+import ShowCartItems from "../../components/cart/showCartItems";
 import { getCookie } from "../../actions/setAuthToken";
-import ServiceCartHeader from "../../components/cart/servicecartheader";
 import { fetchCarts } from "../../actions/shoppingcart";
 import { API } from "../../config";
 import axios from "axios";
+import "../../static/cart.css";
+
 const Cart = () => {
-  const [cart, setCart] = useState({});
+  const [cart, setCart] = useState({
+    tools: "",
+    services: "",
+    isFetching: false,
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    //const mounted = { current: true };
-
-    // if (mounted.current) {
-    getProductsFromCarts();
-    //}
-
-    // return () => {
-    //   mounted.current = false;
-    // };
-  }, [cart]);
-
-  const getProductsFromCarts = async () => {
     setLoading(true);
-    await fetchCarts(getCookie("token")).then((data) => {
-      //console.log("this is data fetched", data);
-      if (data.error) {
-        console.log(data.error);
+    const getProductsFromCarts = async () => {
+      try {
+        setCart({
+          tools: cart.tools,
+          services: cart.services,
+          isFetching: true,
+        });
+        const response = await fetchCarts(getCookie("token"));
+        console.log("this is response from backend", response);
         setLoading(false);
-      } else {
+        setCart({
+          tools: response.toolsCart,
+          services: response.serviceCart,
+          isFetching: false,
+        });
+      } catch (exception) {
         setLoading(false);
-        let newcart = {
-          ...cart,
-          data,
-        };
-        setCart(newcart);
+        console.log(exception);
+        setCart({
+          tools: cart.tools,
+          services: cart.services,
+          isFetching: false,
+        });
       }
-    });
-  };
-  //console.log("thsi is cart contente", cart);
+    };
+    getProductsFromCarts();
+  }, []);
+
   const handleRemoveToolFromCart = async (productId) => {
     const token = getCookie("token");
     const url = `${API}/api/delete-cart`;
@@ -74,13 +79,15 @@ const Cart = () => {
       <React.Fragment>
         {loading ? (
           <div className="loader">
-            <h2>...Loading</h2>
+            <h2>
+              .......................................................Loading.................................................
+            </h2>
           </div>
         ) : (
           <div>
             {cart ? (
               <div>
-                <ServiceCartHeader
+                <ShowCartItems
                   products={cart}
                   handleRemoveServiceFromCart={handleRemoveServiceFromCart}
                   handleRemoveToolFromCart={handleRemoveToolFromCart}
@@ -90,13 +97,6 @@ const Cart = () => {
               <div>
                 <>
                   <p>You got No Product Now! Would You want to Buyt</p>
-                  <Button
-                    icon="cart"
-                    color="yellow"
-                    floated="right"
-                    content="Buy Services"
-                    onClick={() => router.push(`/services `)}
-                  />
                 </>
               </div>
             )}

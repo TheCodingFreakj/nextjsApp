@@ -1,20 +1,15 @@
 import React from "react";
-import { Header, Button } from "semantic-ui-react";
+import Button from "../utils/button";
 
 const ServiceAttribute = ({ summary }) => {
   //console.log(product);
-
   return (
     <>
-      <Header verticalalign="middle" as="h3">
+      <h1 verticalalign="middle" as="h3">
         About This Product
-      </Header>
+      </h1>
       <p>{summary}</p>
-      <Button
-        icon="trash alternate outline"
-        color="orange"
-        content="Delete Product"
-      />
+      <Button btnColor="#962d2d" children="delete" labelColor="#fcc97b" />
     </>
   );
 };
